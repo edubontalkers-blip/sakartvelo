@@ -1,9 +1,9 @@
-exports.handler = async function(event) {
-  if (event.httpMethod !== "POST") {
-    return { statusCode: 405, body: "Method Not Allowed" };
+export default async (request) => {
+  if (request.method !== "POST") {
+    return new Response("Method Not Allowed", { status: 405 });
   }
   try {
-    const body = JSON.parse(event.body);
+    const body = await request.json();
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
@@ -13,17 +13,13 @@ exports.handler = async function(event) {
       },
       body: JSON.stringify(body)
     });
-    const text = await response.text();
-    return {
-      statusCode: 200,
-      headers: { "Access-Control-Allow-Origin": "*" },
-      body: text
-    };
+    const data = await response.json();
+    return Response.json(data, {
+      headers: { "Access-Control-Allow-Origin": "*" }
+    });
   } catch (err) {
-    return {
-      statusCode: 200,
-      headers: { "Access-Control-Allow-Origin": "*" },
-      body: JSON.stringify({ debug_error: err.message })
-    };
+    return Response.json({ debug_error: err.message }, {
+      headers: { "Access-Control-Allow-Origin": "*" }
+    });
   }
 };
