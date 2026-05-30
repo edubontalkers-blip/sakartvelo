@@ -31,6 +31,9 @@
 <!-- Шрифты: один распределённый запрос, display=swap чтоб не блокировать рендер -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://api.anthropic.com">
+<link rel="dns-prefetch" href="https://open.er-api.com">
+<link rel="dns-prefetch" href="https://api.mymemory.translated.net">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
 
 <!-- AI-индексация: структурированные данные -->
@@ -440,6 +443,7 @@ footer .links{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin
     <button class="tile" data-tool="luggage"><span class="ti">🧳</span><h4 data-i18n="t_luggage_h">Камера хранения</h4><p data-i18n="t_luggage_p">Оставь багаж — гуляй налегке</p></button>
     <button class="tile big" data-tool="prices"><span class="ti">🛡️</span><h4 data-i18n="t_prices_h">Честные цены 2026</h4><p data-i18n="t_prices_p">Сколько что стоит — не дай себя обсчитать. Такси, курс, метро, музеи.</p></button>
     <button class="tile big" data-tool="story"><span class="ti">📸</span><h4 data-i18n="t_story_h">Сторис про Грузию</h4><p data-i18n="t_story_p">Создай красивую картинку для Instagram/TikTok — с брендом sakartvelo.ai.</p></button>
+    <button class="tile big" data-tool="camera"><span class="ti">🤳</span><h4>Фото с Чача — кинокадр</h4><p>Сделай фото с камеры или из галереи → грузинский киноэффект и подпись для соцсетей.</p></button>
     <button class="tile big" data-tool="games"><span class="ti">🎮</span><h4>Игры — убей время в дороге</h4><p>Шахматы, нарды, змейка, 2048 и другие. Бесплатно, без регистрации.</p></button>
     <button class="tile big" data-tool="airports"><span class="ti">✈️</span><h4>Табло аэропортов Грузии</h4><p>Прилёты и вылеты Тбилиси, Батуми, Кутаиси — онлайн в реальном времени.</p></button>
     <button class="tile big" data-tool="trains"><span class="ti">🚆</span><h4>Поезда по Грузии</h4><p>Билеты Тбилиси↔Батуми, Кутаиси, Боржоми. Онлайн, с выбором мест.</p></button>
@@ -933,7 +937,8 @@ function streamReply(r,typingEl){
   return pump().catch(function(){finish();}); // ошибка потока не роняет всё приложение
 }
 
-sendBtn.onclick=function(){send()};
+function haptic(){try{if(navigator.vibrate)navigator.vibrate(8)}catch(e){}}
+sendBtn.onclick=function(){haptic();send()};
 input.onkeydown=function(e){if(e.key==='Enter')send()};
 quick.addEventListener('click',function(e){var b=e.target.closest('button');
   if(b)send(b.getAttribute('data-q'))});
@@ -1107,12 +1112,14 @@ tools.translator=function(){openModal('🗣️ Переводчик');
     '</div>'+
 
     '<div class="result"><b>🇬🇪 Грузин → тебе</b>'+
-      '<textarea class="field" id="geText" rows="2" placeholder="Грузин говорит 🎤 или впишите грузинский текст..." style="resize:vertical"></textarea>'+
+      '<textarea class="field" id="geText" rows="2" placeholder="Грузин говорит 🎤 или пишет на грузинской клавиатуре ниже ⌨️" style="resize:vertical"></textarea>'+
       '<div class="row2"><button class="btn" id="spkGe">🎤 Грузин говорит</button>'+
       '<button class="btn sec" id="goGe">🔁 Перевести мне</button></div>'+
+      '<button class="btn sec" id="kbToggle" style="margin-top:8px">⌨️ Грузинская клавиатура</button>'+
+      '<div id="geKb" style="display:none;margin-top:10px"></div>'+
       '<div id="geOut" style="display:none;margin-top:8px"></div>'+
     '</div>'+
-    '<p class="hint" style="margin-top:12px">💡 Если речь распозналась с ошибкой — просто поправь текст в окошке руками и нажми «Перевести». А если микрофон не сработал — впиши текст вручную.</p>';
+    '<p class="hint" style="margin-top:12px">💡 Нет грузинской клавиатуры в телефоне? Дай телефон грузину — пусть нажмёт «⌨️ Грузинская клавиатура» и напишет ответ. Потом «Перевести мне» — и ты поймёшь его.</p>';
 
   function translate(text,from,to,outEl,speakLng){
     if(!text||!text.trim()){outEl.style.display='block';outEl.innerHTML='<span class="hint" style="margin:0">Сначала скажи или впиши текст 🙂</span>';return}
@@ -1121,7 +1128,8 @@ tools.translator=function(){openModal('🗣️ Переводчик');
     fetch(url).then(function(r){return r.json()}).then(function(d){
       var tr=(d&&d.responseData&&d.responseData.translatedText)||'';
       if(!tr)throw 0;
-      outEl.innerHTML='<b style="font-size:1.1rem">'+tr+'</b> <button class="mini-say" data-say="'+tr.replace(/"/g,'&quot;')+'" data-lng="'+speakLng+'">🔊</button>';
+      outEl.innerHTML='<div style="font-size:1.4rem;font-weight:700;line-height:1.3;color:var(--gold)">'+tr+'</div>'+
+        '<button class="mini-say" data-say="'+tr.replace(/"/g,'&quot;')+'" data-lng="'+speakLng+'" style="margin-top:8px">🔊 Озвучить</button>';
       var sb=outEl.querySelector('.mini-say');
       if(sb)sb.onclick=function(){speakFromButton(sb)};
       speak(tr,speakLng);
@@ -1135,20 +1143,57 @@ tools.translator=function(){openModal('🗣️ Переводчик');
     var got=false;
     r.onresult=function(e){got=true;ta.value=e.results[0][0].transcript;if(onDone)onDone()};
     r.onerror=function(ev){if(!got)ta.value='';
-      if(ev&&ev.error==='language-not-supported'){alert('Грузинская речь не распознаётся на этом телефоне 🍶 Впиши грузинский текст вручную в окошко — я переведу.');}
+      if(ev&&(ev.error==='language-not-supported'||ev.error==='no-speech')&&srcLang==='ka-GE'){
+        alert('Грузинская речь не распознаётся на этом телефоне 🍶\n\nПопроси грузина впечатать текст в окошко (грузинская клавиатура) — и нажми «Перевести мне». Перевод появится крупно на твоём языке.');
+      }
     };
     r.onend=function(){if(!got&&ta.value==='🎙️ Слушаю...')ta.value=''};
     try{r.start()}catch(e){ta.value=''}
   }
   // Я → грузину
-  document.getElementById('spkMe').onclick=function(){listen(navigator.language||'ru-RU','meText')};
+  document.getElementById('spkMe').onclick=function(){listen(navigator.language||'ru-RU','meText',function(){
+    translate(document.getElementById('meText').value,myLang,'ka',document.getElementById('meOut'),'ka-GE');
+  })};
   document.getElementById('goMe').onclick=function(){
     translate(document.getElementById('meText').value,myLang,'ka',document.getElementById('meOut'),'ka-GE');
   };
-  // Грузин → мне
-  document.getElementById('spkGe').onclick=function(){listen('ka-GE','geText')};
+  // Грузин → мне — после распознавания сразу переводим и показываем крупно
+  document.getElementById('spkGe').onclick=function(){listen('ka-GE','geText',function(){
+    translate(document.getElementById('geText').value,'ka',myLang,document.getElementById('geOut'),myLang+'-'+myLang.toUpperCase());
+  })};
   document.getElementById('goGe').onclick=function(){
     translate(document.getElementById('geText').value,'ka',myLang,document.getElementById('geOut'),myLang+'-'+myLang.toUpperCase());
+  };
+  // Грузинская экранная клавиатура (для грузина, у которого её нет в телефоне клиента)
+  var kbRows=[
+    ['ქ','წ','ე','რ','ტ','ყ','უ','ი','ო','პ'],
+    ['ა','ს','დ','ფ','გ','ჰ','ჯ','კ','ლ'],
+    ['ზ','ხ','ც','ვ','ბ','ნ','მ'],
+    ['შ','ჩ','ღ','თ','ძ','ჭ','ჟ']
+  ];
+  var kbOpen=false;
+  document.getElementById('kbToggle').onclick=function(){
+    var kb=document.getElementById('geKb');
+    kbOpen=!kbOpen;
+    if(!kbOpen){kb.style.display='none';return}
+    kb.style.display='block';
+    if(kb.dataset.built)return;
+    kb.dataset.built='1';
+    var ta=document.getElementById('geText');
+    var html=kbRows.map(function(row){
+      return '<div style="display:flex;gap:4px;justify-content:center;margin-bottom:4px">'+
+        row.map(function(ch){return '<button type="button" class="gk" data-ch="'+ch+'" style="flex:1;min-width:0;padding:11px 0;font-size:1.15rem;background:var(--card-2);border:1px solid var(--line);border-radius:7px;color:var(--ink);cursor:pointer">'+ch+'</button>'}).join('')+
+      '</div>';
+    }).join('')+
+    '<div style="display:flex;gap:4px;justify-content:center">'+
+      '<button type="button" class="gk" data-ch=" " style="flex:3;padding:11px 0;background:var(--card-2);border:1px solid var(--line);border-radius:7px;color:var(--ink);cursor:pointer">␣ пробел</button>'+
+      '<button type="button" id="gkDel" style="flex:1;padding:11px 0;background:var(--card-2);border:1px solid var(--line);border-radius:7px;color:var(--ink);cursor:pointer">⌫</button>'+
+    '</div>';
+    kb.innerHTML=html;
+    kb.querySelectorAll('.gk').forEach(function(b){
+      b.onclick=function(){ta.value+=b.getAttribute('data-ch');ta.focus()};
+    });
+    kb.querySelector('#gkDel').onclick=function(){ta.value=ta.value.slice(0,-1);ta.focus()};
   };
 };
 
@@ -1365,46 +1410,61 @@ tools.prices=function(){openModal('🛡️ Честные цены и места
     '<div class="list-item"><b>💵 Наличные в горах</b><br><span class="hint" style="margin:0">В Тбилиси и Батуми карта везде. Но в Кахетии, Сванетии, деревнях — бери наличные лари: у бабушки с домашним вином терминала нет.</span></div>'+
     '<div class="list-item"><b>🍽️ Рестораны</b><br><span class="hint" style="margin:0">Ходи туда, куда ходят сами грузины — там вкуснее и честнее по цене, чем в туристических местах. Будем обновлять места для вас скоро.</span></div>'+
     '<div class="list-item"><b>📲 SIM и интернет</b><br><span class="hint" style="margin:0">Если не взял eSIM заранее — SIM можно купить прямо в аэропорту. Интернет в Грузии дешёвый, выбирай тариф под себя.</span></div>'+
-    '<p class="hint" style="margin-top:14px">⚠️ Цены ориентировочные на 2026 — всегда уточняй на месте. Главное правило: такси заказывай в приложении, деньги меняй только в обменниках с табло.</p>';
+    '<p class="hint" style="margin-top:14px">⚠️ Цены ориентировочные на 2026 — всегда уточняй на месте. Главное правило: такси заказывай в приложении, деньги меняй только в обменниках с табло и всегда перечитывай курс на месте, не выходя из обменника, чтобы подтвердить что всё верно.</p>';
 };
 
 /* ============ ВИРУСНЫЙ ГЕНЕРАТОР СТОРИС ============ */
 tools.story=function(){openModal('📸 Сторис про Грузию');
-  // Темы: серьёзные + смешные с персонажами
-  var themes=[
-    {name:'🧀 Хачапури-король',emoji:'🧀👑',grad:['#b8842f','#e6a648'],
-      lines:['Хачапури-король','требует ещё одну порцию 🧀'],fun:true},
-    {name:'🍷 Тамада',emoji:'🍷🎩',grad:['#7a1220','#a8243a'],
-      lines:['Я тут тамада,','а ты — мой дорогой гость! 🍷'],fun:true},
-    {name:'🍇 Чурчхела-банда',emoji:'🍇🍫',grad:['#3a1d0f','#7a1220'],
-      lines:['Чурчхела-банда','уже в деле 😎🍇'],fun:true},
-    {name:'🥟 Хинкали-ниндзя',emoji:'🥟🥷',grad:['#143d2b','#2a5a3a'],
-      lines:['Хинкали-ниндзя:','съел 15 и не считаю 🥟'],fun:true},
-    {name:'🏔️ Душа в Грузии',emoji:'🏔️🇬🇪',grad:['#2a0a12','#a8243a'],
-      lines:['Приехал на пару дней —','остался душой навсегда'],fun:false},
-    {name:'🥂 Супра',emoji:'🥂🍷',grad:['#7a1220','#b8842f'],
-      lines:['Где супра —','там счастье 🥂'],fun:false},
-    {name:'🍇 8000 лет вина',emoji:'🍇🏺',grad:['#3a1d0f','#e6a648'],
-      lines:['Лучшее вино мира','делают здесь 8000 лет'],fun:false},
-    {name:'❤️ Тбилиси',emoji:'❤️🏙️',grad:['#143d2b','#d8a44a'],
-      lines:['Сердце осталось','в Тбилиси ❤️'],fun:false}
+  // Генератор: персонажи × фразы × градиенты = сотни вариантов, все с грузинским колоритом
+  var characters=['🧀👑','🍷🎩','🍇🍫','🥟🥷','🏔️🇬🇪','🥂🍷','🍇🏺','❤️🏙️','🍶😎','🐑⛰️','🍞🔥','🦅🏔️','🌶️🍲','🧄🍆','☕🌅','🍵🫖','🐉🏰','🎻🎶','💃🕺','🌄🚠','🍯🐝','🧺🍅','🌰🍇','🕍✨','🛶🌊','🐴🏞️','🎂🎉','🌻🌞'];
+  var phrases=[
+    ['Хачапури-король','требует добавку 🧀'],
+    ['Я тут тамада,','а ты мой гость! 🍷'],
+    ['Чурчхела-банда','уже в деле 😎'],
+    ['Хинкали-ниндзя:','съел 15, не считаю 🥟'],
+    ['Приехал на 3 дня —','остался душой навсегда'],
+    ['Где супра —','там счастье 🥂'],
+    ['Вино делают тут','8000 лет 🍇'],
+    ['Сердце осталось','в Тбилиси ❤️'],
+    ['Грузия украла','моё сердце 🇬🇪'],
+    ['Один хинкали?','Не смеши, давай 20 🥟'],
+    ['Тамада сказал —','пьём до дна! 🍷'],
+    ['В горах Кавказа','дышится иначе 🏔️'],
+    ['Чача льётся,','душа поёт 🍶'],
+    ['Каждый гость —','подарок Бога 🙏'],
+    ['Хачапури на завтрак,','обед и ужин 🧀'],
+    ['Я не турист,','я почти грузин 😎'],
+    ['Саперави на закате','— вот это жизнь 🌅'],
+    ['Мцване, кварели,','и ещё по бокалу! 🥂'],
+    ['Казбеги зовёт','— я уже бегу 🏔️'],
+    ['Море Батуми','+ хачапури = рай 🌊'],
+    ['Старый Тбилиси','влюбляет с первого шага 🏙️'],
+    ['Гамарджоба,','генацвале! 🍶'],
+    ['Грузинский стол —','это марафон 🍽️'],
+    ['Тут даже воздух','пахнет вином 🍇']
   ];
-  var ti=0;
+  var grads=[
+    ['#7a1220','#a8243a'],['#b8842f','#e6a648'],['#3a1d0f','#7a1220'],
+    ['#143d2b','#2a5a3a'],['#2a0a12','#a8243a'],['#7a1220','#b8842f'],
+    ['#3a1d0f','#e6a648'],['#143d2b','#d8a44a'],['#4a1020','#c8911f'],
+    ['#1d3a2a','#7a1220'],['#5a0c18','#e3b35e'],['#2a1d3a','#a8243a'],
+    ['#3a2410','#d8a44a'],['#1a2a3a','#4caf50'],['#3a0a1a','#f0934a']
+  ];
+  function rnd(a){return a[Math.floor(Math.random()*a.length)]}
+  var cur={emoji:rnd(characters),phrase:rnd(phrases),grad:rnd(grads)};
+  function reroll(){cur={emoji:rnd(characters),phrase:rnd(phrases),grad:rnd(grads)}}
   mBody.innerHTML=
-    '<p class="hint">Сделай весёлую картинку для Instagram/TikTok-сторис. Листай стили, впиши свою фразу — сохрани или поделись. На картинке наш бренд sakartvelo.ai 🍶</p>'+
+    '<p class="hint">Сотни весёлых вариантов с грузинским колоритом! Жми «Следующий», впиши свою фразу — сохрани или поделись. На картинке бренд sakartvelo.ai 🍶</p>'+
     '<canvas id="stCanvas" width="540" height="960" style="width:100%;max-width:300px;border-radius:16px;border:1px solid var(--line);display:block;margin:10px auto"></canvas>'+
-    '<div style="text-align:center;font-weight:700;margin-bottom:8px" id="stName"></div>'+
     '<input class="field" id="stText" maxlength="80" placeholder="Своя фраза (необязательно)">'+
-    '<button class="btn" id="stStyle">🎲 Следующий стиль</button>'+
+    '<button class="btn" id="stStyle">🎲 Следующий вариант</button>'+
     '<button class="btn sec" id="stSave" style="margin-top:8px">💾 Сохранить картинку</button>'+
     '<button class="btn sec" id="stShare" style="margin-top:8px">📲 Поделиться</button>'+
     '<p class="hint" id="stHint" style="margin-top:10px">💡 На айфоне: после «Сохранить» картинка откроется — задержи палец на ней и выбери «Сохранить фото».</p>';
   var cv=document.getElementById('stCanvas'),ctx=cv.getContext('2d');
   function draw(){
-    var th=themes[ti%themes.length];
-    document.getElementById('stName').textContent=th.name;
     var lg=ctx.createLinearGradient(0,0,540,960);
-    lg.addColorStop(0,th.grad[0]);lg.addColorStop(1,th.grad[1]);
+    lg.addColorStop(0,cur.grad[0]);lg.addColorStop(1,cur.grad[1]);
     ctx.fillStyle=lg;ctx.fillRect(0,0,540,960);
     ctx.globalAlpha=.10;ctx.fillStyle='#fff';
     ctx.beginPath();ctx.arc(440,170,130,0,7);ctx.fill();
@@ -1412,10 +1472,10 @@ tools.story=function(){openModal('📸 Сторис про Грузию');
     ctx.globalAlpha=1;
     ctx.textAlign='center';
     // большой эмодзи-персонаж
-    ctx.font='150px serif';ctx.fillText(th.emoji,270,330);
-    // текст: своя фраза или фразы темы
+    ctx.font='150px serif';ctx.fillText(cur.emoji,270,330);
+    // текст: своя фраза или фраза варианта
     var custom=document.getElementById('stText').value.trim();
-    var lines=custom?wrap(custom):[].concat.apply([],th.lines.map(wrap));
+    var lines=custom?wrap(custom):[].concat.apply([],cur.phrase.map(wrap));
     ctx.fillStyle='#fff';ctx.font='bold 44px Georgia, serif';
     ctx.shadowColor='rgba(0,0,0,.4)';ctx.shadowBlur=14;
     var startY=560-(lines.length*54)/2;
@@ -1437,7 +1497,7 @@ tools.story=function(){openModal('📸 Сторис про Грузию');
     lines.push(line.trim());return lines;
   }
   draw();
-  document.getElementById('stStyle').onclick=function(){ti++;draw()};
+  document.getElementById('stStyle').onclick=function(){reroll();draw()};
   document.getElementById('stText').oninput=draw;
   function getURL(){try{return cv.toDataURL('image/png')}catch(e){return null}}
   document.getElementById('stSave').onclick=function(){
@@ -1462,56 +1522,363 @@ tools.story=function(){openModal('📸 Сторис про Грузию');
 };
 /* ============ ИГРЫ ============ */
 tools.games=function(){openModal('🎮 Игры в дороге');
+  // embed = playpager (проверено, работает в iframe). local = встроенные (всегда работают, не тормозят).
   var gameList=[
-    {name:'♟️ Шахматы',desc:'Против компьютера или друга',url:'https://playpager.com/embed/chess/index.html'},
-    {name:'🎲 Нарды',desc:'Классическая игра на двоих',url:'https://cardgames.io/backgammon/'},
-    {name:'🐍 Змейка',desc:'Классика — ешь и расти',url:'https://gamezipper.com/snake/'},
-    {name:'🟦 2048',desc:'Складывай цифры до 2048',url:'https://gamezipper.com/2048/'},
-    {name:'🧱 Блок-пазл',desc:'Тетрис-стиль, уютный дизайн',url:'https://gamezipper.com/wood-block-puzzle/'},
-    {name:'🔢 Судоку',desc:'Заполни цифры 1–9',url:'https://playpager.com/embed/sudoku/index.html'},
-    {name:'🔵 Реверси',desc:'Захвати больше фишек',url:'https://playpager.com/embed/reversi/index.html'},
-    {name:'🃏 Солитер',desc:'Классический пасьянс',url:'https://cardgames.io/solitaire/'},
-    {name:'❤️ Червы',desc:'Карточная игра — не бери штрафы',url:'https://cardgames.io/hearts/'},
-    {name:'💣 Сапёр',desc:'Найди мины — не взорвись',url:'https://playpager.com/embed/minesweeper/index.html'}
+    {name:'🧱 Тетрис',desc:'Складывай фигуры, очищай ряды',type:'local',game:'tetris'},
+    {name:'🐍 Змейка',desc:'Ешь и расти — классика',type:'local',game:'snake'},
+    {name:'🟦 2048',desc:'Соединяй цифры до 2048',type:'local',game:'g2048'},
+    {name:'💣 Сапёр',desc:'Найди мины — не взорвись',type:'embed',url:'https://playpager.com/embed/minesweeper/index.html'},
+    {name:'♟️ Шахматы',desc:'Против компьютера или друга',type:'embed',url:'https://playpager.com/embed/chess/index.html'},
+    {name:'🔢 Судоку',desc:'Заполни цифры 1–9',type:'embed',url:'https://playpager.com/embed/sudoku/index.html'}
   ];
   mBody.innerHTML=
-    '<p class="hint">Играй прямо здесь — без регистрации, бесплатно. Поделись с другом чтобы играть вместе 🎮</p>'+
-    gameList.map(function(g){
-      return '<div class="list-item" style="cursor:pointer" data-gurl="'+g.url+'" data-gname="'+g.name+'">'+
+    '<p class="hint">Играй прямо здесь — бесплатно, без регистрации. Скоротай время в дороге 🎮</p>'+
+    gameList.map(function(g,i){
+      return '<div class="list-item" style="cursor:pointer" data-gi="'+i+'">'+
         '<b>'+g.name+'</b><br><span class="hint" style="margin:0">'+g.desc+'</span></div>';
     }).join('')+
-    '<p class="hint" style="margin-top:12px">💡 После игры поделись результатом с друзьями через кнопку «Поделиться» внизу сайта.</p>';
+    '<p class="hint" style="margin-top:12px">💡 Понравилось? Поделись сайтом с друзьями кнопкой «Поделиться» внизу 🍶</p>';
 
-  // Открытие игры в полноэкранном модальном iframe
-  mBody.querySelectorAll('[data-gurl]').forEach(function(el){
+  mBody.querySelectorAll('[data-gi]').forEach(function(el){
     el.onclick=function(){
-      var url=el.getAttribute('data-gurl');
-      var name=el.getAttribute('data-gname');
-      // Создаём оверлей поверх всего
+      var g=gameList[+el.getAttribute('data-gi')];
       var ov=document.createElement('div');
-      ov.style.cssText='position:fixed;inset:0;z-index:9998;background:#000;display:flex;flex-direction:column';
+      ov.style.cssText='position:fixed;inset:0;z-index:9998;background:#0a0608;display:flex;flex-direction:column';
       var head=document.createElement('div');
-      head.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#1d1113;flex-shrink:0';
-      head.innerHTML='<span style="color:#f4e9dc;font-weight:700;font-size:1rem">'+name+'</span>'+
-        '<div style="display:flex;gap:10px">'+
-        '<button id="gShare" style="background:var(--gold,#e3b35e);color:#3a2410;border:none;border-radius:10px;padding:7px 14px;font-weight:700;font-size:.9rem;cursor:pointer">📲 Поделиться</button>'+
-        '<button id="gClose" style="background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:10px;padding:7px 14px;font-size:.9rem;cursor:pointer">✕ Закрыть</button>'+
-        '</div>';
-      var frame=document.createElement('iframe');
-      frame.src=url;
-      frame.style.cssText='width:100%;flex:1;border:none';
-      frame.allow='autoplay';
+      head.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:12px 16px;padding-top:calc(12px + env(safe-area-inset-top));background:#1d1113;flex-shrink:0';
+      head.innerHTML='<span style="color:#f4e9dc;font-weight:700;font-size:1.05rem">'+g.name+'</span>'+
+        '<button id="gClose" style="background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:10px;padding:8px 16px;font-size:.9rem;cursor:pointer">✕ Закрыть</button>';
       ov.appendChild(head);
-      ov.appendChild(frame);
+      var area=document.createElement('div');
+      area.style.cssText='flex:1;overflow:hidden;display:flex;flex-direction:column';
+      ov.appendChild(area);
       document.body.appendChild(ov);
-      head.querySelector('#gClose').onclick=function(){document.body.removeChild(ov)};
-      head.querySelector('#gShare').onclick=function(){
-        var txt=encodeURIComponent('Играю в '+name+' на sakartvelo.ai 🎮🇬🇪 Попробуй побить меня! sakartvelo.ai');
-        if(navigator.share){navigator.share({title:name,text:'Играю в '+name+' на sakartvelo.ai 🎮',url:'https://sakartvelo.ai'}).catch(function(){});}
-        else{window.open('https://wa.me/?text='+txt);}
+      head.querySelector('#gClose').onclick=function(){
+        if(ov._cleanup)ov._cleanup();
+        document.body.removeChild(ov);
       };
+      if(g.type==='embed'){
+        var frame=document.createElement('iframe');
+        frame.src=g.url;frame.style.cssText='width:100%;flex:1;border:none';frame.allow='autoplay';
+        area.appendChild(frame);
+      }else{
+        GAMES[g.game](area,ov);
+      }
     };
   });
+};
+
+/* ===== ВСТРОЕННЫЕ ИГРЫ (чистый JS, без внешних серверов) ===== */
+var GAMES={};
+
+// --- ТЕТРИС ---
+GAMES.tetris=function(area,ov){
+  var COLS=10,ROWS=20,cell;
+  var wrap=document.createElement('div');
+  wrap.style.cssText='flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:10px';
+  var scoreEl=document.createElement('div');
+  scoreEl.style.cssText='color:#e3b35e;font-weight:700;font-size:1.1rem';scoreEl.textContent='Очки: 0';
+  var cv=document.createElement('canvas');
+  cv.style.cssText='background:#140d0f;border:1px solid rgba(227,179,94,.3);border-radius:8px;touch-action:none;max-height:60vh';
+  var ctrl=document.createElement('div');
+  ctrl.style.cssText='display:flex;gap:8px;flex-wrap:wrap;justify-content:center';
+  ctrl.innerHTML=['◀','🔄','▼','▶'].map(function(s){return '<button style="background:#26171a;border:1px solid rgba(227,179,94,.3);color:#f4e9dc;font-size:1.4rem;width:60px;height:54px;border-radius:12px;cursor:pointer">'+s+'</button>'}).join('');
+  wrap.appendChild(scoreEl);wrap.appendChild(cv);wrap.appendChild(ctrl);area.appendChild(wrap);
+  var size=Math.min(Math.floor((window.innerWidth-40)/COLS),Math.floor((window.innerHeight*0.6)/ROWS));
+  cell=size;cv.width=COLS*cell;cv.height=ROWS*cell;
+  var ctx=cv.getContext('2d');
+  var grid=[],score=0,gameover=false;
+  for(var r=0;r<ROWS;r++){grid[r]=[];for(var c=0;c<COLS;c++)grid[r][c]=0}
+  var shapes=[
+    [[1,1,1,1]],[[1,1],[1,1]],[[0,1,0],[1,1,1]],
+    [[1,0,0],[1,1,1]],[[0,0,1],[1,1,1]],[[1,1,0],[0,1,1]],[[0,1,1],[1,1,0]]
+  ];
+  var colors=['#00bcd4','#ffeb3b','#9c27b0','#2196f3','#ff9800','#4caf50','#f44336'];
+  var cur,curX,curY,curC;
+  function newPiece(){var i=Math.floor(Math.random()*shapes.length);
+    cur=shapes[i];curC=colors[i];curX=Math.floor((COLS-cur[0].length)/2);curY=0;
+    if(collide(curX,curY,cur)){gameover=true}}
+  function collide(x,y,s){for(var r=0;r<s.length;r++)for(var c=0;c<s[r].length;c++){
+    if(s[r][c]){var nx=x+c,ny=y+r;if(nx<0||nx>=COLS||ny>=ROWS||(ny>=0&&grid[ny][nx]))return true}}return false}
+  function merge(){for(var r=0;r<cur.length;r++)for(var c=0;c<cur[r].length;c++)if(cur[r][c]&&curY+r>=0)grid[curY+r][curX+c]=curC}
+  function clearLines(){var lines=0;for(var r=ROWS-1;r>=0;r--){if(grid[r].every(function(v){return v})){grid.splice(r,1);grid.unshift(new Array(COLS).fill(0));lines++;r++}}
+    if(lines){score+=[0,100,300,500,800][lines]||lines*200;scoreEl.textContent='Очки: '+score}}
+  function rotate(){var n=cur[0].length,m=cur.length,nr=[];for(var c=0;c<n;c++){nr[c]=[];for(var r=m-1;r>=0;r--)nr[c].push(cur[r][c])}
+    if(!collide(curX,curY,nr))cur=nr}
+  function drop(){if(!collide(curX,curY+1,cur)){curY++}else{merge();clearLines();newPiece()}draw()}
+  function move(d){if(!collide(curX+d,curY,cur))curX+=d;draw()}
+  function draw(){ctx.fillStyle='#140d0f';ctx.fillRect(0,0,cv.width,cv.height);
+    for(var r=0;r<ROWS;r++)for(var c=0;c<COLS;c++)if(grid[r][c]){ctx.fillStyle=grid[r][c];ctx.fillRect(c*cell+1,r*cell+1,cell-2,cell-2)}
+    if(!gameover)for(var r2=0;r2<cur.length;r2++)for(var c2=0;c2<cur[r2].length;c2++)if(cur[r2][c2]){ctx.fillStyle=curC;ctx.fillRect((curX+c2)*cell+1,(curY+r2)*cell+1,cell-2,cell-2)}
+    if(gameover){ctx.fillStyle='rgba(0,0,0,.75)';ctx.fillRect(0,0,cv.width,cv.height);
+      ctx.fillStyle='#e3b35e';ctx.font='bold 22px sans-serif';ctx.textAlign='center';
+      ctx.fillText('Игра окончена',cv.width/2,cv.height/2-10);
+      ctx.font='16px sans-serif';ctx.fillText('Очки: '+score+' — нажми ▼',cv.width/2,cv.height/2+20)}}
+  var btns=ctrl.querySelectorAll('button');
+  btns[0].onclick=function(){if(gameover)return;move(-1)};
+  btns[1].onclick=function(){if(gameover)return;rotate();draw()};
+  btns[2].onclick=function(){if(gameover){restart();return}drop()};
+  btns[3].onclick=function(){if(gameover)return;move(1)};
+  function restart(){for(var r=0;r<ROWS;r++)for(var c=0;c<COLS;c++)grid[r][c]=0;score=0;gameover=false;scoreEl.textContent='Очки: 0';newPiece();draw()}
+  // свайпы
+  var sx,sy;
+  cv.addEventListener('touchstart',function(e){var t=e.touches[0];sx=t.clientX;sy=t.clientY},{passive:true});
+  cv.addEventListener('touchend',function(e){if(gameover){restart();return}var t=e.changedTouches[0];var dx=t.clientX-sx,dy=t.clientY-sy;
+    if(Math.abs(dx)>Math.abs(dy)){if(dx>20)move(1);else if(dx<-20)move(-1)}else{if(dy>20)drop();else if(dy<-20){rotate();draw()}}},{passive:true});
+  newPiece();draw();
+  var iv=setInterval(function(){if(!gameover)drop()},700);
+  ov._cleanup=function(){clearInterval(iv)};
+};
+
+// --- ЗМЕЙКА ---
+GAMES.snake=function(area,ov){
+  var N=17,cell;
+  var wrap=document.createElement('div');
+  wrap.style.cssText='flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:10px';
+  var scoreEl=document.createElement('div');scoreEl.style.cssText='color:#e3b35e;font-weight:700;font-size:1.1rem';scoreEl.textContent='Очки: 0';
+  var cv=document.createElement('canvas');cv.style.cssText='background:#140d0f;border:1px solid rgba(227,179,94,.3);border-radius:8px;touch-action:none;max-height:60vh';
+  var hint=document.createElement('div');hint.style.cssText='color:#b09a8c;font-size:.85rem';hint.textContent='Свайпай пальцем по полю';
+  wrap.appendChild(scoreEl);wrap.appendChild(cv);wrap.appendChild(hint);area.appendChild(wrap);
+  var size=Math.min(window.innerWidth-40,Math.floor(window.innerHeight*0.6));cell=Math.floor(size/N);cv.width=N*cell;cv.height=N*cell;
+  var ctx=cv.getContext('2d');
+  var snake,dir,food,score,gameover,iv;
+  function reset(){snake=[{x:8,y:8}];dir={x:1,y:0};score=0;gameover=false;scoreEl.textContent='Очки: 0';placeFood()}
+  function placeFood(){food={x:Math.floor(Math.random()*N),y:Math.floor(Math.random()*N)}}
+  function step(){if(gameover)return;
+    var h={x:snake[0].x+dir.x,y:snake[0].y+dir.y};
+    if(h.x<0||h.x>=N||h.y<0||h.y>=N||snake.some(function(s){return s.x===h.x&&s.y===h.y})){gameover=true;draw();return}
+    snake.unshift(h);
+    if(h.x===food.x&&h.y===food.y){score+=10;scoreEl.textContent='Очки: '+score;placeFood()}else{snake.pop()}
+    draw()}
+  function draw(){ctx.fillStyle='#140d0f';ctx.fillRect(0,0,cv.width,cv.height);
+    ctx.fillStyle='#f44336';ctx.beginPath();ctx.arc(food.x*cell+cell/2,food.y*cell+cell/2,cell/2-1,0,7);ctx.fill();
+    snake.forEach(function(s,i){ctx.fillStyle=i===0?'#e3b35e':'#4caf50';ctx.fillRect(s.x*cell+1,s.y*cell+1,cell-2,cell-2)});
+    if(gameover){ctx.fillStyle='rgba(0,0,0,.75)';ctx.fillRect(0,0,cv.width,cv.height);ctx.fillStyle='#e3b35e';ctx.font='bold 22px sans-serif';ctx.textAlign='center';ctx.fillText('Игра окончена',cv.width/2,cv.height/2-10);ctx.font='16px sans-serif';ctx.fillText('Очки: '+score+' — тапни',cv.width/2,cv.height/2+20)}}
+  var sx,sy;
+  cv.addEventListener('touchstart',function(e){var t=e.touches[0];sx=t.clientX;sy=t.clientY},{passive:true});
+  cv.addEventListener('touchend',function(e){if(gameover){reset();draw();return}var t=e.changedTouches[0];var dx=t.clientX-sx,dy=t.clientY-sy;
+    if(Math.abs(dx)>Math.abs(dy)){if(dx>15&&dir.x===0)dir={x:1,y:0};else if(dx<-15&&dir.x===0)dir={x:-1,y:0}}
+    else{if(dy>15&&dir.y===0)dir={x:0,y:1};else if(dy<-15&&dir.y===0)dir={x:0,y:-1}}},{passive:true});
+  reset();draw();iv=setInterval(step,180);
+  ov._cleanup=function(){clearInterval(iv)};
+};
+
+// --- 2048 ---
+GAMES.g2048=function(area,ov){
+  var N=4;
+  var wrap=document.createElement('div');
+  wrap.style.cssText='flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:10px';
+  var scoreEl=document.createElement('div');scoreEl.style.cssText='color:#e3b35e;font-weight:700;font-size:1.1rem';scoreEl.textContent='Очки: 0';
+  var cv=document.createElement('canvas');cv.style.cssText='background:#1d1413;border-radius:10px;touch-action:none;max-height:62vh';
+  var hint=document.createElement('div');hint.style.cssText='color:#b09a8c;font-size:.85rem';hint.textContent='Свайпай — соединяй одинаковые';
+  wrap.appendChild(scoreEl);wrap.appendChild(cv);wrap.appendChild(hint);area.appendChild(wrap);
+  var size=Math.min(window.innerWidth-40,Math.floor(window.innerHeight*0.6),400);cv.width=size;cv.height=size;
+  var ctx=cv.getContext('2d'),pad=size*0.03,cs=(size-pad*(N+1))/N;
+  var grid,score,gameover;
+  var cols={0:'#2a1d1f',2:'#eee4da',4:'#ede0c8',8:'#f2b179',16:'#f59563',32:'#f67c5f',64:'#f65e3b',128:'#edcf72',256:'#edcc61',512:'#edc850',1024:'#edc53f',2048:'#edc22e'};
+  function reset(){grid=[];for(var i=0;i<N;i++){grid[i]=[0,0,0,0]}score=0;gameover=false;add();add();draw()}
+  function add(){var e=[];for(var r=0;r<N;r++)for(var c=0;c<N;c++)if(!grid[r][c])e.push([r,c]);
+    if(e.length){var p=e[Math.floor(Math.random()*e.length)];grid[p[0]][p[1]]=Math.random()<0.9?2:4}}
+  function draw(){ctx.fillStyle='#1d1413';ctx.fillRect(0,0,size,size);
+    for(var r=0;r<N;r++)for(var c=0;c<N;c++){var v=grid[r][c],x=pad+c*(cs+pad),y=pad+r*(cs+pad);
+      ctx.fillStyle=cols[v]||'#edc22e';roundRect(x,y,cs,cs,8);ctx.fill();
+      if(v){ctx.fillStyle=v<=4?'#776e65':'#fff';ctx.font='bold '+(v<100?cs*0.4:v<1000?cs*0.32:cs*0.26)+'px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(v,x+cs/2,y+cs/2)}}
+    scoreEl.textContent='Очки: '+score;
+    if(gameover){ctx.fillStyle='rgba(0,0,0,.7)';ctx.fillRect(0,0,size,size);ctx.fillStyle='#e3b35e';ctx.font='bold 24px sans-serif';ctx.textAlign='center';ctx.fillText('Конец! Очки: '+score,size/2,size/2-10);ctx.font='15px sans-serif';ctx.fillText('Тапни для новой игры',size/2,size/2+20)}}
+  function roundRect(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+  function slide(row){var a=row.filter(function(v){return v});
+    for(var i=0;i<a.length-1;i++){if(a[i]===a[i+1]){a[i]*=2;score+=a[i];a.splice(i+1,1)}}
+    while(a.length<N)a.push(0);return a}
+  function rotateGrid(g){var n=[];for(var c=0;c<N;c++){n[c]=[];for(var r=N-1;r>=0;r--)n[c].push(g[r][c])}return n}
+  function move(dir){var before=JSON.stringify(grid);var g=grid;
+    for(var i=0;i<dir;i++)g=rotateGrid(g);
+    for(var r=0;r<N;r++)g[r]=slide(g[r]);
+    for(var j=0;j<(4-dir)%4;j++)g=rotateGrid(g);
+    grid=g;if(JSON.stringify(grid)!==before){add();draw();checkOver()}}
+  function checkOver(){for(var r=0;r<N;r++)for(var c=0;c<N;c++){if(!grid[r][c])return;
+    if(c<N-1&&grid[r][c]===grid[r][c+1])return;if(r<N-1&&grid[r][c]===grid[r+1][c])return}gameover=true;draw()}
+  var sx,sy;
+  cv.addEventListener('touchstart',function(e){var t=e.touches[0];sx=t.clientX;sy=t.clientY},{passive:true});
+  cv.addEventListener('touchend',function(e){if(gameover){reset();return}var t=e.changedTouches[0];var dx=t.clientX-sx,dy=t.clientY-sy;
+    if(Math.max(Math.abs(dx),Math.abs(dy))<20)return;
+    if(Math.abs(dx)>Math.abs(dy)){move(dx>0?2:0)}else{move(dy>0?3:1)}},{passive:true});
+  reset();
+  ov._cleanup=function(){};
+};
+
+/* ============ ФОТО С ЧАЧА (камера + киноэффект) ============ */
+tools.camera=function(){openModal('🤳 Фото с Чача');
+  var OVERLAYS=[
+    {emoji:'⛰️',name:'Казбек',label:'Казбеги 2026',color:'#1a3a5c',text:'ყაზბეგი',sub:'Kazbegi Moment'},
+    {emoji:'🍷',name:'Вино',label:'Georgian Wine',color:'#6b1a2a',text:'ღვინო',sub:'Wine & Soul'},
+    {emoji:'🧀',name:'Хачапури',label:'Хачапури vibes',color:'#c47a1e',text:'ხაჭაპური',sub:'Хачапури ❤️'},
+    {emoji:'🏔️',name:'Сванетия',label:'Сванетия',color:'#2d5a27',text:'სვანეთი',sub:'Svaneti Forever'},
+    {emoji:'🌅',name:'Закат',label:'Golden Hour',color:'#d4501a',text:'საქართველო',sub:'Golden Georgia'},
+    {emoji:'🍑',name:'Чача',label:'Чача Approves',color:'#8b2fc9',text:'ჭაჭა',sub:'Chacha Approves 🔥'},
+    {emoji:'🏛️',name:'Тбилиси',label:'Old Tbilisi',color:'#8b4513',text:'თბილისი',sub:'Old Town Magic'},
+    {emoji:'❤️',name:'Люблю',label:'Georgia ❤️',color:'#cc0000',text:'მიყვარს',sub:'I ❤️ Georgia'}
+  ];
+  var CAPTIONS=[
+    'Грузия захватила моё сердце навсегда 🇬🇪❤️ #Georgia #Sakartvelo #GeorgiaTravel',
+    'Один момент в Казбеги стоит тысячи слов ⛰️ #Kazbegi #Mountains #Georgia2026',
+    'Чача + хачапури = счастье 🧀🥂 #Chacha #Khachapuri #GeorgianFood',
+    'Тбилиси, я влюбился 🏛️✨ #Tbilisi #OldTown #GeorgiaVibes',
+    'Сванетия меняет тебя навсегда 🏔️💫 #Svaneti #GeorgianMountains'
+  ];
+  var sel=0,captured=null,processed=null,stream=null,facing='environment';
+
+  mBody.innerHTML=
+    '<p class="hint">Сделай фото на камеру или выбери из галереи — добавим грузинский киноэффект, надпись и подпись для соцсетей. Всё на твоём телефоне, ничего не загружается на сервер 🍶</p>'+
+    '<div id="camStage"></div>';
+  var stage=document.getElementById('camStage');
+
+  function stopStream(){if(stream){stream.getTracks().forEach(function(t){t.stop()});stream=null}}
+  // когда закрывают модалку — глушим камеру
+  var origBack=mBack.onclick;
+  mBack.onclick=function(){stopStream();mBack.onclick=origBack;origBack()};
+
+  function home(){
+    stopStream();
+    stage.innerHTML=
+      '<button class="btn" id="camOpen" style="margin-bottom:10px">📷 Открыть камеру</button>'+
+      '<button class="btn sec" id="camPick">🖼️ Выбрать из галереи</button>'+
+      '<input type="file" id="camFile" accept="image/*" style="display:none">'+
+      '<div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:16px;justify-content:center">'+
+        OVERLAYS.map(function(o,i){return '<div class="camov" data-i="'+i+'" style="font-size:1.5rem;width:48px;height:48px;display:grid;place-items:center;border-radius:12px;border:2px solid '+(i===sel?'var(--gold)':'var(--line)')+';cursor:pointer;background:var(--card-2)">'+o.emoji+'</div>'}).join('')+
+      '</div>'+
+      '<p class="hint" style="text-align:center;margin-top:8px">Выбери стиль рамки сверху, потом фото</p>';
+    document.getElementById('camOpen').onclick=function(){openCamera(facing)};
+    document.getElementById('camPick').onclick=function(){document.getElementById('camFile').click()};
+    document.getElementById('camFile').onchange=function(e){
+      var f=e.target.files&&e.target.files[0];if(!f)return;
+      var rd=new FileReader();rd.onload=function(ev){captured=ev.target.result;preview()};rd.readAsDataURL(f);e.target.value=''
+    };
+    stage.querySelectorAll('.camov').forEach(function(el){el.onclick=function(){sel=+el.getAttribute('data-i');
+      stage.querySelectorAll('.camov').forEach(function(x,i){x.style.borderColor=i===sel?'var(--gold)':'var(--line)'})}});
+  }
+
+  function openCamera(mode){
+    if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+      alert('Камера недоступна в этом браузере — выбери фото из галереи 🙂');return;
+    }
+    stage.innerHTML='<p class="hint" style="text-align:center">Разреши доступ к камере, когда телефон спросит 📷</p><div style="text-align:center"><span class="spin"></span></div>';
+    stopStream();
+    navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:mode},width:{ideal:1280},height:{ideal:720}},audio:false})
+    .then(function(s){stream=s;
+      stage.innerHTML=
+        '<video id="camVid" playsinline autoplay muted style="width:100%;border-radius:14px;background:#000;max-height:60vh;object-fit:cover"></video>'+
+        '<div class="row2" style="margin-top:10px"><button class="btn sec" id="camFlip">🔄 Камера</button>'+
+        '<button class="btn" id="camShot">📸 Снять</button></div>'+
+        '<button class="btn ghost" id="camBack2" style="margin-top:8px">← Назад</button>';
+      var v=document.getElementById('camVid');v.srcObject=s;v.play().catch(function(){});
+      document.getElementById('camShot').onclick=shoot;
+      document.getElementById('camFlip').onclick=function(){facing=facing==='user'?'environment':'user';openCamera(facing)};
+      document.getElementById('camBack2').onclick=home;
+    }).catch(function(e){
+      var msg='Нет доступа к камере. Разреши его в настройках браузера или выбери фото из галереи.';
+      if(e&&e.name==='NotAllowedError')msg='Доступ к камере запрещён. Разреши в настройках браузера и попробуй снова, либо выбери из галереи.';
+      stage.innerHTML='<div class="result">⚠️ '+msg+'</div><button class="btn" id="camRetry" style="margin-top:10px">← Назад</button>';
+      document.getElementById('camRetry').onclick=home;
+    });
+  }
+
+  function shoot(){
+    var v=document.getElementById('camVid');if(!v||!v.videoWidth)return;
+    var c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;
+    var ctx=c.getContext('2d');
+    if(facing==='user'){ctx.translate(c.width,0);ctx.scale(-1,1)}
+    ctx.drawImage(v,0,0);
+    captured=c.toDataURL('image/jpeg',0.92);stopStream();preview();
+  }
+
+  function preview(){
+    stage.innerHTML=
+      '<img src="'+captured+'" style="width:100%;border-radius:14px;max-height:55vh;object-fit:contain;background:#000">'+
+      '<div style="display:flex;flex-wrap:wrap;gap:7px;margin:14px 0;justify-content:center">'+
+        OVERLAYS.map(function(o,i){return '<div class="camov" data-i="'+i+'" style="font-size:1.4rem;width:46px;height:46px;display:grid;place-items:center;border-radius:11px;border:2px solid '+(i===sel?'var(--gold)':'var(--line)')+';cursor:pointer;background:var(--card-2)">'+o.emoji+'</div>'}).join('')+
+      '</div>'+
+      '<button class="btn" id="camGo">✨ Применить эффект</button>'+
+      '<button class="btn ghost" id="camRetake" style="margin-top:8px">↺ Другое фото</button>';
+    stage.querySelectorAll('.camov').forEach(function(el){el.onclick=function(){sel=+el.getAttribute('data-i');
+      stage.querySelectorAll('.camov').forEach(function(x,i){x.style.borderColor=i===sel?'var(--gold)':'var(--line)'})}});
+    document.getElementById('camGo').onclick=process;
+    document.getElementById('camRetake').onclick=home;
+  }
+
+  function process(){
+    stage.innerHTML='<p class="hint" style="text-align:center">Чача колдует над кадром... 🎬</p><div style="text-align:center"><span class="spin"></span></div>';
+    var caption=CAPTIONS[Math.floor(Math.random()*CAPTIONS.length)];
+    var img=new Image();
+    img.onload=function(){
+      var ov=OVERLAYS[sel];var W=img.width,H=img.height;
+      var c=document.createElement('canvas');c.width=W;c.height=H;var ctx=c.getContext('2d');
+      ctx.drawImage(img,0,0);
+      // кинополосы
+      var barH=H*0.07;ctx.fillStyle='rgba(0,0,0,0.85)';ctx.fillRect(0,0,W,barH);ctx.fillRect(0,H-barH,W,barH);
+      // цветовой градиент
+      var hex=ov.color,r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+      var grad=ctx.createLinearGradient(0,0,W,H);
+      grad.addColorStop(0,'rgba('+r+','+g+','+b+',0.45)');grad.addColorStop(0.5,'rgba(0,0,0,0.1)');grad.addColorStop(1,'rgba(0,0,0,0.55)');
+      ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
+      // виньетка
+      var vig=ctx.createRadialGradient(W/2,H/2,H*0.2,W/2,H/2,H*0.85);
+      vig.addColorStop(0,'rgba(0,0,0,0)');vig.addColorStop(1,'rgba(0,0,0,0.6)');ctx.fillStyle=vig;ctx.fillRect(0,0,W,H);
+      // грузинский крест-орнамент
+      ctx.save();ctx.translate(W-80,60);ctx.strokeStyle='rgba(255,255,255,0.7)';ctx.lineWidth=3;
+      ctx.beginPath();ctx.moveTo(0,-25);ctx.lineTo(0,25);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(-25,0);ctx.lineTo(25,0);ctx.stroke();
+      [[-15,-15],[15,-15],[-15,15],[15,15]].forEach(function(p){
+        ctx.beginPath();ctx.moveTo(p[0],p[1]-7);ctx.lineTo(p[0],p[1]+7);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(p[0]-7,p[1]);ctx.lineTo(p[0]+7,p[1]);ctx.stroke()});
+      ctx.restore();
+      // грузинский текст
+      ctx.save();ctx.font='bold '+(W*0.09)+'px Georgia, serif';ctx.fillStyle='rgba(255,255,255,0.92)';
+      ctx.shadowColor='rgba(0,0,0,0.8)';ctx.shadowBlur=12;ctx.textAlign='left';ctx.fillText(ov.text,W*0.05,H*0.82);ctx.restore();
+      // подзаголовок
+      ctx.save();ctx.font=(W*0.038)+'px Georgia, serif';ctx.fillStyle='rgba(255,220,100,0.95)';
+      ctx.shadowColor='rgba(0,0,0,0.9)';ctx.shadowBlur=8;ctx.textAlign='left';ctx.fillText(ov.sub,W*0.055,H*0.89);ctx.restore();
+      // локация
+      ctx.save();ctx.font=(W*0.025)+'px monospace';ctx.fillStyle='rgba(255,255,255,0.7)';ctx.textAlign='left';
+      ctx.fillText('📍 '+ov.label+' · 2026',W*0.055,H*0.94);ctx.restore();
+      // водяной знак
+      ctx.save();ctx.font='bold '+(W*0.022)+'px Georgia, serif';ctx.fillStyle='rgba(255,255,255,0.6)';ctx.textAlign='right';
+      ctx.fillText('sakartvelo.ai · Чача 🍑',W*0.97,H-barH-12);ctx.restore();
+      // зерно плёнки
+      try{var id=ctx.getImageData(0,0,W,H),d=id.data;
+        for(var i=0;i<d.length;i+=4){var n=(Math.random()-0.5)*18;d[i]=Math.min(255,Math.max(0,d[i]+n));d[i+1]=Math.min(255,Math.max(0,d[i+1]+n));d[i+2]=Math.min(255,Math.max(0,d[i+2]+n))}
+        ctx.putImageData(id,0,0)}catch(e){}
+      processed=c.toDataURL('image/jpeg',0.92);
+      result(caption);
+    };
+    img.src=captured;
+  }
+
+  function result(caption){
+    stage.innerHTML=
+      '<img src="'+processed+'" style="width:100%;border-radius:14px;max-height:55vh;object-fit:contain;background:#000">'+
+      '<div class="result" style="margin-top:12px"><b>📝 Готовая подпись:</b><br><span class="hint" style="margin:6px 0 0;display:block">'+caption+'</span>'+
+        '<button class="btn sec" id="camCopy" style="margin-top:10px">📋 Копировать подпись</button></div>'+
+      '<button class="btn" id="camSave" style="margin-top:10px">💾 Сохранить фото</button>'+
+      '<button class="btn sec" id="camShare" style="margin-top:8px">📲 Поделиться</button>'+
+      '<button class="btn ghost" id="camNew" style="margin-top:8px">↺ Новое фото</button>'+
+      '<p class="hint" style="margin-top:10px">💡 На айфоне после «Сохранить» картинка откроется — задержи палец и выбери «Сохранить фото».</p>';
+    document.getElementById('camCopy').onclick=function(){if(navigator.clipboard){navigator.clipboard.writeText(caption);var b=document.getElementById('camCopy');b.textContent='✓ Скопировано';setTimeout(function(){b.textContent='📋 Копировать подпись'},1500)}};
+    document.getElementById('camSave').onclick=function(){
+      var isIOS=/iP(hone|ad|od)/.test(navigator.userAgent);
+      if(isIOS){var w=window.open();if(w){w.document.write('<img src="'+processed+'" style="width:100%">')}else{location.href=processed}}
+      else{var a=document.createElement('a');a.download='georgia-moment.jpg';a.href=processed;a.click()}
+    };
+    document.getElementById('camShare').onclick=function(){
+      fetch(processed).then(function(r){return r.blob()}).then(function(blob){
+        var file=new File([blob],'georgia-moment.jpg',{type:'image/jpeg'});
+        if(navigator.canShare&&navigator.canShare({files:[file]})){navigator.share({files:[file],text:caption}).catch(function(){})}
+        else{document.getElementById('camSave').click()}
+      }).catch(function(){document.getElementById('camSave').click()});
+    };
+    document.getElementById('camNew').onclick=home;
+  }
+
+  home();
 };
 
 /* ============ ТАБЛО АЭРОПОРТОВ ============ */
@@ -1551,49 +1918,68 @@ tools.airports=function(){openModal('✈️ Табло аэропортов Гр
 
 /* ============ ПРЯМЫЕ РЕЙСЫ ============ */
 tools.flights=function(){openModal('🛫 Прямые рейсы в Грузию');
-  var AV='https://aviasales.tpm.lv/3v2DPRiC';
-  mBody.innerHTML=
-    '<p class="hint">Прямые рейсы без пересадок — данные май 2026. Нажми «Найти билеты» — откроется поиск с лучшими ценами.</p>'+
-
-    '<div class="result" style="margin-bottom:14px">'+
-      '<b style="font-size:1.05rem">🏙️ Тбилиси (TBS) — 65 направлений</b>'+
-      '<p class="hint" style="margin:6px 0 8px">Самый большой аэропорт. Летят из Европы, Ближнего Востока, СНГ.</p>'+
+  var AV='https://aviasales.tpm.lv/3v2DPRiC'; // партнёрская ссылка (запасная)
+  // Прямая ссылка на поиск с подставленными городами. Формат Aviasales:
+  // aviasales.com/search/<ORIGIN><DDMM><DEST><DDMM>1  — но без дат: используем city map.
+  // Город вылета определим по IP, прилёт фиксируем (TBS/BUS/KUT).
+  var originIata=''; // заполнится по IP
+  function avLink(destIata){
+    // если знаем город вылета — строим прямой поиск, иначе партнёрская ссылка
+    if(originIata){
+      // дата: +14 дней, формат DDMM
+      var d=new Date();d.setDate(d.getDate()+14);
+      var dd=('0'+d.getDate()).slice(-2),mm=('0'+(d.getMonth()+1)).slice(-2);
+      return 'https://www.aviasales.com/search/'+originIata+dd+mm+destIata+'1?marker=732753';
+    }
+    return AV;
+  }
+  function render(){
+    mBody.innerHTML=
+      '<p class="hint">Прямые рейсы без пересадок — данные май 2026.'+(originIata?' Город вылета: <b>'+originIata+'</b> (по твоему местоположению).':'')+' Нажми «Найти билеты».</p>'+
+      block('🏙️ Тбилиси (TBS) — 65 направлений','Самый большой аэропорт. Летят из Европы, Ближнего Востока, СНГ.',
+        ['🇹🇷 Стамбул','🇮🇱 Тель-Авив','🇦🇿 Баку','🇦🇪 Дубай','🇦🇲 Ереван','🇩🇪 Берлин','🇦🇹 Вена','🇫🇷 Париж','🇮🇹 Рим','🇬🇧 Лондон','🇳🇱 Амстердам','🇰🇿 Алматы','🇧🇾 Минск','🇸🇦 Эр-Рияд','🇰🇼 Кувейт'],
+        avLink('TBS'),'Тбилиси')+
+      block('🌊 Батуми (BUS) — 24 направления','Черноморский курорт. Главные рейсы — Тель-Авив и Стамбул (59% всех рейсов).',
+        ['🇮🇱 Тель-Авив','🇹🇷 Стамбул','🇦🇪 Дубай','🇦🇲 Ереван','🇦🇿 Баку','🇧🇾 Минск','🇱🇻 Рига','🇸🇦 Эр-Рияд','🇮🇶 Эрбиль','🇮🇷 Тегеран'],
+        avLink('BUS'),'Батуми')+
+      block('🏔️ Кутаиси (KUT) — хаб лоукостов','Wizz Air и Ryanair — дешёвые прямые из 30+ городов Европы.',
+        ['🇪🇸 Мадрид','🇪🇸 Барселона','🇫🇷 Париж','🇮🇹 Рим','🇮🇹 Милан','🇩🇪 Берлин','🇩🇪 Франкфурт','🇩🇪 Гамбург','🇵🇱 Варшава','🇵🇱 Краков','🇭🇺 Будапешт','🇬🇷 Афины','🇧🇪 Брюссель','🇱🇹 Вильнюс','🇱🇻 Рига'],
+        avLink('KUT'),'Кутаиси')+
+      '<p class="hint">💡 Город вылета подставляется автоматически по твоему местоположению. В поиске можно поменять даты и города. Мы бесплатный посредник 🍶</p>';
+  }
+  function block(title,desc,cities,link,short){
+    return '<div class="result" style="margin-bottom:14px">'+
+      '<b style="font-size:1.05rem">'+title+'</b>'+
+      '<p class="hint" style="margin:6px 0 8px">'+desc+'</p>'+
       '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">'+
-        ['🇹🇷 Стамбул','🇮🇱 Тель-Авив','🇦🇿 Баку','🇦🇪 Дубай','🇦🇲 Ереван',
-         '🇩🇪 Берлин','🇦🇹 Вена','🇫🇷 Париж','🇮🇹 Рим','🇬🇧 Лондон',
-         '🇳🇱 Амстердам','🇰🇿 Алматы','🇧🇾 Минск','🇸🇦 Эр-Рияд','🇰🇼 Кувейт'].map(function(c){
-          return '<span style="background:var(--card-2);border:1px solid var(--line);border-radius:20px;padding:4px 10px;font-size:.82rem">'+c+'</span>';
-        }).join('')+
+        cities.map(function(c){return '<span style="background:var(--card-2);border:1px solid var(--line);border-radius:20px;padding:4px 10px;font-size:.82rem">'+c+'</span>'}).join('')+
       '</div>'+
-      '<a href="'+AV+'" target="_blank" rel="noopener" class="btn" style="display:block;text-align:center;text-decoration:none">🎫 Найти билеты в Тбилиси</a>'+
-    '</div>'+
-
-    '<div class="result" style="margin-bottom:14px">'+
-      '<b style="font-size:1.05rem">🌊 Батуми (BUS) — 24 направления</b>'+
-      '<p class="hint" style="margin:6px 0 8px">Черноморский курорт. Главные рейсы — Тель-Авив и Стамбул (59% всех рейсов).</p>'+
-      '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">'+
-        ['🇮🇱 Тель-Авив','🇹🇷 Стамбул','🇦🇪 Дубай','🇦🇲 Ереван','🇦🇿 Баку',
-         '🇧🇾 Минск','🇱🇻 Рига','🇸🇦 Эр-Рияд','🇮🇶 Эрбиль','🇮🇷 Тегеран'].map(function(c){
-          return '<span style="background:var(--card-2);border:1px solid var(--line);border-radius:20px;padding:4px 10px;font-size:.82rem">'+c+'</span>';
-        }).join('')+
-      '</div>'+
-      '<a href="'+AV+'" target="_blank" rel="noopener" class="btn" style="display:block;text-align:center;text-decoration:none">🎫 Найти билеты в Батуми</a>'+
-    '</div>'+
-
-    '<div class="result" style="margin-bottom:14px">'+
-      '<b style="font-size:1.05rem">🏔️ Кутаиси (KUT) — хаб лоукостов</b>'+
-      '<p class="hint" style="margin:6px 0 8px">Wizz Air и Ryanair — дешёвые прямые из 30+ городов Европы.</p>'+
-      '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">'+
-        ['🇪🇸 Мадрид','🇪🇸 Барселона','🇫🇷 Париж','🇮🇹 Рим','🇮🇹 Милан',
-         '🇩🇪 Берлин','🇩🇪 Франкфурт','🇩🇪 Гамбург','🇵🇱 Варшава','🇵🇱 Краков',
-         '🇭🇺 Будапешт','🇬🇷 Афины','🇧🇪 Брюссель','🇱🇹 Вильнюс','🇱🇻 Рига'].map(function(c){
-          return '<span style="background:var(--card-2);border:1px solid var(--line);border-radius:20px;padding:4px 10px;font-size:.82rem">'+c+'</span>';
-        }).join('')+
-      '</div>'+
-      '<a href="'+AV+'" target="_blank" rel="noopener" class="btn" style="display:block;text-align:center;text-decoration:none">🎫 Найти билеты в Кутаиси</a>'+
-    '</div>'+
-
-    '<p class="hint">💡 Не нашёл свой город? Нажми любую кнопку — в поиске можно выбрать любой маршрут. Мы бесплатный посредник 🍶</p>';
+      '<a href="'+link+'" target="_blank" rel="noopener" class="btn" style="display:block;text-align:center;text-decoration:none">🎫 Найти билеты в '+short+'</a>'+
+    '</div>';
+  }
+  render();
+  // Определяем ближайший аэропорт вылета по IP (бесплатный сервис, без ключа)
+  fetch('https://ipapi.co/json/').then(function(r){return r.json()}).then(function(d){
+    if(d&&d.latitude&&d.longitude){
+      originIata=nearestAirport(d.latitude,d.longitude);
+      if(originIata)render();
+    }
+  }).catch(function(){});
+  // Небольшая база крупных аэропортов-источников турпотока в Грузию
+  function nearestAirport(lat,lon){
+    var A=[
+      ['MAD',40.47,-3.56],['BCN',41.30,2.08],['CDG',49.01,2.55],['FCO',41.80,12.25],['MXP',45.63,8.72],
+      ['BER',52.36,13.50],['FRA',50.04,8.56],['HAM',53.63,10.00],['WAW',52.17,20.97],['KRK',50.08,19.80],
+      ['BUD',47.44,19.26],['ATH',37.94,23.95],['BRU',50.90,4.48],['VNO',54.64,25.29],['RIX',56.92,23.97],
+      ['LON',51.47,-0.45],['AMS',52.31,4.76],['VIE',48.11,16.57],['IST',41.28,28.75],['TLV',32.01,34.89],
+      ['GYD',40.47,50.05],['EVN',40.15,44.40],['DXB',25.25,55.36],['RUH',24.96,46.70],['ALA',43.35,77.04],
+      ['MSQ',53.88,28.03],['KWI',29.24,47.97],['TBS',41.67,44.95]
+    ];
+    var best=null,bd=1e9;
+    for(var i=0;i<A.length;i++){var dx=lat-A[i][1],dy=lon-A[i][2],dist=dx*dx+dy*dy;
+      if(dist<bd){bd=dist;best=A[i][0]}}
+    return best;
+  }
 };
 tools.trains=function(){openModal('🚆 Поезда по Грузии');
   var ID='15992767';
