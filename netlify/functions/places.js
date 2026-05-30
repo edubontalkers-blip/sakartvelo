@@ -48,7 +48,11 @@ export default async (request) => {
       headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=representation' },
       body: JSON.stringify(place)
     });
-    const [created] = await res.json();
+    const resData = await res.json();
+    const created = Array.isArray(resData) ? resData[0] : resData;
+    if (!created || !created.id) {
+      return new Response(JSON.stringify({ error: 'db error', detail: resData }), { status: 500, headers });
+    }
 
     // Notify moderator in Telegram
     const emoji = { restaurant:'🍽️', cafe:'☕', sight:'🏛️', hotel:'🏨', tour:'🗺️', other:'📍' }[category] || '📍';
@@ -157,4 +161,4 @@ export default async (request) => {
   return new Response(JSON.stringify({ error: 'unknown action' }), { status: 400, headers });
 };
 
-
+export const config = { path: '/api/places' };
