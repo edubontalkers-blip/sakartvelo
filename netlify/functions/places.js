@@ -157,4 +157,4 @@ export default async (request) => {
   return new Response(JSON.stringify({ error: 'unknown action' }), { status: 400, headers });
 };
 
-export const config = { path: '/api/places' };
+
