@@ -364,6 +364,14 @@ footer .links{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin
   border-top-color:var(--gold);border-radius:50%;animation:sp .7s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
+<!-- Security -->
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+<!-- Performance: preconnect -->
+<link rel="preconnect" href="https://api.anthropic.com">
+<link rel="preconnect" href="https://nuxaaxxlatbiosxcxkfn.supabase.co">
+<link rel="preconnect" href="https://api.mymemory.translated.net">
 </head>
 <body data-theme="dark">
 
@@ -391,21 +399,21 @@ footer .links{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin
       <div class="msg bot" data-i18n="hello">Гамарджоба, генацвале! 🍶 Я Чача — твой грузинский друг. Помогу с отелями, турами, трансфером и подскажу про обязательную страховку 2026. Куда едем?</div>
     </div>
     <div class="quick" id="quick">
-      <button data-q="Хочу тур в Сванетию на 3 дня" data-i18n="q_svaneti">🏔️ Сванетия</button>
-      <button data-q="Отель в Батуми у моря" data-i18n="q_batumi">🏨 Батуми</button>
-      <button data-q="Винный тур по Кахетии" data-i18n="q_kakheti">🍷 Кахетия</button>
-      <button data-q="Что посмотреть в Тбилиси">🏙️ Тбилиси</button>
-      <button data-q="Казбеги Гергетская церковь трекинг jeep-туры">⛰️ Казбеги</button>
-      <button data-q="Кутаиси Пещера Прометея Мартвильский каньон что посмотреть">🦅 Кутаиси</button>
-      <button data-q="Горнолыжный отдых в Бакуриани">⛷️ Бакуриани</button>
-      <button data-q="Гудаури трекинг парапланеризм виды">🪂 Гудаури</button>
-      <button data-q="Отдых в Боржоми, минеральные воды">💧 Боржоми</button>
-      <button data-q="Вардзия пещерный монастырь что посмотреть">🏛️ Вардзия</button>
-      <button data-q="Уреки Кобулети пляжный отдых чёрный песок">🏖️ Уреки</button>
-      <button data-q="Давид-Гареджи монастырский комплекс как добраться">🕌 Давид-Гареджи</button>
-      <button data-q="Древняя столица Мцхета, что посмотреть">⛪ Мцхета</button>
-      <button data-q="Сигнаги город любви в Кахетии что посмотреть вино">🌹 Сигнаги</button>
-      <button data-q="Трансфер из аэропорта Тбилиси" data-i18n="q_transfer">✈️ Трансфер</button>
+      <button data-q="Хочу тур в Сванетию на 3 дня" data-i18n="q_svaneti" data-iq="dq_svaneti">🏔️ Сванетия</button>
+      <button data-q="Отель в Батуми у моря" data-i18n="q_batumi" data-iq="dq_batumi">🏨 Батуми</button>
+      <button data-q="Винный тур по Кахетии" data-i18n="q_kakheti" data-iq="dq_kakheti">🍷 Кахетия</button>
+      <button data-q="Что посмотреть в Тбилиси" data-i18n="q_tbilisi" data-iq="dq_tbilisi">🏙️ Тбилиси</button>
+      <button data-q="Казбеги Гергетская церковь трекинг jeep-туры" data-i18n="q_kazbegi" data-iq="dq_kazbegi">⛰️ Казбеги</button>
+      <button data-q="Кутаиси Пещера Прометея Мартвильский каньон что посмотреть" data-i18n="q_kutaisi" data-iq="dq_kutaisi">🦅 Кутаиси</button>
+      <button data-q="Горнолыжный отдых в Бакуриани" data-i18n="q_bakuriani" data-iq="dq_bakuriani">⛷️ Бакуриани</button>
+      <button data-q="Гудаури трекинг парапланеризм виды" data-i18n="q_gudauri" data-iq="dq_gudauri">🪂 Гудаури</button>
+      <button data-q="Отдых в Боржоми, минеральные воды" data-i18n="q_borjomi" data-iq="dq_borjomi">💧 Боржоми</button>
+      <button data-q="Вардзия пещерный монастырь что посмотреть" data-i18n="q_vardzia" data-iq="dq_vardzia">🏛️ Вардзия</button>
+      <button data-q="Уреки Кобулети пляжный отдых чёрный песок" data-i18n="q_ureki" data-iq="dq_ureki">🏖️ Уреки</button>
+      <button data-q="Давид-Гареджи монастырский комплекс как добраться" data-i18n="q_david" data-iq="dq_david">🕌 Давид-Гареджи</button>
+      <button data-q="Древняя столица Мцхета, что посмотреть" data-i18n="q_mtskheta" data-iq="dq_mtskheta">⛪ Мцхета</button>
+      <button data-q="Сигнаги город любви в Кахетии что посмотреть вино" data-i18n="q_sighnaghi" data-iq="dq_sighnaghi">🌹 Сигнаги</button>
+      <button data-q="Трансфер из аэропорта Тбилиси" data-i18n="q_transfer" data-iq="dq_transfer">✈️ Трансфер</button>
     </div>
     <div class="input-row">
       <button class="icon-btn mic" id="micBtn" aria-label="Голос">🎤</button>
@@ -523,6 +531,8 @@ var I18N={
     back:'← На сайт',chacha:'Чача',
     hello:'Гамарджоба, генацвале! 🍶 Я Чача — твой грузинский друг. Помогу с отелями, турами, трансфером и подскажу про обязательную страховку 2026. Куда едем?',
     q_svaneti:'🏔️ Сванетия',q_batumi:'🏨 Батуми',q_kakheti:'🍷 Кахетия',q_transfer:'✈️ Трансфер',
+    q_tbilisi:'🏙️ Тбилиси',q_kazbegi:'⛰️ Казбеги',q_kutaisi:'🦅 Кутаиси',q_bakuriani:'⛷️ Бакуриани',q_gudauri:'🪂 Гудаури',q_borjomi:'💧 Боржоми',q_vardzia:'🏛️ Вардзия',q_ureki:'🏖️ Уреки',q_david:'🕌 Давид-Гареджи',q_mtskheta:'⛪ Мцхета',q_sighnaghi:'🌹 Сигнаги',
+    dq_svaneti:'Хочу тур в Сванетию на 3 дня',dq_batumi:'Отель в Батуми у моря',dq_kakheti:'Винный тур по Кахетии',dq_transfer:'Трансфер из аэропорта Тбилиси',dq_tbilisi:'Что посмотреть в Тбилиси',dq_kazbegi:'Казбеги Гергетская церковь трекинг jeep-туры',dq_kutaisi:'Кутаиси Пещера Прометея Мартвильский каньон',dq_bakuriani:'Горнолыжный отдых в Бакуриани',dq_gudauri:'Гудаури трекинг парапланеризм виды',dq_borjomi:'Отдых в Боржоми минеральные воды',dq_vardzia:'Вардзия пещерный монастырь',dq_ureki:'Уреки пляжный отдых чёрный песок',dq_david:'Давид-Гареджи монастырский комплекс',dq_mtskheta:'Мцхета древняя столица что посмотреть',dq_sighnaghi:'Сигнаги город любви вино Кахетия',
     ph:'Напиши Чаче...',
     law_h:'Новый закон 2026 — страховка обязательна',
     law_p:'С 1 января 2026 каждый турист обязан иметь медстраховку (мин. 30 000 ₾ ≈ $11 000). Без неё могут не пустить. Оформи заранее — на границе дороже.',
@@ -553,6 +563,8 @@ var I18N={
     back:'← Back to site',chacha:'Chacha',
     hello:'Gamarjoba, genatsvale! 🍶 I\'m Chacha — your Georgian friend. I help with hotels, tours, transfers, and the mandatory 2026 insurance. Where are we going?',
     q_svaneti:'🏔️ Svaneti',q_batumi:'🏨 Batumi',q_kakheti:'🍷 Kakheti',q_transfer:'✈️ Transfer',
+    q_tbilisi:'🏙️ Tbilisi',q_kazbegi:'⛰️ Kazbegi',q_kutaisi:'🦅 Kutaisi',q_bakuriani:'⛷️ Bakuriani',q_gudauri:'🪂 Gudauri',q_borjomi:'💧 Borjomi',q_vardzia:'🏛️ Vardzia',q_ureki:'🏖️ Ureki',q_david:'🕌 David Gareja',q_mtskheta:'⛪ Mtskheta',q_sighnaghi:'🌹 Sighnaghi',
+    dq_svaneti:'I want a 3-day tour to Svaneti',dq_batumi:'Hotel in Batumi by the sea',dq_kakheti:'Wine tour in Kakheti',dq_transfer:'Transfer from Tbilisi airport',dq_tbilisi:'What to see in Tbilisi',dq_kazbegi:'Kazbegi Gergeti church trekking jeep tours',dq_kutaisi:'Kutaisi Prometheus Cave Martvili Canyon',dq_bakuriani:'Skiing in Bakuriani',dq_gudauri:'Gudauri trekking paragliding views',dq_borjomi:'Borjomi mineral water resort',dq_vardzia:'Vardzia cave monastery',dq_ureki:'Ureki beach black sand',dq_david:'David Gareja monastery complex',dq_mtskheta:'Mtskheta ancient capital what to see',dq_sighnaghi:'Sighnaghi city of love wine Kakheti',
     ph:'Message Chacha...',
     law_h:'New 2026 law — insurance is mandatory',
     law_p:'From January 1, 2026 every tourist must have medical insurance (min. 30,000 ₾ ≈ $11,000). Without it you may be refused entry. Buy ahead — it costs more at the border.',
@@ -583,6 +595,8 @@ var I18N={
     back:'← უკან საიტზე',chacha:'ჭაჭა',
     hello:'გამარჯობა, გენაცვალე! 🍶 მე ვარ ჭაჭა — შენი ქართველი მეგობარი. დაგეხმარები სასტუმროებში, ტურებში, ტრანსფერში და 2026-ის სავალდებულო დაზღვევაში. სად მივდივართ?',
     q_svaneti:'🏔️ სვანეთი',q_batumi:'🏨 ბათუმი',q_kakheti:'🍷 კახეთი',q_transfer:'✈️ ტრანსფერი',
+    q_tbilisi:'🏙️ თბილისი',q_kazbegi:'⛰️ ყაზბეგი',q_kutaisi:'🦅 ქუთაისი',q_bakuriani:'⛷️ ბაკურიანი',q_gudauri:'🪂 გუდაური',q_borjomi:'💧 ბორჯომი',q_vardzia:'🏛️ ვარძია',q_ureki:'🏖️ ურეკი',q_david:'🕌 დავით გარეჯი',q_mtskheta:'⛪ მცხეთა',q_sighnaghi:'🌹 სიღნაღი',
+    dq_svaneti:'3 დღიანი ტური სვანეთში',dq_batumi:'სასტუმრო ბათუმში ზღვასთან',dq_kakheti:'ღვინის ტური კახეთში',dq_transfer:'ტრანსფერი თბილისის აეროპორტიდან',dq_tbilisi:'რა ვნახო თბილისში',dq_kazbegi:'ყაზბეგი გერგეტის ეკლესია ლაშქრობა',dq_kutaisi:'ქუთაისი პრომეთეს გამოქვაბული მარტვილი',dq_bakuriani:'სათხილამურო დასვენება ბაკურიანში',dq_gudauri:'გუდაური ლაშქრობა პარაგლაიდინგი',dq_borjomi:'ბორჯომი მინერალური წყლები',dq_vardzia:'ვარძია გამოქვაბულის მონასტერი',dq_ureki:'ურეკი პლაჟი შავი ქვიშა',dq_david:'დავით გარეჯი მონასტერი',dq_mtskheta:'მცხეთა ძველი დედაქალაქი',dq_sighnaghi:'სიღნაღი სიყვარულის ქალაქი ღვინო',
     ph:'მისწერე ჭაჭას...',
     law_h:'ახალი 2026 კანონი — დაზღვევა სავალდებულოა',
     law_p:'2026 წლის 1 იანვრიდან ყველა ტურისტს სჭირდება სამედიცინო დაზღვევა (მინ. 30 000 ₾ ≈ $11 000). მის გარეშე შესვლა შეიძლება აიკრძალოს. გააფორმე წინასწარ.',
@@ -613,6 +627,8 @@ var I18N={
     back:'← Siteye dön',chacha:'Çaça',
     hello:'Gamarcoba, genatsvale! 🍶 Ben Çaça — Gürcü dostun. Oteller, turlar, transfer ve zorunlu 2026 sigortası konusunda yardımcı olurum. Nereye gidiyoruz?',
     q_svaneti:'🏔️ Svaneti',q_batumi:'🏨 Batum',q_kakheti:'🍷 Kakheti',q_transfer:'✈️ Transfer',
+    q_tbilisi:'🏙️ Tiflis',q_kazbegi:'⛰️ Kazbegi',q_kutaisi:'🦅 Kutaisi',q_bakuriani:'⛷️ Bakuriani',q_gudauri:'🪂 Gudauri',q_borjomi:'💧 Borjomi',q_vardzia:'🏛️ Vardzia',q_ureki:'🏖️ Ureki',q_david:'🕌 David Gareji',q_mtskheta:'⛪ Mtskheta',q_sighnaghi:'🌹 Sighnaghi',
+    dq_svaneti:'Svaneti\'e 3 günlük tur istiyorum',dq_batumi:'Batum\'da deniz kenarında otel',dq_kakheti:'Kakheti\'de şarap turu',dq_transfer:'Tiflis havalimanından transfer',dq_tbilisi:'Tiflis\'de gezilecek yerler',dq_kazbegi:'Kazbegi Gergeti kilisesi trekking',dq_kutaisi:'Kutaisi Prometheus Mağarası Martvili',dq_bakuriani:'Bakuriani\'de kayak tatili',dq_gudauri:'Gudauri trekking paraşüt',dq_borjomi:'Borjomi maden suyu tatili',dq_vardzia:'Vardzia mağara manastırı',dq_ureki:'Ureki plaj siyah kum',dq_david:'David Gareji manastırı',dq_mtskheta:'Mtskheta eski başkent',dq_sighnaghi:'Sighnaghi aşk şehri şarap',
     ph:'Çaça\'ya yaz...',
     law_h:'Yeni 2026 yasası — sigorta zorunlu',
     law_p:'1 Ocak 2026\'dan itibaren her turistin sağlık sigortası olması gerekir (min. 30.000 ₾ ≈ $11.000). Olmadan girişe izin verilmeyebilir. Önceden al — sınırda daha pahalı.',
@@ -643,6 +659,8 @@ var I18N={
     back:'← العودة للموقع',chacha:'تشاتشا',
     hello:'غامارجوبا يا صديقي! 🍶 أنا تشاتشا — صديقك الجورجي. أساعدك في الفنادق والجولات والتوصيل والتأمين الإلزامي 2026. إلى أين نذهب؟',
     q_svaneti:'🏔️ سفانيتي',q_batumi:'🏨 باتومي',q_kakheti:'🍷 كاخيتي',q_transfer:'✈️ التوصيل',
+    q_tbilisi:'🏙️ تبليسي',q_kazbegi:'⛰️ كازبيغي',q_kutaisi:'🦅 كوتايسي',q_bakuriani:'⛷️ باكورياني',q_gudauri:'🪂 غوداوري',q_borjomi:'💧 بورجومي',q_vardzia:'🏛️ فارذيا',q_ureki:'🏖️ أوريكي',q_david:'🕌 دافيد غاريجا',q_mtskheta:'⛪ متسخيتا',q_sighnaghi:'🌹 سيغناغي',
+    dq_svaneti:'أريد جولة 3 أيام في سفانيتي',dq_batumi:'فندق في باتومي على البحر',dq_kakheti:'جولة النبيذ في كاخيتي',dq_transfer:'توصيل من مطار تبليسي',dq_tbilisi:'ماذا أرى في تبليسي',dq_kazbegi:'كازبيغي كنيسة غيرغيتي مشي',dq_kutaisi:'كوتايسي كهف بروميثيوس مارتفيلي',dq_bakuriani:'التزلج في باكورياني',dq_gudauri:'غوداوري مشي طيران شراعي',dq_borjomi:'بورجومي مياه معدنية',dq_vardzia:'دير فارذيا الكهفي',dq_ureki:'أوريكي شاطئ رمل أسود',dq_david:'دير دافيد غاريجا',dq_mtskheta:'متسخيتا العاصمة القديمة',dq_sighnaghi:'سيغناغي مدينة الحب النبيذ',
     ph:'اكتب لتشاتشا...',
     law_h:'قانون 2026 الجديد — التأمين إلزامي',
     law_p:'من 1 يناير 2026 يجب على كل سائح امتلاك تأمين صحي (بحد أدنى 30,000 ₾ ≈ 11,000$). بدونه قد يُمنع الدخول. احصل عليه مسبقًا — فهو أغلى على الحدود.',
@@ -667,12 +685,206 @@ var I18N={
     f_terms:'الشروط',f_privacy:'الخصوصية',f_about:'من نحن',
     f_note:'تشاتشا مساعد مجاني. نحن وسيط: نقترح الخيارات، بينما يتم الحجز والدفع مباشرة على المنصات الرسمية. 🇬🇪',
     consent:'أوافق 🍶',consent_no:'رفض',consent_text:'نستخدم فقط ملفات تعريف الارتباط الضرورية لتشغيل الموقع — تُحفظ على هاتفك وليس على خادمنا.',disclaimer:'تشاتشا ذكاء اصطناعي وقد يخطئ. يرجى التحقق من الإجابات 🍶'},
+  uk:{trust:'🆓 Безкоштовно назавжди · оплата через <b>перевірених гігантів</b>',
+    h1:'Твій друг <span class="em">Чача</span><br>у Грузії 🇬🇪',
+    sub:'Не просто планувальник — турботливий супутник на всю поїздку. Запитай будь-що про Грузію.',
+    back:'← На сайт',chacha:'Чача',
+    hello:'Гамарджоба, генацвале! 🍶 Я Чача — твій грузинський друг. Допоможу з готелями, турами, трансфером і обов\'язковою страховкою 2026. Куди їдемо?',
+    q_svaneti:'🏔️ Сванеті',q_batumi:'🏨 Батумі',q_kakheti:'🍷 Кахеті',q_transfer:'✈️ Трансфер',
+    q_tbilisi:'🏙️ Тбілісі',q_kazbegi:'⛰️ Казбеги',q_kutaisi:'🦅 Кутаїсі',q_bakuriani:'⛷️ Бакуріані',q_gudauri:'🪂 Гудаурі',q_borjomi:'💧 Боржомі',q_vardzia:'🏛️ Вардзія',q_ureki:'🏖️ Уреки',q_david:'🕌 Давид-Гареджі',q_mtskheta:'⛪ Мцхета',q_sighnaghi:'🌹 Сигнагі',
+    dq_svaneti:'Хочу тур у Сванеті на 3 дні',dq_batumi:'Готель у Батумі біля моря',dq_kakheti:'Винний тур по Кахеті',dq_transfer:'Трансфер з аеропорту Тбілісі',dq_tbilisi:'Що подивитися у Тбілісі',dq_kazbegi:'Казбеги Гергетська церква трекінг',dq_kutaisi:'Кутаїсі Печера Прометея Мартвілі',dq_bakuriani:'Гірськолижний відпочинок у Бакуріані',dq_gudauri:'Гудаурі трекінг парапланеризм',dq_borjomi:'Боржомі мінеральні води',dq_vardzia:'Вардзія печерний монастир',dq_ureki:'Уреки пляж чорний пісок',dq_david:'Давид-Гареджі монастирський комплекс',dq_mtskheta:'Мцхета давня столиця',dq_sighnaghi:'Сигнагі місто кохання вино',
+    ph:'Напиши Чачі...',
+    law_h:'Новий закон 2026 — страховка обов\'язкова',
+    law_p:'З 1 січня 2026 кожен турист зобов\'язаний мати медстраховку (мін. 30 000 ₾ ≈ $11 000). Без неї можуть не пустити. Оформи заздалегідь — на кордоні дорожче.',
+    law_a:'Оформити страховку →',
+    tools_h:'🧰 Корисне у Грузії',tools_sub:'Все що потрібно на місці — працює кожен день поїздки',
+    t_translator_h:'Перекладач турист ↔ грузин',t_translator_p:'Говори своєю — Чача перекладе грузинською голосом. Безкоштовно.',
+    t_metro_h:'Метро Тбілісі',t_metro_p:'Маршрут, ціна, пересадка. Офлайн.',
+    t_phrases_h:'Розмовник',t_phrases_p:'Грузинські фрази + озвучка',
+    t_currency_h:'Курс ларі',t_currency_p:'GEL у твою валюту',
+    t_radio_h:'Радіо різних країн',t_radio_p:'Твоя країна + Грузія',
+    t_emergency_h:'Екстрене',t_emergency_p:'112, посольство, допомога',
+    t_tips_h:'Чайові',t_tips_p:'Поділ рахунку супри',
+    t_checklist_h:'Чек-лист зборів',t_checklist_p:'Зі страховкою 2026',
+    t_food_h:'Що замовити',t_food_p:'Страви і вино Грузії',
+    t_visa_h:'Дні візи',t_visa_p:'Безвіз рік — лічильник',
+    t_alarm_h:'Будильник',t_alarm_p:'Не проспи екскурсію',
+    t_torch_h:'Ліхтарик',t_torch_p:'Світло в темряві',
+    t_luggage_h:'Камера зберігання',t_luggage_p:'Залиш багаж — гуляй налегке',
+    t_prices_h:'Чесні ціни 2026',t_prices_p:'Скільки що коштує — не дай себе обрахувати. Таксі, курс, метро, музеї.',
+    t_story_h:'Сторіс про Грузію',t_story_p:'Створи красиву картинку для Instagram/TikTok — з брендом sakartvelo.ai.',
+    share_h:'Поділитись 🍶',share_sub:'Розкажи друзям, хто їде до Грузії',
+    f_terms:'Умови',f_privacy:'Конфіденційність',f_about:'Про нас',
+    f_note:'Чача — безкоштовний помічник. Ми посередник: підбираємо варіанти, а бронювання і оплата проходять напряму на офіційних платформах. 🇬🇪',
+    consent:'Приймаю 🍶',consent_no:'Відхилити',consent_text:'Ми використовуємо лише необхідні cookie для роботи сайту — вони зберігаються у вашому телефоні, не на сервері.',disclaimer:'Чача — AI і може помилятися. Перевіряйте відповіді 🍶'},
+  be:{trust:'🆓 Бясплатна назаўжды · аплата праз <b>правераных гігантаў</b>',
+    h1:'Твой сябар <span class="em">Чача</span><br>у Грузіі 🇬🇪',
+    sub:'Не проста планавальнік — клапатлівы спадарожнік на ўсю паездку. Спытай усё пра Грузію.',
+    back:'← На сайт',chacha:'Чача',
+    hello:'Гамарджоба, генацвале! 🍶 Я Чача — твой грузінскі сябар. Дапамагу з гатэлямі, турамі, трансферам і абавязковай страхоўкай 2026. Куды едзем?',
+    q_svaneti:'🏔️ Сванеція',q_batumi:'🏨 Батумі',q_kakheti:'🍷 Кахеція',q_transfer:'✈️ Трансфер',
+    q_tbilisi:'🏙️ Тбілісі',q_kazbegi:'⛰️ Казбегі',q_kutaisi:'🦅 Кутаісі',q_bakuriani:'⛷️ Бакурыяні',q_gudauri:'🪂 Гудаурі',q_borjomi:'💧 Боржомі',q_vardzia:'🏛️ Вардзія',q_ureki:'🏖️ Урэкі',q_david:'🕌 Давід-Гарэджы',q_mtskheta:'⛪ Мцхета',q_sighnaghi:'🌹 Сігнагі',
+    dq_svaneti:'Хачу тур у Сванецію на 3 дні',dq_batumi:'Гатэль у Батумі каля мора',dq_kakheti:'Вінны тур па Кахеціі',dq_transfer:'Трансфер з аэрапорта Тбілісі',dq_tbilisi:'Што паглядзець у Тбілісі',dq_kazbegi:'Казбегі Гергецкая царква трэкінг',dq_kutaisi:'Кутаісі Пячора Праметэя Мартвілі',dq_bakuriani:'Горналыжны адпачынак у Бакурыяні',dq_gudauri:'Гудаурі трэкінг парапланерызм',dq_borjomi:'Боржомі мінеральныя воды',dq_vardzia:'Вардзія пячорны манастыр',dq_ureki:'Урэкі пляж чорны пясок',dq_david:'Давід-Гарэджы манастырскі комплекс',dq_mtskheta:'Мцхета старажытная сталіца',dq_sighnaghi:'Сігнагі горад кахання віно',
+    ph:'Напішы Чачу...',
+    law_h:'Новы закон 2026 — страхоўка абавязковая',
+    law_p:'З 1 студзеня 2026 кожны турыст абавязаны мець медстрахоўку (мін. 30 000 ₾ ≈ $11 000). Без яе могуць не пусціць. Аформі загадзя — на мяжы даражэй.',
+    law_a:'Аформіць страхоўку →',
+    tools_h:'🧰 Карыснае ў Грузіі',tools_sub:'Усё што трэба на месцы — працуе кожны дзень паездкі',
+    t_translator_h:'Перакладчык турыст ↔ грузін',t_translator_p:'Гавары сваёй — Чача перакладзе на грузінскую голасам. Бясплатна.',
+    t_metro_h:'Метро Тбілісі',t_metro_p:'Маршрут, цана, перасадка. Афлайн.',
+    t_phrases_h:'Размоўнік',t_phrases_p:'Грузінскія фразы + азвучка',
+    t_currency_h:'Курс лары',t_currency_p:'GEL у тваю валюту',
+    t_radio_h:'Радыё розных краін',t_radio_p:'Твая краіна + Грузія',
+    t_emergency_h:'Экстраннае',t_emergency_p:'112, пасольства, дапамога',
+    t_tips_h:'Чаявыя',t_tips_p:'Падзел рахунку супры',
+    t_checklist_h:'Чэк-ліст зборы',t_checklist_p:'Са страхоўкай 2026',
+    t_food_h:'Што замовіць',t_food_p:'Стравы і віно Грузіі',
+    t_visa_h:'Дні візы',t_visa_p:'Бязвіз год — лічыльнік',
+    t_alarm_h:'Будзільнік',t_alarm_p:'Не праспі экскурсію',
+    t_torch_h:'Ліхтарык',t_torch_p:'Святло ў цемры',
+    t_luggage_h:'Камера захавання',t_luggage_p:'Пакінь багаж — гуляй налегке',
+    t_prices_h:'Сумленныя цэны 2026',t_prices_p:'Колькі што каштуе — не дай сябе падмануць. Такcі, курс, метро, музеі.',
+    t_story_h:'Сторыс пра Грузію',t_story_p:'Стварай прыгожую карцінку для Instagram/TikTok — з брэндам sakartvelo.ai.',
+    share_h:'Падзяліцца 🍶',share_sub:'Раскажы сябрам, хто едзе ў Грузію',
+    f_terms:'Умовы',f_privacy:'Канфідэнцыяльнасць',f_about:'Пра нас',
+    f_note:'Чача — бясплатны памочнік. Мы пасярэднік: падбіраем варыянты, а браніраванне і аплата праходзяць напрамую на афіцыйных платформах. 🇬🇪',
+    consent:'Прымаю 🍶',consent_no:'Адхіліць',consent_text:'Мы выкарыстоўваем толькі неабходныя cookie для працы сайта — яны захоўваюцца ў вашым тэлефоне, не на серверы.',disclaimer:'Чача — AI і можа памыляцца. Правярайце адказы 🍶'},
+  he:{trust:'🆓 חינם לתמיד · תשלום דרך <b>מותגים בינלאומיים אמינים</b>',
+    h1:'החבר שלך <span class="em">צ\'אצ\'ה</span><br>בגאורגיה 🇬🇪',
+    sub:'לא רק מתכנן — חבר מסור לאורך כל הטיול. שאל כל דבר על גאורגיה.',
+    back:'← חזרה לאתר',chacha:'צ\'אצ\'ה',
+    hello:'גמארג\'ובה, גנאצוואלה! 🍶 אני צ\'אצ\'ה — החבר הגאורגי שלך. אעזור עם מלונות, טיולים, העברות וביטוח החובה 2026. לאן נוסעים?',
+    q_svaneti:'🏔️ סוואנטי',q_batumi:'🏨 באטומי',q_kakheti:'🍷 קאכ\'טי',q_transfer:'✈️ העברה',
+    q_tbilisi:'🏙️ טביליסי',q_kazbegi:'⛰️ קאזבגי',q_kutaisi:'🦅 קוטאיסי',q_bakuriani:'⛷️ בקוריאני',q_gudauri:'🪂 גודאורי',q_borjomi:'💧 בורג\'ומי',q_vardzia:'🏛️ ורדזיה',q_ureki:'🏖️ אורקי',q_david:'🕌 דוד גארג\'ה',q_mtskheta:'⛪ מצחטה',q_sighnaghi:'🌹 סיגנאגי',
+    dq_svaneti:'אני רוצה טיול 3 ימים לסוואנטי',dq_batumi:'מלון בבאטומי ליד הים',dq_kakheti:'טיול יין בקאכ\'טי',dq_transfer:'העברה משדה התעופה טביליסי',dq_tbilisi:'מה לראות בטביליסי',dq_kazbegi:'קאזבגי כנסיית גרגטי טיולים',dq_kutaisi:'קוטאיסי מערת פרומתאוס מארטווילי',dq_bakuriani:'סקי בבקוריאני',dq_gudauri:'גודאורי טיולים פאראגלידינג',dq_borjomi:'בורג\'ומי מי מינרלים',dq_vardzia:'ורדזיה מנזר מערות',dq_ureki:'אורקי חוף חול שחור',dq_david:'מנזר דוד גארג\'ה',dq_mtskheta:'מצחטה בירה עתיקה',dq_sighnaghi:'סיגנאגי עיר האהבה יין',
+    ph:'כתוב לצ\'אצ\'ה...',
+    law_h:'חוק 2026 חדש — ביטוח חובה',
+    law_p:'מ-1 בינואר 2026 כל תייר חייב בביטוח רפואי (מינ. 30,000 ₾ ≈ $11,000). בלעדיו עשויים לא לאפשר כניסה. קנה מראש — בגבול יקר יותר.',
+    law_a:'קבל ביטוח →',
+    tools_h:'🧰 שימושי בגאורגיה',tools_sub:'כל מה שצריך במקום — עובד כל יום של הטיול',
+    t_translator_h:'מתרגם תייר ↔ גאורגי',t_translator_p:'דבר בשפתך — צ\'אצ\'ה יתרגם לגאורגית בקול. חינם.',
+    t_metro_h:'מטרו טביליסי',t_metro_p:'מסלול, מחיר, העברה. אופליין.',
+    t_phrases_h:'ספר שיחות',t_phrases_p:'ביטויים גאורגיים + אודיו',
+    t_currency_h:'שער הלארי',t_currency_p:'GEL למטבע שלך',
+    t_radio_h:'רדיו ממדינות שונות',t_radio_p:'המדינה שלך + גאורגיה',
+    t_emergency_h:'חירום',t_emergency_p:'112, שגרירות, עזרה',
+    t_tips_h:'טיפים',t_tips_p:'חלוקת חשבון הסופרה',
+    t_checklist_h:'רשימת אריזה',t_checklist_p:'עם ביטוח 2026',
+    t_food_h:'מה להזמין',t_food_p:'מאכלים ויין גאורגיים',
+    t_visa_h:'ימי ויזה',t_visa_p:'שנה ללא ויזה — מונה',
+    t_alarm_h:'שעון מעורר',t_alarm_p:'אל תפספס את הסיור',
+    t_torch_h:'פנס',t_torch_p:'אור בחושך',
+    t_luggage_h:'שמירת מטען',t_luggage_p:'השאר מזוודות — טייל קל',
+    t_prices_h:'מחירים הוגנים 2026',t_prices_p:'כמה עולה כל דבר — אל תתנו לרמות אתכם. מונית, שער, מטרו, מוזיאונים.',
+    t_story_h:'סטורי על גאורגיה',t_story_p:'צור תמונה יפה לאינסטגרם/טיקטוק — עם מותג sakartvelo.ai.',
+    share_h:'שתף 🍶',share_sub:'ספר לחברים שנוסעים לגאורגיה',
+    f_terms:'תנאים',f_privacy:'פרטיות',f_about:'אודות',
+    f_note:'צ\'אצ\'ה הוא עוזר חינמי. אנחנו מתווכים: מציעים אפשרויות, בעוד ההזמנה והתשלום מתבצעים ישירות בפלטפורמות הרשמיות. 🇬🇪',
+    consent:'מקבל 🍶',consent_no:'דחה',consent_text:'אנו משתמשים רק בעוגיות הכרחיות להפעלת האתר — מאוחסנות בטלפון שלך, לא בשרת שלנו.',disclaimer:'צ\'אצ\'ה הוא AI ועלול לטעות. אנא בדוק את התשובות 🍶'},
+  fr:{trust:'🆓 Gratuit pour toujours · paiement via <b>marques mondiales de confiance</b>',
+    h1:'Ton ami <span class="em">Chacha</span><br>en Géorgie 🇬🇪',
+    sub:'Pas juste un planificateur — un compagnon attentionné pour tout ton voyage. Pose toutes tes questions sur la Géorgie.',
+    back:'← Retour au site',chacha:'Chacha',
+    hello:'Gamarjoba, genatsvale! 🍶 Je suis Chacha — ton ami géorgien. Je t\'aide avec les hôtels, les tours, les transferts et l\'assurance obligatoire 2026. Où va-t-on?',
+    q_svaneti:'🏔️ Svanétie',q_batumi:'🏨 Batoumi',q_kakheti:'🍷 Kakhétie',q_transfer:'✈️ Transfert',
+    q_tbilisi:'🏙️ Tbilissi',q_kazbegi:'⛰️ Kazbegi',q_kutaisi:'🦅 Koutaïssi',q_bakuriani:'⛷️ Bakuriani',q_gudauri:'🪂 Goudaouri',q_borjomi:'💧 Borjomi',q_vardzia:'🏛️ Vardzia',q_ureki:'🏖️ Oureki',q_david:'🕌 David Gareji',q_mtskheta:'⛪ Mtskheta',q_sighnaghi:'🌹 Sighnaghi',
+    dq_svaneti:'Je veux un tour de 3 jours en Svanétie',dq_batumi:'Hôtel à Batoumi au bord de la mer',dq_kakheti:'Tour du vin en Kakhétie',dq_transfer:'Transfert depuis l\'aéroport de Tbilissi',dq_tbilisi:'Que voir à Tbilissi',dq_kazbegi:'Kazbegi église Gergeti randonnée',dq_kutaisi:'Koutaïssi grotte Prométhée Martvili',dq_bakuriani:'Ski à Bakuriani',dq_gudauri:'Goudaouri randonnée parapente',dq_borjomi:'Borjomi eau minérale',dq_vardzia:'Vardzia monastère troglodyte',dq_ureki:'Oureki plage sable noir',dq_david:'Monastère David Gareji',dq_mtskheta:'Mtskheta ancienne capitale',dq_sighnaghi:'Sighnaghi ville de l\'amour vin',
+    ph:'Écris à Chacha...',
+    law_h:'Nouvelle loi 2026 — assurance obligatoire',
+    law_p:'Depuis le 1er janvier 2026, chaque touriste doit avoir une assurance médicale (min. 30 000 ₾ ≈ 11 000$). Sans elle, l\'entrée peut être refusée. Prenez-la à l\'avance — à la frontière c\'est plus cher.',
+    law_a:'Prendre une assurance →',
+    tools_h:'🧰 Utile en Géorgie',tools_sub:'Tout ce dont vous avez besoin sur place — utile chaque jour du voyage',
+    t_translator_h:'Traducteur touriste ↔ géorgien',t_translator_p:'Parle ta langue — Chacha traduit en géorgien par la voix. Gratuit.',
+    t_metro_h:'Métro de Tbilissi',t_metro_p:'Itinéraire, prix, correspondance. Hors ligne.',
+    t_phrases_h:'Guide de conversation',t_phrases_p:'Phrases géorgiennes + audio',
+    t_currency_h:'Taux du lari',t_currency_p:'GEL dans ta devise',
+    t_radio_h:'Radio de différents pays',t_radio_p:'Ton pays + Géorgie',
+    t_emergency_h:'Urgence',t_emergency_p:'112, ambassade, aide',
+    t_tips_h:'Pourboires',t_tips_p:'Partager l\'addition du supra',
+    t_checklist_h:'Liste de voyage',t_checklist_p:'Avec assurance 2026',
+    t_food_h:'Quoi commander',t_food_p:'Plats et vins géorgiens',
+    t_visa_h:'Jours de visa',t_visa_p:'Année sans visa — compteur',
+    t_alarm_h:'Réveil',t_alarm_p:'Ne rate pas ton excursion',
+    t_torch_h:'Lampe de poche',t_torch_p:'Lumière dans l\'obscurité',
+    t_luggage_h:'Consigne bagages',t_luggage_p:'Laisse tes bagages — explore léger',
+    t_prices_h:'Prix honnêtes 2026',t_prices_p:'Combien coûte quoi — ne te fais pas arnaquer. Taxi, taux, métro, musées.',
+    t_story_h:'Story sur la Géorgie',t_story_p:'Crée une belle image pour Instagram/TikTok — avec la marque sakartvelo.ai.',
+    share_h:'Partager 🍶',share_sub:'Dis à tes amis qui vont en Géorgie',
+    f_terms:'Conditions',f_privacy:'Confidentialité',f_about:'À propos',
+    f_note:'Chacha est un assistant gratuit. Nous sommes intermédiaires : nous suggérons des options, tandis que la réservation et le paiement se font directement sur les plateformes officielles. 🇬🇪',
+    consent:'J\'accepte 🍶',consent_no:'Refuser',consent_text:'Nous utilisons uniquement les cookies nécessaires au fonctionnement du site — stockés sur votre téléphone, pas sur notre serveur.',disclaimer:'Chacha est une IA et peut se tromper. Veuillez vérifier les réponses 🍶'},
+  es:{trust:'🆓 Gratis para siempre · pago a través de <b>marcas globales de confianza</b>',
+    h1:'Tu amigo <span class="em">Chacha</span><br>en Georgia 🇬🇪',
+    sub:'No solo un planificador — un compañero atento durante todo tu viaje. Pregunta lo que quieras sobre Georgia.',
+    back:'← Volver al sitio',chacha:'Chacha',
+    hello:'¡Gamarjoba, genatsvale! 🍶 Soy Chacha — tu amigo georgiano. Te ayudo con hoteles, tours, traslados y el seguro obligatorio 2026. ¿Adónde vamos?',
+    q_svaneti:'🏔️ Svaneti',q_batumi:'🏨 Batumi',q_kakheti:'🍷 Kajeti',q_transfer:'✈️ Traslado',
+    q_tbilisi:'🏙️ Tiflis',q_kazbegi:'⛰️ Kazbegi',q_kutaisi:'🦅 Kutaisi',q_bakuriani:'⛷️ Bakuriani',q_gudauri:'🪂 Gudauri',q_borjomi:'💧 Borjomi',q_vardzia:'🏛️ Vardzia',q_ureki:'🏖️ Ureki',q_david:'🕌 David Gareja',q_mtskheta:'⛪ Mtskheta',q_sighnaghi:'🌹 Sighnaghi',
+    dq_svaneti:'Quiero un tour de 3 días a Svaneti',dq_batumi:'Hotel en Batumi junto al mar',dq_kakheti:'Tour del vino en Kajeti',dq_transfer:'Traslado desde el aeropuerto de Tiflis',dq_tbilisi:'Qué ver en Tiflis',dq_kazbegi:'Kazbegi iglesia Gergeti senderismo',dq_kutaisi:'Kutaisi cueva Prometeo Martvili',dq_bakuriani:'Esquí en Bakuriani',dq_gudauri:'Gudauri senderismo parapente',dq_borjomi:'Borjomi agua mineral',dq_vardzia:'Vardzia monasterio cueva',dq_ureki:'Ureki playa arena negra',dq_david:'Monasterio David Gareja',dq_mtskheta:'Mtskheta capital antigua',dq_sighnaghi:'Sighnaghi ciudad del amor vino',
+    ph:'Escribe a Chacha...',
+    law_h:'Nueva ley 2026 — seguro obligatorio',
+    law_p:'Desde el 1 de enero de 2026, cada turista debe tener un seguro médico (mín. 30.000 ₾ ≈ $11.000). Sin él pueden negar la entrada. Contrátalo antes — en la frontera es más caro.',
+    law_a:'Obtener seguro →',
+    tools_h:'🧰 Útil en Georgia',tools_sub:'Todo lo que necesitas allí — útil cada día del viaje',
+    t_translator_h:'Traductor turista ↔ georgiano',t_translator_p:'Habla tu idioma — Chacha traduce al georgiano por voz. Gratis.',
+    t_metro_h:'Metro de Tiflis',t_metro_p:'Ruta, precio, transbordo. Sin conexión.',
+    t_phrases_h:'Guía de conversación',t_phrases_p:'Frases georgianas + audio',
+    t_currency_h:'Tipo de cambio lari',t_currency_p:'GEL a tu moneda',
+    t_radio_h:'Radio de distintos países',t_radio_p:'Tu país + Georgia',
+    t_emergency_h:'Emergencia',t_emergency_p:'112, embajada, ayuda',
+    t_tips_h:'Propinas',t_tips_p:'Dividir la cuenta del supra',
+    t_checklist_h:'Lista de equipaje',t_checklist_p:'Con seguro 2026',
+    t_food_h:'Qué pedir',t_food_p:'Platos y vinos georgianos',
+    t_visa_h:'Días de visa',t_visa_p:'Año sin visa — contador',
+    t_alarm_h:'Alarma',t_alarm_p:'No te pierdas la excursión',
+    t_torch_h:'Linterna',t_torch_p:'Luz en la oscuridad',
+    t_luggage_h:'Consigna de equipaje',t_luggage_p:'Deja el equipaje — explora ligero',
+    t_prices_h:'Precios justos 2026',t_prices_p:'Cuánto cuesta cada cosa — no te dejes estafar. Taxi, cambio, metro, museos.',
+    t_story_h:'Story sobre Georgia',t_story_p:'Crea una imagen bonita para Instagram/TikTok — con la marca sakartvelo.ai.',
+    share_h:'Compartir 🍶',share_sub:'Cuéntaselo a los amigos que van a Georgia',
+    f_terms:'Términos',f_privacy:'Privacidad',f_about:'Sobre nosotros',
+    f_note:'Chacha es un asistente gratuito. Somos intermediarios: sugerimos opciones, mientras que la reserva y el pago se realizan directamente en plataformas oficiales. 🇬🇪',
+    consent:'Acepto 🍶',consent_no:'Rechazar',consent_text:'Usamos solo las cookies necesarias para el funcionamiento del sitio — almacenadas en tu teléfono, no en nuestro servidor.',disclaimer:'Chacha es IA y puede cometer errores. Por favor verifica las respuestas 🍶'},
+  de:{trust:'🆓 Für immer kostenlos · Zahlung über <b>vertrauenswürdige Weltmarken</b>',
+    h1:'Dein Freund <span class="em">Chacha</span><br>in Georgien 🇬🇪',
+    sub:'Nicht nur ein Planer — ein fürsorglicher Begleiter für deine gesamte Reise. Frag alles über Georgien.',
+    back:'← Zurück zur Website',chacha:'Chacha',
+    hello:'Gamarjoba, genatsvale! 🍶 Ich bin Chacha — dein georgischer Freund. Ich helfe bei Hotels, Touren, Transfers und der Pflichtversicherung 2026. Wohin fahren wir?',
+    q_svaneti:'🏔️ Swanetien',q_batumi:'🏨 Batumi',q_kakheti:'🍷 Kachetien',q_transfer:'✈️ Transfer',
+    q_tbilisi:'🏙️ Tiflis',q_kazbegi:'⛰️ Kazbegi',q_kutaisi:'🦅 Kutaissi',q_bakuriani:'⛷️ Bakuriani',q_gudauri:'🪂 Gudauri',q_borjomi:'💧 Borjomi',q_vardzia:'🏛️ Wardsia',q_ureki:'🏖️ Ureki',q_david:'🕌 David Garedschi',q_mtskheta:'⛪ Mzcheta',q_sighnaghi:'🌹 Signagi',
+    dq_svaneti:'Ich möchte eine 3-tägige Tour nach Swanetien',dq_batumi:'Hotel in Batumi am Meer',dq_kakheti:'Weintour durch Kachetien',dq_transfer:'Transfer vom Flughafen Tiflis',dq_tbilisi:'Was in Tiflis besichtigen',dq_kazbegi:'Kazbegi Gergeti Kirche Wandern',dq_kutaisi:'Kutaissi Prometheus Höhle Martvili',dq_bakuriani:'Skifahren in Bakuriani',dq_gudauri:'Gudauri Wandern Paragliding',dq_borjomi:'Borjomi Mineralwasser',dq_vardzia:'Wardsia Höhlenkloster',dq_ureki:'Ureki Strand schwarzer Sand',dq_david:'David Garedschi Kloster',dq_mtskheta:'Mzcheta alte Hauptstadt',dq_sighnaghi:'Signagi Stadt der Liebe Wein',
+    ph:'Schreib Chacha...',
+    law_h:'Neues Gesetz 2026 — Versicherung Pflicht',
+    law_p:'Ab 1. Januar 2026 muss jeder Tourist eine Krankenversicherung haben (mind. 30.000 ₾ ≈ 11.000$). Ohne sie kann die Einreise verweigert werden. Im Voraus abschließen — an der Grenze ist es teurer.',
+    law_a:'Versicherung abschließen →',
+    tools_h:'🧰 Nützlich in Georgien',tools_sub:'Alles was du vor Ort brauchst — jeden Tag der Reise',
+    t_translator_h:'Übersetzer Tourist ↔ Georgier',t_translator_p:'Sprich deine Sprache — Chacha übersetzt per Stimme ins Georgische. Kostenlos.',
+    t_metro_h:'Tiflis Metro',t_metro_p:'Route, Preis, Umstieg. Offline.',
+    t_phrases_h:'Sprachführer',t_phrases_p:'Georgische Phrasen + Audio',
+    t_currency_h:'Lari-Kurs',t_currency_p:'GEL in deine Währung',
+    t_radio_h:'Radio aus verschiedenen Ländern',t_radio_p:'Dein Land + Georgien',
+    t_emergency_h:'Notfall',t_emergency_p:'112, Botschaft, Hilfe',
+    t_tips_h:'Trinkgeld',t_tips_p:'Supra-Rechnung aufteilen',
+    t_checklist_h:'Packliste',t_checklist_p:'Mit Versicherung 2026',
+    t_food_h:'Was bestellen',t_food_p:'Georgische Gerichte & Wein',
+    t_visa_h:'Visum-Tage',t_visa_p:'Visumfreies Jahr — Zähler',
+    t_alarm_h:'Wecker',t_alarm_p:'Verpasse nicht deine Tour',
+    t_torch_h:'Taschenlampe',t_torch_p:'Licht im Dunkeln',
+    t_luggage_h:'Gepäckaufbewahrung',t_luggage_p:'Gepäck abgeben — leicht erkunden',
+    t_prices_h:'Faire Preise 2026',t_prices_p:'Was was kostet — lass dich nicht abzocken. Taxi, Kurs, Metro, Museen.',
+    t_story_h:'Story über Georgien',t_story_p:'Erstelle ein schönes Bild für Instagram/TikTok — mit der Marke sakartvelo.ai.',
+    share_h:'Teilen 🍶',share_sub:'Erzähl Freunden, die nach Georgien fahren',
+    f_terms:'Bedingungen',f_privacy:'Datenschutz',f_about:'Über uns',
+    f_note:'Chacha ist ein kostenloser Assistent. Wir sind Vermittler: Wir schlagen Optionen vor, während Buchung und Zahlung direkt auf offiziellen Plattformen erfolgen. 🇬🇪',
+    consent:'Akzeptieren 🍶',consent_no:'Ablehnen',consent_text:'Wir verwenden nur notwendige Cookies für den Betrieb der Website — gespeichert auf Ihrem Telefon, nicht auf unserem Server.',disclaimer:'Chacha ist KI und kann Fehler machen. Bitte überprüfen Sie die Antworten 🍶'},
   fa:{trust:'🆓 همیشه رایگان · پرداخت از طریق <b>برندهای معتبر جهانی</b>',
     h1:'دوست تو <span class="em">چاچا</span><br>در گرجستان 🇬🇪',
     sub:'فقط یک برنامه‌ریز نیست — همراهی دلسوز در تمام سفرت. هر چیزی درباره گرجستان بپرس.',
     back:'← بازگشت به سایت',chacha:'چاچا',
     hello:'گامارجوبا، دوست من! 🍶 من چاچا هستم — دوست گرجی تو. در هتل‌ها، تورها، ترانسفر و بیمه اجباری ۲۰۲۶ کمکت می‌کنم. کجا می‌رویم؟',
     q_svaneti:'🏔️ سوانتی',q_batumi:'🏨 باتومی',q_kakheti:'🍷 کاختی',q_transfer:'✈️ ترانسفر',
+    q_tbilisi:'🏙️ تفلیس',q_kazbegi:'⛰️ کازبگی',q_kutaisi:'🦅 کوتایسی',q_bakuriani:'⛷️ باکوریانی',q_gudauri:'🪂 گوداوری',q_borjomi:'💧 بورجومی',q_vardzia:'🏛️ واردزیا',q_ureki:'🏖️ اورکی',q_david:'🕌 داوید گارجا',q_mtskheta:'⛪ متسختا',q_sighnaghi:'🌹 سیغناغی',
+    dq_svaneti:'می‌خواهم تور ۳ روزه به سوانتی',dq_batumi:'هتل در باتومی کنار دریا',dq_kakheti:'تور شراب در کاختی',dq_transfer:'ترانسفر از فرودگاه تفلیس',dq_tbilisi:'چه چیزی در تفلیس ببینم',dq_kazbegi:'کازبگی کلیسای گرگتی کوهنوردی',dq_kutaisi:'کوتایسی غار پرومتئوس مارتویلی',dq_bakuriani:'اسکی در باکوریانی',dq_gudauri:'گوداوری کوهنوردی پاراگلایدینگ',dq_borjomi:'بورجومی آب معدنی',dq_vardzia:'صومعه غار واردزیا',dq_ureki:'اورکی ساحل ماسه سیاه',dq_david:'صومعه داوید گارجا',dq_mtskheta:'متسختا پایتخت باستانی',dq_sighnaghi:'سیغناغی شهر عشق شراب',
     ph:'به چاچا بنویس...',
     law_h:'قانون جدید ۲۰۲۶ — بیمه اجباری است',
     law_p:'از ۱ ژانویه ۲۰۲۶ هر گردشگر باید بیمه درمانی داشته باشد (حداقل ۳۰٬۰۰۰ ₾ ≈ ۱۱٬۰۰۰$). بدون آن ممکن است اجازه ورود ندهند. از قبل تهیه کن.',
@@ -698,8 +910,45 @@ var I18N={
     f_note:'چاچا دستیار رایگان است. ما واسطه هستیم: گزینه‌ها را پیشنهاد می‌دهیم، اما رزرو و پرداخت مستقیماً در پلتفرم‌های رسمی انجام می‌شود. 🇬🇪',
     consent:'می‌پذیرم 🍶',consent_no:'رد',consent_text:'فقط از کوکی‌های ضروری برای کارکرد سایت استفاده می‌کنیم — روی گوشی شما ذخیره می‌شود، نه سرور ما.',disclaimer:'چاچا هوش مصنوعی است و ممکن است اشتباه کند. لطفاً پاسخ‌ها را بررسی کنید 🍶'}
 };
-var RTL_LANGS={ar:1,fa:1};
+var RTL_LANGS={ar:1,fa:1,he:1};
 var L=I18N[userLang]?userLang:'en';   // если язык не поддержан — английский
+
+// DeepL автоперевод для неподдерживаемых языков
+async function autoTranslateUI(targetLang){
+  if(I18N[targetLang]||targetLang==='en')return; // уже есть
+  try{
+    var keysToTranslate=['sub','law_h','law_p','law_a','tools_h','tools_sub',
+      't_translator_h','t_translator_p','t_metro_h','t_metro_p','t_phrases_h','t_phrases_p',
+      't_currency_h','t_currency_p','t_radio_h','t_radio_p','t_emergency_h','t_emergency_p',
+      't_tips_h','t_tips_p','t_checklist_h','t_checklist_p','t_food_h','t_food_p',
+      't_visa_h','t_visa_p','t_alarm_h','t_alarm_p','t_torch_h','t_torch_p',
+      't_luggage_h','t_luggage_p','t_prices_h','t_prices_p','t_story_h','t_story_p',
+      'share_h','share_sub','f_terms','f_privacy','f_about','f_note',
+      'consent','consent_no','back','ph','disclaimer'];
+    var enT=I18N['en'];
+    var texts=keysToTranslate.map(function(k){return enT[k]||'';});
+    var q=texts.map(function(t){return'q='+encodeURIComponent(t);}).join('&');
+    var url='https://api.mymemory.translated.net/get?'+q+'&langpair=en|'+targetLang;
+    var res=await fetch(url);
+    var data=await res.json();
+    if(data&&data.responseData&&data.responseData.translatedText){
+      // одиночный перевод
+      var translated=Object.assign({},enT);
+      translated[keysToTranslate[0]]=data.responseData.translatedText;
+      I18N[targetLang]=translated;
+      var newL=targetLang;
+      var newT=translated;
+      window.__t=newT;
+      document.querySelectorAll('[data-i18n]').forEach(function(el){
+        var k=el.getAttribute('data-i18n');if(newT[k]!=null)el.textContent=newT[k];
+      });
+      document.querySelectorAll('[data-i18n-ph]').forEach(function(el){
+        var k=el.getAttribute('data-i18n-ph');if(newT[k]!=null)el.setAttribute('placeholder',newT[k]);
+      });
+    }
+  }catch(e){console.log('AutoTranslate error:',e);}
+}
+if(!I18N[userLang]&&userLang!=='en'){autoTranslateUI(userLang);}
 var T=I18N[L];
 window.__t=T; // словарь доступен инструментам/чату
 
@@ -719,6 +968,10 @@ function applyI18n(){
   // trust-бейдж содержит <b>, рендерим как html
   var tr=document.querySelector('[data-i18n="trust"]');if(tr&&T.trust)tr.innerHTML=T.trust;
   var fn=document.querySelector('[data-i18n="f_note"]');if(fn&&T.f_note)fn.textContent=T.f_note;
+  // обновляем data-q (запрос к чату) на язык пользователя
+  document.querySelectorAll('[data-iq]').forEach(function(el){
+    var k=el.getAttribute('data-iq');if(T[k])el.setAttribute('data-q',T[k]);
+  });
   // язык + направление документа
   document.documentElement.setAttribute('lang',L);
   if(RTL_LANGS[L])document.documentElement.setAttribute('dir','rtl');
@@ -979,6 +1232,24 @@ document.querySelector('.share').addEventListener('click',function(e){
 });
 
 /* ---------- PWA: иконка-приложение ---------- */
+var deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',function(e){
+  e.preventDefault();
+  deferredPrompt=e;
+  // показываем кнопку установки если есть
+  var installBtn=document.getElementById('installBtn');
+  if(installBtn)installBtn.style.display='flex';
+});
+window.addEventListener('appinstalled',function(){
+  deferredPrompt=null;
+  var installBtn=document.getElementById('installBtn');
+  if(installBtn)installBtn.style.display='none';
+});
+window.__installPWA=function(){
+  if(!deferredPrompt)return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(function(){deferredPrompt=null;});
+};
 window.__userLang=userLang; // для инструментов
 window.__send=send;
 })();
@@ -1461,13 +1732,39 @@ tools.story=function(){openModal('📸 Сторис про Грузию');
     ['Просто скажи','«гаумарджос!» 🥂']
   ];
   var grads=[
-    ['#7a1220','#a8243a'],['#b8842f','#e6a648'],['#3a1d0f','#7a1220'],
-    ['#143d2b','#2a5a3a'],['#2a0a12','#a8243a'],['#7a1220','#b8842f'],
-    ['#3a1d0f','#e6a648'],['#143d2b','#d8a44a'],['#4a1020','#c8911f'],
-    ['#1d3a2a','#7a1220'],['#5a0c18','#e3b35e'],['#2a1d3a','#a8243a'],
-    ['#3a2410','#d8a44a'],['#1a2a3a','#4caf50'],['#3a0a1a','#f0934a'],
-    ['#0d2a3a','#2a7a9a'],['#3a1020','#d83a5a'],['#2a3a0a','#8aaa2a']
+    // Закат над Тбилиси
+    ['#1a0a0e','#7a1220','#b8842f'],
+    // Ночной Тбилиси
+    ['#0a0a1a','#1a1a3a','#7a1220'],
+    // Кахетийское вино
+    ['#2a0810','#7a1220','#c8500a'],
+    // Горы Сванетии
+    ['#0a1a2a','#1a3a5a','#4a8aaa'],
+    // Золотой час
+    ['#1a0a00','#8a4a00','#e8a020'],
+    // Море Батуми
+    ['#001a2a','#004a6a','#0a8a9a'],
+    // Весенняя Кахетия
+    ['#0a1a0a','#1a3a1a','#4a7a2a'],
+    // Гранатовый
+    ['#2a0010','#7a0020','#d8204a'],
+    // Чача закат
+    ['#2a1000','#7a3a00','#d87a20'],
+    // Лавандовый
+    ['#1a0a2a','#3a1a5a','#8a4aaa'],
+    // Мрамор
+    ['#0a0a0a','#2a2a2a','#5a5a5a'],
+    // Нeon 2026
+    ['#0a001a','#2a006a','#8a00ff'],
   ];
+  // Функция тройного градиента
+  function makeGrad(ctx,w,h,g){
+    var lg=ctx.createLinearGradient(0,0,w,h);
+    lg.addColorStop(0,g[0]);
+    lg.addColorStop(0.5,g[1]||g[0]);
+    lg.addColorStop(1,g[2]||g[1]||g[0]);
+    return lg;
+  }
   function rnd(a){return a[Math.floor(Math.random()*a.length)]}
   // антиповтор: помним последние комбинации, не показываем дважды подряд
   var seen={};
@@ -1492,12 +1789,12 @@ tools.story=function(){openModal('📸 Сторис про Грузию');
     '<p class="hint" id="stHint" style="margin-top:10px">💡 На айфоне: после «Сохранить» картинка откроется — задержи палец на ней и выбери «Сохранить фото».</p>';
   var cv=document.getElementById('stCanvas'),ctx=cv.getContext('2d');
   function draw(){
-    var lg=ctx.createLinearGradient(0,0,540,960);
-    lg.addColorStop(0,cur.grad[0]);lg.addColorStop(1,cur.grad[1]);
-    ctx.fillStyle=lg;ctx.fillRect(0,0,540,960);
-    ctx.globalAlpha=.10;ctx.fillStyle='#fff';
-    ctx.beginPath();ctx.arc(440,170,130,0,7);ctx.fill();
-    ctx.beginPath();ctx.arc(90,800,170,0,7);ctx.fill();
+    ctx.fillStyle=makeGrad(ctx,540,960,cur.grad);ctx.fillRect(0,0,540,960);
+    // декоративные круги
+    ctx.globalAlpha=.08;ctx.fillStyle='#fff';
+    ctx.beginPath();ctx.arc(460,150,160,0,7);ctx.fill();
+    ctx.beginPath();ctx.arc(80,820,190,0,7);ctx.fill();
+    ctx.beginPath();ctx.arc(270,480,80,0,7);ctx.fill();
     ctx.globalAlpha=1;
     ctx.textAlign='center';
     // большой эмодзи-персонаж
@@ -1848,24 +2145,30 @@ tools.camera=function(){openModal('🤳 Фото с Чача');
   // Живые фильтры — применяются к видео в реальном времени (видно сразу на лице)
   var FILTERS=[
     {name:'Оригинал',css:'none',tag:''},
-    {name:'Тбилиси Голд',css:'sepia(.45) saturate(1.5) contrast(1.05) brightness(1.05)',tag:'თბილისი ✨'},
-    {name:'Кахетинское вино',css:'saturate(1.7) contrast(1.15) hue-rotate(-12deg) brightness(.95)',tag:'ღვინო 🍷'},
-    {name:'Винтаж 80-х',css:'sepia(.6) contrast(1.2) saturate(1.3) brightness(1.05)',tag:'Ретро 📼'},
-    {name:'Казбеги Лёд',css:'saturate(1.2) contrast(1.1) hue-rotate(180deg) brightness(1.05)',tag:'ყაზბეგი ❄️'},
-    {name:'Чёрно-белое кино',css:'grayscale(1) contrast(1.25) brightness(1.05)',tag:'Кино 🎬'},
-    {name:'Золотой час',css:'sepia(.3) saturate(1.6) brightness(1.12) contrast(1.05)',tag:'Закат 🌅'},
-    {name:'Сванетия Холод',css:'saturate(.85) contrast(1.15) brightness(1.02) hue-rotate(-8deg)',tag:'სვანეთი 🏔️'},
-    {name:'Неон Тбилиси',css:'saturate(2) contrast(1.25) brightness(1.05) hue-rotate(8deg)',tag:'Неон 🌃'},
-    {name:'Мечта (мягкий)',css:'blur(.4px) saturate(1.35) brightness(1.1) contrast(.97)',tag:'Dream 💫'},
-    {name:'Чача Огонь',css:'saturate(1.8) contrast(1.2) hue-rotate(-18deg) brightness(1.05)',tag:'ჭაჭა 🔥'}
+    {name:'🥟 Хинкали',css:'saturate(1.4) contrast(1.1) brightness(1.08) hue-rotate(-5deg)',tag:'🥟 Khinkali vibes'},
+    {name:'🧀 Хачапури',css:'sepia(.35) saturate(1.6) contrast(1.1) brightness(1.1)',tag:'🧀 Khachapuri mood'},
+    {name:'🍷 Саперави',css:'saturate(1.8) contrast(1.2) hue-rotate(-15deg) brightness(.95)',tag:'🍷 Saperavi 2026'},
+    {name:'✨ Глитч',css:'saturate(2) contrast(1.4) hue-rotate(8deg) brightness(1.1)',tag:'✨ Glitch 2026'},
+    {name:'👾 8-Бит',css:'saturate(1.5) contrast(1.5) brightness(1.05)',tag:'👾 8-bit Georgia'},
+    {name:'🏔️ Казбеги',css:'saturate(.9) contrast(1.2) brightness(1.05) hue-rotate(-8deg)',tag:'🏔️ Kazbegi vibes'},
+    {name:'🌅 Закат',css:'sepia(.3) saturate(1.6) brightness(1.12) contrast(1.05)',tag:'🌅 Golden hour'},
+    {name:'🎬 Кино',css:'grayscale(1) contrast(1.3) brightness(1.05)',tag:'🎬 Cinema Georgia'},
+    {name:'🌈 Радуга',css:'saturate(2.2) contrast(1.15) hue-rotate(15deg) brightness(1.08)',tag:'🌈 Rainbow Tbilisi'},
+    {name:'💫 Мечта',css:'blur(.3px) saturate(1.4) brightness(1.12) contrast(.96)',tag:'💫 Dream Georgia'},
+    {name:'🔥 Чача',css:'saturate(1.9) contrast(1.25) hue-rotate(-20deg) brightness(1.05)',tag:'🍶 Chacha fire'},
+    {name:'🪞 Неон',css:'saturate(2.1) contrast(1.3) brightness(1.08) hue-rotate(20deg)',tag:'🌃 Neon Tbilisi'},
+    {name:'📼 Ретро',css:'sepia(.6) contrast(1.2) saturate(1.3) brightness(1.05)',tag:'📼 Retro 80s'}
   ];
-  var CAPTIONS=[
-    'Грузия захватила моё сердце навсегда 🇬🇪❤️ #Georgia #Sakartvelo #GeorgiaTravel',
-    'Один момент в Казбеги стоит тысячи слов ⛰️ #Kazbegi #Mountains #Georgia2026',
-    'Чача + хачапури = счастье 🧀🥂 #Chacha #Khachapuri #GeorgianFood',
-    'Тбилиси, я влюбился 🏛️✨ #Tbilisi #OldTown #GeorgiaVibes',
-    'Сванетия меняет тебя навсегда 🏔️💫 #Svaneti #GeorgianMountains'
-  ];
+  var CAPTIONS_ALL={
+    ru:['Грузия захватила моё сердце навсегда 🇬🇪❤️ #Georgia #Sakartvelo','Один момент в Казбеги стоит тысячи слов ⛰️ #Kazbegi #Georgia2026','Хинкали + хачапури = счастье 🥟🧀 #GeorgianFood #Khinkali','Тбилиси, я влюбился 🏛️✨ #Tbilisi #OldTown','Сванетия меняет тебя навсегда 🏔️💫 #Svaneti','Чача — это не просто напиток, это философия 🍶 #Chacha'],
+    en:['Georgia stole my heart forever 🇬🇪❤️ #Georgia #Sakartvelo','One moment in Kazbegi is worth a thousand words ⛰️ #Kazbegi','Khinkali + khachapuri = happiness 🥟🧀 #GeorgianFood','Tbilisi, I\'m in love 🏛️✨ #Tbilisi #OldTown','Svaneti changes you forever 🏔️💫 #Svaneti','Chacha is not just a drink, it\'s a philosophy 🍶 #Chacha'],
+    de:['Georgien hat mein Herz für immer gestohlen 🇬🇪❤️ #Georgia','Ein Moment in Kazbegi ist tausend Worte wert ⛰️ #Kazbegi','Chinkali + Chatschapuri = Glück 🥟🧀 #GeorgianFood','Tiflis, ich bin verliebt 🏛️✨ #Tbilisi','Swanetien verändert dich für immer 🏔️💫 #Svaneti'],
+    fr:['La Géorgie a volé mon cœur pour toujours 🇬🇪❤️ #Géorgie','Un moment à Kazbegi vaut mille mots ⛰️ #Kazbegi','Khinkali + khachapuri = bonheur 🥟🧀 #CuisineGéorgienne','Tbilissi, je suis amoureux 🏛️✨ #Tbilissi','La Svanétie vous change pour toujours 🏔️💫'],
+    es:['Georgia robó mi corazón para siempre 🇬🇪❤️ #Georgia','Un momento en Kazbegi vale mil palabras ⛰️ #Kazbegi','Jinkali + jachapuri = felicidad 🥟🧀 #CocinaGeorgiana','Tiflis, estoy enamorado 🏛️✨ #Tbilisi','Svaneti te cambia para siempre 🏔️💫 #Svaneti'],
+    tr:['Gürcistan kalbimi sonsuza dek çaldı 🇬🇪❤️ #Gürcistan','Kazbegi\'deki bir an binlerce kelimeye bedeldir ⛰️','Khinkali + khachapuri = mutluluk 🥟🧀 #GürcüMutfağı','Tiflis, sana aşık oldum 🏛️✨ #Tiflis','Svaneti sizi sonsuza dek değiştirir 🏔️💫'],
+    ar:['جورجيا سرقت قلبي إلى الأبد 🇬🇪❤️ #جورجيا','لحظة واحدة في كازبيغي تستحق ألف كلمة ⛰️','خينكالي + خاتشابوري = سعادة 🥟🧀','تبليسي، أنا واقع في الحب 🏛️✨ #تبليسي','سفانيتي تغيرك إلى الأبد 🏔️💫']
+  };
+  var CAPTIONS=CAPTIONS_ALL[window.__userLang]||CAPTIONS_ALL.en;
   var fi=0,stream=null,facing='user',captured=null,curTag='';
 
   mBody.innerHTML='<p class="hint">Живые фильтры — выбираешь и сразу видишь результат на камере. Сними фото и поделись 🍶</p><div id="camStage"></div>';

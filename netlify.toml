@@ -1,3 +1,37 @@
 [build]
   publish = "."
-  functions = "netlify/functions"
+
+[[redirects]]
+  from = "http://sakartvelo.ai/*"
+  to = "https://sakartvelo.ai/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.sakartvelo.ai/*"
+  to = "https://sakartvelo.ai/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.sakartvelo.ai/*"
+  to = "https://sakartvelo.ai/:splat"
+  status = 301
+  force = true
+
+[build.processing]
+  skip_processing = false
+
+[build.processing.css]
+  bundle = true
+  minify = true
+
+[build.processing.js]
+  bundle = false
+  minify = true
+
+[build.processing.html]
+  pretty_urls = true
+
+[build.processing.images]
+  compress = true
