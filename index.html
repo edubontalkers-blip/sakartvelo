@@ -363,6 +363,20 @@ footer .links{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin
 .spin{display:inline-block;width:18px;height:18px;border:2px solid var(--line);
   border-top-color:var(--gold);border-radius:50%;animation:sp .7s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
+
+/* ===== LANGUAGE PICKER ===== */
+#langPicker{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;overflow-y:auto}
+#langPicker.hidden{display:none}
+.lp-title{font-family:var(--font-display);font-size:1.8rem;font-weight:900;color:var(--ink);margin-bottom:6px;text-align:center}
+.lp-sub{color:var(--muted);font-size:.95rem;margin-bottom:24px;text-align:center}
+.lp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;width:100%;max-width:400px}
+.lp-btn{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 12px;cursor:pointer;font-family:var(--font-body);font-size:.95rem;color:var(--ink);display:flex;align-items:center;gap:10px;transition:all .18s;text-align:left}
+.lp-btn:active{transform:scale(.97);border-color:var(--gold)}
+.lp-btn .lp-flag{font-size:1.5rem;flex-shrink:0}
+.lp-btn .lp-name{font-weight:600;font-size:.9rem}
+.lp-btn .lp-native{font-size:.75rem;color:var(--muted)}
+.lp-other{margin-top:12px;width:100%;max-width:400px;background:var(--card-2);border:1px solid var(--line);border-radius:16px;padding:14px 16px;cursor:pointer;font-family:var(--font-body);font-size:.9rem;color:var(--muted);text-align:center}
+.lp-logo{font-family:var(--font-display);font-size:1.1rem;font-weight:900;margin-bottom:28px;color:var(--gold)}
 </style>
 <!-- Security -->
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
@@ -373,6 +387,29 @@ footer .links{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin
 <link rel="preconnect" href="https://api.mymemory.translated.net">
 </head>
 <body data-theme="dark">
+<!-- ===== LANGUAGE PICKER ONBOARDING ===== -->
+<div id="langPicker" class="hidden">
+  <div class="lp-logo">🍶 sakartvelo.ai</div>
+  <div class="lp-title">Choose your language</div>
+  <div class="lp-sub">Выберите язык · زبان خود را انتخاب کنید</div>
+  <div class="lp-grid">
+    <button class="lp-btn" data-lang="en"><span class="lp-flag">🇬🇧</span><div><div class="lp-name">English</div><div class="lp-native">English</div></div></button>
+    <button class="lp-btn" data-lang="ru"><span class="lp-flag">🇷🇺</span><div><div class="lp-name">Русский</div><div class="lp-native">Russian</div></div></button>
+    <button class="lp-btn" data-lang="de"><span class="lp-flag">🇩🇪</span><div><div class="lp-name">Deutsch</div><div class="lp-native">German</div></div></button>
+    <button class="lp-btn" data-lang="fr"><span class="lp-flag">🇫🇷</span><div><div class="lp-name">Français</div><div class="lp-native">French</div></div></button>
+    <button class="lp-btn" data-lang="tr"><span class="lp-flag">🇹🇷</span><div><div class="lp-name">Türkçe</div><div class="lp-native">Turkish</div></div></button>
+    <button class="lp-btn" data-lang="ar"><span class="lp-flag">🇸🇦</span><div><div class="lp-name">العربية</div><div class="lp-native">Arabic</div></div></button>
+    <button class="lp-btn" data-lang="he"><span class="lp-flag">🇮🇱</span><div><div class="lp-name">עברית</div><div class="lp-native">Hebrew</div></div></button>
+    <button class="lp-btn" data-lang="fa"><span class="lp-flag">🇮🇷</span><div><div class="lp-name">فارسی</div><div class="lp-native">Persian</div></div></button>
+    <button class="lp-btn" data-lang="es"><span class="lp-flag">🇪🇸</span><div><div class="lp-name">Español</div><div class="lp-native">Spanish</div></div></button>
+    <button class="lp-btn" data-lang="uk"><span class="lp-flag">🇺🇦</span><div><div class="lp-name">Українська</div><div class="lp-native">Ukrainian</div></div></button>
+    <button class="lp-btn" data-lang="be"><span class="lp-flag">🇧🇾</span><div><div class="lp-name">Беларуская</div><div class="lp-native">Belarusian</div></div></button>
+    <button class="lp-btn" data-lang="ka"><span class="lp-flag">🇬🇪</span><div><div class="lp-name">ქართული</div><div class="lp-native">Georgian</div></div></button>
+  </div>
+  <button class="lp-other" id="lpOther">🌐 Other language (auto-translate)</button>
+</div>
+
+
 
 <header class="top">
   <div class="logo"><span class="mark">🍶</span> sakartvelo<b>.ai</b></div>
@@ -449,13 +486,13 @@ footer .links{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin
     <button class="tile" data-tool="torch"><span class="ti">🔦</span><h4 data-i18n="t_torch_h">Фонарик</h4><p data-i18n="t_torch_p">Свет в темноте</p></button>
     <button class="tile" data-tool="luggage"><span class="ti">🧳</span><h4 data-i18n="t_luggage_h">Камера хранения</h4><p data-i18n="t_luggage_p">Оставь багаж — гуляй налегке</p></button>
     <button class="tile big" data-tool="prices"><span class="ti">🛡️</span><h4 data-i18n="t_prices_h">Честные цены 2026</h4><p data-i18n="t_prices_p">Сколько что стоит — не дай себя обсчитать. Такси, курс, метро, музеи.</p></button>
-    <button class="tile big" data-tool="story"><span class="ti">📸</span><h4 data-i18n="t_story_h">Сторис про Грузию</h4><p data-i18n="t_story_p">Создай красивую картинку для Instagram/TikTok — с брендом sakartvelo.ai.</p></button>
-    <button class="tile big" data-tool="places"><span class="ti">📍</span><h4>Лучшие места — от туристов</h4><p>Рестораны, кафе, достопримечательности. Добавляй сам и голосуй ❤️</p></button>
-    <button class="tile big" data-tool="camera"><span class="ti">🤳</span><h4>Фото с Чача — кинокадр</h4><p>Сделай фото с камеры или из галереи → грузинский киноэффект и подпись для соцсетей.</p></button>
-    <button class="tile big" data-tool="games"><span class="ti">🎮</span><h4>Игры — убей время в дороге</h4><p>Шахматы, нарды, змейка, 2048 и другие. Бесплатно, без регистрации.</p></button>
-    <button class="tile big" data-tool="airports"><span class="ti">✈️</span><h4>Табло аэропортов Грузии</h4><p>Прилёты и вылеты Тбилиси, Батуми, Кутаиси — онлайн в реальном времени.</p></button>
-    <button class="tile big" data-tool="trains"><span class="ti">🚆</span><h4>Поезда по Грузии</h4><p>Билеты Тбилиси↔Батуми, Кутаиси, Боржоми. Онлайн, с выбором мест.</p></button>
-    <button class="tile big" data-tool="flights"><span class="ti">🛫</span><h4>Прямые рейсы в Грузию</h4><p>Откуда летят прямые в Тбилиси, Батуми и Кутаиси. Купи билет онлайн.</p></button>
+    <button class="tile big" data-tool="story"><span class="ti">🌿</span><h4 data-i18n="t_story_h">Цитаты о Грузии</h4><p data-i18n="t_story_p">Выбери и поделись своей любимой цитатой о Грузии.</p></button>
+    <button class="tile big" data-tool="places"><span class="ti">📍</span><h4 data-i18n="t_places_h">Лучшие места — от туристов</h4><p data-i18n="t_places_p">Рестораны, кафе, достопримечательности. Добавляй сам и голосуй ❤️</p></button>
+    <button class="tile big" data-tool="camera"><span class="ti">🤳</span><h4 data-i18n="t_camera_h">Фото с Чача — кинокадр</h4><p data-i18n="t_camera_p">Сделай фото с камеры или из галереи → грузинский киноэффект и подпись для соцсетей.</p></button>
+    <button class="tile big" data-tool="games"><span class="ti">🎮</span><h4 data-i18n="t_games_h">Игры — убей время в дороге</h4><p data-i18n="t_games_p">Шахматы, нарды, змейка, 2048 и другие. Бесплатно, без регистрации.</p></button>
+    <button class="tile big" data-tool="airports"><span class="ti">✈️</span><h4 data-i18n="t_airports_h">Табло аэропортов Грузии</h4><p data-i18n="t_airports_p">Прилёты и вылеты Тбилиси, Батуми, Кутаиси — онлайн в реальном времени.</p></button>
+    <button class="tile big" data-tool="trains"><span class="ti">🚆</span><h4 data-i18n="t_trains_h">Поезда по Грузии</h4><p data-i18n="t_trains_p">Билеты Тбилиси↔Батуми, Кутаиси, Боржоми. Онлайн, с выбором мест.</p></button>
+    <button class="tile big" data-tool="flights"><span class="ti">🛫</span><h4 data-i18n="t_flights_h">Прямые рейсы в Грузию</h4><p data-i18n="t_flights_p">Откуда летят прямые в Тбилиси, Батуми и Кутаиси. Купи билет онлайн.</p></button>
   </div>
 
   <!-- SHARE -->
@@ -520,7 +557,38 @@ setInterval(function(){gi=(gi+1)%greets.length;gEl.style.opacity=0;
 gEl.style.transition='opacity .25s';
 
 /* ---------- Язык пользователя ---------- */
-var userLang=(navigator.language||'ru').slice(0,2).toLowerCase();
+/* ===== LANGUAGE PICKER LOGIC ===== */
+(function(){
+  var picker=document.getElementById('langPicker');
+  // Check if user already chose
+  var saved=null;
+  try{saved=localStorage.getItem('sak_lang');}catch(e){}
+  if(saved){
+    // Already chosen — apply and hide
+    window.__forcedLang=saved;
+    return;
+  }
+  // Show picker
+  picker.classList.remove('hidden');
+  // Block scroll
+  document.body.style.overflow='hidden';
+  function chooseLang(lang){
+    try{localStorage.setItem('sak_lang',lang);}catch(e){}
+    window.__forcedLang=lang;
+    picker.classList.add('hidden');
+    document.body.style.overflow='';
+  }
+  picker.querySelectorAll('[data-lang]').forEach(function(btn){
+    btn.onclick=function(){chooseLang(btn.getAttribute('data-lang'));};
+  });
+  document.getElementById('lpOther').onclick=function(){
+    // Use device language for auto-translate
+    var dl=(navigator.language||'en').slice(0,2).toLowerCase();
+    chooseLang(dl);
+  };
+})();
+
+var userLang=window.__forcedLang||(navigator.language||'en').slice(0,2).toLowerCase();
 
 /* ---------- Локализация интерфейса (по языку устройства гостя) ---------- */
 var I18N={
@@ -551,11 +619,11 @@ var I18N={
     t_torch_h:'Фонарик',t_torch_p:'Свет в темноте',
     t_luggage_h:'Камера хранения',t_luggage_p:'Оставь багаж — гуляй налегке',
     t_prices_h:'Честные цены 2026',t_prices_p:'Сколько что стоит — не дай себя обсчитать. Такси, курс, метро, музеи.',
-    t_story_h:'Сторис про Грузию',t_story_p:'Создай красивую картинку для Instagram/TikTok — с брендом sakartvelo.ai.',
+    t_story_h:'🌿 Цитаты о Грузии',t_story_p:'Выбери и поделись своей любимой цитатой о Грузии.',
     share_h:'Поделиться 🍶',share_sub:'Расскажи друзьям, кто едет в Грузию',
     f_terms:'Условия',f_privacy:'Конфиденциальность',f_about:'О нас',
     f_note:'Чача — бесплатный помощник. Мы посредник: подбираем варианты, а бронирование и оплата проходят напрямую на официальных платформах. 🇬🇪',
-    consent:'Принимаю 🍶',consent_no:'Отклонить',consent_text:'Мы используем только необходимые cookie для работы сайта (тема, чек-лист, согласие) — они хранятся в вашем телефоне, не на сервере.',disclaimer:'Чача — AI и может ошибаться. Проверяйте ответы 🍶'},
+    consent:'Принимаю 🍶',consent_no:'Отклонить',consent_text:'Мы используем только необходимые cookie для работы сайта (тема, чек-лист, согласие) — они хранятся в вашем телефоне, не на сервере.',disclaimer:'Чача — AI и может ошибаться. Проверяйте ответы 🍶','t_places_h':'Лучшие места — от туристов','t_places_p':'Рестораны, кафе, достопримечательности. Добавляй сам и голосуй ❤️','t_camera_h':'Фото с Чача — кинокадр','t_camera_p':'Сделай фото с камеры или из галереи → грузинский киноэффект и подпись для соцсетей.','t_games_h':'Игры — убей время в дороге','t_games_p':'Шахматы, нарды, змейка, 2048 и другие. Бесплатно, без регистрации.','t_airports_h':'Табло аэропортов Грузии','t_airports_p':'Прилёты и вылеты Тбилиси, Батуми, Кутаиси — онлайн.','t_trains_h':'Поезда по Грузии','t_trains_p':'Билеты Тбилиси↔Батуми, Кутаиси, Боржоми. Онлайн.','t_flights_h':'Прямые рейсы в Грузию','t_flights_p':'Откуда летят прямые в Тбилиси, Батуми, Кутаиси.'},
   en:{trust:'🆓 Free forever · pay via <b>trusted global brands</b>',
     h1:'Your friend <span class="em">Chacha</span><br>in Georgia 🇬🇪',
     sub:'Not just a planner — a caring companion for your whole trip. Ask anything about Georgia.',
@@ -583,11 +651,11 @@ var I18N={
     t_torch_h:'Flashlight',t_torch_p:'Light in the dark',
     t_luggage_h:'Luggage storage',t_luggage_p:'Drop your bags — explore light',
     t_prices_h:'Fair prices 2026',t_prices_p:'What things cost — don\'t get overcharged. Taxi, rate, metro, museums.',
-    t_story_h:'Georgia story maker',t_story_p:'Create a beautiful Instagram/TikTok image — branded sakartvelo.ai.',
+    t_story_h:'🌿 Georgia Quotes',t_story_p:'Choose and share your favourite quote about Georgia.',
     share_h:'Share 🍶',share_sub:'Tell friends heading to Georgia',
     f_terms:'Terms',f_privacy:'Privacy',f_about:'About',
     f_note:'Chacha is a free assistant. We are an intermediary: we suggest options, while booking and payment happen directly on official platforms. 🇬🇪',
-    consent:'Accept 🍶',consent_no:'Decline',consent_text:'We use only essential cookies to run the site (theme, checklist, consent) — stored on your phone, not our server.',disclaimer:'Chacha is AI and can make mistakes. Please double-check responses 🍶'},
+    consent:'Accept 🍶',consent_no:'Decline',consent_text:'We use only essential cookies to run the site (theme, checklist, consent) — stored on your phone, not our server.',disclaimer:'Chacha is AI and can make mistakes. Please double-check responses 🍶','t_places_h':'Best places — from tourists','t_places_p':'Restaurants, cafes, sights. Add your own and vote ❤️','t_camera_h':'Photo with Chacha','t_camera_p':'Take a photo from camera or gallery → Georgian film effect and caption for social media.','t_games_h':'Games — kill time on the road','t_games_p':'Chess, backgammon, snake, 2048 and more. Free, no registration.','t_airports_h':'Georgia airport boards','t_airports_p':'Arrivals and departures Tbilisi, Batumi, Kutaisi — online.','t_trains_h':'Trains in Georgia','t_trains_p':'Tickets Tbilisi↔Batumi, Kutaisi, Borjomi. Online.','t_flights_h':'Direct flights to Georgia','t_flights_p':'Direct flights to Tbilisi, Batumi and Kutaisi.'},
   ka:{trust:'🆓 უფასო სამუდამოდ · გადახდა <b>სანდო ბრენდებით</b>',
     h1:'შენი მეგობარი <span class="em">ჭაჭა</span><br>საქართველოში 🇬🇪',
     sub:'არა მხოლოდ დამგეგმავი — მზრუნველი თანამგზავრი მთელი მოგზაურობისთვის. იკითხე ყველაფერი საქართველოზე.',
@@ -619,7 +687,7 @@ var I18N={
     share_h:'გააზიარე 🍶',share_sub:'უთხარი მეგობრებს, ვინც საქართველოში მოდის',
     f_terms:'პირობები',f_privacy:'კონფიდენციალურობა',f_about:'ჩვენ შესახებ',
     f_note:'ჭაჭა უფასო დამხმარეა. ჩვენ შუამავალი ვართ: ვთავაზობთ ვარიანტებს, ჯავშანი და გადახდა კი პირდაპირ ოფიციალურ პლატფორმებზე ხდება. 🇬🇪',
-    consent:'ვეთანხმები 🍶',consent_no:'უარყოფა',consent_text:'ვიყენებთ მხოლოდ აუცილებელ cookie-ს საიტის მუშაობისთვის — ინახება თქვენს ტელეფონში, არა სერვერზე.',disclaimer:'ჭაჭა არის AI და შეიძლება შეცდეს. გთხოვთ გადაამოწმოთ პასუხები 🍶'},
+    consent:'ვეთანხმები 🍶',consent_no:'უარყოფა',consent_text:'ვიყენებთ მხოლოდ აუცილებელ cookie-ს საიტის მუშაობისთვის — ინახება თქვენს ტელეფონში, არა სერვერზე.',disclaimer:'ჭაჭა არის AI და შეიძლება შეცდეს. გთხოვთ გადაამოწმოთ პასუხები 🍶','t_places_h':'საუკეთესო ადგილები — ტურისტებისგან','t_places_p':'რესტორნები, კაფეები, ღირსშესანიშნაობები. დაამატე და მისცე ხმა ❤️','t_camera_h':'ფოტო ჭაჭასთან','t_camera_p':'გადაიღე ფოტო კამერით ან გალერეიდან → ქართული კინო ეფექტი.','t_games_h':'თამაშები — გაატარე დრო','t_games_p':'შახმატი, ნარდი, გველი, 2048 და სხვა. უფასოდ.','t_airports_h':'საქართველოს აეროპორტების ბორდი','t_airports_p':'ჩამოსვლა და გამგზავრება თბილისი, ბათუმი, ქუთაისი.','t_trains_h':'მატარებლები საქართველოში','t_trains_p':'ბილეთები თბილისი↔ბათუმი, ქუთაისი, ბორჯომი.','t_flights_h':'პირდაპირი რეისები საქართველოში','t_flights_p':'პირდაპირი რეისები თბილისში, ბათუმსა და ქუთაისში.'},
   tr:{trust:'🆓 Sonsuza dek ücretsiz · ödeme <b>güvenilir devlerle</b>',
     h1:'Gürcistan\'daki<br>dostun <span class="em">Çaça</span> 🇬🇪',
     sub:'Sadece bir planlayıcı değil — tüm yolculuğun için özenli bir yol arkadaşı. Gürcistan hakkında her şeyi sor.',
@@ -651,7 +719,7 @@ var I18N={
     share_h:'Paylaş 🍶',share_sub:'Gürcistan\'a gidecek arkadaşlarına söyle',
     f_terms:'Koşullar',f_privacy:'Gizlilik',f_about:'Hakkımızda',
     f_note:'Çaça ücretsiz bir yardımcıdır. Biz aracıyız: seçenekler öneririz, rezervasyon ve ödeme doğrudan resmi platformlarda yapılır. 🇬🇪',
-    consent:'Kabul ediyorum 🍶',consent_no:'Reddet',consent_text:'Sitenin çalışması için yalnızca gerekli çerezleri kullanırız (tema, liste, onay) — sunucuda değil, telefonunuzda saklanır.',disclaimer:'Çaça bir yapay zekadır ve hata yapabilir. Lütfen yanıtları kontrol edin 🍶'},
+    consent:'Kabul ediyorum 🍶',consent_no:'Reddet',consent_text:'Sitenin çalışması için yalnızca gerekli çerezleri kullanırız (tema, liste, onay) — sunucuda değil, telefonunuzda saklanır.',disclaimer:'Çaça bir yapay zekadır ve hata yapabilir. Lütfen yanıtları kontrol edin 🍶','t_places_h':'En iyi yerler — turistlerden','t_places_p':'Restoranlar, kafeler, gezilecek yerler. Ekle ve oy ver ❤️','t_camera_h':'Çaça ile fotoğraf','t_camera_p':'Kameradan veya galeriden fotoğraf çek → Gürcü film efekti.','t_games_h':'Oyunlar — yolda vakit geçir','t_games_p':'Satranç, tavla, yılan, 2048 ve daha fazlası. Ücretsiz.','t_airports_h':'Gürcistan havalimanı tabloları','t_airports_p':'Tiflis, Batum, Kutaisi varış ve kalkışları — çevrimiçi.','t_trains_h':'Gürcistan\'da trenler','t_trains_p':'Biletler Tiflis↔Batum, Kutaisi, Borjomi.','t_flights_h':'Gürcistan\'a direkt uçuşlar','t_flights_p':'Tiflis, Batum ve Kutaisi\'ye direkt uçuşlar.'},
   ar:{trust:'🆓 مجاني للأبد · الدفع عبر <b>علامات عالمية موثوقة</b>',
     h1:'صديقك <span class="em">تشاتشا</span><br>في جورجيا 🇬🇪',
     sub:'ليس مجرد مخطط — رفيق مهتم طوال رحلتك. اسأل أي شيء عن جورجيا.',
@@ -683,7 +751,7 @@ var I18N={
     share_h:'شارك 🍶',share_sub:'أخبر أصدقاءك المسافرين إلى جورجيا',
     f_terms:'الشروط',f_privacy:'الخصوصية',f_about:'من نحن',
     f_note:'تشاتشا مساعد مجاني. نحن وسيط: نقترح الخيارات، بينما يتم الحجز والدفع مباشرة على المنصات الرسمية. 🇬🇪',
-    consent:'أوافق 🍶',consent_no:'رفض',consent_text:'نستخدم فقط ملفات تعريف الارتباط الضرورية لتشغيل الموقع — تُحفظ على هاتفك وليس على خادمنا.',disclaimer:'تشاتشا ذكاء اصطناعي وقد يخطئ. يرجى التحقق من الإجابات 🍶'},
+    consent:'أوافق 🍶',consent_no:'رفض',consent_text:'نستخدم فقط ملفات تعريف الارتباط الضرورية لتشغيل الموقع — تُحفظ على هاتفك وليس على خادمنا.',disclaimer:'تشاتشا ذكاء اصطناعي وقد يخطئ. يرجى التحقق من الإجابات 🍶','t_places_h':'أفضل الأماكن — من السياح','t_places_p':'مطاعم، مقاهٍ، معالم سياحية. أضف وصوّت ❤️','t_camera_h':'صورة مع تشاتشا','t_camera_p':'التقط صورة من الكاميرا أو المعرض → تأثير السينما الجورجية.','t_games_h':'ألعاب — اقتل الوقت في الطريق','t_games_p':'شطرنج، طاولة، ثعبان، 2048 والمزيد. مجانًا.','t_airports_h':'لوحات مطارات جورجيا','t_airports_p':'وصول ومغادرة تبليسي، باتومي، كوتايسي — مباشر.','t_trains_h':'قطارات جورجيا','t_trains_p':'تذاكر تبليسي↔باتومي، كوتايسي، بورجومي.','t_flights_h':'رحلات مباشرة إلى جورجيا','t_flights_p':'رحلات مباشرة إلى تبليسي، باتومي وكوتايسي.'},
   uk:{trust:'🆓 Безкоштовно назавжди · оплата через <b>перевірених гігантів</b>',
     h1:'Твій друг <span class="em">Чача</span><br>у Грузії 🇬🇪',
     sub:'Не просто планувальник — турботливий супутник на всю поїздку. Запитай будь-що про Грузію.',
@@ -715,7 +783,7 @@ var I18N={
     share_h:'Поділитись 🍶',share_sub:'Розкажи друзям, хто їде до Грузії',
     f_terms:'Умови',f_privacy:'Конфіденційність',f_about:'Про нас',
     f_note:'Чача — безкоштовний помічник. Ми посередник: підбираємо варіанти, а бронювання і оплата проходять напряму на офіційних платформах. 🇬🇪',
-    consent:'Приймаю 🍶',consent_no:'Відхилити',consent_text:'Ми використовуємо лише необхідні cookie для роботи сайту — вони зберігаються у вашому телефоні, не на сервері.',disclaimer:'Чача — AI і може помилятися. Перевіряйте відповіді 🍶'},
+    consent:'Приймаю 🍶',consent_no:'Відхилити',consent_text:'Ми використовуємо лише необхідні cookie для роботи сайту — вони зберігаються у вашому телефоні, не на сервері.',disclaimer:'Чача — AI і може помилятися. Перевіряйте відповіді 🍶','t_places_h':'Найкращі місця — від туристів','t_places_p':'Ресторани, кафе, пам\'ятки. Додавай сам і голосуй ❤️','t_camera_h':'Фото з Чачею','t_camera_p':'Зроби фото з камери або галереї → грузинський кіноефект.','t_games_h':'Ігри — вбий час в дорозі','t_games_p':'Шахи, нарди, змійка, 2048 та інші. Безкоштовно.','t_airports_h':'Табло аеропортів Грузії','t_airports_p':'Прильоти та вильоти Тбілісі, Батумі, Кутаїсі.','t_trains_h':'Поїзди по Грузії','t_trains_p':'Квитки Тбілісі↔Батумі, Кутаїсі, Боржомі.','t_flights_h':'Прямі рейси до Грузії','t_flights_p':'Прямі рейси до Тбілісі, Батумі та Кутаїсі.'},
   be:{trust:'🆓 Бясплатна назаўжды · аплата праз <b>правераных гігантаў</b>',
     h1:'Твой сябар <span class="em">Чача</span><br>у Грузіі 🇬🇪',
     sub:'Не проста планавальнік — клапатлівы спадарожнік на ўсю паездку. Спытай усё пра Грузію.',
@@ -747,7 +815,7 @@ var I18N={
     share_h:'Падзяліцца 🍶',share_sub:'Раскажы сябрам, хто едзе ў Грузію',
     f_terms:'Умовы',f_privacy:'Канфідэнцыяльнасць',f_about:'Пра нас',
     f_note:'Чача — бясплатны памочнік. Мы пасярэднік: падбіраем варыянты, а браніраванне і аплата праходзяць напрамую на афіцыйных платформах. 🇬🇪',
-    consent:'Прымаю 🍶',consent_no:'Адхіліць',consent_text:'Мы выкарыстоўваем толькі неабходныя cookie для працы сайта — яны захоўваюцца ў вашым тэлефоне, не на серверы.',disclaimer:'Чача — AI і можа памыляцца. Правярайце адказы 🍶'},
+    consent:'Прымаю 🍶',consent_no:'Адхіліць',consent_text:'Мы выкарыстоўваем толькі неабходныя cookie для працы сайта — яны захоўваюцца ў вашым тэлефоне, не на серверы.',disclaimer:'Чача — AI і можа памыляцца. Правярайце адказы 🍶','t_places_h':'Лепшыя месцы — ад турыстаў','t_places_p':'Рэстараны, кавярні, славутасці. Дадавай сам і галасуй ❤️','t_camera_h':'Фота з Чачам','t_camera_p':'Зрабі фота з камеры або галерэі → грузінскі кінаэфект.','t_games_h':'Гульні — забі час у дарозе','t_games_p':'Шахматы, нарды, змейка, 2048 і іншыя. Бясплатна.','t_airports_h':'Табло аэрапортаў Грузіі','t_airports_p':'Прылёты і вылеты Тбілісі, Батумі, Кутаісі.','t_trains_h':'Цягнікі па Грузіі','t_trains_p':'Білеты Тбілісі↔Батумі, Кутаісі, Боржомі.','t_flights_h':'Прамыя рэйсы ў Грузію','t_flights_p':'Прамыя рэйсы ў Тбілісі, Батумі і Кутаісі.'},
   he:{trust:'🆓 חינם לתמיד · תשלום דרך <b>מותגים בינלאומיים אמינים</b>',
     h1:'החבר שלך <span class="em">צ\'אצ\'ה</span><br>בגאורגיה 🇬🇪',
     sub:'לא רק מתכנן — חבר מסור לאורך כל הטיול. שאל כל דבר על גאורגיה.',
@@ -779,7 +847,7 @@ var I18N={
     share_h:'שתף 🍶',share_sub:'ספר לחברים שנוסעים לגאורגיה',
     f_terms:'תנאים',f_privacy:'פרטיות',f_about:'אודות',
     f_note:'צ\'אצ\'ה הוא עוזר חינמי. אנחנו מתווכים: מציעים אפשרויות, בעוד ההזמנה והתשלום מתבצעים ישירות בפלטפורמות הרשמיות. 🇬🇪',
-    consent:'מקבל 🍶',consent_no:'דחה',consent_text:'אנו משתמשים רק בעוגיות הכרחיות להפעלת האתר — מאוחסנות בטלפון שלך, לא בשרת שלנו.',disclaimer:'צ\'אצ\'ה הוא AI ועלול לטעות. אנא בדוק את התשובות 🍶'},
+    consent:'מקבל 🍶',consent_no:'דחה',consent_text:'אנו משתמשים רק בעוגיות הכרחיות להפעלת האתר — מאוחסנות בטלפון שלך, לא בשרת שלנו.',disclaimer:'צ\'אצ\'ה הוא AI ועלול לטעות. אנא בדוק את התשובות 🍶','t_places_h':'המקומות הטובים ביותר — מתיירים','t_places_p':'מסעדות, בתי קפה, אתרים. הוסף בעצמך והצבע ❤️','t_camera_h':'צילום עם צ\'אצ\'ה','t_camera_p':'צלם תמונה מהמצלמה או הגלריה → אפקט קולנוע גאורגי.','t_games_h':'משחקים — הרוג זמן בדרך','t_games_p':'שחמט, שש-בש, נחש, 2048 ועוד. חינם.','t_airports_h':'לוחות תצוגה בנמלי תעופה בגאורגיה','t_airports_p':'הגעות ויציאות טביליסי, באטומי, קוטאיסי.','t_trains_h':'רכבות בגאורגיה','t_trains_p':'כרטיסים טביליסי↔באטומי, קוטאיסי, בורג\'ומי.','t_flights_h':'טיסות ישירות לגאורגיה','t_flights_p':'טיסות ישירות לטביליסי, באטומי וקוטאיסי.'},
   fr:{trust:'🆓 Gratuit pour toujours · paiement via <b>marques mondiales de confiance</b>',
     h1:'Ton ami <span class="em">Chacha</span><br>en Géorgie 🇬🇪',
     sub:'Pas juste un planificateur — un compagnon attentionné pour tout ton voyage. Pose toutes tes questions sur la Géorgie.',
@@ -811,7 +879,7 @@ var I18N={
     share_h:'Partager 🍶',share_sub:'Dis à tes amis qui vont en Géorgie',
     f_terms:'Conditions',f_privacy:'Confidentialité',f_about:'À propos',
     f_note:'Chacha est un assistant gratuit. Nous sommes intermédiaires : nous suggérons des options, tandis que la réservation et le paiement se font directement sur les plateformes officielles. 🇬🇪',
-    consent:'J\'accepte 🍶',consent_no:'Refuser',consent_text:'Nous utilisons uniquement les cookies nécessaires au fonctionnement du site — stockés sur votre téléphone, pas sur notre serveur.',disclaimer:'Chacha est une IA et peut se tromper. Veuillez vérifier les réponses 🍶'},
+    consent:'J\'accepte 🍶',consent_no:'Refuser',consent_text:'Nous utilisons uniquement les cookies nécessaires au fonctionnement du site — stockés sur votre téléphone, pas sur notre serveur.',disclaimer:'Chacha est une IA et peut se tromper. Veuillez vérifier les réponses 🍶','t_places_h':'Meilleurs endroits — par les touristes','t_places_p':'Restaurants, cafés, sites. Ajoutez et votez ❤️','t_camera_h':'Photo avec Chacha','t_camera_p':'Prenez une photo avec la caméra ou la galerie → effet cinéma géorgien.','t_games_h':'Jeux — tuer le temps en route','t_games_p':'Échecs, backgammon, snake, 2048 et plus. Gratuit.','t_airports_h':'Tableaux des aéroports de Géorgie','t_airports_p':'Arrivées et départs Tbilissi, Batoumi, Koutaïssi.','t_trains_h':'Trains en Géorgie','t_trains_p':'Billets Tbilissi↔Batoumi, Koutaïssi, Borjomi.','t_flights_h':'Vols directs vers la Géorgie','t_flights_p':'Vols directs vers Tbilissi, Batoumi et Koutaïssi.'},
   es:{trust:'🆓 Gratis para siempre · pago a través de <b>marcas globales de confianza</b>',
     h1:'Tu amigo <span class="em">Chacha</span><br>en Georgia 🇬🇪',
     sub:'No solo un planificador — un compañero atento durante todo tu viaje. Pregunta lo que quieras sobre Georgia.',
@@ -843,7 +911,7 @@ var I18N={
     share_h:'Compartir 🍶',share_sub:'Cuéntaselo a los amigos que van a Georgia',
     f_terms:'Términos',f_privacy:'Privacidad',f_about:'Sobre nosotros',
     f_note:'Chacha es un asistente gratuito. Somos intermediarios: sugerimos opciones, mientras que la reserva y el pago se realizan directamente en plataformas oficiales. 🇬🇪',
-    consent:'Acepto 🍶',consent_no:'Rechazar',consent_text:'Usamos solo las cookies necesarias para el funcionamiento del sitio — almacenadas en tu teléfono, no en nuestro servidor.',disclaimer:'Chacha es IA y puede cometer errores. Por favor verifica las respuestas 🍶'},
+    consent:'Acepto 🍶',consent_no:'Rechazar',consent_text:'Usamos solo las cookies necesarias para el funcionamiento del sitio — almacenadas en tu teléfono, no en nuestro servidor.',disclaimer:'Chacha es IA y puede cometer errores. Por favor verifica las respuestas 🍶','t_places_h':'Mejores lugares — de turistas','t_places_p':'Restaurantes, cafés, lugares de interés. Añade y vota ❤️','t_camera_h':'Foto con Chacha','t_camera_p':'Toma una foto con la cámara o galería → efecto cine georgiano.','t_games_h':'Juegos — mata el tiempo en el camino','t_games_p':'Ajedrez, backgammon, serpiente, 2048 y más. Gratis.','t_airports_h':'Paneles de aeropuertos de Georgia','t_airports_p':'Llegadas y salidas Tiflis, Batumi, Kutaisi.','t_trains_h':'Trenes en Georgia','t_trains_p':'Billetes Tiflis↔Batumi, Kutaisi, Borjomi.','t_flights_h':'Vuelos directos a Georgia','t_flights_p':'Vuelos directos a Tiflis, Batumi y Kutaisi.'},
   de:{trust:'🆓 Für immer kostenlos · Zahlung über <b>vertrauenswürdige Weltmarken</b>',
     h1:'Dein Freund <span class="em">Chacha</span><br>in Georgien 🇬🇪',
     sub:'Nicht nur ein Planer — ein fürsorglicher Begleiter für deine gesamte Reise. Frag alles über Georgien.',
@@ -875,7 +943,7 @@ var I18N={
     share_h:'Teilen 🍶',share_sub:'Erzähl Freunden, die nach Georgien fahren',
     f_terms:'Bedingungen',f_privacy:'Datenschutz',f_about:'Über uns',
     f_note:'Chacha ist ein kostenloser Assistent. Wir sind Vermittler: Wir schlagen Optionen vor, während Buchung und Zahlung direkt auf offiziellen Plattformen erfolgen. 🇬🇪',
-    consent:'Akzeptieren 🍶',consent_no:'Ablehnen',consent_text:'Wir verwenden nur notwendige Cookies für den Betrieb der Website — gespeichert auf Ihrem Telefon, nicht auf unserem Server.',disclaimer:'Chacha ist KI und kann Fehler machen. Bitte überprüfen Sie die Antworten 🍶'},
+    consent:'Akzeptieren 🍶',consent_no:'Ablehnen',consent_text:'Wir verwenden nur notwendige Cookies für den Betrieb der Website — gespeichert auf Ihrem Telefon, nicht auf unserem Server.',disclaimer:'Chacha ist KI und kann Fehler machen. Bitte überprüfen Sie die Antworten 🍶','t_places_h':'Beste Orte — von Touristen','t_places_p':'Restaurants, Cafés, Sehenswürdigkeiten. Füge hinzu und stimme ab ❤️','t_camera_h':'Foto mit Chacha','t_camera_p':'Mach ein Foto mit der Kamera oder Galerie → Georgischer Kinoeffekt.','t_games_h':'Spiele — Zeit auf der Reise vertreiben','t_games_p':'Schach, Backgammon, Schlange, 2048 und mehr. Kostenlos.','t_airports_h':'Georgiens Flughafen-Anzeigetafeln','t_airports_p':'Ankünfte und Abflüge Tiflis, Batumi, Kutaissi.','t_trains_h':'Züge in Georgien','t_trains_p':'Tickets Tiflis↔Batumi, Kutaissi, Borjomi.','t_flights_h':'Direktflüge nach Georgien','t_flights_p':'Direktflüge nach Tiflis, Batumi und Kutaissi.'},
   fa:{trust:'🆓 همیشه رایگان · پرداخت از طریق <b>برندهای معتبر جهانی</b>',
     h1:'دوست تو <span class="em">چاچا</span><br>در گرجستان 🇬🇪',
     sub:'فقط یک برنامه‌ریز نیست — همراهی دلسوز در تمام سفرت. هر چیزی درباره گرجستان بپرس.',
@@ -907,15 +975,22 @@ var I18N={
     share_h:'به اشتراک بگذار 🍶',share_sub:'به دوستانی که به گرجستان می‌روند بگو',
     f_terms:'شرایط',f_privacy:'حریم خصوصی',f_about:'درباره ما',
     f_note:'چاچا دستیار رایگان است. ما واسطه هستیم: گزینه‌ها را پیشنهاد می‌دهیم، اما رزرو و پرداخت مستقیماً در پلتفرم‌های رسمی انجام می‌شود. 🇬🇪',
-    consent:'می‌پذیرم 🍶',consent_no:'رد',consent_text:'فقط از کوکی‌های ضروری برای کارکرد سایت استفاده می‌کنیم — روی گوشی شما ذخیره می‌شود، نه سرور ما.',disclaimer:'چاچا هوش مصنوعی است و ممکن است اشتباه کند. لطفاً پاسخ‌ها را بررسی کنید 🍶'}
+    consent:'می‌پذیرم 🍶',consent_no:'رد',consent_text:'فقط از کوکی‌های ضروری برای کارکرد سایت استفاده می‌کنیم — روی گوشی شما ذخیره می‌شود، نه سرور ما.',disclaimer:'چاچا هوش مصنوعی است و ممکن است اشتباه کند. لطفاً پاسخ‌ها را بررسی کنید 🍶','t_places_h':'بهترین مکان‌ها — از گردشگران','t_places_p':'رستوران‌ها، کافه‌ها، جاذبه‌ها. اضافه کن و رأی بده ❤️','t_camera_h':'عکس با چاچا','t_camera_p':'از دوربین یا گالری عکس بگیر → افکت سینمای گرجی.','t_games_h':'بازی‌ها — وقت را در راه بکش','t_games_p':'شطرنج، تخته‌نرد، مار، 2048 و بیشتر. رایگان.','t_airports_h':'تابلوهای فرودگاه‌های گرجستان','t_airports_p':'ورود و خروج تفلیس، باتومی، کوتایسی.','t_trains_h':'قطارهای گرجستان','t_trains_p':'بلیط تفلیس↔باتومی، کوتایسی، بورجومی.','t_flights_h':'پروازهای مستقیم به گرجستان','t_flights_p':'پروازهای مستقیم به تفلیس، باتومی و کوتایسی.'}
 };
 var RTL_LANGS={ar:1,fa:1,he:1};
 var L=I18N[userLang]?userLang:'en';   // если язык не поддержан — английский
 
-// DeepL автоперевод для неподдерживаемых языков
+// Автоперевод UI — по одному ключу через MyMemory, кеш в sessionStorage, без тоста
 async function autoTranslateUI(targetLang){
-  if(I18N[targetLang]||targetLang==='en')return; // уже есть
-  try{
+  if(I18N[targetLang]||targetLang==='en')return;
+  var cacheKey='sak_ui_'+targetLang;
+  var cached=null;
+  try{var raw=sessionStorage.getItem(cacheKey);if(raw)cached=JSON.parse(raw);}catch(e){}
+  var enT=I18N['en'];
+  var translated=Object.assign({},enT);
+  if(cached){
+    Object.assign(translated,cached);
+  }else{
     var keysToTranslate=['sub','law_h','law_p','law_a','tools_h','tools_sub',
       't_translator_h','t_translator_p','t_metro_h','t_metro_p','t_phrases_h','t_phrases_p',
       't_currency_h','t_currency_p','t_radio_h','t_radio_p','t_emergency_h','t_emergency_p',
@@ -923,31 +998,43 @@ async function autoTranslateUI(targetLang){
       't_visa_h','t_visa_p','t_alarm_h','t_alarm_p','t_torch_h','t_torch_p',
       't_luggage_h','t_luggage_p','t_prices_h','t_prices_p','t_story_h','t_story_p',
       'share_h','share_sub','f_terms','f_privacy','f_about','f_note',
-      'consent','consent_no','back','ph','disclaimer'];
-    var enT=I18N['en'];
-    var texts=keysToTranslate.map(function(k){return enT[k]||'';});
-    var q=texts.map(function(t){return'q='+encodeURIComponent(t);}).join('&');
-    var url='https://api.mymemory.translated.net/get?'+q+'&langpair=en|'+targetLang;
-    var res=await fetch(url);
-    var data=await res.json();
-    if(data&&data.responseData&&data.responseData.translatedText){
-      // одиночный перевод
-      var translated=Object.assign({},enT);
-      translated[keysToTranslate[0]]=data.responseData.translatedText;
-      I18N[targetLang]=translated;
-      var newL=targetLang;
-      var newT=translated;
-      window.__t=newT;
-      document.querySelectorAll('[data-i18n]').forEach(function(el){
-        var k=el.getAttribute('data-i18n');if(newT[k]!=null)el.textContent=newT[k];
-      });
-      document.querySelectorAll('[data-i18n-ph]').forEach(function(el){
-        var k=el.getAttribute('data-i18n-ph');if(newT[k]!=null)el.setAttribute('placeholder',newT[k]);
-      });
+      'consent','consent_no','back','ph','disclaimer','hello','chacha'];
+    var delta={};
+    for(var i=0;i<keysToTranslate.length;i++){
+      var k=keysToTranslate[i];
+      var val=enT[k];
+      if(!val)continue;
+      if(/<[a-z]/i.test(val)){delta[k]=val;continue;}
+      try{
+        var url='https://api.mymemory.translated.net/get?q='+encodeURIComponent(val)+'&langpair=en|'+targetLang;
+        var res=await fetch(url);
+        var data=await res.json();
+        var tr=data&&data.responseData&&data.responseData.translatedText;
+        if(tr&&tr.length>1&&tr!==val)delta[k]=tr;
+      }catch(e){}
     }
-  }catch(e){console.log('AutoTranslate error:',e);}
+    Object.assign(translated,delta);
+    try{sessionStorage.setItem(cacheKey,JSON.stringify(delta));}catch(e){}
+  }
+  I18N[targetLang]=translated;
+  window.__t=translated;
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var k=el.getAttribute('data-i18n');if(translated[k]!=null)el.textContent=translated[k];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(function(el){
+    var k=el.getAttribute('data-i18n-html');if(translated[k]!=null)el.innerHTML=translated[k];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(function(el){
+    var k=el.getAttribute('data-i18n-ph');if(translated[k]!=null)el.setAttribute('placeholder',translated[k]);
+  });
+  var tr2=document.querySelector('[data-i18n="trust"]');if(tr2&&translated.trust)tr2.innerHTML=translated.trust;
+  var fn=document.querySelector('[data-i18n="f_note"]');if(fn&&translated.f_note)fn.textContent=translated.f_note;
+  var firstBot=document.querySelector('#messages .msg.bot');
+  if(firstBot){var dn=firstBot.querySelector('.ai-note');if(dn&&translated.disclaimer)dn.textContent=translated.disclaimer;}
 }
+// Запускаем всегда — без тоста, без вопросов
 if(!I18N[userLang]&&userLang!=='en'){autoTranslateUI(userLang);}
+
 var T=I18N[L];
 window.__t=T; // словарь доступен инструментам/чату
 
@@ -1322,9 +1409,9 @@ function speakFromButton(btn){
     // Показываем попап с грузинским текстом
     var overlay=document.createElement('div');
     overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;cursor:pointer';
-    overlay.innerHTML='<div style="color:#fff;font-size:.9rem;margin-bottom:20px;opacity:.7">Покажи грузину экран 👇</div>'+
+    overlay.innerHTML='<div style="color:#fff;font-size:.9rem;margin-bottom:20px;opacity:.7">'+TTX('show_georgian')+'</div>'+
       '<div style="font-size:clamp(2rem,8vw,3.5rem);font-weight:700;color:#fff;text-align:center;line-height:1.3">'+text+'</div>'+
-      '<div style="color:rgba(255,255,255,.5);font-size:.85rem;margin-top:28px">Нажми чтобы закрыть</div>';
+      '<div style="color:rgba(255,255,255,.5);font-size:.85rem;margin-top:28px">'+TTX('show_close')+'</div>';
     overlay.onclick=function(){document.body.removeChild(overlay)};
     document.body.appendChild(overlay);
     return;
@@ -1340,6 +1427,16 @@ var redLine=['Akhmetelis Teatri (Ахметели)','Sarajishvili (Сарадж�
 var greenLine=['Sadguris Moedani 2 (Вокзальная) 🔄','Tsereteli (Церетели)','Teknikuri Universiteti (Политех)','Samedicino Universiteti (Мед.унив)','Delisi (Делиси)','Vazha-Pshavela (Важа-Пшавела)','Sakartvelos Universiteti (Госунив)*'];
 
 // Разговорник
+var PHRASES_I18N={
+  ru:[["Привет","გამარჯობა","gamarjoba"],["Спасибо","მადლობა","madloba"],["Пожалуйста","გთხოვთ","gtxovt"],["Да / Нет","კი / არა","ki / ara"],["Сколько стоит?","რა ღირს?","ra ghirs?"],["Очень вкусно!","ძალიან გემრიელია","dzalian gemrielia"],["Где туалет?","სად არის ტუალეტი?","sad aris tualeti?"],["Помогите!","დამეხმარეთ!","damexmaret!"],["Вкусно было, спасибо","გემრიელი იყო, მადლობა","gemrieli iko, madloba"],["До свидания","ნახვამდის","naxvamdis"]],
+  en:[["Hello","გამარჯობა","gamarjoba"],["Thank you","მადლობა","madloba"],["Please","გთხოვთ","gtxovt"],["Yes / No","კი / არა","ki / ara"],["How much?","რა ღირს?","ra ghirs?"],["Very delicious!","ძალიან გემრიელია","dzalian gemrielia"],["Where is the toilet?","სად არის ტუალეტი?","sad aris tualeti?"],["Help!","დამეხმარეთ!","damexmaret!"],["It was delicious, thanks","გემრიელი იყო, მადლობა","gemrieli iko, madloba"],["Goodbye","ნახვამდის","naxvamdis"]],
+  de:[["Hallo","გამარჯობა","gamarjoba"],["Danke","მადლობა","madloba"],["Bitte","გთხოვთ","gtxovt"],["Ja / Nein","კი / არა","ki / ara"],["Wie viel?","რა ღირს?","ra ghirs?"],["Sehr lecker!","ძალიან გემრიელია","dzalian gemrielia"],["Wo ist die Toilette?","სად არის ტუალეტი?","sad aris tualeti?"],["Hilfe!","დამეხმარეთ!","damexmaret!"],["Es war lecker, danke","გემრიელი იყო, მადლობა","gemrieli iko, madloba"],["Auf Wiedersehen","ნახვამდის","naxvamdis"]],
+  fr:[["Bonjour","გამარჯობა","gamarjoba"],["Merci","მადლობა","madloba"],["Merci beaucoup","გთხოვთ","gtxovt"],["Oui / Non","კი / არა","ki / ara"],["Combien ca coute?","რა ღირს?","ra ghirs?"],["Tres delicieux!","ძალიან გემრიელია","dzalian gemrielia"],["Ou sont les toilettes?","სად არის ტუალეტი?","sad aris tualeti?"],["Au secours!","დამეხმარეთ!","damexmaret!"],["C etait delicieux, merci","გემრიელი იყო, მადლობა","gemrieli iko, madloba"],["Au revoir","ნახვამდის","naxvamdis"]],
+  es:[["Hola","გამარჯობა","gamarjoba"],["Gracias","მადლობა","madloba"],["Por favor","გთხოვთ","gtxovt"],["Si / No","კი / არა","ki / ara"],["Cuanto cuesta?","რა ღირს?","ra ghirs?"],["Muy delicioso!","ძალიან გემრიელია","dzalian gemrielia"],["Donde esta el bano?","სად არის ტუალეტი?","sad aris tualeti?"],["Ayuda!","დამეხმარეთ!","damexmaret!"],["Estaba delicioso, gracias","გემრიელი იყო, მადლობა","gemrieli iko, madloba"],["Adios","ნახვამდის","naxvamdis"]],
+  tr:[["Merhaba","გამარჯობა","gamarjoba"],["Tesekkurler","მადლობა","madloba"],["Lutfen","გთხოვთ","gtxovt"],["Evet / Hayir","კი / არა","ki / ara"],["Ne kadar?","რა ღირს?","ra ghirs?"],["Cok lezzetli!","ძალიან გემრიელია","dzalian gemrielia"],["Tuvalet nerede?","სად არის ტუალეტი?","sad aris tualeti?"],["Imdat!","დამეხმარეთ!","damexmaret!"],["Cok lezzetliydi, tesekkurler","გემრიელი იყო, მადლობა","gemrieli iko, madloba"],["Gule gule","ნახვამდის","naxvamdis"]],
+  ar:[["مرحبا","გამარჯობა","gamarjoba"],["شكرا","მადლობა","madloba"],["من فضلك","გთხოვთ","gtxovt"],["نعم / لا","კი / არა","ki / ara"],["كم يكلف؟","რა ღირს?","ra ghirs?"],["لذيذ جدا!","ძალიან გემრიელია","dzalian gemrielia"],["اين الحمام؟","სად არის ტუალეტი?","sad aris tualeti?"],["النجدة!","დამეხმარეთ!","damexmaret!"],["كان لذيذا، شكرا","გემრიელი იყო, მადლობა","gemrieli iko, madloba"],["مع السلامة","ნახვამდის","naxvamdis"]],
+  uk:[["Привiт","გამარჯობა","gamarjoba"],["Дякую","მადლობა","madloba"],["Будь ласка","გთხოვთ","gtxovt"],["Так / Нi","კი / არა","ki / ara"],["Скiльки коштує?","რა ღირს?","ra ghirs?"],["Дуже смачно!","ძალიან გემრიელია","dzalian gemrielia"],["Де туалет?","სად არის ტუალეტი?","sad aris tualeti?"],["Допоможiть!","დამეხმარეთ!","damexmaret!"],["Було смачно, дякую","გემრიელი იყო, მადლობა","gemrieli iko, madloba"],["До побачення","ნახვამდის","naxvamdis"]],
+};
 var phrases=[
   ['Привет','გამარჯობა','gamarjoba'],
   ['Спасибо','მადლობა','madloba'],
@@ -1352,8 +1449,19 @@ var phrases=[
   ['Вкусно было, спасибо','გემრიელი იყო, მადლობა','gemrieli iko, madloba'],
   ['До свидания','ნახვამდის','naxvamdis']
 ];
+phrases=PHRASES_I18N[window.__userLang]||phrases;
 
 // Блюда
+var FOODS_I18N={
+  ru:[["🥟 Хинкали","Сочные пельмени. Держи за хвостик, надкуси, выпей бульон."],["🧀 Хачапури аджарули","Лодочка с сыром, яйцом и маслом."],["🍆 Бадриджани","Баклажаны с грецким орехом и гранатом."],["🫘 Лобио","Тушёная фасоль со специями в глиняном горшочке."],["🍷 Вино квеври","Янтарное вино в глиняных амфорах. Ркацители, Саперави."],["🍬 Чурчхела","Грузинский сникерс — орехи в виноградном соке."]],
+  en:[["🥟 Khinkali","Juicy dumplings. Hold by the knot, bite, drink the broth."],["🧀 Adjarian Khachapuri","Boat-shaped with cheese, egg and butter."],["🍆 Badrijani","Eggplant with walnut and pomegranate."],["🫘 Lobio","Stewed beans with spices in a clay pot."],["🍷 Qvevri Wine","Amber wine in clay amphorae. Rkatsiteli, Saperavi."],["🍬 Churchkhela","Georgian Snickers — nuts in grape juice."]],
+  de:[["🥟 Chinkali","Saftige Teigtaschen. Am Knoten halten, beißen, Bruhe trinken."],["🧀 Adjarisches Chatschapuri","Bootformig mit Kase, Ei und Butter."],["🍆 Badrischani","Aubergine mit Walnuss und Granatapfel."],["🫘 Lobio","Geschmorte Bohnen mit Gewurzen im Tontopf."],["🍷 Qvevri-Wein","Bernsteinfarbener Wein in Tonamphoren."],["🍬 Tschurtschkhela","Georgisches Snickers — Nusse in Traubensaft."]],
+  fr:[["🥟 Khinkali","Raviolis juteux. Tenir par le noeud, mordre, boire le bouillon."],["🧀 Khachapuri Adjaran","En forme de bateau avec fromage, oeuf et beurre."],["🍆 Badriani","Aubergine aux noix et grenade."],["🫘 Lobio","Haricots mijotes aux epices dans un pot en argile."],["🍷 Vin Qvevri","Vin ambre dans des amphores en argile."],["🍬 Churchkhela","Snickers georgien — noix dans du jus de raisin."]],
+  es:[["🥟 Jinkali","Empanadillas jugosas. Sujeta por el nudo, muerde, bebe el caldo."],["🧀 Jachapuri Adjariano","Con forma de barca con queso, huevo y mantequilla."],["🍆 Badriyani","Berenjena con nuez y granada."],["🫘 Lobio","Judias guisadas con especias en olla de barro."],["🍷 Vino Qvevri","Vino ambar en anforas de barro."],["🍬 Churchkhela","Snickers georgiano — nueces en zumo de uva."]],
+  tr:[["🥟 Hinkali","Sulu hamur cantasi. Dugumden tut, isir, et suyunu ic."],["🧀 Acar Hacapuri","Tekne seklinde peynir, yumurta ve tereyagi ile."],["🍆 Badriyani","Cevizli ve narli patlican."],["🫘 Lobio","Baharatlı pismis fasulye kil tencerede."],["🍷 Kvevri Sarabi","Amber sarap kil ampulerde."],["🍬 Curchela","Gurcistan kuru yemisi — uzum suyunda."]],
+  ar:[["🥟 خينكالي","فطائر عصيرية. امسك بالعقدة واعض واشرب المرق."],["🧀 خاتشابوري اجاري","على شكل قارب مع جبن وبيض وزبدة."],["🍆 بادريجاني","باذنجان بالجوز والرمان."],["🫘 لوبيو","فاصوليا مطبوخة بالتوابل في وعاء طيني."],["🍷 نبيذ كفيفري","نبيذ عنبري في امفورات طينية."],["🍬 تشورتشخيلا","سنيكرز جورجي — مكسرات في عصير العنب."]],
+  uk:[["🥟 Хiнкалi","Соковитi вареники. Тримай за хвостик, надкуси, випий бульйон."],["🧀 Аджарський хачапурi","Човник з сиром, яйцем i маслом."],["🍆 Бадрiджанi","Баклажани з горiхами i гранатом."],["🫘 Лобiо","Тушкована квасоля зi спецiями у глиняному горщику."],["🍷 Вино квеврi","Бурштинове вино в глиняних амфорах."],["🍬 Чурчхела","Грузинський сникерс — горiхи у виноградному соку."]],
+};
 var foods=[
   ['🥟 Хинкали','Сочные пельмени-мешочки. Держи за хвостик, надкуси, выпей бульон. Хвостик не едят!'],
   ['🧀 Хачапури аджарули','Лодочка с сыром, яйцом и маслом. Мешай и макай корочкой.'],
@@ -1362,63 +1470,362 @@ var foods=[
   ['🍷 Вино квеври','Янтарное вино в глиняных амфорах — родина виноделия. Ркацители, Саперави.'],
   ['🍬 Чурчхела','«Грузинский сникерс» — орехи в виноградном соке. Бери в дорогу.']
 ];
+foods=FOODS_I18N[window.__userLang]||foods;
 
 // Чек-лист
-var checkItems=['Паспорт (действителен весь срок)','🛡️ Страховка 2026 (мин. 30000₾) — ОБЯЗАТЕЛЬНО','Билеты туда-обратно','Деньги + карта (Visa/MC работают)','Переходник (тип C/F, 220V)','Лекарства личные','Одежда по сезону/региону','Удобная обувь (булыжник в старом городе)','Скрин брони отеля','Офлайн-карта в телефоне'];
+var checkItems_EN=['Passport (valid for the entire trip)','🛡️ Insurance 2026 (min. 30,000₾) — MANDATORY','Return tickets','Cash + card (Visa/MC work everywhere)','Adapter (type C/F, 220V)','Personal medication','Clothes for season/region','Comfortable shoes (cobblestones in old town)','Hotel booking screenshot','Offline map downloaded'];
+var checkItems_RU=['Паспорт (действителен весь срок)','🛡️ Страховка 2026 (мин. 30000₾) — ОБЯЗАТЕЛЬНО','Билеты туда-обратно','Деньги + карта (Visa/MC работают)','Переходник (тип C/F, 220V)','Лекарства личные','Одежда по сезону/региону','Удобная обувь (булыжник в старом городе)','Скрин брони отеля','Офлайн-карта в телефоне'];
+var checkItems=(window.__userLang==='ru'||window.__userLang==='be'||window.__userLang==='uk')?checkItems_RU:checkItems_EN;
 
 /* ============ РЕНДЕР ИНСТРУМЕНТОВ ============ */
+
+/* ---- Переводы инструментов ---- */
+var TOOL_I18N={
+  ru:{metro_title:"🚇 Метро и транспорт Тбилиси",phrases_title:"📖 Разговорник",currency_title:"💱 Курс лари (GEL)",emergency_title:"🆘 Экстренная помощь",tips_title:"🧮 Чаевые и делёж",checklist_title:"✅ Чек-лист сборов",food_title:"🍷 Что заказать",visa_title:"🛂 Счётчик дней визы",alarm_title:"⏰ Будильник",torch_title:"🔦 Фонарик",luggage_title:"🧳 Камера хранения",prices_title:"🛡️ Честные цены 2026",games_title:"🎮 Игры в дороге",places_title:"📍 Лучшие места Грузии",airports_title:"✈️ Табло аэропортов",trains_title:"🚆 Поезда по Грузии",flights_title:"🛫 Прямые рейсы",translator_title:"🗣️ Переводчик"},
+  en:{metro_title:"🚇 Tbilisi Metro",phrases_title:"📖 Phrasebook",currency_title:"💱 Lari Rate (GEL)",emergency_title:"🆘 Emergency Help",tips_title:"🧮 Tips & Bill Split",checklist_title:"✅ Packing Checklist",food_title:"🍷 What to Order",visa_title:"🛂 Visa Day Counter",alarm_title:"⏰ Alarm",torch_title:"🔦 Flashlight",luggage_title:"🧳 Luggage Storage",prices_title:"🛡️ Fair Prices 2026",games_title:"🎮 Road Games",places_title:"📍 Best Places in Georgia",airports_title:"✈️ Georgia Airport Boards",trains_title:"🚆 Trains in Georgia",flights_title:"🛫 Direct Flights",translator_title:"🗣️ Translator"},
+  de:{metro_title:"🚇 Tiflis Metro",phrases_title:"📖 Sprachführer",currency_title:"💱 Lari-Kurs (GEL)",emergency_title:"🆘 Notfallhilfe",tips_title:"🧮 Trinkgeld",checklist_title:"✅ Packliste",food_title:"🍷 Was bestellen",visa_title:"🛂 Visum-Tage",alarm_title:"⏰ Wecker",torch_title:"🔦 Taschenlampe",luggage_title:"🧳 Gepäckaufbewahrung",prices_title:"🛡️ Faire Preise 2026",games_title:"🎮 Reisespiele",places_title:"📍 Beste Orte in Georgien",airports_title:"✈️ Flughafen-Tafeln",trains_title:"🚆 Züge in Georgien",flights_title:"🛫 Direktflüge",translator_title:"🗣️ Übersetzer"},
+  fr:{metro_title:"🚇 Métro de Tbilissi",phrases_title:"📖 Guide de conversation",currency_title:"💱 Taux du Lari",emergency_title:"🆘 Aide d urgence",tips_title:"🧮 Pourboires",checklist_title:"✅ Liste de voyage",food_title:"🍷 Que commander",visa_title:"🛂 Jours de visa",alarm_title:"⏰ Réveil",torch_title:"🔦 Lampe de poche",luggage_title:"🧳 Consigne bagages",prices_title:"🛡️ Prix honnêtes 2026",games_title:"🎮 Jeux en route",places_title:"📍 Meilleurs endroits",airports_title:"✈️ Aéroports Géorgie",trains_title:"🚆 Trains Géorgie",flights_title:"🛫 Vols directs",translator_title:"🗣️ Traducteur"},
+  es:{metro_title:"🚇 Metro de Tiflis",phrases_title:"📖 Guía de conversación",currency_title:"💱 Tipo de cambio",emergency_title:"🆘 Ayuda de emergencia",tips_title:"🧮 Propinas",checklist_title:"✅ Lista de equipaje",food_title:"🍷 Qué pedir",visa_title:"🛂 Días de visa",alarm_title:"⏰ Alarma",torch_title:"🔦 Linterna",luggage_title:"🧳 Consigna equipaje",prices_title:"🛡️ Precios justos 2026",games_title:"🎮 Juegos en el camino",places_title:"📍 Mejores lugares",airports_title:"✈️ Aeropuertos Georgia",trains_title:"🚆 Trenes en Georgia",flights_title:"🛫 Vuelos directos",translator_title:"🗣️ Traductor"},
+  tr:{metro_title:"🚇 Tiflis Metrosu",phrases_title:"📖 Konuşma rehberi",currency_title:"💱 Lari Kuru",emergency_title:"🆘 Acil Yardim",tips_title:"🧮 Bahsis",checklist_title:"✅ Bavul listesi",food_title:"🍷 Ne siparis etmeli",visa_title:"🛂 Vize sayaci",alarm_title:"⏰ Alarm",torch_title:"🔦 Fener",luggage_title:"🧳 Bagaj emaneti",prices_title:"🛡️ Adil fiyatlar 2026",games_title:"🎮 Yol oyunlari",places_title:"📍 En iyi yerler",airports_title:"✈️ Havalimani tablolari",trains_title:"🚆 Tren",flights_title:"🛫 Direkt ucuslar",translator_title:"🗣️ Ceviri"},
+  ar:{metro_title:"🚇 مترو تبليسي",phrases_title:"📖 دليل المحادثة",currency_title:"💱 سعر الليري",emergency_title:"🆘 مساعدة طارئة",tips_title:"🧮 البقشيش",checklist_title:"✅ قائمة التجهيز",food_title:"🍷 ماذا تطلب",visa_title:"🛂 عداد التأشيرة",alarm_title:"⏰ المنبه",torch_title:"🔦 مصباح",luggage_title:"🧳 حفظ الامتعة",prices_title:"🛡️ اسعار عادلة 2026",games_title:"🎮 العاب الطريق",places_title:"📍 افضل الاماكن",airports_title:"✈️ مطارات جورجيا",trains_title:"🚆 قطارات جورجيا",flights_title:"🛫 رحلات مباشرة",translator_title:"🗣️ المترجم"},
+  uk:{metro_title:"🚇 Метро Тбiлiсi",phrases_title:"📖 Розмовник",currency_title:"💱 Курс ларi",emergency_title:"🆘 Екстрена допомога",tips_title:"🧮 Чайовi",checklist_title:"✅ Чек-лист",food_title:"🍷 Що замовити",visa_title:"🛂 Лiчильник вiзи",alarm_title:"⏰ Будильник",torch_title:"🔦 Лiхтарик",luggage_title:"🧳 Камера зберiгання",prices_title:"🛡️ Чеснi цiни 2026",games_title:"🎮 Iгри в дорозi",places_title:"📍 Найкращi мiсця",airports_title:"✈️ Аеропорти Грузii",trains_title:"🚆 Поiзди Грузii",flights_title:"🛫 Прямi рейси",translator_title:"🗣️ Перекладач"},
+};
+function TT(k){var d=TOOL_I18N[window.__userLang||'ru']||TOOL_I18N['en'];return(d&&d[k])||((TOOL_I18N['en']||{})[k])||k;}
+
+/* ---- Тексты ВНУТРИ инструментов (ru + en база для автоперевода) ---- */
+var TOOL_TEXTS_I18N={
+  ru:{
+    // metro
+    metro_hint:'Метро работает <b>6:00–24:00</b>. Весь городской транспорт безналичный — кэш не принимают.',
+    metro_card_title:'💳 Карта MetroMoney',
+    metro_card_body:'Купи в кассе метро (табличка «MS», не оранжевая стойка банка). Карта — <b>2 ₾</b>, поездка — <b>1 ₾</b>. После оплаты <b>90 минут</b> катаешься на метро, автобусах и маршрутках <b>бесплатно</b> (пересадки не списываются). Иностранной картой/Apple/Google Pay у турникета — <b>1.5 ₾</b>, но без бесплатных пересадок. Поэтому MetroMoney выгоднее.',
+    metro_from:'Откуда:',
+    metro_to:'Куда:',
+    metro_go:'Построить маршрут',
+    metro_bus_title:'🚌 Полезные автобусы',
+    metro_bus_body:'• <b>№337</b> (синий) — аэропорт ↔ центр (пл. Свободы, Руставели, вокзал). 1/1.5 ₾. Днём примерно с 7:00 до 23:00, каждые 15–20 мин. Ночью лучше Bolt/Yandex или трансфер.<br>• <b>№88</b> — Руставели → Ваке и Сабуртало (удобно до Ваке-парка).<br>• Маршруты и время удобнее смотреть в Google Maps — там точные данные по автобусам Тбилиси.',
+    metro_tip:'💡 Лайфхак: вошёл в метро по MetroMoney → автобус №337 в аэропорт будет бесплатным, если сел в течение 90 минут.',
+    metro_red:'🔴 Красная',metro_green:'🟢 Зелёная',
+    metro_result_direct:'Без пересадки, по',metro_result_red:'🔴 красной',metro_result_green:'🟢 зелёной',metro_result_line:'линии.',
+    metro_result_stops:'Станций:',metro_result_min:'мин',
+    metro_result_transfer:'🔄 С пересадкой на <b>Вокзальной площади</b>.',metro_result_total:'Всего станций:',metro_transfer_free:'(пересадка бесплатна)',
+    // translator
+    translator_hint:'Говори или пиши на своём языке — переведём на грузинский и озвучим. Грузин ответит голосом или текстом — переведём обратно. Бесплатно, для простого общения.',
+    translator_me:'🙋 Ты → грузину',
+    translator_me_ph:'Скажи 🎤 или впиши текст здесь...',
+    translator_speak_me:'🎤 Сказать',
+    translator_go_me:'🔁 Перевести на грузинский',
+    translator_geo:'🇬🇪 Грузин → тебе',
+    translator_geo_ph:'Грузин говорит 🎤 или пишет на грузинской клавиатуре ниже ⌨️',
+    translator_speak_geo:'🎤 Грузин говорит',
+    translator_go_geo:'🔁 Перевести мне',
+    translator_kb:'⌨️ Грузинская клавиатура',
+    translator_tip:'💡 Нет грузинской клавиатуры в телефоне? Дай телефон грузину — пусть нажмёт «⌨️ Грузинская клавиатура» и напишет ответ. Потом «Перевести мне» — и ты поймёшь его.',
+    translator_empty:'Сначала скажи или впиши текст 🙂',
+    translator_err:'⚠️ Перевод временно недоступен, попробуй ещё раз.',
+    translator_listening:'🎙️ Слушаю...',
+    translator_no_voice:'Голосовой ввод недоступен в этом браузере — впиши текст вручную 🙂',
+    translator_ka_no_voice:'Грузинская речь не распознаётся на этом телефоне 🍶\n\nПопроси грузина впечатать текст в окошко (грузинская клавиатура) — и нажми «Перевести мне». Перевод появится крупно на твоём языке.',
+    speak_btn:'🔊 Озвучить',
+    // phrases
+    phrases_hint:'Нажми 🔊 чтобы услышать произношение. Покажи грузину экран — он прочтёт.',
+    // currency
+    currency_hint:'Введи сумму в лари — покажем в твоей валюте. Курс обновляется автоматически.',
+    currency_btn:'Перевести',
+    currency_lbl:'по текущему курсу',
+    currency_fb:'ориентировочный курс (живой временно недоступен, проверь на месте)',
+    currency_usd:'Доллар USD',currency_eur:'Евро EUR',currency_rub:'Рубль RUB',
+    currency_try:'Лира TRY',currency_ils:'Шекель ILS',currency_aed:'Дирхам AED',currency_gbp:'Фунт GBP',
+    // radio
+    radio_hint:'Слушай радио своей страны или Грузии. Потоки идут с серверов самих станций.',
+    radio_hint2:'🎵 Только музыкальные станции. Страны выбираются и обновляются автоматически через открытый Radio Browser API — мы не контролируем этот список вручную.',
+    radio_my:'🌍 Моя страна (по языку)',
+    radio_go:'Показать станции',
+    radio_not_found:'Станции не найдены, выбери другую страну.',
+    radio_music_not_found:'Музыкальные станции не найдены, выбери другую страну.',
+    radio_err:'⚠️ Каталог радио недоступен, попробуй позже.',
+    // emergency
+    emergency_note:'<b>112</b> работает на английском. Назови город и адрес.',
+    emergency_help:'Мне нужна помощь!',
+    emergency_ambulance:'Вызовите скорую!',
+    emergency_tip:'📍 Посольство своей страны ищи в Тбилиси — сохрани адрес заранее. Страховка 2026 покрывает экстренную помощь (звони на номер из полиса).',
+    show_georgian:'Покажи грузину экран 👇',
+    show_close:'Нажми чтобы закрыть',
+    // tips
+    tips_hint:'В Грузии чаевые ~10%. Раздели счёт супры на компанию.',
+    tips_bill:'Сумма счёта, ₾',tips_pct:'% чаевых',tips_ppl:'Человек',tips_go:'Посчитать',
+    tips_result_tip:'Чаевые:',tips_result_total:'Итого:',tips_result_each:'С каждого:',
+    // checklist
+    checklist_hint:'Отметь собранное — сохранится в телефоне.',
+    // food
+    food_hint:'Грузинская кухня — это душа страны. Вот must-try:',
+    food_wine:'🍷 К мясу — Саперави (красное), к сыру — Ркацители (янтарное).',
+    food_toast_title:'🥂 О тостах на супре',
+    food_toast_body:'Грузинское застолье ведёт тамада. Когда пьют за кого-то, желают здоровья и добра — вам можно говорить <b>«Тквен гаумарджос»</b>. Если хотите выпить за кого-то — и смело пейте до дна 🥂',
+    // visa
+    visa_hint:'Граждане 98 стран — виза-фри 1 год (365 дней). Укажи дату въезда:',
+    visa_go:'Посчитать',
+    visa_future:'Дата ещё не наступила 🙂',
+    visa_passed:'Прошло дней:',visa_left:'Осталось до конца виза-фри:',visa_days:'дней',
+    visa_warn:'⚠️ Скоро лимит — продли страховку и планируй выезд',visa_ok:'Всё спокойно, путешествуй! 🍶',
+    // alarm
+    alarm_hint:'Поставь время — зазвенит, пока вкладка открыта. Удобно для ранних экскурсий.',
+    alarm_go:'Поставить',alarm_set:'⏰ Будильник на',alarm_set2:'поставлен. Не закрывай вкладку.',
+    alarm_ring:'⏰ Подъём, генацвале! Пора на экскурсию 🍶',
+    // torch
+    torch_hint:'На Android Chrome — настоящая вспышка. На других — яркий белый экран.',
+    torch_go:'Включить свет 💡',torch_on:'💡 Фонарик включён. Нажми ещё раз чтобы выключить.',
+    torch_off:'Выключено.',torch_fallback:'Вспышка недоступна — включил белый экран (нажми на него чтобы убрать).',
+    // luggage
+    luggage_hint:'Рейс вечером, а выселили из отеля? Оставь чемоданы на хранение и гуляй по Тбилиси налегке. Точки по всему городу, от пары лари в день.',
+    luggage_btn:'🧳 Найти камеру хранения →',
+    luggage_note:'Бронируешь онлайн, приходишь, оставляешь багаж — всё застраховано на стороне сервиса.',
+    // prices
+    prices_hint:'Чтобы тебя не обсчитали. Ориентир на 2026 — цены чуть меняются, но если просят сильно больше, торгуйся или уходи.',
+    prices_footer:'⚠️ Цены ориентировочные на 2026 — всегда уточняй на месте. Главное правило: такси заказывай в приложении, деньги меняй только в обменниках с табло и всегда перечитывай курс на месте, не выходя из обменника, чтобы подтвердить что всё верно.',
+    // story
+    story_hint:'Больше 1000 уникальных вариантов с грузинским колоритом — ничего не повторяется! Жми «Следующий», впиши свою фразу — сохрани или поделись. На картинке бренд sakartvelo.ai 🍶',
+    story_ph:'Своя фраза (необязательно)',story_next:'🎲 Следующий вариант',
+    story_save:'💾 Сохранить картинку',story_share:'📲 Поделиться',
+    story_ios_tip:'💡 На айфоне: после «Сохранить» картинка откроется — задержи палец на ней и выбери «Сохранить фото».',
+    story_no_save:'Не получилось — сделай скриншот экрана 🍶',
+    story_share_text:'Мой друг Чача в Грузии! 🇬🇪🍶 sakartvelo.ai',
+    story_watermark:'Твой друг Чача в Грузии',
+    // games
+    games_hint:'Играй прямо здесь — бесплатно, без регистрации. Скоротай время в дороге 🎮',
+    games_tip:'💡 Понравилось? Поделись сайтом с друзьями кнопкой «Поделиться» внизу 🍶',
+    games_close:'✕ Закрыть',
+  },
+  en:{
+    metro_hint:'Metro runs <b>6:00–24:00</b>. All city transport is cashless — cash not accepted.',
+    metro_card_title:'💳 MetroMoney Card',
+    metro_card_body:'Buy at metro ticket office (sign «MS», not the orange bank kiosk). Card — <b>2 ₾</b>, ride — <b>1 ₾</b>. After tapping, enjoy <b>90 minutes</b> of free metro, bus and minibus transfers. Foreign card/Apple/Google Pay at turnstile — <b>1.5 ₾</b>, no free transfers. MetroMoney is the better deal.',
+    metro_from:'From:',metro_to:'To:',metro_go:'Get route',
+    metro_bus_title:'🚌 Useful buses',
+    metro_bus_body:'• <b>Bus 337</b> (blue) — airport ↔ city centre (Freedom Square, Rustaveli, train station). 1/1.5 ₾. Approx 7:00–23:00, every 15–20 min. At night use Bolt/Yandex or a transfer.<br>• <b>Bus 88</b> — Rustaveli → Vake & Saburtalo (handy for Vake Park).<br>• Check routes and times in Google Maps — it has live Tbilisi bus data.',
+    metro_tip:'💡 Tip: tap MetroMoney at metro → bus 337 to the airport is free if you board within 90 minutes.',
+    metro_red:'🔴 Red line',metro_green:'🟢 Green line',
+    metro_result_direct:'Direct, on the',metro_result_red:'🔴 red',metro_result_green:'🟢 green',metro_result_line:'line.',
+    metro_result_stops:'Stops:',metro_result_min:'min',
+    metro_result_transfer:'🔄 Transfer at <b>Sadguris Moedani (Station Square)</b>.',metro_result_total:'Total stops:',metro_transfer_free:'(transfer is free)',
+    translator_hint:'Speak or type in your language — we\'ll translate to Georgian and say it aloud. The Georgian can reply by voice or text — we\'ll translate back. Free, for simple conversations.',
+    translator_me:'🙋 You → to Georgian',
+    translator_me_ph:'Say 🎤 or type here...',
+    translator_speak_me:'🎤 Speak',
+    translator_go_me:'🔁 Translate to Georgian',
+    translator_geo:'🇬🇪 Georgian → you',
+    translator_geo_ph:'Georgian speaks 🎤 or types on the Georgian keyboard below ⌨️',
+    translator_speak_geo:'🎤 Georgian speaks',
+    translator_go_geo:'🔁 Translate to me',
+    translator_kb:'⌨️ Georgian keyboard',
+    translator_tip:'💡 No Georgian keyboard on your phone? Hand your phone to the Georgian — ask them to tap «⌨️ Georgian keyboard» and type their answer. Then «Translate to me» — and you\'ll understand them.',
+    translator_empty:'Please say or type something first 🙂',
+    translator_err:'⚠️ Translation temporarily unavailable, please try again.',
+    translator_listening:'🎙️ Listening...',
+    translator_no_voice:'Voice input not available in this browser — please type manually 🙂',
+    translator_ka_no_voice:'Georgian speech not recognised on this device 🍶\n\nAsk the Georgian to type in the text box (Georgian keyboard) and tap «Translate to me». The translation will appear in large text in your language.',
+    speak_btn:'🔊 Read aloud',
+    phrases_hint:'Tap 🔊 to hear pronunciation. Show the screen to a Georgian — they can read it.',
+    currency_hint:'Enter an amount in Lari — we\'ll show it in your currency. Rate updates automatically.',
+    currency_btn:'Convert',currency_lbl:'at current rate',
+    currency_fb:'approximate rate (live rate temporarily unavailable, check locally)',
+    currency_usd:'Dollar USD',currency_eur:'Euro EUR',currency_rub:'Ruble RUB',
+    currency_try:'Lira TRY',currency_ils:'Shekel ILS',currency_aed:'Dirham AED',currency_gbp:'Pound GBP',
+    radio_hint:'Listen to radio from your country or Georgia. Streams come directly from station servers.',
+    radio_hint2:'🎵 Music stations only. Countries are selected and updated automatically via the open Radio Browser API — we don\'t curate this list manually.',
+    radio_my:'🌍 My country (by language)',
+    radio_go:'Show stations',
+    radio_not_found:'No stations found, try another country.',
+    radio_music_not_found:'No music stations found, try another country.',
+    radio_err:'⚠️ Radio directory unavailable, please try later.',
+    emergency_note:'<b>112</b> operates in English. State your city and address.',
+    emergency_help:'I need help!',
+    emergency_ambulance:'Call an ambulance!',
+    emergency_tip:'📍 Find your country\'s embassy in Tbilisi — save the address in advance. Your 2026 insurance covers emergency care (call the number on your policy).',
+    show_georgian:'Show this screen to a Georgian 👇',
+    show_close:'Tap to close',
+    tips_hint:'Tips in Georgia are ~10%. Split the supra bill between your group.',
+    tips_bill:'Bill amount, ₾',tips_pct:'Tip %',tips_ppl:'People',tips_go:'Calculate',
+    tips_result_tip:'Tip:',tips_result_total:'Total:',tips_result_each:'Per person:',
+    checklist_hint:'Check items off — saved on your phone.',
+    food_hint:'Georgian cuisine is the soul of the country. Must-try:',
+    food_wine:'🍷 With meat — Saperavi (red), with cheese — Rkatsiteli (amber).',
+    food_toast_title:'🥂 About toasts at the supra',
+    food_toast_body:'A Georgian feast is led by the tamada. When drinking to someone, wish health and goodness — you can say <b>«Tqven gaumarjos»</b>. If you want to toast someone — drink to the bottom 🥂',
+    visa_hint:'Citizens of 98 countries — visa-free for 1 year (365 days). Enter your entry date:',
+    visa_go:'Calculate',
+    visa_future:'That date hasn\'t arrived yet 🙂',
+    visa_passed:'Days passed:',visa_left:'Visa-free days remaining:',visa_days:'days',
+    visa_warn:'⚠️ Limit approaching — renew insurance and plan your exit',visa_ok:'All good, keep travelling! 🍶',
+    alarm_hint:'Set a time — it\'ll ring while this tab is open. Great for early excursions.',
+    alarm_go:'Set alarm',alarm_set:'⏰ Alarm set for',alarm_set2:'Don\'t close the tab.',
+    alarm_ring:'⏰ Rise and shine, genatsvale! Time for your excursion 🍶',
+    torch_hint:'On Android Chrome — real torch. On others — bright white screen.',
+    torch_go:'Turn on light 💡',torch_on:'💡 Flashlight on. Tap again to turn off.',
+    torch_off:'Off.',torch_fallback:'Torch unavailable — switched on white screen (tap it to dismiss).',
+    luggage_hint:'Flight in the evening but already checked out? Leave your bags in storage and explore Tbilisi light. Spots all over the city, from a couple of Lari a day.',
+    luggage_btn:'🧳 Find luggage storage →',
+    luggage_note:'Book online, drop off your bags — everything is insured by the service.',
+    prices_hint:'So you don\'t get overcharged. A 2026 guide — prices shift slightly, but if asked much more, negotiate or walk away.',
+    prices_footer:'⚠️ Prices are approximate for 2026 — always confirm on the spot. The golden rule: order taxis via app, exchange money only at booths with a display board, and always re-read the rate before handing over cash.',
+    story_hint:'Over 1,000 unique Georgian-flavoured combinations — nothing repeats! Hit «Next», add your own phrase, save or share. The image is branded sakartvelo.ai 🍶',
+    story_ph:'Your phrase (optional)',story_next:'🎲 Next variant',
+    story_save:'💾 Save image',story_share:'📲 Share',
+    story_ios_tip:'💡 On iPhone: after «Save» the image opens — long-press it and choose «Save to Photos».',
+    story_no_save:'Couldn\'t save — take a screenshot instead 🍶',
+    story_share_text:'My friend Chacha in Georgia! 🇬🇪🍶 sakartvelo.ai',
+    story_watermark:'Your friend Chacha in Georgia',
+    games_hint:'Play right here — free, no registration. Kill time on the road 🎮',
+    games_tip:'💡 Enjoyed it? Share the site with friends using the «Share» button below 🍶',
+    games_close:'✕ Close',
+    // airports
+    airports_hint:'Live boards — tap to open in browser for real-time data.',
+    airports_arrivals:'Arrivals',airports_departures:'Departures',
+    airports_track:'Track any flight',airports_track_sub:'All 3 airports + flight number in real time',
+    // flights
+    flights_hint_main:'Direct non-stop flights — data May 2026.',
+    flights_origin:'Departure city:',flights_cta:'Tap «Find tickets».',
+    flights_tbs_desc:'Largest airport. Flights from Europe, Middle East, CIS.',
+    flights_bus_desc:'Black Sea resort. Main routes — Tel Aviv and Istanbul (59% of all flights).',
+    flights_kut_desc:'Wizz Air and Ryanair — cheap direct flights from 30+ European cities.',
+    flights_find_btn:'Find tickets to',
+    flights_footer:'💡 Departure city is auto-detected by your location. You can change dates and cities in the search. We are a free intermediary 🍶',
+    // trains
+    trains_hint:'Official Georgian Railways tickets online — seat selection, card payment, email confirmation. We are a free intermediary 🍶',
+    trains_warning_title:'Important:',trains_warning_body:'Tickets go on sale <b>14–20 days</b> before departure. In summer (June–September) Tbilisi↔Batumi sells out fast — book ahead.',
+    trains_tip_tbs_bus:'Most popular route. Beautiful mountain and sea views. Book early in summer.',
+    trains_tip_tbs_kut:'Handy if flying from Kutaisi airport (KUT) or visiting the caves.',
+    trains_tip_bus_tbs:'Return route. Morning and evening departures.',
+    trains_tip_tbs_bor:'Scenic mountain road. Borjomi mineral waters.',
+    trains_tip_tbs_zug:'Starting point for a trip to Svaneti (Mestia).',
+    trains_all:'All trains in Georgia',trains_all_tip:'Full Georgian Railways schedule — all routes and dates.',
+    trains_buy_btn:'Buy ticket',trains_schedule_btn:'View schedule',
+    trains_footer:'💡 Book through our site — same price as the station, no queue, email confirmation. We use the official 12Go service.',
+    // prices extra keys
+    prices_taxi:'🚖 Taxi from Tbilisi airport → city centre',
+    prices_taxi_body:'Via Bolt/Yandex app ~25–40 ₾. Street drivers at exit often overcharge 60–100 ₾. Always order via app.',
+    prices_bus:'🚌 Bus 337 from airport',
+    prices_bus_body:'Blue bus to city centre (Freedom Sq, Rustaveli, station). 1 ₾ MetroMoney / 1.5 ₾ foreign card. Approx 7:00–23:00, every 15–20 min. At night use Bolt/transfer.',
+    prices_exchange:'💱 Lari rate and exchange',
+    prices_exchange_body:'~2.7 ₾ per $1, ~2.9 ₾ per €1. Best exchange — <b>station area</b> and <b>Samgori</b> (Samgori market is often better, but station can be good too — always compare both). No commission at board-display booths, but confirm first.',
+    prices_metro_item:'🚇 Metro / bus',
+    prices_metro_body:'1 ₾ with MetroMoney (card 2 ₾) + 90 min free transfers. 1.5 ₾ with foreign card, no transfers. No "tourist tickets".',
+    prices_lilo:'👕 Lilo Market (clothes)',
+    prices_lilo_body:'Large wholesale market. Go <b>in the morning</b> — more choice and you can negotiate.',
+    prices_samgori:'🥬 Samgori Market (food)',
+    prices_samgori_body:'Big food market — fruit, vegetables, cheese, spices. Cheap and local.',
+    prices_vake:'🌳 Vake district',
+    prices_vake_body:'Most prestigious green district: wide streets, clean air (Upper Vake on a hill), cafes, restaurants, big <b>Vake Park</b> nearby — great for families. No metro in Vake, use bus 88 or taxi.',
+    prices_museum:'🏛️ Museums',
+    prices_museum_body:'National Museum ~40 ₾ (~$15). Buy tickets at the cash desk or official site, not from "helpers" nearby.',
+    prices_cash:'💵 Cash in the mountains',
+    prices_cash_body:'Cards everywhere in Tbilisi and Batumi. But in Kakheti, Svaneti, villages — bring lari cash: the grandma selling homemade wine has no terminal.',
+    prices_restaurants:'🍽️ Restaurants',
+    prices_restaurants_body:'Go where locals go — tastier and fairer priced than tourist traps. We will update our places list soon.',
+    prices_sim:'📲 SIM and internet',
+    prices_sim_body:'If you did not get an eSIM in advance — buy a SIM at the airport. Internet in Georgia is cheap, pick a plan that suits you.',
+  }
+};
+
+/* ---- TTX: получить текст инструмента по ключу ---- */
+/* Сначала смотрит в кэш автоперевода (sessionStorage), потом в TOOL_TEXTS_I18N, потом fallback на EN */
+function TTX(k){
+  var ul=window.__userLang||'ru';
+  // 1. Кэш автоперевода
+  var cacheKey='sak_ttx_'+ul;
+  var cached=window.__ttxCache;
+  if(!cached){
+    try{var raw=sessionStorage.getItem(cacheKey);if(raw)cached=window.__ttxCache=JSON.parse(raw);}catch(e){}
+  }
+  if(cached&&cached[k]!=null)return cached[k];
+  // 2. Словарь
+  if(TOOL_TEXTS_I18N[ul]&&TOOL_TEXTS_I18N[ul][k]!=null)return TOOL_TEXTS_I18N[ul][k];
+  // 3. EN fallback
+  return(TOOL_TEXTS_I18N['en']&&TOOL_TEXTS_I18N['en'][k]!=null)?TOOL_TEXTS_I18N['en'][k]:k;
+}
+
+/* ---- Автоперевод текстов инструментов через MyMemory ---- */
+/* Переводит все ключи из EN и кеширует в sessionStorage */
+async function autoTranslateToolTexts(targetLang){
+  if(TOOL_TEXTS_I18N[targetLang])return; // уже есть нативный перевод
+  var cacheKey='sak_ttx_'+targetLang;
+  try{var raw=sessionStorage.getItem(cacheKey);if(raw&&JSON.parse(raw)){window.__ttxCache=JSON.parse(raw);return;}}catch(e){}
+  var enTexts=TOOL_TEXTS_I18N['en'];
+  var keys=Object.keys(enTexts);
+  // Переводим батчами по 20 (MyMemory ограничивает длину URL)
+  var translated={};
+  var batchSize=20;
+  for(var i=0;i<keys.length;i+=batchSize){
+    var batch=keys.slice(i,i+batchSize);
+    for(var j=0;j<batch.length;j++){
+      var k=batch[j];
+      var val=enTexts[k];
+      // Пропускаем ключи с HTML-тегами — оставляем EN (безопасно)
+      if(/<[a-z]/.test(val)){translated[k]=val;continue;}
+      try{
+        var url='https://api.mymemory.translated.net/get?q='+encodeURIComponent(val)+'&langpair=en|'+targetLang;
+        var res=await fetch(url);var data=await res.json();
+        var tr=data&&data.responseData&&data.responseData.translatedText;
+        translated[k]=(tr&&tr!==val&&tr.length>1)?tr:val;
+      }catch(e){translated[k]=val;}
+    }
+  }
+  window.__ttxCache=translated;
+  try{sessionStorage.setItem(cacheKey,JSON.stringify(translated));}catch(e){}
+}
+
 var tools={};
 
-tools.translator=function(){openModal('🗣️ Переводчик');
+tools.translator=function(){openModal(TT('translator_title'));
   var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   var myLang=(window.__userLang||'ru').slice(0,2);
   mBody.innerHTML=
-    '<p class="hint">Говори или пиши на своём языке — переведём на грузинский и озвучим. Грузин ответит голосом или текстом — переведём обратно. Бесплатно, для простого общения.</p>'+
+    '<p class="hint">'+TTX('translator_hint')+'</p>'+
 
-    '<div class="result" style="margin-bottom:10px"><b>🙋 Ты → грузину</b>'+
-      '<textarea class="field" id="meText" rows="2" placeholder="Скажи 🎤 или впиши текст здесь..." style="resize:vertical"></textarea>'+
-      '<div class="row2"><button class="btn" id="spkMe">🎤 Сказать</button>'+
-      '<button class="btn sec" id="goMe">🔁 Перевести на грузинский</button></div>'+
+    '<div class="result" style="margin-bottom:10px"><b>'+TTX('translator_me')+'</b>'+
+      '<textarea class="field" id="meText" rows="2" placeholder="'+TTX('translator_me_ph')+'" style="resize:vertical"></textarea>'+
+      '<div class="row2"><button class="btn" id="spkMe">'+TTX('translator_speak_me')+'</button>'+
+      '<button class="btn sec" id="goMe">'+TTX('translator_go_me')+'</button></div>'+
       '<div id="meOut" style="display:none;margin-top:8px"></div>'+
     '</div>'+
 
-    '<div class="result"><b>🇬🇪 Грузин → тебе</b>'+
-      '<textarea class="field" id="geText" rows="2" placeholder="Грузин говорит 🎤 или пишет на грузинской клавиатуре ниже ⌨️" style="resize:vertical"></textarea>'+
-      '<div class="row2"><button class="btn" id="spkGe">🎤 Грузин говорит</button>'+
-      '<button class="btn sec" id="goGe">🔁 Перевести мне</button></div>'+
-      '<button class="btn sec" id="kbToggle" style="margin-top:8px">⌨️ Грузинская клавиатура</button>'+
+    '<div class="result"><b>'+TTX('translator_geo')+'</b>'+
+      '<textarea class="field" id="geText" rows="2" placeholder="'+TTX('translator_geo_ph')+'" style="resize:vertical"></textarea>'+
+      '<div class="row2"><button class="btn" id="spkGe">'+TTX('translator_speak_geo')+'</button>'+
+      '<button class="btn sec" id="goGe">'+TTX('translator_go_geo')+'</button></div>'+
+      '<button class="btn sec" id="kbToggle" style="margin-top:8px">'+TTX('translator_kb')+'</button>'+
       '<div id="geKb" style="display:none;margin-top:10px"></div>'+
       '<div id="geOut" style="display:none;margin-top:8px"></div>'+
     '</div>'+
-    '<p class="hint" style="margin-top:12px">💡 Нет грузинской клавиатуры в телефоне? Дай телефон грузину — пусть нажмёт «⌨️ Грузинская клавиатура» и напишет ответ. Потом «Перевести мне» — и ты поймёшь его.</p>';
+    '<p class="hint" style="margin-top:12px">'+TTX('translator_tip')+'</p>';
 
   function translate(text,from,to,outEl,speakLng){
-    if(!text||!text.trim()){outEl.style.display='block';outEl.innerHTML='<span class="hint" style="margin:0">Сначала скажи или впиши текст 🙂</span>';return}
+    if(!text||!text.trim()){outEl.style.display='block';outEl.innerHTML='<span class="hint" style="margin:0">'+TTX('translator_empty')+'</span>';return}
     outEl.style.display='block';outEl.innerHTML='<span class="spin"></span>';
     var url='https://api.mymemory.translated.net/get?q='+encodeURIComponent(text.trim())+'&langpair='+from+'|'+to;
     fetch(url).then(function(r){return r.json()}).then(function(d){
       var tr=(d&&d.responseData&&d.responseData.translatedText)||'';
       if(!tr)throw 0;
       outEl.innerHTML='<div style="font-size:1.4rem;font-weight:700;line-height:1.3;color:var(--gold)">'+tr+'</div>'+
-        '<button class="mini-say" data-say="'+tr.replace(/"/g,'&quot;')+'" data-lng="'+speakLng+'" style="margin-top:8px">🔊 Озвучить</button>';
+        '<button class="mini-say" data-say="'+tr.replace(/"/g,'&quot;')+'" data-lng="'+speakLng+'" style="margin-top:8px">'+TTX('speak_btn')+'</button>';
       var sb=outEl.querySelector('.mini-say');
       if(sb)sb.onclick=function(){speakFromButton(sb)};
       speak(tr,speakLng);
-    }).catch(function(){outEl.innerHTML='<span class="hint" style="margin:0">⚠️ Перевод временно недоступен, попробуй ещё раз.</span>'});
+    }).catch(function(){outEl.innerHTML='<span class="hint" style="margin:0">'+TTX('translator_err')+'</span>'});
   }
   function listen(srcLang,targetTextarea,onDone){
-    if(!SR){alert('Голосовой ввод недоступен в этом браузере — впиши текст вручную 🙂');return}
+    if(!SR){alert(TTX('translator_no_voice'));return}
     var r=new SR();r.lang=srcLang;r.interimResults=false;r.maxAlternatives=1;
     var ta=document.getElementById(targetTextarea);
-    ta.value='🎙️ Слушаю...';
+    ta.value=TTX('translator_listening');
     var got=false;
     r.onresult=function(e){got=true;ta.value=e.results[0][0].transcript;if(onDone)onDone()};
     r.onerror=function(ev){if(!got)ta.value='';
       if(ev&&(ev.error==='language-not-supported'||ev.error==='no-speech')&&srcLang==='ka-GE'){
-        alert('Грузинская речь не распознаётся на этом телефоне 🍶\n\nПопроси грузина впечатать текст в окошко (грузинская клавиатура) — и нажми «Перевести мне». Перевод появится крупно на твоём языке.');
+        alert(TTX('translator_ka_no_voice'));
       }
     };
-    r.onend=function(){if(!got&&ta.value==='🎙️ Слушаю...')ta.value=''};
+    r.onend=function(){if(!got&&ta.value===TTX('translator_listening'))ta.value=''};
     try{r.start()}catch(e){ta.value=''}
   }
   // Я → грузину
@@ -1468,43 +1875,43 @@ tools.translator=function(){openModal('🗣️ Переводчик');
   };
 };
 
-tools.metro=function(){openModal('🚇 Метро и транспорт Тбилиси');
+tools.metro=function(){openModal(TT('metro_title'));
   var opts=function(arr,line){return arr.map(function(s,i){return'<option value="'+line+':'+i+'">'+s+'</option>'}).join('')};
   mBody.innerHTML=
-    '<p class="hint">Метро работает <b>6:00–24:00</b>. Весь городской транспорт безналичный — кэш не принимают.</p>'+
-    '<div class="result" style="margin-bottom:12px"><b>💳 Карта MetroMoney</b><br><span class="hint" style="margin:0">Купи в кассе метро (табличка «MS», не оранжевая стойка банка). Карта — <b>2 ₾</b>, поездка — <b>1 ₾</b>. После оплаты <b>90 минут</b> катаешься на метро, автобусах и маршрутках <b>бесплатно</b> (пересадки не списываются). Иностранной картой/Apple/Google Pay у турникета — <b>1.5 ₾</b>, но без бесплатных пересадок. Поэтому MetroMoney выгоднее.</span></div>'+
-    '<label class="hint">Откуда:</label><select class="field" id="mFrom"><optgroup label="🔴 Красная">'+opts(redLine,'r')+'</optgroup><optgroup label="🟢 Зелёная">'+opts(greenLine,'g')+'</optgroup></select>'+
-    '<label class="hint">Куда:</label><select class="field" id="mTo"><optgroup label="🔴 Красная">'+opts(redLine,'r')+'</optgroup><optgroup label="🟢 Зелёная">'+opts(greenLine,'g')+'</optgroup></select>'+
-    '<button class="btn" id="mGo">Построить маршрут</button><div id="mRes"></div>'+
-    '<div class="result" style="margin-top:14px"><b>🚌 Полезные автобусы</b><br><span class="hint" style="margin:0">• <b>№337</b> (синий) — аэропорт ↔ центр (пл. Свободы, Руставели, вокзал). 1/1.5 ₾. Днём примерно с 7:00 до 23:00, каждые 15–20 мин. Ночью лучше Bolt/Yandex или трансфер.<br>• <b>№88</b> — Руставели → Ваке и Сабуртало (удобно до Ваке-парка).<br>• Маршруты и время удобнее смотреть в Google Maps — там точные данные по автобусам Тбилиси.</span></div>'+
-    '<p class="hint" style="margin-top:10px">💡 Лайфхак: вошёл в метро по MetroMoney → автобус №337 в аэропорт будет бесплатным, если сел в течение 90 минут.</p>';
+    '<p class="hint">'+TTX('metro_hint')+'</p>'+
+    '<div class="result" style="margin-bottom:12px"><b>'+TTX('metro_card_title')+'</b><br><span class="hint" style="margin:0">'+TTX('metro_card_body')+'</span></div>'+
+    '<label class="hint">'+TTX('metro_from')+'</label><select class="field" id="mFrom"><optgroup label="'+TTX('metro_red')+'">'+opts(redLine,'r')+'</optgroup><optgroup label="'+TTX('metro_green')+'">'+opts(greenLine,'g')+'</optgroup></select>'+
+    '<label class="hint">'+TTX('metro_to')+'</label><select class="field" id="mTo"><optgroup label="'+TTX('metro_red')+'">'+opts(redLine,'r')+'</optgroup><optgroup label="'+TTX('metro_green')+'">'+opts(greenLine,'g')+'</optgroup></select>'+
+    '<button class="btn" id="mGo">'+TTX('metro_go')+'</button><div id="mRes"></div>'+
+    '<div class="result" style="margin-top:14px"><b>'+TTX('metro_bus_title')+'</b><br><span class="hint" style="margin:0">'+TTX('metro_bus_body')+'</span></div>'+
+    '<p class="hint" style="margin-top:10px">'+TTX('metro_tip')+'</p>';
   document.getElementById('mGo').onclick=function(){
     var f=document.getElementById('mFrom').value.split(':'),t=document.getElementById('mTo').value.split(':');
     var fl=f[0],fi=+f[1],tl=t[0],ti=+t[1];
     var res='',stops,mins;
     if(fl===tl){stops=Math.abs(ti-fi);mins=Math.round(stops*2.3+2);
-      res='Без пересадки, по '+(fl==='r'?'🔴 красной':'🟢 зелёной')+' линии.<br>Станций: <b>'+stops+'</b> · ~'+mins+' мин · <b>1 ₾</b>';
+      res=TTX('metro_result_direct')+' '+(fl==='r'?TTX('metro_result_red'):TTX('metro_result_green'))+' '+TTX('metro_result_line')+'<br>'+TTX('metro_result_stops')+' <b>'+stops+'</b> · ~'+mins+' '+TTX('metro_result_min')+' · <b>1 ₾</b>';
     }else{
       var toJunc=fl==='r'?Math.abs(fi-7):Math.abs(fi-0);
       var fromJunc=tl==='r'?Math.abs(ti-7):Math.abs(ti-0);
       stops=toJunc+fromJunc;mins=Math.round(stops*2.3+6);
-      res='🔄 С пересадкой на <b>Вокзальной площади</b>.<br>Всего станций: <b>'+stops+'</b> · ~'+mins+' мин · <b>1 ₾</b> (пересадка бесплатна)';
+      res=TTX('metro_result_transfer')+'<br>'+TTX('metro_result_total')+' <b>'+stops+'</b> · ~'+mins+' '+TTX('metro_result_min')+' · <b>1 ₾</b> '+TTX('metro_transfer_free');
     }
     document.getElementById('mRes').innerHTML='<div class="result">'+res+'</div>';
   };
 };
 
-tools.phrases=function(){openModal('📖 Разговорник');
-  mBody.innerHTML='<p class="hint">Нажми 🔊 чтобы услышать произношение. Покажи грузину экран — он прочтёт.</p>'+
+tools.phrases=function(){openModal(TT('phrases_title'));
+  mBody.innerHTML='<p class="hint">'+TTX('phrases_hint')+'</p>'+
     phrases.map(function(p){return'<div class="phrase"><div><div>'+p[0]+'</div><div class="geo">'+p[1]+'</div><div class="hint" style="margin:0">'+p[2]+'</div></div><button data-say="'+p[1]+'">🔊</button></div>'}).join('');
   mBody.querySelectorAll('[data-say]').forEach(function(b){b.onclick=function(){speakFromButton(b)}});
 };
 
-tools.currency=function(){openModal('💱 Курс лари (GEL)');
-  mBody.innerHTML='<p class="hint">Введи сумму в лари — покажем в твоей валюте. Курс обновляется автоматически.</p>'+
+tools.currency=function(){openModal(TT('currency_title'));
+  mBody.innerHTML='<p class="hint">'+TTX('currency_hint')+'</p>'+
     '<input class="field" id="cAmt" type="number" inputmode="decimal" placeholder="100" value="100">'+
-    '<select class="field" id="cCur"><option value="USD">Доллар USD</option><option value="EUR">Евро EUR</option><option value="RUB">Рубль RUB</option><option value="TRY">Лира TRY</option><option value="ILS">Шекель ILS</option><option value="AED">Дирхам AED</option><option value="GBP">Фунт GBP</option></select>'+
-    '<button class="btn" id="cGo">Перевести</button><div id="cRes"></div>';
+    '<select class="field" id="cCur"><option value="USD">'+TTX('currency_usd')+'</option><option value="EUR">'+TTX('currency_eur')+'</option><option value="RUB">'+TTX('currency_rub')+'</option><option value="TRY">'+TTX('currency_try')+'</option><option value="ILS">'+TTX('currency_ils')+'</option><option value="AED">'+TTX('currency_aed')+'</option><option value="GBP">'+TTX('currency_gbp')+'</option></select>'+
+    '<button class="btn" id="cGo">'+TTX('currency_btn')+'</button><div id="cRes"></div>';
   // запасные курсы (ориентир 2026): сколько единиц валюты за 1 лари
   var fallback={USD:0.37,EUR:0.34,RUB:33,TRY:13,ILS:1.35,AED:1.36,GBP:0.29};
   function convert(){
@@ -1516,10 +1923,10 @@ tools.currency=function(){openModal('💱 Курс лари (GEL)');
         if(!d||!d.rates||d.rates[cur]==null)throw 0;
         var v=amt*d.rates[cur];
         var when=d.time_last_update_utc?(' · обновлено: '+d.time_last_update_utc.replace(' GMT','')):'';
-        box.innerHTML='<div class="result"><span class="big-num">'+v.toFixed(2)+' '+cur+'</span><br><span class="hint">'+amt+' ₾ по текущему курсу'+when+'</span></div>';
+        box.innerHTML='<div class="result"><span class="big-num">'+v.toFixed(2)+' '+cur+'</span><br><span class="hint">'+amt+' ₾ '+TTX('currency_lbl')+when+'</span></div>';
       }).catch(function(){
         var v=amt*(fallback[cur]||0);
-        box.innerHTML='<div class="result"><span class="big-num">≈ '+v.toFixed(2)+' '+cur+'</span><br><span class="hint">'+amt+' ₾ · ориентировочный курс (живой временно недоступен, проверь на месте)</span></div>';
+        box.innerHTML='<div class="result"><span class="big-num">≈ '+v.toFixed(2)+' '+cur+'</span><br><span class="hint">'+amt+' ₾ · '+TTX('currency_fb')+'</span></div>';
       });
   }
   document.getElementById('cGo').onclick=convert;
@@ -1527,17 +1934,17 @@ tools.currency=function(){openModal('💱 Курс лари (GEL)');
 };
 
 tools.radio=function(){openModal('📻 Радио разных стран');
-  mBody.innerHTML='<p class="hint">Слушай радио своей страны или Грузии. Потоки идут с серверов самих станций.</p>'+
-    '<p class="hint" style="margin-bottom:10px">🎵 Только музыкальные станции. Страны выбираются и обновляются автоматически через открытый Radio Browser API — мы не контролируем этот список вручную.</p>'+
-    '<select class="field" id="rCountry"><option value="Georgia">🇬🇪 Грузия</option><option value="">🌍 Моя страна (по языку)</option><option value="Armenia">🇦🇲 Армения</option><option value="Azerbaijan">🇦🇿 Азербайджан</option><option value="Kazakhstan">🇰🇿 Казахстан</option><option value="Belarus">🇧🇾 Беларусь</option><option value="Turkey">🇹🇷 Турция</option><option value="Israel">🇮🇱 Израиль</option><option value="Iran">🇮🇷 Иран</option><option value="Saudi Arabia">🇸🇦 Саудовская Аравия</option><option value="Germany">🇩🇪 Германия</option><option value="France">🇫🇷 Франция</option><option value="United Kingdom">🇬🇧 Великобритания</option><option value="Poland">🇵🇱 Польша</option><option value="Italy">🇮🇹 Италия</option><option value="Netherlands">🇳🇱 Нидерланды</option><option value="Spain">🇪🇸 Испания</option><option value="India">🇮🇳 Индия</option><option value="China">🇨🇳 Китай</option><option value="Lithuania">🇱🇹 Литва</option><option value="Estonia">🇪🇪 Эстония</option><option value="Moldova">🇲🇩 Молдова</option><option value="Latvia">🇱🇻 Латвия</option><option value="United States">🇺🇸 США</option></select>'+
-    '<button class="btn" id="rGo">Показать станции</button><div id="rList"></div>'+
+  mBody.innerHTML='<p class="hint">'+TTX('radio_hint')+'</p>'+
+    '<p class="hint" style="margin-bottom:10px">'+TTX('radio_hint2')+'</p>'+
+    '<select class="field" id="rCountry"><option value="Georgia">🇬🇪 Georgia</option><option value="">'+TTX('radio_my')+'</option><option value="Armenia">🇦🇲 Armenia</option><option value="Azerbaijan">🇦🇿 Azerbaijan</option><option value="Kazakhstan">🇰🇿 Kazakhstan</option><option value="Belarus">🇧🇾 Belarus</option><option value="Turkey">🇹🇷 Turkey</option><option value="Israel">🇮🇱 Israel</option><option value="Iran">🇮🇷 Iran</option><option value="Saudi Arabia">🇸🇦 Saudi Arabia</option><option value="Germany">🇩🇪 Germany</option><option value="France">🇫🇷 France</option><option value="United Kingdom">🇬🇧 UK</option><option value="Poland">🇵🇱 Poland</option><option value="Italy">🇮🇹 Italy</option><option value="Netherlands">🇳🇱 Netherlands</option><option value="Spain">🇪🇸 Spain</option><option value="India">🇮🇳 India</option><option value="China">🇨🇳 China</option><option value="Lithuania">🇱🇹 Lithuania</option><option value="Estonia">🇪🇪 Estonia</option><option value="Moldova">🇲🇩 Moldova</option><option value="Latvia">🇱🇻 Latvia</option><option value="United States">🇺🇸 USA</option></select>'+
+    '<button class="btn" id="rGo">'+TTX('radio_go')+'</button><div id="rList"></div>'+
     '<audio id="rPlayer" controls style="width:100%;margin-top:12px;display:none"></audio>';
   document.getElementById('rGo').onclick=function(){
     var c=document.getElementById('rCountry').value;
     var list=document.getElementById('rList');list.innerHTML='<div class="result"><span class="spin"></span></div>';
     var url='https://de1.api.radio-browser.info/json/stations/bycountry/'+encodeURIComponent(c||'')+'?limit=30&hidebroken=true&order=clickcount&reverse=true';
     fetch(url).then(function(r){return r.json()}).then(function(arr){
-      if(!arr||!arr.length){list.innerHTML='<div class="result">Станции не найдены, выбери другую страну.</div>';return}
+      if(!arr||!arr.length){list.innerHTML='<div class="result">'+TTX('radio_not_found')+'</div>';return}
       // фильтр: только музыкальные, без новостей и политики
       var blocked=/news|talk|sport|politi|вести|соловь|правда|novosti|actualit|nachrichten|aktuell/i;
       var filtered=arr.filter(function(s){
@@ -1546,78 +1953,78 @@ tools.radio=function(){openModal('📻 Радио разных стран');
         if(blocked.test(name))return false;
         return true;
       }).slice(0,12);
-      if(!filtered.length){list.innerHTML='<div class="result">Музыкальные станции не найдены, выбери другую страну.</div>';return}
+      if(!filtered.length){list.innerHTML='<div class="result">'+TTX('radio_music_not_found')+'</div>';return}
       list.innerHTML=filtered.map(function(s){
         return'<div class="list-item" data-url="'+encodeURIComponent(s.url_resolved)+'">▶️ '+(s.name||'Радио').slice(0,40)+'</div>'}).join('');
       list.querySelectorAll('[data-url]').forEach(function(it){it.onclick=function(){
         var p=document.getElementById('rPlayer');p.src=decodeURIComponent(it.getAttribute('data-url'));
         p.style.display='block';p.play().catch(function(){})}});
-    }).catch(function(){list.innerHTML='<div class="result">⚠️ Каталог радио недоступен, попробуй позже.</div>'});
+    }).catch(function(){list.innerHTML='<div class="result">'+TTX('radio_err')+'</div>'});
   };
 };
 
-tools.emergency=function(){openModal('🆘 Экстренная помощь');
+tools.emergency=function(){openModal(TT('emergency_title'));
   mBody.innerHTML=
     '<a class="list-item" style="display:block;text-decoration:none;color:inherit" href="tel:112"><b>🚨 112</b> — единый экстренный (полиция, скорая, пожарные)</a>'+
     '<a class="list-item" style="display:block;text-decoration:none;color:inherit" href="tel:1441"><b>📞 1441</b> — туристическая горячая линия Грузии (помощь и информация туристам)</a>'+
-    '<div class="list-item"><b>112</b> работает на английском. Назови город и адрес.</div>'+
-    '<div class="phrase"><div><div>Мне нужна помощь!</div><div class="geo">დამეხმარეთ!</div></div><button data-say="დამეხმარეთ!">🔊</button></div>'+
-    '<div class="phrase"><div><div>Вызовите скорую!</div><div class="geo">სასწრაფო დახმარება!</div></div><button data-say="სასწრაფო დახმარება!">🔊</button></div>'+
-    '<p class="hint" style="margin-top:14px">📍 Посольство своей страны ищи в Тбилиси — сохрани адрес заранее. Страховка 2026 покрывает экстренную помощь (звони на номер из полиса).</p>';
+    '<div class="list-item">'+TTX('emergency_note')+'</div>'+
+    '<div class="phrase"><div><div>'+TTX('emergency_help')+'</div><div class="geo">დამეხმარეთ!</div></div><button data-say="დამეხმარეთ!">🔊</button></div>'+
+    '<div class="phrase"><div><div>'+TTX('emergency_ambulance')+'</div><div class="geo">სასწრაფო დახმარება!</div></div><button data-say="სასწრაფო დახმარება!">🔊</button></div>'+
+    '<p class="hint" style="margin-top:14px">'+TTX('emergency_tip')+'</p>';
   mBody.querySelectorAll('[data-say]').forEach(function(b){b.onclick=function(){speakFromButton(b)}});
 };
 
-tools.tips=function(){openModal('🧮 Чаевые и делёж');
-  mBody.innerHTML='<p class="hint">В Грузии чаевые ~10%. Раздели счёт супры на компанию.</p>'+
-    '<input class="field" id="tBill" type="number" inputmode="decimal" placeholder="Сумма счёта, ₾" value="100">'+
-    '<div class="row2"><input class="field" id="tPct" type="number" placeholder="% чаевых" value="10"><input class="field" id="tPpl" type="number" placeholder="Человек" value="2"></div>'+
-    '<button class="btn" id="tGo">Посчитать</button><div id="tRes"></div>';
+tools.tips=function(){openModal(TT('tips_title'));
+  mBody.innerHTML='<p class="hint">'+TTX('tips_hint')+'</p>'+
+    '<input class="field" id="tBill" type="number" inputmode="decimal" placeholder="'+TTX('tips_bill')+'" value="100">'+
+    '<div class="row2"><input class="field" id="tPct" type="number" placeholder="'+TTX('tips_pct')+'" value="10"><input class="field" id="tPpl" type="number" placeholder="'+TTX('tips_ppl')+'" value="2"></div>'+
+    '<button class="btn" id="tGo">'+TTX('tips_go')+'</button><div id="tRes"></div>';
   document.getElementById('tGo').onclick=function(){
     var b=parseFloat(document.getElementById('tBill').value)||0,
         p=parseFloat(document.getElementById('tPct').value)||0,
         n=parseInt(document.getElementById('tPpl').value)||1;
     var tip=b*p/100,total=b+tip;
-    document.getElementById('tRes').innerHTML='<div class="result">Чаевые: <b>'+tip.toFixed(2)+' ₾</b><br>Итого: <b>'+total.toFixed(2)+' ₾</b><br>С каждого: <span class="big-num">'+(total/n).toFixed(2)+' ₾</span></div>';
+    document.getElementById('tRes').innerHTML='<div class="result">'+TTX('tips_result_tip')+' <b>'+tip.toFixed(2)+' ₾</b><br>'+TTX('tips_result_total')+' <b>'+total.toFixed(2)+' ₾</b><br>'+TTX('tips_result_each')+' <span class="big-num">'+(total/n).toFixed(2)+' ₾</span></div>';
   };
 };
 
-tools.checklist=function(){openModal('✅ Чек-лист сборов');
+tools.checklist=function(){openModal(TT('checklist_title'));
   var saved={};try{saved=JSON.parse(localStorage.getItem('sak_chk')||'{}')}catch(e){}
-  mBody.innerHTML='<p class="hint">Отметь собранное — сохранится в телефоне.</p>'+
+  mBody.innerHTML='<p class="hint">'+TTX('checklist_hint')+'</p>'+
     checkItems.map(function(it,i){return'<div class="chk'+(saved[i]?' done':'')+'" data-i="'+i+'"><div class="box">✓</div><span>'+it+'</span></div>'}).join('');
   mBody.querySelectorAll('.chk').forEach(function(el){el.onclick=function(){
     var i=el.getAttribute('data-i');el.classList.toggle('done');saved[i]=el.classList.contains('done');
     try{localStorage.setItem('sak_chk',JSON.stringify(saved))}catch(e){}}});
 };
 
-tools.food=function(){openModal('🍷 Что заказать');
-  mBody.innerHTML='<p class="hint">Грузинская кухня — это душа страны. Вот must-try:</p>'+
+tools.food=function(){openModal(TT('food_title'));
+  mBody.innerHTML='<p class="hint">'+TTX('food_hint')+'</p>'+
     foods.map(function(f){return'<div class="list-item"><b>'+f[0]+'</b><br><span class="hint" style="margin:0">'+f[1]+'</span></div>'}).join('')+
-    '<p class="hint" style="margin-top:10px">🍷 К мясу — Саперави (красное), к сыру — Ркацители (янтарное).</p>'+
-    '<div class="result" style="margin-top:12px"><b>🥂 О тостах на супре</b><br><span class="hint" style="margin:0">Грузинское застолье ведёт тамада. Когда пьют за кого-то, желают здоровья и добра — вам можно говорить <b>«Тквен гаумарджос»</b>. Если хотите выпить за кого-то — и смело пейте до дна 🥂</span></div>';
+    '<p class="hint" style="margin-top:10px">'+TTX('food_wine')+'</p>'+
+    '<div class="result" style="margin-top:12px"><b>'+TTX('food_toast_title')+'</b><br><span class="hint" style="margin:0">'+TTX('food_toast_body')+'</span></div>';
 };
 
-tools.visa=function(){openModal('🛂 Счётчик дней визы');
+tools.visa=function(){openModal(TT('visa_title'));
   var saved='';try{saved=localStorage.getItem('sak_visa')||''}catch(e){}
-  mBody.innerHTML='<p class="hint">Граждане 98 стран — виза-фри 1 год (365 дней). Укажи дату въезда:</p>'+
+  mBody.innerHTML='<p class="hint">'+TTX('visa_hint')+'</p>'+
     '<input class="field" id="vDate" type="date" value="'+saved+'">'+
-    '<button class="btn" id="vGo">Посчитать</button><div id="vRes"></div>';
+    '<button class="btn" id="vGo">'+TTX('visa_go')+'</button><div id="vRes"></div>';
   function calc(d){if(!d)return;try{localStorage.setItem('sak_visa',d)}catch(e){}
     var entry=new Date(d),now=new Date();
     var passed=Math.floor((now-entry)/86400000);
     var left=365-passed;
     var box=document.getElementById('vRes');
-    if(passed<0){box.innerHTML='<div class="result">Дата ещё не наступила 🙂</div>';return}
-    box.innerHTML='<div class="result">Прошло дней: <b>'+passed+'</b><br>Осталось до конца виза-фри: <span class="big-num">'+left+'</span> дней<br><span class="hint">'+(left<30?'⚠️ Скоро лимит — продли страховку и планируй выезд':'Всё спокойно, путешествуй! 🍶')+'</span></div>';
+    if(passed<0){box.innerHTML='<div class="result">'+TTX('visa_future')+'</div>';return}
+    box.innerHTML='<div class="result">'+TTX('visa_passed')+' <b>'+passed+'</b><br>'+TTX('visa_left')+' <span class="big-num">'+left+'</span> '+TTX('visa_days')+'<br><span class="hint">'+(left<30?TTX('visa_warn'):TTX('visa_ok'))+'</span></div>';
   }
   document.getElementById('vGo').onclick=function(){calc(document.getElementById('vDate').value)};
   if(saved)calc(saved);
 };
 
-tools.alarm=function(){openModal('⏰ Будильник');
-  mBody.innerHTML='<p class="hint">Поставь время — зазвенит, пока вкладка открыта. Удобно для ранних экскурсий.</p>'+
+tools.alarm=function(){openModal(TT('alarm_title'));
+  mBody.innerHTML='<p class="hint">'+TTX('alarm_hint')+'</p>'+
     '<input class="field" id="aTime" type="time">'+
-    '<button class="btn" id="aSet">Поставить</button><div id="aRes"></div>';
+    '<button class="btn" id="aSet">'+TTX('alarm_go')+'</button><div id="aRes"></div>';
   var timer=null;
   document.getElementById('aSet').onclick=function(){
     var v=document.getElementById('aTime').value;if(!v)return;
@@ -1626,20 +2033,20 @@ tools.alarm=function(){openModal('⏰ Будильник');
     if(target<=now)target.setDate(target.getDate()+1);
     var ms=target-now;
     if(timer)clearTimeout(timer);
-    document.getElementById('aRes').innerHTML='<div class="result">⏰ Будильник на <b>'+v+'</b> поставлен. Не закрывай вкладку.</div>';
+    document.getElementById('aRes').innerHTML='<div class="result">'+TTX('alarm_set')+' <b>'+v+'</b> — '+TTX('alarm_set2')+'</div>';
     timer=setTimeout(function(){
       try{var ctx=new(window.AudioContext||window.webkitAudioContext)();
         var beep=function(){var o=ctx.createOscillator();o.connect(ctx.destination);o.frequency.value=880;
           o.start();setTimeout(function(){o.stop()},500)};
         beep();setTimeout(beep,700);setTimeout(beep,1400)}catch(e){}
-      alert('⏰ Подъём, генацвале! Пора на экскурсию 🍶');
+      alert(TTX('alarm_ring'));
     },ms);
   };
 };
 
-tools.torch=function(){openModal('🔦 Фонарик');
-  mBody.innerHTML='<p class="hint">На Android Chrome — настоящая вспышка. На других — яркий белый экран.</p>'+
-    '<button class="btn" id="tqGo">Включить свет 💡</button><p class="hint" id="tqMsg" style="margin-top:12px"></p>';
+tools.torch=function(){openModal(TT('torch_title'));
+  mBody.innerHTML='<p class="hint">'+TTX('torch_hint')+'</p>'+
+    '<button class="btn" id="tqGo">'+TTX('torch_go')+'</button><p class="hint" id="tqMsg" style="margin-top:12px"></p>';
   var on=false,track=null;
   document.getElementById('tqGo').onclick=function(){
     if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&!on){
@@ -1647,222 +2054,321 @@ tools.torch=function(){openModal('🔦 Фонарик');
         track=stream.getVideoTracks()[0];
         var cap=track.getCapabilities&&track.getCapabilities();
         if(cap&&cap.torch){track.applyConstraints({advanced:[{torch:true}]});on=true;
-          document.getElementById('tqMsg').textContent='💡 Фонарик включён. Нажми ещё раз чтобы выключить.';
+          document.getElementById('tqMsg').textContent=TTX('torch_on');
         }else{track.stop();whiteScreen()}
       }).catch(function(){whiteScreen()});
     }else if(on&&track){track.applyConstraints({advanced:[{torch:false}]});track.stop();on=false;
-      document.getElementById('tqMsg').textContent='Выключено.';
+      document.getElementById('tqMsg').textContent=TTX('torch_off');
     }else{whiteScreen()}
   };
   function whiteScreen(){
     var ov=document.createElement('div');ov.style.cssText='position:fixed;inset:0;background:#fff;z-index:999';
     ov.onclick=function(){ov.remove()};document.body.appendChild(ov);
-    document.getElementById('tqMsg').textContent='Вспышка недоступна — включил белый экран (нажми на него чтобы убрать).';
+    document.getElementById('tqMsg').textContent=TTX('torch_fallback');
   }
 };
 
-tools.luggage=function(){openModal('🧳 Камера хранения багажа');
-  mBody.innerHTML='<p class="hint">Рейс вечером, а выселили из отеля? Оставь чемоданы на хранение и гуляй по Тбилиси налегке. Точки по всему городу, от пары лари в день.</p>'+
-    '<a class="btn" href="https://radicalstorage.tpm.lv/aEyoKYmh" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none">🧳 Найти камеру хранения →</a>'+
-    '<p class="hint" style="margin-top:12px">Бронируешь онлайн, приходишь, оставляешь багаж — всё застраховано на стороне сервиса.</p>';
+tools.luggage=function(){openModal(TT('luggage_title'));
+  mBody.innerHTML='<p class="hint">'+TTX('luggage_hint')+'</p>'+
+    '<a class="btn" href="https://radicalstorage.tpm.lv/aEyoKYmh" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none">'+TTX('luggage_btn')+'</a>'+
+    '<p class="hint" style="margin-top:12px">'+TTX('luggage_note')+'</p>';
 };
 
-tools.prices=function(){openModal('🛡️ Честные цены и места 2026');
+tools.prices=function(){openModal(TT('prices_title'));
   mBody.innerHTML=
-    '<p class="hint">Чтобы тебя не обсчитали. Ориентир на 2026 — цены чуть меняются, но если просят сильно больше, торгуйся или уходи.</p>'+
-    '<div class="list-item"><b>🚖 Такси из аэропорта Тбилиси → центр</b><br><span class="hint" style="margin:0">Через приложение Bolt/Yandex ~25–40 ₾. Уличные «по счётчику» у выхода — частая разводка, просят 60–100 ₾. Заказывай в приложении.</span></div>'+
-    '<div class="list-item"><b>🚌 Автобус №337 из аэропорта</b><br><span class="hint" style="margin:0">Синий автобус до центра (пл. Свободы, Руставели, вокзал). 1 ₾ картой MetroMoney / 1.5 ₾ иностранной. Днём ~7:00–23:00, каждые 15–20 мин. Ночью лучше Bolt/трансфер.</span></div>'+
-    '<div class="list-item"><b>💱 Курс лари и обменники</b><br><span class="hint" style="margin:0">~2.7 ₾ за $1, ~2.9 ₾ за €1. Лучшие места обмена — район <b>вокзала</b> и <b>Самгори</b> (базар Самгори часто лучше вокзального, но и на вокзале бывает хороший курс — всегда сверяй между двумя). В обменниках с табло комиссии обычно нет, но заранее подтверди, так ли это.</span></div>'+
-    '<div class="list-item"><b>🚇 Метро / автобус</b><br><span class="hint" style="margin:0">1 ₾ по MetroMoney (карта 2 ₾) + 90 минут бесплатных пересадок. 1.5 ₾ иностранной картой без пересадок. «Туристических» билетов не бывает.</span></div>'+
-    '<div class="list-item"><b>👕 Рынок Лило (одежда)</b><br><span class="hint" style="margin:0">Большой вещевой рынок, много оптовиков. Езжай <b>утром</b> — больше выбор, и можно торговаться/договариваться.</span></div>'+
-    '<div class="list-item"><b>🥬 Базар Самгори (еда)</b><br><span class="hint" style="margin:0">Большой продуктовый рынок — фрукты, овощи, сыр, специи. Дёшево и по-местному.</span></div>'+
-    '<div class="list-item"><b>🌳 Район Ваке (для спокойной жизни)</b><br><span class="hint" style="margin:0">Самый престижный зелёный район: широкие улицы, чистый воздух (Верхний Ваке на холме), кафе и рестораны, рядом большой <b>Ваке-парк</b> — отлично для семей и отдыха. Метро в Ваке нет, удобнее автобус №88 или такси.</span></div>'+
-    '<div class="list-item"><b>🏛️ Музеи</b><br><span class="hint" style="margin:0">Нацмузей ~40 ₾ (~$15). Билеты бери на кассе или офиц. сайте, не у «помощников» рядом.</span></div>'+
-    '<div class="list-item"><b>💵 Наличные в горах</b><br><span class="hint" style="margin:0">В Тбилиси и Батуми карта везде. Но в Кахетии, Сванетии, деревнях — бери наличные лари: у бабушки с домашним вином терминала нет.</span></div>'+
-    '<div class="list-item"><b>🍽️ Рестораны</b><br><span class="hint" style="margin:0">Ходи туда, куда ходят сами грузины — там вкуснее и честнее по цене, чем в туристических местах. Будем обновлять места для вас скоро.</span></div>'+
-    '<div class="list-item"><b>📲 SIM и интернет</b><br><span class="hint" style="margin:0">Если не взял eSIM заранее — SIM можно купить прямо в аэропорту. Интернет в Грузии дешёвый, выбирай тариф под себя.</span></div>'+
-    '<p class="hint" style="margin-top:14px">⚠️ Цены ориентировочные на 2026 — всегда уточняй на месте. Главное правило: такси заказывай в приложении, деньги меняй только в обменниках с табло и всегда перечитывай курс на месте, не выходя из обменника, чтобы подтвердить что всё верно.</p>';
+    '<p class="hint">'+TTX('prices_hint')+'</p>'+
+    '<div class="list-item"><b>'+TTX('prices_taxi')+'</b><br><span class="hint" style="margin:0">'+TTX('prices_taxi_body')+'</span></div>'+
+    '<div class="list-item"><b>'+TTX('prices_bus')+'</b><br><span class="hint" style="margin:0">'+TTX('prices_bus_body')+'</span></div>'+
+    '<div class="list-item"><b>'+TTX('prices_exchange')+'</b><br><span class="hint" style="margin:0">'+TTX('prices_exchange_body')+'</span></div>'+
+    '<div class="list-item"><b>'+TTX('prices_metro_item')+'</b><br><span class="hint" style="margin:0">'+TTX('prices_metro_body')+'</span></div>'+
+    '<div class="list-item"><b>'+TTX('prices_lilo')+'</b><br><span class="hint" style="margin:0">'+TTX('prices_lilo_body')+'</span></div>'+
+    '<div class="list-item"><b>'+TTX('prices_samgori')+'</b><br><span class="hint" style="margin:0">'+TTX('prices_samgori_body')+'</span></div>'+
+    '<div class="list-item"><b>'+TTX('prices_vake')+'</b><br><span class="hint" style="margin:0">'+TTX('prices_vake_body')+'</span></div>'+
+    '<div class="list-item"><b>'+TTX('prices_museum')+'</b><br><span class="hint" style="margin:0">'+TTX('prices_museum_body')+'</span></div>'+
+    '<div class="list-item"><b>'+TTX('prices_cash')+'</b><br><span class="hint" style="margin:0">'+TTX('prices_cash_body')+'</span></div>'+
+    '<div class="list-item"><b>'+TTX('prices_restaurants')+'</b><br><span class="hint" style="margin:0">'+TTX('prices_restaurants_body')+'</span></div>'+
+    '<div class="list-item"><b>'+TTX('prices_sim')+'</b><br><span class="hint" style="margin:0">'+TTX('prices_sim_body')+'</span></div>'+
+    '<p class="hint" style="margin-top:14px">'+TTX('prices_footer')+'</p>';
 };
 
-/* ============ ВИРУСНЫЙ ГЕНЕРАТОР СТОРИС ============ */
-tools.story=function(){openModal('📸 Сторис про Грузию');
-  // Генератор: 40 персонажей × 40 фраз × 18 фонов = 28000+ комбинаций, без повторов подряд
-  var characters=['🧀👑','🍷🎩','🍇🍫','🥟🥷','🏔️🇬🇪','🥂🍷','🍇🏺','❤️🏙️','🍶😎','🐑⛰️','🍞🔥','🦅🏔️','🌶️🍲','🧄🍆','☕🌅','🍵🫖','🐉🏰','🎻🎶','💃🕺','🌄🚠','🍯🐝','🧺🍅','🌰🍇','🕍✨','🛶🌊','🐴🏞️','🎂🎉','🌻🌞','🍖🔥','🫓🧀','🍐🍇','🏰🌙','⛲🕊️','🎺🥁','🧿🪬','🌹🍷','🦃🍗','🐟🌊','🏞️📷','🍫🌰'];
-  var phrases=[
-    ['Хачапури-король','требует добавку 🧀'],
-    ['Я тут тамада,','а ты мой гость! 🍷'],
-    ['Чурчхела-банда','уже в деле 😎'],
-    ['Хинкали-ниндзя:','съел 15, не считаю 🥟'],
-    ['Приехал на 3 дня —','остался душой навсегда'],
-    ['Где супра —','там счастье 🥂'],
-    ['Вино делают тут','8000 лет 🍇'],
-    ['Сердце осталось','в Тбилиси ❤️'],
-    ['Грузия украла','моё сердце 🇬🇪'],
-    ['Один хинкали?','Не смеши, давай 20 🥟'],
-    ['Тамада сказал —','пьём до дна! 🍷'],
-    ['В горах Кавказа','дышится иначе 🏔️'],
-    ['Чача льётся,','душа поёт 🍶'],
-    ['Каждый гость —','подарок Бога 🙏'],
-    ['Хачапури на завтрак,','обед и ужин 🧀'],
-    ['Я не турист,','я почти грузин 😎'],
-    ['Саперави на закате','— вот это жизнь 🌅'],
-    ['Мцване, кварели,','и ещё по бокалу! 🥂'],
-    ['Казбеги зовёт','— я уже бегу 🏔️'],
-    ['Море Батуми','+ хачапури = рай 🌊'],
-    ['Старый Тбилиси','влюбляет с первого шага 🏙️'],
-    ['Гамарджоба,','генацвале! 🍶'],
-    ['Грузинский стол —','это марафон 🍽️'],
-    ['Тут даже воздух','пахнет вином 🍇'],
-    ['Кинжал не нужен —','покорили хачапури ⚔️🧀'],
-    ['Сулугуни тает,','а я таю с ним 🧀'],
-    ['Мой план на отпуск:','есть и пить 🍷'],
-    ['Пхали, лобио,','и душа на месте 🫘'],
-    ['Виноград прямо','с лозы 🍇'],
-    ['Танцую лезгинку','как умею 💃'],
-    ['Боржоми бьёт','прямо из земли 💧'],
-    ['Мцхета — где','началась Грузия ⛪'],
-    ['Серные бани','и я как новый 🛁'],
-    ['Уплисцихе:','город в скале 🏛️'],
-    ['Гори, Уплисцихе,','и ещё вина 🍷'],
-    ['Шашлык-мцвади','на углях 🔥'],
-    ['Гудаури —','снег и адреналин 🏂'],
-    ['Аджарское хачапури','с яйцом 🍳🧀'],
-    ['Вардзия высечена','в скале 🏔️'],
-    ['Просто скажи','«гаумарджос!» 🥂']
-  ];
-  var grads=[
-    // Закат над Тбилиси
-    ['#1a0a0e','#7a1220','#b8842f'],
-    // Ночной Тбилиси
-    ['#0a0a1a','#1a1a3a','#7a1220'],
-    // Кахетийское вино
-    ['#2a0810','#7a1220','#c8500a'],
-    // Горы Сванетии
-    ['#0a1a2a','#1a3a5a','#4a8aaa'],
-    // Золотой час
-    ['#1a0a00','#8a4a00','#e8a020'],
-    // Море Батуми
-    ['#001a2a','#004a6a','#0a8a9a'],
-    // Весенняя Кахетия
-    ['#0a1a0a','#1a3a1a','#4a7a2a'],
-    // Гранатовый
-    ['#2a0010','#7a0020','#d8204a'],
-    // Чача закат
-    ['#2a1000','#7a3a00','#d87a20'],
-    // Лавандовый
-    ['#1a0a2a','#3a1a5a','#8a4aaa'],
-    // Мрамор
-    ['#0a0a0a','#2a2a2a','#5a5a5a'],
-    // Нeon 2026
-    ['#0a001a','#2a006a','#8a00ff'],
-  ];
-  // Функция тройного градиента
-  function makeGrad(ctx,w,h,g){
-    var lg=ctx.createLinearGradient(0,0,w,h);
-    lg.addColorStop(0,g[0]);
-    lg.addColorStop(0.5,g[1]||g[0]);
-    lg.addColorStop(1,g[2]||g[1]||g[0]);
-    return lg;
+/* ============ ЦИТАТЫ ПРО ГРУЗИЮ ============ */
+var QUOTES_EN=[
+/* === WINE & FOOD === */
+{e:'🍇',q:'Georgia is the birthplace of wine — 8,000 years of viniculture, older than any other country on Earth.',a:'UNESCO, 2013'},
+{e:'🍷',q:'Georgian amber wine is not a trend — it is a 6,000-year-old tradition of skin-contact qvevri fermentation.',a:'Wine historians'},
+{e:'🍇',q:'Georgia produces over 500 grape varieties — more than France and Italy combined.',a:'Viticulture research'},
+{e:'🥟',q:'Never count your khinkali. Eat them with joy — the knot stays on the plate, always.',a:'Georgian table rule'},
+{e:'🧀',q:'Sulguni cheese was born in Samegrelo. The name means "kneaded soul" in Mingrelian.',a:'Food historians'},
+{e:'🍶',q:'Chacha — Georgian grape vodka — is not just a drink. It is an invitation to friendship.',a:'Georgian tradition'},
+{e:'🫘',q:'Lobio — stewed beans in a clay pot — has fed Georgians for thousands of years. Simple food, infinite comfort.',a:'Georgian cuisine'},
+{e:'🍞',q:'Shoti bread, baked on the walls of a tone oven, is shaped like the crescent moon. It has not changed in 3,000 years.',a:'Georgian bakers'},
+{e:'🍬',q:'Churchkhela — nuts threaded on grape juice — is Georgia\'s ancient energy bar. It keeps for months.',a:'Georgian tradition'},
+{e:'🥗',q:'Pkhali — minced vegetables mixed with walnut paste — turns any leftover into a jewel of Georgian cuisine.',a:'Georgian cooks'},
+{e:'🍷',q:'A proper supra table in Georgia does not end until every guest feels at home. That can take all night.',a:'Georgian saying'},
+{e:'🧆',q:'Ajapsandali, the Georgian vegetable stew, proves that the best food needs no meat — only patience and good spices.',a:'Georgian cuisine'},
+{e:'🫕',q:'Chikhirtma — a chicken soup thickened with eggs and lemon — is Georgia\'s answer to every ailment.',a:'Georgian grandmothers'},
+{e:'🍺',q:'Georgian beer has been brewed since antiquity. Natakhtari and Kazbegi are the two most beloved national brands.',a:'Georgian brewing'},
+{e:'🌶️',q:'Adjika, the fierce spice paste of Adjara, is made by hand — grinding chillies, garlic and herbs on a flat stone.',a:'Adjarian tradition'},
+{e:'🥩',q:'Mtsvadi — Georgian shashlik — is grilled on grapevine wood. The smoke gives it a flavour no gas grill can replicate.',a:'Georgian grill masters'},
+{e:'🫙',q:'Tkemali, the sour plum sauce, goes on everything in Georgia: meat, potatoes, bread. Every family has its own recipe.',a:'Georgian kitchens'},
+{e:'🍰',q:'Gozinaki — caramelised walnuts in honey — is eaten only on New Year\'s Eve and Christmas. Missing it means bad luck.',a:'Georgian tradition'},
+{e:'🧁',q:'Nazuki, the spiced sweet bread of Surami, is baked with cinnamon and cloves and sold by the roadside in cone shapes.',a:'Surami bakers'},
+{e:'🫒',q:'Georgian walnut sauce — bazhe — is the foundation of dozens of dishes. The country is one of the world\'s top walnut producers.',a:'Georgian agriculture'},
+/* === TBILISI === */
+{e:'🏛️',q:'Tbilisi\'s sulfur baths have been healing travellers since the 5th century. Tbili means warm in Georgian.',a:'Tbilisi City History'},
+{e:'🕍',q:'Old Tbilisi\'s jumble of balconies, caravanserais and cobblestones inspired Pushkin, Dumas and dozens of poets.',a:'Literary history'},
+{e:'🎨',q:'The Dry Bridge flea market in Tbilisi is open every day. Soviet-era paintings, old coins, handmade jewellery — history at every table.',a:'Tbilisi locals'},
+{e:'🌉',q:'The Peace Bridge in Tbilisi, a glass-and-steel bow over the Mtkvari river, was designed by Italian architect Michele De Lucchi.',a:'Tbilisi Architecture'},
+{e:'🚡',q:'The Narikala fortress cable car in Tbilisi lifts you above the old city in under two minutes. The view is worth every second.',a:'Tbilisi Transport'},
+{e:'🎭',q:'Tbilisi has more theatres per capita than most European capitals. Georgians take drama seriously — on and off stage.',a:'Georgian culture'},
+{e:'🌆',q:'At night, the old town of Tbilisi glows from below. Every ancient church is lit as if it were a stage set.',a:'Travel writers'},
+{e:'🛁',q:'Orbeliani Baths in Tbilisi, built in the 17th century, are still active. You can book a private sulfur bath for under $20.',a:'Tbilisi Tourism'},
+{e:'🏠',q:'The iconic carved wooden balconies of Old Tbilisi were designed to catch the breeze. On summer evenings, neighbours talk across them.',a:'Georgian architects'},
+{e:'🎪',q:'Rustaveli Avenue is Georgia\'s answer to the Champs-Elysees — grand 19th-century facades, bookshops, cafes and the Opera House.',a:'Tbilisi guide'},
+{e:'🖼️',q:'The Simon Janashia Museum of Georgia holds one of the finest collections of Colchian gold in the world.',a:'Georgian Museums'},
+{e:'⛩️',q:'Jvari Monastery above Tbilisi has stood since the 6th century. Lermontov described its silhouette in his most famous poem.',a:'Literary Georgia'},
+{e:'🌃',q:'Fabrika, a repurposed Soviet sewing factory in Tbilisi, is now the city\'s most creative hub: cafes, studios and a hostel.',a:'Tbilisi culture'},
+{e:'🧱',q:'Narikala Fortress has been besieged by Arabs, Persians, Mongols and earthquakes. It still stands above the old city.',a:'Georgian history'},
+{e:'🌸',q:'Vake Park in Tbilisi is where the whole city goes on Sunday mornings. Grandparents, joggers, chess players — all together.',a:'Tbilisi life'},
+/* === KAZBEGI & MOUNTAINS === */
+{e:'🏔️',q:'The Caucasus mountains hold more than 5,000 glaciers. Kazbegi peak rises 5,047 metres — taller than Mont Blanc.',a:'Georgian National Tourism'},
+{e:'⛪',q:'Gergeti Trinity Church sits at 2,170 metres. To reach it on foot takes two hours. The view is worth every step.',a:'Georgian Orthodox Church'},
+{e:'🦅',q:'In Kazbegi, golden eagles circle the peaks all day. The locals say they are the souls of ancient warriors.',a:'Kazbegi folklore'},
+{e:'🌨️',q:'Gudauri ski resort sits between 1,990 and 3,280 metres. The season runs from December to April — sometimes longer.',a:'Georgian Ski Federation'},
+{e:'🪂',q:'Gudauri is one of Europe\'s best paragliding destinations. The thermal currents above the Caucasus are uniquely powerful.',a:'Adventure Georgia'},
+{e:'🛤️',q:'The Georgian Military Highway, cut through the mountains in the 19th century, is one of the most dramatic drives in the world.',a:'Travel history'},
+{e:'🏕️',q:'The trek from Kazbegi to the Truso Valley takes you past ancient towers, mineral springs and abandoned villages.',a:'Georgian hiking guides'},
+{e:'🌬️',q:'In winter, the wind at Kazbegi can reach 200 km/h. The village has survived every storm for over a thousand years.',a:'Georgian meteorology'},
+{e:'🐑',q:'The Tushetian shepherds still move their flocks across the Caucasus on foot each spring — a transhumance unchanged for centuries.',a:'Georgian ethnography'},
+{e:'🗺️',q:'Mount Shkhara, at 5,193 metres, is the highest peak in Georgia. It sits on the border with Russia in the Greater Caucasus.',a:'Georgian geography'},
+/* === SVANETI === */
+{e:'🌄',q:'Svaneti towers — medieval stone fortresses — were built to protect family treasures and sacred icons from raiders.',a:'Svaneti historians'},
+{e:'🏘️',q:'Mestia, the capital of Svaneti, is the only place in Georgia where medieval watchtowers and a modern airport share the same skyline.',a:'Svaneti guide'},
+{e:'❄️',q:'Ushba, the twin-peaked mountain above Svaneti, is called "the terror of the Caucasus" by mountaineers. It is unforgiving and magnificent.',a:'Georgian climbing'},
+{e:'🎿',q:'Hatsvali ski resort near Mestia is one of Europe\'s hidden ski gems — uncrowded slopes and views of 5,000-metre peaks.',a:'Georgian Ski'},
+{e:'🔔',q:'Svan towers were also used as watchtowers against enemies. Some families lived in them for months during sieges.',a:'Georgian history'},
+{e:'🗿',q:'The Svaneti Museum in Mestia holds medieval icons and manuscripts rescued from remote mountain churches.',a:'Georgian Museums'},
+{e:'🦌',q:'Svaneti is home to the Caucasian chamois — a mountain goat that leaps across vertical cliffs with casual elegance.',a:'Georgian wildlife'},
+{e:'🌿',q:'The Svan people have their own language, Svan, unrelated to Georgian. It is spoken by fewer than 30,000 people.',a:'Georgian linguistics'},
+/* === BATUMI & BLACK SEA === */
+{e:'🌊',q:'The Black Sea coast of Adjara has a subtropical climate — palm trees grow next to snowy mountain peaks.',a:'Georgian Geography'},
+{e:'🎡',q:'Batumi\'s Ali and Nino moving sculpture — two figures who merge and pass through each other — has become an icon of the city.',a:'Batumi Tourism'},
+{e:'🏖️',q:'Ureki\'s black sand beach contains magnetite, said to have therapeutic effects on the cardiovascular and nervous systems.',a:'Georgian Medicine'},
+{e:'🌴',q:'Batumi Botanical Garden, founded in 1912, holds over 2,000 plant species from five continents across 113 hectares.',a:'Batumi Botanic Garden'},
+{e:'🎰',q:'Batumi was rebuilt entirely in the 2000s. Its skyline is now a wild mix of Georgian towers, Venetian canals and futurist skyscrapers.',a:'Batumi Architecture'},
+{e:'🚢',q:'In the Soviet era, Batumi was a key Black Sea port. Today its old port area is being transformed into a creative waterfront.',a:'Batumi History'},
+{e:'🌅',q:'The sunrise over the Black Sea from Batumi promenade is one of the most quietly beautiful moments in the Caucasus.',a:'Travel writers'},
+{e:'🐬',q:'Bottlenose dolphins live in the Black Sea off the Georgian coast. Fishermen consider them a sign of good fortune.',a:'Georgian marine biology'},
+/* === KAKHETI & WINE REGION === */
+{e:'🍇',q:'Kakheti produces over 70% of Georgia\'s wine. The region has been cultivating grapes continuously for at least 7,000 years.',a:'Kakheti Wine Council'},
+{e:'🏡',q:'Sighnaghi, the City of Love, is the only city in Georgia where a civil registry works 24 hours a day, 365 days a year.',a:'Georgian Tourism'},
+{e:'🌿',q:'The Alazani valley in Kakheti stretches 100 km along the Greater Caucasus foothills — one unbroken vineyard.',a:'Georgian geography'},
+{e:'🏺',q:'The traditional Georgian method of fermenting wine in buried clay jars — qvevri — was added to UNESCO heritage in 2013.',a:'UNESCO'},
+{e:'🦚',q:'The peacocks at Gremi Monastery in Kakheti have been walking its courtyards for generations. No one remembers who first brought them.',a:'Gremi Monastery'},
+{e:'🌸',q:'In spring, the Kakheti plain turns white with almond blossoms before the vines wake. It is called the Georgian sakura.',a:'Kakheti locals'},
+{e:'🏰',q:'Alaverdi Cathedral in Kakheti, built in the 11th century, is the second tallest medieval structure in Georgia.',a:'Georgian Architecture'},
+{e:'🕯️',q:'During the Rtveli grape harvest festival in October, all of Kakheti smells of fermenting must. Strangers are invited in to help crush.',a:'Kakheti tradition'},
+/* === HISTORY & CULTURE === */
+{e:'⛪',q:'Mtskheta, the ancient capital, has been a UNESCO World Heritage Site since 1994. Christianity arrived here in 327 AD.',a:'UNESCO'},
+{e:'📜',q:'The Georgian alphabet is one of only 14 scripts in the world designated a masterpiece of human heritage by UNESCO.',a:'UNESCO'},
+{e:'🎶',q:'Georgian polyphonic singing is on the UNESCO list of Intangible Cultural Heritage of Humanity.',a:'UNESCO, 2001'},
+{e:'🙏',q:'Every guest is a gift from God.',a:'Georgian proverb'},
+{e:'🙏',q:'A guest in Georgia is not just a visitor — they become part of the family table, the supra.',a:'Georgian saying'},
+{e:'❤️',q:'Once you taste Georgian hospitality, every other country feels a little colder.',a:'Travellers, worldwide'},
+{e:'🌿',q:'Georgia has more than 400 endemic plant species found nowhere else on Earth.',a:'Georgian Environmental Agency'},
+{e:'🛕',q:'Vardzia cave monastery, carved into cliffs in the 12th century, once housed over 3,000 monks.',a:'Georgian Chronicle'},
+{e:'🦅',q:'The Prometheus Cave near Kutaisi stretches 22 km with underground rivers and stalactites millions of years old.',a:'Georgian Caves Bureau'},
+{e:'🏛️',q:'The Georgian national epic, The Knight in the Panther\'s Skin, was written by Shota Rustaveli in the 12th century. It is still memorised by schoolchildren.',a:'Georgian literature'},
+{e:'⚔️',q:'Queen Tamar ruled Georgia at its Golden Age in the 12th century — the only woman to hold that title. She is still called "king" in Georgian.',a:'Georgian history'},
+{e:'🎼',q:'Georgian folk music uses three-part harmony so complex that ethnomusicologists still argue about how it evolved independently.',a:'Music scholars'},
+{e:'💃',q:'The Georgian national dance Kartuli is performed by men and women who never touch each other — the man circles the woman like a satellite.',a:'Georgian choreography'},
+{e:'🏺',q:'The Colchian civilization on Georgia\'s Black Sea coast produced goldwork so fine that it inspired the myth of the Golden Fleece.',a:'Greek historians'},
+{e:'📖',q:'Georgia converted to Christianity in 337 AD — one of the first countries in the world to do so officially.',a:'Georgian Church history'},
+{e:'🗡️',q:'The Georgian cross — Bolnisi cross — appears on the national flag five times. It is one of the oldest Christian symbols in the world.',a:'Georgian heraldry'},
+{e:'🎭',q:'Georgia has a tradition of shadow puppetry called Khelosani that dates back to the medieval period.',a:'Georgian folk arts'},
+{e:'🏅',q:'Georgia has won Olympic gold medals in wrestling, judo, weightlifting and boxing — remarkable for a country of 3.7 million.',a:'Georgian Olympics'},
+{e:'📚',q:'Nino, the female missionary who converted Georgia to Christianity, is venerated as Equal-to-the-Apostles. Her cross was made of grapevines.',a:'Georgian Church'},
+{e:'🧭',q:'The Silk Road passed through Tbilisi for centuries. The city\'s caravanserais once hosted merchants from China, India and Rome.',a:'Silk Road history'},
+/* === NATURE === */
+{e:'🌿',q:'Borjomi mineral water has been bottled since the 1890s. The spring flows at a constant temperature of 38 degrees Celsius.',a:'Borjomi history'},
+{e:'🦁',q:'The Caucasian leopard was thought extinct in Georgia. Camera traps in Tusheti confirmed a breeding population in 2021.',a:'WWF Georgia'},
+{e:'🌳',q:'Colchic forests in western Georgia are a biodiversity hotspot — a UNESCO World Heritage Site since 2021.',a:'UNESCO'},
+{e:'🐺',q:'Grey wolves still roam the Greater Caucasus in Georgia. Shepherds say they are the most intelligent animals in the mountains.',a:'Georgian shepherds'},
+{e:'🦋',q:'Georgia\'s alpine meadows above 2,000 metres are home to over 80 species of butterfly found nowhere else in Europe.',a:'Georgian entomology'},
+{e:'💧',q:'The Mtkvari (Kura) river starts in Turkey, runs through Tbilisi and empties into the Caspian Sea. Georgia stands at its heart.',a:'Georgian geography'},
+{e:'🌋',q:'Uplistsikhe, the cave town near Gori, was carved into volcanic rock over 3,000 years ago and once held 20,000 people.',a:'Georgian archaeology'},
+{e:'🏞️',q:'Lagodekhi Nature Reserve in eastern Georgia is the oldest protected area in the Caucasus — established in 1912.',a:'Georgian Nature'},
+{e:'🦢',q:'Javakheti Plateau in southern Georgia hosts some of the highest-altitude wetlands in Europe, with thousands of migratory birds.',a:'Georgian ornithology'},
+{e:'🌲',q:'The Ajarian forests receive more rainfall than any other part of Georgia — over 3,000 mm per year. They are primeval.',a:'Georgian forestry'},
+/* === PEOPLE & SPIRIT === */
+{e:'🍶',q:'In Georgia, a stranger at the door is not an interruption — they are an opportunity to show who you are.',a:'Georgian tradition'},
+{e:'🥂',q:'The tamada, Georgia\'s toastmaster, must be witty, wise and never drunk. It is a serious honour, not just a party trick.',a:'Georgian culture'},
+{e:'🤝',q:'Georgians say: a friend of a friend is also a friend. The social web is tight — and forgiving.',a:'Georgian proverb'},
+{e:'🎁',q:'When a Georgian invites you to eat, say yes at least twice. The first refusal is politeness. The third is an insult.',a:'Georgian table etiquette'},
+{e:'❤️',q:'Georgians will argue fiercely about politics, football and whose grandmother makes the best khachapuri. Then order more wine.',a:'Georgian character'},
+{e:'🌟',q:'Georgia has produced world champions in chess, wrestling, boxing and piano — from a country smaller than Ireland.',a:'Georgian pride'},
+{e:'🎻',q:'Georgian singer Nino Katamadze is known across Europe for blending jazz with ancient Caucasian folk melody.',a:'Georgian music'},
+{e:'🏋️',q:'Weightlifting is a Georgian obsession. Villages in remote Racha have produced Olympic champions in consecutive generations.',a:'Georgian sport'},
+{e:'🎬',q:'Georgian cinema has a global cult following. Directors like Otar Iosseliani and Giorgi Shengelaia created films unlike anything else.',a:'World cinema'},
+{e:'✍️',q:'The poet Akaki Tsereteli walked the length of Georgia on foot to collect folk songs. He said the mountains were the best library.',a:'Georgian poetry'},
+{e:'🕊️',q:'Georgia has been invaded over 40 times in its history. Each time, it rebuilt its churches first.',a:'Georgian historians'},
+{e:'🌺',q:'The national symbol of Georgia is the Borjgali — a solar symbol of eternal motion, found on ancient artifacts across the country.',a:'Georgian symbolism'},
+/* === KUTAISI & WEST GEORGIA === */
+{e:'🦅',q:'Kutaisi is one of the oldest continuously inhabited cities in the world — mentioned by ancient Greek geographers.',a:'Greek sources'},
+{e:'🏛️',q:'Bagrati Cathedral in Kutaisi, begun in 1003, was a UNESCO site until controversial reconstruction work in 2012.',a:'UNESCO/Georgia'},
+{e:'🌊',q:'Martvili Canyon — turquoise water in a forested gorge — is one of western Georgia\'s most breathtaking natural sites.',a:'Georgian Tourism'},
+{e:'🕯️',q:'Gelati Monastery near Kutaisi was the intellectual centre of medieval Georgia. Its academy attracted scholars from across the Christian world.',a:'Georgian history'},
+{e:'🌿',q:'Okatse Canyon offers a glass-bottomed walkway suspended over a 40-metre gorge. The drops go straight to the river below.',a:'Georgian Adventures'},
+{e:'🏊',q:'The Prometheus Cave near Kutaisi has an underground boat tour through its illuminated chambers.',a:'Georgian Caves'},
+/* === BORJOMI & CENTRAL GEORGIA === */
+{e:'💧',q:'Borjomi-Kharagauli National Park is one of the largest national parks in Europe — 85,000 hectares of forest and alpine meadow.',a:'Georgian Parks'},
+{e:'🛁',q:'Borjomi mineral water was the official water of the Russian Imperial court in the 19th century.',a:'Borjomi archive'},
+{e:'🚂',q:'The narrow-gauge Borjomi-Bakuriani railway, nicknamed "Kukushka" (cuckoo), runs through beech forests at walking pace. It is pure magic.',a:'Georgian Railways'},
+{e:'⛷️',q:'Bakuriani ski resort sits at 1,700 metres and has been a winter destination since the Soviet era. The slopes are gentle, the snow is reliable.',a:'Bakuriani resort'},
+/* === DAVID GAREJA === */
+{e:'🏜️',q:'David Gareja monastery complex stretches along a semi-desert ridge. Its cave churches contain frescoes from the 8th to 17th centuries.',a:'Georgian Church'},
+{e:'🦎',q:'The semi-desert around David Gareja is home to unique reptile species found nowhere else in the Caucasus.',a:'Georgian biology'},
+{e:'🌅',q:'From the top of David Gareja, you can see three countries on a clear day: Georgia, Azerbaijan and Armenia.',a:'Georgian tourism'},
+/* === VARDZIA === */
+{e:'🏔️',q:'Vardzia was built into a cliff by Queen Tamar in the 12th century. The complex once had over 3,000 rooms on 13 levels.',a:'Georgian history'},
+{e:'💦',q:'An earthquake in 1283 shook off the outer wall of Vardzia, exposing its inner rooms to the world for the first time.',a:'Georgian chronicle'},
+/* === TUSHETI === */
+{e:'🏕️',q:'Tusheti, one of Georgia\'s most remote regions, is only accessible by a mountain road open from June to October.',a:'Georgian regions'},
+{e:'🐎',q:'The Tushetian horse is a hardy mountain breed that has carried shepherds across the Caucasus for over a thousand years.',a:'Georgian horse breeding'},
+{e:'🌙',q:'In Tusheti, the night sky is free of all light pollution. The Milky Way is so bright it casts shadows.',a:'Georgian astronomers'},
+/* === AJARIA === */
+{e:'🌿',q:'Ajarian cuisine is the spiciest in Georgia. The region\'s chilli-red adjika paste appears on every table, every meal.',a:'Ajarian cuisine'},
+{e:'🌊',q:'Adjara has Georgia\'s only subtropical coast — tea, tangerines and bamboo grow just kilometres from the mountains.',a:'Georgian botany'},
+{e:'🕌',q:'Batumi Old Town blends Ottoman architecture, Art Nouveau facades and Soviet modernism in a single street.',a:'Batumi architecture'},
+/* === INSPIRATION === */
+{e:'🌟',q:'Georgia is the only country where you can ski in the morning and swim in the sea in the afternoon — in the same day.',a:'Georgian Tourism'},
+{e:'🌍',q:'Georgia sits at the crossroads of Europe and Asia. It has been shaped by both — and absorbed the best of each.',a:'Historians'},
+{e:'💫',q:'There is a Georgian word — shemomaWhe — meaning "I accidentally ate the whole thing". That is Georgia in one word.',a:'Georgian language'},
+{e:'🍀',q:'Georgia ranks among the top 10 countries in the world for speed and affordability of mobile internet.',a:'Speedtest Global Index'},
+{e:'🌈',q:'Georgia has four distinct climatic zones: subtropical coast, alpine mountains, semi-desert steppe and temperate valleys.',a:'Georgian meteorology'},
+{e:'🎯',q:'Georgia was ranked one of the safest countries in Europe for solo travellers in multiple independent surveys.',a:'Travel safety indexes'},
+{e:'✈️',q:'In 2023, Georgia saw a record 7.1 million international arrivals — nearly twice its own population.',a:'Georgian Tourism Agency'},
+{e:'🌺',q:'The rose is the symbol of Georgia\'s peaceful revolution in 2003. No shot was fired. The government stepped down.',a:'Georgian politics'},
+{e:'🏆',q:'Georgia has been producing world-class chess grandmasters since the Soviet era. Nona Gaprindashvili was the first female world champion.',a:'FIDE records'},
+{e:'🌱',q:'Georgia has some of the world\'s strictest laws against genetically modified organisms. The country protects its ancient agricultural heritage.',a:'Georgian law'},
+{e:'🕊️',q:'The Georgian saying: "Better a bad peace than a good war." The country has lived by these words through centuries of invasion.',a:'Georgian proverb'},
+{e:'🧠',q:'Georgia has one of the highest rates of chess players per capita in the world. The game is taught in schools nationwide.',a:'Georgian education'},
+{e:'🎵',q:'Traditional Georgian polyphony uses harmonies that Western music theory does not have a name for. It predates written music.',a:'Ethnomusicology'},
+{e:'🤲',q:'The Georgian toast is not a formality — it is a small speech, a poem, a philosophical statement. The best tamadas are remembered for generations.',a:'Georgian tradition'},
+{e:'🌻',q:'Georgia has never persecuted a religious minority on its soil. The country is home to Muslims, Jews, Armenians and Catholics — side by side.',a:'Georgian tolerance'},
+{e:'💎',q:'Georgian craftsmen have produced cloisonne enamel — a technique called minankari — for over a thousand years. Each piece takes weeks to make.',a:'Georgian crafts'},
+{e:'🏺',q:'Georgian pottery has been found in Bronze Age sites across the Caucasus. The tradition of handmade clay vessels continues today.',a:'Georgian archaeology'},
+{e:'🌏',q:'The Georgian language is spoken by about 4 million people worldwide. It is one of the oldest living languages on Earth.',a:'Georgian linguistics'},
+{e:'🦉',q:'Georgian folklore is full of wise foxes and foolish kings. The moral: cleverness outlasts power, always.',a:'Georgian tales'},
+{e:'🌠',q:'Georgia has 12 UNESCO World Heritage Sites and candidates — extraordinary for such a small country.',a:'UNESCO'},
+{e:'🎪',q:'The Festival of Arts Tbilisi Open Air is one of the Caucasus\'s largest cultural events — 150 acts across the whole city.',a:'Tbilisi Festival'},
+{e:'🌾',q:'Georgia was one of the first countries in the world to develop settled agriculture — evidence dates back 8,000 years.',a:'Archaeological research'},
+{e:'🔮',q:'The ancient Georgians believed that gold could trap light. That is why they hammered it so thin — to let the light through.',a:'Georgian mythology'},
+{e:'🛡️',q:'The five crosses on the Georgian flag represent Christ and the four evangelists — or Georgia and its four neighbouring kingdoms.',a:'Georgian heraldry'},
+{e:'🌙',q:'Georgian legend says that when God divided the world among the peoples, Georgians were feasting and arrived late. God gave them the land he had saved for himself.',a:'Georgian creation myth'},
+{e:'🍶',q:'In Georgia, a full glass is a question. An empty glass is an answer. The answer is always yes.',a:'Georgian proverb'},
+{e:'🗝️',q:'Georgia has been called the treasure house of the Caucasus — for its art, its wine, its music and its people.',a:'Travel writers'},
+{e:'🌿',q:'Georgians say: our country is small but our hearts are big enough for the whole world.',a:'Georgian saying'},
+{e:'🏔️',q:'The Caucasus mountains form the natural border between Europe and Asia. Georgia lives on both sides — and belongs to both.',a:'Geography'},
+{e:'❤️',q:'Georgia stole my heart the moment I landed. I have been trying to get it back ever since — and failing happily.',a:'Unnamed traveller'},
+{e:'🍷',q:'Wine in Georgia is not a beverage — it is a medium through which the living speak to the dead, and the dead speak back.',a:'Georgian winemakers'},
+{e:'🌟',q:'Arrive in Georgia as a tourist. Leave as a guest who was never allowed to pay for anything.',a:'Every traveller, ever'}
+];
+
+
+tools.story=function(){
+  var lang=window.__userLang||'en';
+  var T2=window.__t||{};
+  openModal(T2['t_story_h']||'🌿 Georgia');
+  var qCacheKey='sak_quotes_'+lang;
+  var quotesCache=null;
+  try{var qr=sessionStorage.getItem(qCacheKey);if(qr)quotesCache=JSON.parse(qr);}catch(e){}
+  var currentIdx=0;
+  var quotes=QUOTES_EN;
+
+  function renderQuote(idx){
+    var q=quotes[idx]||quotes[0];
+    var total=quotes.length;
+    mBody.innerHTML=
+      '<div style="text-align:center;padding:8px 0 4px;color:var(--muted);font-size:.82rem">'+(idx+1)+' / '+total+'</div>'+
+      '<div style="background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px 20px;margin:8px 0;text-align:center;min-height:220px;display:flex;flex-direction:column;justify-content:center;gap:16px">'+
+        '<div style="font-size:3.2rem">'+q.e+'</div>'+
+        '<div style="font-family:var(--font-display);font-size:1.15rem;font-weight:600;line-height:1.5;color:var(--ink)">'+q.q+'</div>'+
+        '<div style="font-size:.8rem;color:var(--muted);font-style:italic">— '+q.a+'</div>'+
+      '</div>'+
+      '<div style="display:flex;gap:9px;margin-top:4px">'+
+        '<button class="btn sec" id="qPrev" style="flex:1">←</button>'+
+        '<button class="btn" id="qNext" style="flex:2">→</button>'+
+        '<button class="btn sec" id="qShare" style="flex:1">📲</button>'+
+      '</div>'+
+      (lang!=='en'&&!quotesCache?'<p class="hint" style="margin-top:10px;text-align:center">🌐 Translating...</p>':'');
+    document.getElementById('qPrev').onclick=function(){currentIdx=(currentIdx-1+quotes.length)%quotes.length;renderQuote(currentIdx);};
+    document.getElementById('qNext').onclick=function(){currentIdx=(currentIdx+1)%quotes.length;renderQuote(currentIdx);};
+    document.getElementById('qShare').onclick=function(){
+      var text=q.e+' '+q.q+' — '+q.a+' sakartvelo.ai';
+      if(navigator.share){navigator.share({text:text,url:'https://sakartvelo.ai'}).catch(function(){});}
+      else if(navigator.clipboard){navigator.clipboard.writeText(text).then(function(){
+        var b=document.getElementById('qShare');if(b){b.textContent='✅';setTimeout(function(){b.textContent='📲';},1500);}
+      });}
+    };
   }
-  function rnd(a){return a[Math.floor(Math.random()*a.length)]}
-  // антиповтор: помним последние комбинации, не показываем дважды подряд
-  var seen={};
-  function makeCombo(){
-    var c,key,tries=0;
-    do{c={ei:Math.floor(Math.random()*characters.length),pi:Math.floor(Math.random()*phrases.length),gi:Math.floor(Math.random()*grads.length)};
-       key=c.ei+'-'+c.pi+'-'+c.gi;tries++;}while(seen[key]&&tries<60);
-    seen[key]=1;
-    // если показали очень много — очищаем память чтобы не зациклиться
-    if(Object.keys(seen).length>900)seen={};
-    return {emoji:characters[c.ei],phrase:phrases[c.pi],grad:grads[c.gi]};
-  }
-  var cur=makeCombo();
-  function reroll(){cur=makeCombo()}
-  mBody.innerHTML=
-    '<p class="hint">Больше 1000 уникальных вариантов с грузинским колоритом — ничего не повторяется! Жми «Следующий», впиши свою фразу — сохрани или поделись. На картинке бренд sakartvelo.ai 🍶</p>'+
-    '<canvas id="stCanvas" width="540" height="960" style="width:100%;max-width:300px;border-radius:16px;border:1px solid var(--line);display:block;margin:10px auto"></canvas>'+
-    '<input class="field" id="stText" maxlength="80" placeholder="Своя фраза (необязательно)">'+
-    '<button class="btn" id="stStyle">🎲 Следующий вариант</button>'+
-    '<button class="btn sec" id="stSave" style="margin-top:8px">💾 Сохранить картинку</button>'+
-    '<button class="btn sec" id="stShare" style="margin-top:8px">📲 Поделиться</button>'+
-    '<p class="hint" id="stHint" style="margin-top:10px">💡 На айфоне: после «Сохранить» картинка откроется — задержи палец на ней и выбери «Сохранить фото».</p>';
-  var cv=document.getElementById('stCanvas'),ctx=cv.getContext('2d');
-  function draw(){
-    ctx.fillStyle=makeGrad(ctx,540,960,cur.grad);ctx.fillRect(0,0,540,960);
-    // декоративные круги
-    ctx.globalAlpha=.08;ctx.fillStyle='#fff';
-    ctx.beginPath();ctx.arc(460,150,160,0,7);ctx.fill();
-    ctx.beginPath();ctx.arc(80,820,190,0,7);ctx.fill();
-    ctx.beginPath();ctx.arc(270,480,80,0,7);ctx.fill();
-    ctx.globalAlpha=1;
-    ctx.textAlign='center';
-    // большой эмодзи-персонаж
-    ctx.font='150px serif';ctx.fillText(cur.emoji,270,330);
-    // текст: своя фраза или фраза варианта
-    var custom=document.getElementById('stText').value.trim();
-    var lines=custom?wrap(custom):[].concat.apply([],cur.phrase.map(wrap));
-    ctx.fillStyle='#fff';ctx.font='bold 44px Georgia, serif';
-    ctx.shadowColor='rgba(0,0,0,.4)';ctx.shadowBlur=14;
-    var startY=560-(lines.length*54)/2;
-    lines.forEach(function(l,k){ctx.fillText(l,270,startY+k*54)});
-    ctx.shadowBlur=0;
-    // флаг
-    ctx.font='54px serif';ctx.fillText('🇬🇪',270,800);
-    // водяной знак-бренд
-    ctx.font='600 32px Georgia, serif';ctx.fillStyle='rgba(255,255,255,.97)';
-    ctx.fillText('🍶 sakartvelo.ai',270,890);
-    ctx.font='22px Georgia, serif';ctx.fillStyle='rgba(255,255,255,.75)';
-    ctx.fillText('Твой друг Чача в Грузии',270,926);
-  }
-  function wrap(txt){
-    ctx.font='bold 44px Georgia, serif';
-    var words=txt.split(' '),line='',lines=[];
-    for(var i=0;i<words.length;i++){var t=line+words[i]+' ';
-      if(ctx.measureText(t).width>470&&line){lines.push(line.trim());line=words[i]+' '}else line=t}
-    lines.push(line.trim());return lines;
-  }
-  draw();
-  document.getElementById('stStyle').onclick=function(){reroll();draw()};
-  document.getElementById('stText').oninput=draw;
-  function getURL(){try{return cv.toDataURL('image/png')}catch(e){return null}}
-  document.getElementById('stSave').onclick=function(){
-    var url=getURL();
-    if(!url){alert('Не получилось — сделай скриншот экрана 🍶');return}
-    // iOS Safari игнорирует download — открываем картинку, юзер сохраняет долгим тапом
-    var isIOS=/iP(hone|ad|od)/.test(navigator.userAgent);
-    if(isIOS){var w=window.open();if(w){w.document.write('<img src="'+url+'" style="width:100%">');}else{location.href=url;}}
-    else{var a=document.createElement('a');a.download='sakartvelo-story.png';a.href=url;a.click();}
-  };
-  document.getElementById('stShare').onclick=function(){
-    try{
-      cv.toBlob(function(blob){
-        if(!blob){alert('Поделись скриншотом 🍶');return}
-        var file=new File([blob],'sakartvelo-story.png',{type:'image/png'});
-        if(navigator.canShare&&navigator.canShare({files:[file]})){
-          navigator.share({files:[file],text:'Мой друг Чача в Грузии! 🇬🇪🍶 sakartvelo.ai'}).catch(function(){});
-        }else{document.getElementById('stSave').click();}
-      },'image/png');
-    }catch(e){document.getElementById('stSave').click();}
-  };
+
+  renderQuote(0);
+  if(lang==='en'||lang==='ka')return;
+  if(quotesCache&&quotesCache.length===QUOTES_EN.length){quotes=quotesCache;renderQuote(currentIdx);return;}
+  (async function(){
+    var translated=[];
+    for(var i=0;i<QUOTES_EN.length;i++){
+      var orig=QUOTES_EN[i];
+      try{
+        var url='https://api.mymemory.translated.net/get?q='+encodeURIComponent(orig.q)+'&langpair=en|'+lang;
+        var res=await fetch(url);var data=await res.json();
+        var tr=data&&data.responseData&&data.responseData.translatedText;
+        translated.push({e:orig.e,q:(tr&&tr.length>5&&tr!==orig.q)?tr:orig.q,a:orig.a});
+      }catch(e){translated.push(orig);}
+    }
+    quotes=translated;
+    try{sessionStorage.setItem(qCacheKey,JSON.stringify(translated));}catch(e){}
+    renderQuote(currentIdx);
+  })();
 };
+
+
 /* ============ ИГРЫ ============ */
-tools.games=function(){openModal('🎮 Игры в дороге');
+tools.games=function(){openModal(TT('games_title'));
   // embed = playpager (проверено, работает в iframe). local = встроенные (всегда работают, не тормозят).
+  var _gl=window.__userLang||'en';
+  var _gnames={
+    tetris:_gl==='ru'||_gl==='be'||_gl==='uk'?'🧱 Тетрис':'🧱 Tetris',
+    snake:_gl==='ru'||_gl==='be'||_gl==='uk'?'🐍 Змейка':'🐍 Snake',
+    g2048:'🟦 2048',
+    mine:_gl==='ru'||_gl==='be'||_gl==='uk'?'💣 Сапёр':'💣 Minesweeper',
+    chess:_gl==='ru'||_gl==='be'||_gl==='uk'?'♟️ Шахматы':'♟️ Chess',
+    sudoku:_gl==='ru'||_gl==='be'||_gl==='uk'?'🔢 Судоку':'🔢 Sudoku'
+  };
+  var _gdesc={
+    tetris:_gl==='ru'||_gl==='be'||_gl==='uk'?'Складывай фигуры, очищай ряды':'Stack pieces, clear lines',
+    snake:_gl==='ru'||_gl==='be'||_gl==='uk'?'Ешь и расти — классика':'Eat and grow — classic',
+    g2048:_gl==='ru'||_gl==='be'||_gl==='uk'?'Соединяй цифры до 2048':'Merge tiles to reach 2048',
+    mine:_gl==='ru'||_gl==='be'||_gl==='uk'?'Найди мины — не взорвись':'Find mines — don\'t explode',
+    chess:_gl==='ru'||_gl==='be'||_gl==='uk'?'Против компьютера или друга':'vs computer or friend',
+    sudoku:_gl==='ru'||_gl==='be'||_gl==='uk'?'Заполни цифры 1–9':'Fill in digits 1–9'
+  };
   var gameList=[
-    {name:'🧱 Тетрис',desc:'Складывай фигуры, очищай ряды',type:'local',game:'tetris'},
-    {name:'🐍 Змейка',desc:'Ешь и расти — классика',type:'local',game:'snake'},
-    {name:'🟦 2048',desc:'Соединяй цифры до 2048',type:'local',game:'g2048'},
-    {name:'💣 Сапёр',desc:'Найди мины — не взорвись',type:'embed',url:'https://playpager.com/embed/minesweeper/index.html'},
-    {name:'♟️ Шахматы',desc:'Против компьютера или друга',type:'embed',url:'https://playpager.com/embed/chess/index.html'},
-    {name:'🔢 Судоку',desc:'Заполни цифры 1–9',type:'embed',url:'https://playpager.com/embed/sudoku/index.html'}
+    {name:_gnames.tetris,desc:_gdesc.tetris,type:'local',game:'tetris'},
+    {name:_gnames.snake,desc:_gdesc.snake,type:'local',game:'snake'},
+    {name:_gnames.g2048,desc:_gdesc.g2048,type:'local',game:'g2048'},
+    {name:_gnames.mine,desc:_gdesc.mine,type:'embed',url:'https://playpager.com/embed/minesweeper/index.html'},
+    {name:_gnames.chess,desc:_gdesc.chess,type:'embed',url:'https://playpager.com/embed/chess/index.html'},
+    {name:_gnames.sudoku,desc:_gdesc.sudoku,type:'embed',url:'https://playpager.com/embed/sudoku/index.html'}
   ];
   mBody.innerHTML=
-    '<p class="hint">Играй прямо здесь — бесплатно, без регистрации. Скоротай время в дороге 🎮</p>'+
+    '<p class="hint">'+TTX('games_hint')+'</p>'+
     gameList.map(function(g,i){
       return '<div class="list-item" style="cursor:pointer" data-gi="'+i+'">'+
         '<b>'+g.name+'</b><br><span class="hint" style="margin:0">'+g.desc+'</span></div>';
     }).join('')+
-    '<p class="hint" style="margin-top:12px">💡 Понравилось? Поделись сайтом с друзьями кнопкой «Поделиться» внизу 🍶</p>';
+    '<p class="hint" style="margin-top:12px">'+TTX('games_tip')+'</p>';
 
   mBody.querySelectorAll('[data-gi]').forEach(function(el){
     el.onclick=function(){
@@ -1872,7 +2378,7 @@ tools.games=function(){openModal('🎮 Игры в дороге');
       var head=document.createElement('div');
       head.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:12px 16px;padding-top:calc(12px + env(safe-area-inset-top));background:#1d1113;flex-shrink:0';
       head.innerHTML='<span style="color:#f4e9dc;font-weight:700;font-size:1.05rem">'+g.name+'</span>'+
-        '<button id="gClose" style="background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:10px;padding:8px 16px;font-size:.9rem;cursor:pointer">✕ Закрыть</button>';
+        '<button id="gClose" style="background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:10px;padding:8px 16px;font-size:.9rem;cursor:pointer">'+TTX('games_close')+'</button>';
       ov.appendChild(head);
       var area=document.createElement('div');
       area.style.cssText='flex:1;overflow:hidden;display:flex;flex-direction:column';
@@ -2032,7 +2538,7 @@ GAMES.g2048=function(area,ov){
 };
 
 /* ============ ЛУЧШИЕ МЕСТА ============ */
-tools.places=function(){openModal('📍 Лучшие места Грузии');
+tools.places=function(){openModal(TT('places_title'));
   var CATS={restaurant:'🍽️ Ресторан',cafe:'☕ Кафе',sight:'🏛️ Достопримечательность',hotel:'🏨 Отель',tour:'🗺️ Тур/экскурсия',other:'📍 Другое'};
   var CITIES=['Тбилиси','Батуми','Кутаиси','Казбеги','Сванетия','Боржоми','Сигнаги','Мцхета'];
   var curCity='Тбилиси';
@@ -2140,23 +2646,23 @@ tools.places=function(){openModal('📍 Лучшие места Грузии');
 };
 
 /* ============ ФОТО С ЧАЧА (живые фильтры камеры) ============ */
-tools.camera=function(){openModal('🤳 Фото с Чача');
+tools.camera=function(){var _cl=window.__userLang||'en';var _cru=_cl==='ru'||_cl==='be'||_cl==='uk';openModal(TT('camera_title')||'📸 Photo');
   // Живые фильтры — применяются к видео в реальном времени (видно сразу на лице)
   var FILTERS=[
-    {name:'Оригинал',css:'none',tag:''},
-    {name:'🥟 Хинкали',css:'saturate(1.4) contrast(1.1) brightness(1.08) hue-rotate(-5deg)',tag:'🥟 Khinkali vibes'},
-    {name:'🧀 Хачапури',css:'sepia(.35) saturate(1.6) contrast(1.1) brightness(1.1)',tag:'🧀 Khachapuri mood'},
-    {name:'🍷 Саперави',css:'saturate(1.8) contrast(1.2) hue-rotate(-15deg) brightness(.95)',tag:'🍷 Saperavi 2026'},
-    {name:'✨ Глитч',css:'saturate(2) contrast(1.4) hue-rotate(8deg) brightness(1.1)',tag:'✨ Glitch 2026'},
-    {name:'👾 8-Бит',css:'saturate(1.5) contrast(1.5) brightness(1.05)',tag:'👾 8-bit Georgia'},
-    {name:'🏔️ Казбеги',css:'saturate(.9) contrast(1.2) brightness(1.05) hue-rotate(-8deg)',tag:'🏔️ Kazbegi vibes'},
-    {name:'🌅 Закат',css:'sepia(.3) saturate(1.6) brightness(1.12) contrast(1.05)',tag:'🌅 Golden hour'},
-    {name:'🎬 Кино',css:'grayscale(1) contrast(1.3) brightness(1.05)',tag:'🎬 Cinema Georgia'},
-    {name:'🌈 Радуга',css:'saturate(2.2) contrast(1.15) hue-rotate(15deg) brightness(1.08)',tag:'🌈 Rainbow Tbilisi'},
-    {name:'💫 Мечта',css:'blur(.3px) saturate(1.4) brightness(1.12) contrast(.96)',tag:'💫 Dream Georgia'},
-    {name:'🔥 Чача',css:'saturate(1.9) contrast(1.25) hue-rotate(-20deg) brightness(1.05)',tag:'🍶 Chacha fire'},
-    {name:'🪞 Неон',css:'saturate(2.1) contrast(1.3) brightness(1.08) hue-rotate(20deg)',tag:'🌃 Neon Tbilisi'},
-    {name:'📼 Ретро',css:'sepia(.6) contrast(1.2) saturate(1.3) brightness(1.05)',tag:'📼 Retro 80s'}
+    {name:_cru?'Оригинал':'Original',css:'none',tag:''},
+    {name:_cru?'🥟 Хинкали':'🥟 Khinkali',css:'saturate(1.4) contrast(1.1) brightness(1.08) hue-rotate(-5deg)',tag:'🥟 Khinkali vibes'},
+    {name:_cru?'🧀 Хачапури':'🧀 Khachapuri',css:'sepia(.35) saturate(1.6) contrast(1.1) brightness(1.1)',tag:'🧀 Khachapuri mood'},
+    {name:_cru?'🍷 Саперави':'🍷 Saperavi',css:'saturate(1.8) contrast(1.2) hue-rotate(-15deg) brightness(.95)',tag:'🍷 Saperavi 2026'},
+    {name:_cru?'✨ Глитч':'✨ Glitch',css:'saturate(2) contrast(1.4) hue-rotate(8deg) brightness(1.1)',tag:'✨ Glitch 2026'},
+    {name:_cru?'👾 8-Бит':'👾 8-Bit',css:'saturate(1.5) contrast(1.5) brightness(1.05)',tag:'👾 8-bit Georgia'},
+    {name:_cru?'🏔️ Казбеги':'🏔️ Kazbegi',css:'saturate(.9) contrast(1.2) brightness(1.05) hue-rotate(-8deg)',tag:'🏔️ Kazbegi vibes'},
+    {name:_cru?'🌅 Закат':'🌅 Sunset',css:'sepia(.3) saturate(1.6) brightness(1.12) contrast(1.05)',tag:'🌅 Golden hour'},
+    {name:_cru?'🎬 Кино':'🎬 Cinema',css:'grayscale(1) contrast(1.3) brightness(1.05)',tag:'🎬 Cinema Georgia'},
+    {name:_cru?'🌈 Радуга':'🌈 Rainbow',css:'saturate(2.2) contrast(1.15) hue-rotate(15deg) brightness(1.08)',tag:'🌈 Rainbow Tbilisi'},
+    {name:_cru?'💫 Мечта':'💫 Dream',css:'blur(.3px) saturate(1.4) brightness(1.12) contrast(.96)',tag:'💫 Dream Georgia'},
+    {name:_cru?'🔥 Чача':'🔥 Chacha',css:'saturate(1.9) contrast(1.25) hue-rotate(-20deg) brightness(1.05)',tag:'🍶 Chacha fire'},
+    {name:_cru?'🪞 Неон':'🪞 Neon',css:'saturate(2.1) contrast(1.3) brightness(1.08) hue-rotate(20deg)',tag:'🌃 Neon Tbilisi'},
+    {name:_cru?'📼 Ретро':'📼 Retro',css:'sepia(.6) contrast(1.2) saturate(1.3) brightness(1.05)',tag:'📼 Retro 80s'}
   ];
   var CAPTIONS_ALL={
     ru:['Грузия захватила моё сердце навсегда 🇬🇪❤️ #Georgia #Sakartvelo','Один момент в Казбеги стоит тысячи слов ⛰️ #Kazbegi #Georgia2026','Хинкали + хачапури = счастье 🥟🧀 #GeorgianFood #Khinkali','Тбилиси, я влюбился 🏛️✨ #Tbilisi #OldTown','Сванетия меняет тебя навсегда 🏔️💫 #Svaneti','Чача — это не просто напиток, это философия 🍶 #Chacha'],
@@ -2170,7 +2676,7 @@ tools.camera=function(){openModal('🤳 Фото с Чача');
   var CAPTIONS=CAPTIONS_ALL[window.__userLang]||CAPTIONS_ALL.en;
   var fi=0,stream=null,facing='user',captured=null,curTag='';
 
-  mBody.innerHTML='<p class="hint">Живые фильтры — выбираешь и сразу видишь результат на камере. Сними фото и поделись 🍶</p><div id="camStage"></div>';
+  mBody.innerHTML='<p class="hint">'+(_cru?'Живые фильтры — выбираешь и сразу видишь результат на камере. Сними фото и поделись 🍶':'Live filters — pick one and see it on your camera in real time. Snap & share 🍶')+'</p><div id="camStage"></div>';
   var stage=document.getElementById('camStage');
 
   function stopStream(){if(stream){stream.getTracks().forEach(function(t){t.stop()});stream=null}}
@@ -2180,10 +2686,10 @@ tools.camera=function(){openModal('🤳 Фото с Чача');
   function home(){
     stopStream();captured=null;
     stage.innerHTML=
-      '<button class="btn" id="camOpen" style="margin-bottom:10px">📷 Открыть камеру с фильтрами</button>'+
-      '<button class="btn sec" id="camPick">🖼️ Или выбрать фото из галереи</button>'+
+      '<button class="btn" id="camOpen" style="margin-bottom:10px">'+(_cru?'📷 Открыть камеру с фильтрами':'📷 Open camera with filters')+'</button>'+
+      '<button class="btn sec" id="camPick">'+(_cru?'🖼️ Или выбрать фото из галереи':'🖼️ Or pick from gallery')+'</button>'+
       '<input type="file" id="camFile" accept="image/*" style="display:none">'+
-      '<p class="hint" style="text-align:center;margin-top:14px">📸 Открой камеру — листай фильтры внизу и снимай. Всё на твоём телефоне, ничего не уходит на сервер.</p>';
+      '<p class="hint" style="text-align:center;margin-top:14px">'+(_cru?'📸 Открой камеру — листай фильтры внизу и снимай. Всё на твоём телефоне, ничего не уходит на сервер.':'📸 Open camera — swipe filters below and shoot. Everything stays on your phone, nothing goes to a server.')+'</p>';
     document.getElementById('camOpen').onclick=function(){openCamera(facing)};
     document.getElementById('camPick').onclick=function(){document.getElementById('camFile').click()};
     document.getElementById('camFile').onchange=function(e){var f=e.target.files&&e.target.files[0];if(!f)return;
@@ -2215,7 +2721,7 @@ tools.camera=function(){openModal('🤳 Фото с Чача');
       if(facing==='user')v.style.transform='scaleX(-1)';else v.style.transform='';
       applyLive();
       document.getElementById('camStrip').innerHTML=filterStrip(fi);
-      bindStrip(function(){applyLive();document.getElementById('camStrip').innerHTML=filterStrip(fi);bindStrip(arguments.callee)});
+      bindStrip(function rebind(){applyLive();document.getElementById('camStrip').innerHTML=filterStrip(fi);bindStrip(rebind);});
       document.getElementById('camShot').onclick=shoot;
       document.getElementById('camFlip').onclick=function(){facing=facing==='user'?'environment':'user';openCamera(facing)};
       document.getElementById('camBack2').onclick=home;
@@ -2311,42 +2817,44 @@ tools.camera=function(){openModal('🤳 Фото с Чача');
 };
 
 /* ============ ТАБЛО АЭРОПОРТОВ ============ */
-tools.airports=function(){openModal('✈️ Табло аэропортов Грузии');
+tools.airports=function(){openModal(TT('airports_title'));
+  var T2=window.__t||{};
+  var arr=TTX('airports_arrivals')||'Arrivals';
+  var dep=TTX('airports_departures')||'Departures';
+  var track=TTX('airports_track')||'Track any flight';
+  var trackSub=TTX('airports_track_sub')||'All 3 airports + flight number in real time';
+  var hint=TTX('airports_hint')||'Live boards — open in browser for real-time data.';
   mBody.innerHTML=
-    '<p class="hint">Прямые ссылки на официальные онлайн-табло. Откроются в браузере — живые данные в реальном времени.</p>'+
-
+    '<p class="hint">'+hint+'</p>'+
     '<div class="result" style="margin-bottom:14px">'+
-      '<b style="font-size:1.05rem">🏙️ Тбилиси (TBS) — Шота Руставели</b>'+
-      '<p class="hint" style="margin:6px 0 10px">Самый крупный аэропорт Грузии, 17 км от центра</p>'+
-      '<a href="https://tbilisiairport.com/en-EN/flights" target="_blank" rel="noopener" class="btn" style="display:block;text-align:center;text-decoration:none;margin-bottom:8px">🛬 Прилёты Тбилиси</a>'+
-      '<a href="https://tbilisiairport.com/en-EN/flights" target="_blank" rel="noopener" class="btn sec" style="display:block;text-align:center;text-decoration:none">🛫 Вылеты Тбилиси</a>'+
+      '<b style="font-size:1.05rem">🏙️ Tbilisi (TBS) — Shota Rustaveli</b>'+
+      '<p class="hint" style="margin:6px 0 10px">Largest airport in Georgia, 17 km from city centre</p>'+
+      '<a href="https://tbilisiairport.com/en-EN/flights" target="_blank" rel="noopener" class="btn" style="display:block;text-align:center;text-decoration:none;margin-bottom:8px">🛬 '+arr+' Tbilisi</a>'+
+      '<a href="https://tbilisiairport.com/en-EN/flights" target="_blank" rel="noopener" class="btn sec" style="display:block;text-align:center;text-decoration:none">🛫 '+dep+' Tbilisi</a>'+
     '</div>'+
-
     '<div class="result" style="margin-bottom:14px">'+
-      '<b style="font-size:1.05rem">🌊 Батуми (BUS) — Александр Картвели</b>'+
-      '<p class="hint" style="margin:6px 0 10px">Аэропорт у Чёрного моря, 2 км от центра Батуми</p>'+
-      '<a href="https://batumiairport.com/en-EN/flights" target="_blank" rel="noopener" class="btn" style="display:block;text-align:center;text-decoration:none;margin-bottom:8px">🛬 Прилёты Батуми</a>'+
-      '<a href="https://batumiairport.com/en-EN/flights" target="_blank" rel="noopener" class="btn sec" style="display:block;text-align:center;text-decoration:none">🛫 Вылеты Батуми</a>'+
+      '<b style="font-size:1.05rem">🌊 Batumi (BUS) — Alexander Kartvelishvili</b>'+
+      '<p class="hint" style="margin:6px 0 10px">Black Sea airport, 2 km from Batumi centre</p>'+
+      '<a href="https://batumiairport.com/en-EN/flights" target="_blank" rel="noopener" class="btn" style="display:block;text-align:center;text-decoration:none;margin-bottom:8px">🛬 '+arr+' Batumi</a>'+
+      '<a href="https://batumiairport.com/en-EN/flights" target="_blank" rel="noopener" class="btn sec" style="display:block;text-align:center;text-decoration:none">🛫 '+dep+' Batumi</a>'+
     '</div>'+
-
     '<div class="result" style="margin-bottom:14px">'+
-      '<b style="font-size:1.05rem">🏔️ Кутаиси (KUT) — Давид Строитель</b>'+
-      '<p class="hint" style="margin:6px 0 10px">Хаб лоукостов, 14 км от Кутаиси. Ryanair, Wizz Air</p>'+
-      '<a href="https://www.kutaisi.aero/en/flights/arrivals" target="_blank" rel="noopener" class="btn" style="display:block;text-align:center;text-decoration:none;margin-bottom:8px">🛬 Прилёты Кутаиси</a>'+
-      '<a href="https://www.kutaisi.aero/en/flights/departures" target="_blank" rel="noopener" class="btn sec" style="display:block;text-align:center;text-decoration:none">🛫 Вылеты Кутаиси</a>'+
+      '<b style="font-size:1.05rem">🏔️ Kutaisi (KUT) — David the Builder</b>'+
+      '<p class="hint" style="margin:6px 0 10px">Low-cost hub, 14 km from Kutaisi. Ryanair, Wizz Air</p>'+
+      '<a href="https://www.kutaisi.aero/en/flights/arrivals" target="_blank" rel="noopener" class="btn" style="display:block;text-align:center;text-decoration:none;margin-bottom:8px">🛬 '+arr+' Kutaisi</a>'+
+      '<a href="https://www.kutaisi.aero/en/flights/departures" target="_blank" rel="noopener" class="btn sec" style="display:block;text-align:center;text-decoration:none">🛫 '+dep+' Kutaisi</a>'+
     '</div>'+
-
     '<div class="result">'+
-      '<b>📡 Отследить любой рейс</b>'+
-      '<p class="hint" style="margin:6px 0 10px">Все три аэропорта + номер рейса в реальном времени</p>'+
-      '<a href="https://www.flightradar24.com/data/airports/tbs" target="_blank" rel="noopener" class="btn sec" style="display:block;text-align:center;text-decoration:none;margin-bottom:8px">🗺️ Тбилиси на Flightradar24</a>'+
-      '<a href="https://www.flightradar24.com/data/airports/bus" target="_blank" rel="noopener" class="btn sec" style="display:block;text-align:center;text-decoration:none;margin-bottom:8px">🗺️ Батуми на Flightradar24</a>'+
-      '<a href="https://www.flightradar24.com/data/airports/kut" target="_blank" rel="noopener" class="btn sec" style="display:block;text-align:center;text-decoration:none">🗺️ Кутаиси на Flightradar24</a>'+
+      '<b>📡 '+track+'</b>'+
+      '<p class="hint" style="margin:6px 0 10px">'+trackSub+'</p>'+
+      '<a href="https://www.flightradar24.com/data/airports/tbs" target="_blank" rel="noopener" class="btn sec" style="display:block;text-align:center;text-decoration:none;margin-bottom:8px">🗺️ Tbilisi — Flightradar24</a>'+
+      '<a href="https://www.flightradar24.com/data/airports/bus" target="_blank" rel="noopener" class="btn sec" style="display:block;text-align:center;text-decoration:none;margin-bottom:8px">🗺️ Batumi — Flightradar24</a>'+
+      '<a href="https://www.flightradar24.com/data/airports/kut" target="_blank" rel="noopener" class="btn sec" style="display:block;text-align:center;text-decoration:none">🗺️ Kutaisi — Flightradar24</a>'+
     '</div>';
 };
 
 /* ============ ПРЯМЫЕ РЕЙСЫ ============ */
-tools.flights=function(){openModal('🛫 Прямые рейсы в Грузию');
+tools.flights=function(){openModal(TT('flights_title'));
   var AV='https://aviasales.tpm.lv/3v2DPRiC'; // партнёрская ссылка (запасная)
   // Прямая ссылка на поиск с подставленными городами. Формат Aviasales:
   // aviasales.com/search/<ORIGIN><DDMM><DEST><DDMM>1  — но без дат: используем city map.
@@ -2364,17 +2872,17 @@ tools.flights=function(){openModal('🛫 Прямые рейсы в Грузию
   }
   function render(){
     mBody.innerHTML=
-      '<p class="hint">Прямые рейсы без пересадок — данные май 2026.'+(originIata?' Город вылета: <b>'+originIata+'</b> (по твоему местоположению).':'')+' Нажми «Найти билеты».</p>'+
-      block('🏙️ Тбилиси (TBS) — 65 направлений','Самый большой аэропорт. Летят из Европы, Ближнего Востока, СНГ.',
-        ['🇹🇷 Стамбул','🇮🇱 Тель-Авив','🇦🇿 Баку','🇦🇪 Дубай','🇦🇲 Ереван','🇩🇪 Берлин','🇦🇹 Вена','🇫🇷 Париж','🇮🇹 Рим','🇬🇧 Лондон','🇳🇱 Амстердам','🇰🇿 Алматы','🇧🇾 Минск','🇸🇦 Эр-Рияд','🇰🇼 Кувейт'],
-        avLink('TBS'),'Тбилиси')+
-      block('🌊 Батуми (BUS) — 24 направления','Черноморский курорт. Главные рейсы — Тель-Авив и Стамбул (59% всех рейсов).',
-        ['🇮🇱 Тель-Авив','🇹🇷 Стамбул','🇦🇪 Дубай','🇦🇲 Ереван','🇦🇿 Баку','🇧🇾 Минск','🇱🇻 Рига','🇸🇦 Эр-Рияд','🇮🇶 Эрбиль','🇮🇷 Тегеран'],
-        avLink('BUS'),'Батуми')+
-      block('🏔️ Кутаиси (KUT) — хаб лоукостов','Wizz Air и Ryanair — дешёвые прямые из 30+ городов Европы.',
-        ['🇪🇸 Мадрид','🇪🇸 Барселона','🇫🇷 Париж','🇮🇹 Рим','🇮🇹 Милан','🇩🇪 Берлин','🇩🇪 Франкфурт','🇩🇪 Гамбург','🇵🇱 Варшава','🇵🇱 Краков','🇭🇺 Будапешт','🇬🇷 Афины','🇧🇪 Брюссель','🇱🇹 Вильнюс','🇱🇻 Рига'],
-        avLink('KUT'),'Кутаиси')+
-      '<p class="hint">💡 Город вылета подставляется автоматически по твоему местоположению. В поиске можно поменять даты и города. Мы бесплатный посредник 🍶</p>';
+      '<p class="hint">'+TTX('flights_hint_main')+(originIata?' '+TTX('flights_origin')+' <b>'+originIata+'</b>.':'')+' '+TTX('flights_cta')+'</p>'+
+      block('🏙️ Tbilisi (TBS) — 65 routes',TTX('flights_tbs_desc'),
+        ['🇹🇷 Istanbul','🇮🇱 Tel Aviv','🇦🇿 Baku','🇦🇪 Dubai','🇦🇲 Yerevan','🇩🇪 Berlin','🇦🇹 Vienna','🇫🇷 Paris','🇮🇹 Rome','🇬🇧 London','🇳🇱 Amsterdam','🇰🇿 Almaty','🇧🇾 Minsk','🇸🇦 Riyadh','🇰🇼 Kuwait'],
+        avLink('TBS'),'Tbilisi')+
+      block('🌊 Batumi (BUS) — 24 routes',TTX('flights_bus_desc'),
+        ['🇮🇱 Tel Aviv','🇹🇷 Istanbul','🇦🇪 Dubai','🇦🇲 Yerevan','🇦🇿 Baku','🇧🇾 Minsk','🇱🇻 Riga','🇸🇦 Riyadh','🇮🇶 Erbil','🇮🇷 Tehran'],
+        avLink('BUS'),'Batumi')+
+      block('🏔️ Kutaisi (KUT) — low-cost hub',TTX('flights_kut_desc'),
+        ['🇪🇸 Madrid','🇪🇸 Barcelona','🇫🇷 Paris','🇮🇹 Rome','🇮🇹 Milan','🇩🇪 Berlin','🇩🇪 Frankfurt','🇩🇪 Hamburg','🇵🇱 Warsaw','🇵🇱 Krakow','🇭🇺 Budapest','🇬🇷 Athens','🇧🇪 Brussels','🇱🇹 Vilnius','🇱🇻 Riga'],
+        avLink('KUT'),'Kutaisi')+
+      '<p class="hint">'+TTX('flights_footer')+'</p>';
   }
   function block(title,desc,cities,link,short){
     return '<div class="result" style="margin-bottom:14px">'+
@@ -2383,7 +2891,7 @@ tools.flights=function(){openModal('🛫 Прямые рейсы в Грузию
       '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">'+
         cities.map(function(c){return '<span style="background:var(--card-2);border:1px solid var(--line);border-radius:20px;padding:4px 10px;font-size:.82rem">'+c+'</span>'}).join('')+
       '</div>'+
-      '<a href="'+link+'" target="_blank" rel="noopener" class="btn" style="display:block;text-align:center;text-decoration:none">🎫 Найти билеты в '+short+'</a>'+
+      '<a href="'+link+'" target="_blank" rel="noopener" class="btn" style="display:block;text-align:center;text-decoration:none">🎫 '+TTX('flights_find_btn')+' '+short+'</a>'+
     '</div>';
   }
   render();
@@ -2410,32 +2918,32 @@ tools.flights=function(){openModal('🛫 Прямые рейсы в Грузию
     return best;
   }
 };
-tools.trains=function(){openModal('🚆 Поезда по Грузии');
+tools.trains=function(){openModal(TT('trains_title'));
   var ID='15992767';
   var routes=[
-    {from:'Тбилиси',to:'Батуми',dur:'~5 ч',price:'от 15 ₾',
+    {from:'Tbilisi',to:'Batumi',dur:'~5h',price:'from 15 ₾',
      url:'https://12go.asia/en/train/tbilisi/batumi?z='+ID,
-     tip:'Самый популярный маршрут. Красивые виды на горы и море. Летом бронируй заранее — раскупают быстро.'},
-    {from:'Тбилиси',to:'Кутаиси',dur:'~2.5 ч',price:'от 8 ₾',
+     tip:TTX('trains_tip_tbs_bus')},
+    {from:'Tbilisi',to:'Kutaisi',dur:'~2.5h',price:'from 8 ₾',
      url:'https://12go.asia/en/train/tbilisi/kutaisi?z='+ID,
-     tip:'Удобно если летишь из аэропорта Кутаиси (KUT) или едешь в пещеры.'},
-    {from:'Батуми',to:'Тбилиси',dur:'~5 ч',price:'от 15 ₾',
+     tip:TTX('trains_tip_tbs_kut')},
+    {from:'Batumi',to:'Tbilisi',dur:'~5h',price:'from 15 ₾',
      url:'https://12go.asia/en/train/batumi/tbilisi?z='+ID,
-     tip:'Обратный маршрут. Отправление утром и вечером.'},
-    {from:'Тбилиси',to:'Боржоми',dur:'~2.5 ч',price:'от 6 ₾',
+     tip:TTX('trains_tip_bus_tbs')},
+    {from:'Tbilisi',to:'Borjomi',dur:'~2.5h',price:'from 6 ₾',
      url:'https://12go.asia/en/train/tbilisi/borjomi?z='+ID,
-     tip:'Живописная дорога через горы. Минеральные воды Боржоми.'},
-    {from:'Тбилиси',to:'Зугдиди',dur:'~5 ч',price:'от 12 ₾',
+     tip:TTX('trains_tip_tbs_bor')},
+    {from:'Tbilisi',to:'Zugdidi',dur:'~5h',price:'from 12 ₾',
      url:'https://12go.asia/en/train/tbilisi/zugdidi?z='+ID,
-     tip:'Отправная точка для поездки в Сванетию (Местию).'},
-    {from:'Все поезда Грузии',to:'',dur:'',price:'',
+     tip:TTX('trains_tip_tbs_zug')},
+    {from:TTX('trains_all'),to:'',dur:'',price:'',
      url:'https://12go.asia/en/operator/georgian-railways?z='+ID,
-     tip:'Полное расписание Georgian Railways — все маршруты и даты.'}
+     tip:TTX('trains_all_tip')}
   ];
   mBody.innerHTML=
-    '<p class="hint">Официальные билеты Georgian Railways онлайн — с выбором мест, оплатой картой, подтверждением на почту. Мы бесплатный посредник 🍶</p>'+
+    '<p class="hint">'+TTX('trains_hint')+'</p>'+
     '<div class="result" style="margin-bottom:14px;padding:12px 14px;background:rgba(232,17,45,.08);border:1px solid rgba(232,17,45,.2)">'+
-      '⚠️ <b>Важно:</b> билеты открывают продажу за <b>14–20 дней</b> до отправления. Летом (июнь–сентябрь) Тбилиси↔Батуми раскупают быстро — бери заранее.'+
+      '⚠️ <b>'+TTX('trains_warning_title')+'</b> '+TTX('trains_warning_body')+
     '</div>'+
     routes.map(function(r){
       return '<div class="list-item" style="margin-bottom:10px">'+
@@ -2443,11 +2951,11 @@ tools.trains=function(){openModal('🚆 Поезда по Грузии');
         (r.dur?'<span style="float:right;color:var(--muted);font-size:.85rem">'+r.dur+' · '+r.price+'</span>':'')+'<br>'+
         '<span class="hint" style="margin:4px 0 8px;display:block">'+r.tip+'</span>'+
         '<a href="'+r.url+'" target="_blank" rel="noopener" class="btn" style="display:block;text-align:center;text-decoration:none;font-size:.9rem">'+
-          (r.to?'🎫 Купить билет '+r.from+' → '+r.to:'📋 Смотреть расписание')+
+          (r.to?'🎫 '+TTX('trains_buy_btn')+' '+r.from+' → '+r.to:'📋 '+TTX('trains_schedule_btn'))+
         '</a>'+
       '</div>';
     }).join('')+
-    '<p class="hint" style="margin-top:14px">💡 Бронируй через наш сайт — цена та же что на вокзале, но без очереди и с подтверждением на почту. Мы работаем через официальный сервис 12Go.</p>';
+    '<p class="hint" style="margin-top:14px">'+TTX('trains_footer')+'</p>';
 };
 
 tools.terms=function(){openModal('📜 Условия использования');
