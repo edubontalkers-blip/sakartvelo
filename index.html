@@ -534,6 +534,7 @@ footer .links{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin
   <div class="modal-head">
     <button class="back-btn" id="modalBack">← Назад</button>
     <h3 id="modalTitle"></h3>
+    <button class="theme-btn" id="modalLangBtn" aria-label="Language" style="font-size:1.1rem">🌐</button>
   </div>
   <div class="modal-body" id="modalBody"></div>
 </div>
@@ -1450,9 +1451,62 @@ var modal=document.getElementById('modal'),
     mBack=document.getElementById('modalBack');
 var lang=window.__userLang||'ru';
 
-function openModal(title){mTitle.textContent=title;modal.classList.add('open');
-  document.body.style.overflow='hidden';mBody.scrollTop=0}
-mBack.onclick=function(){modal.classList.remove('open');document.body.style.overflow='';mBody.innerHTML=''};
+function openModal(title){
+  // Translate title
+  var lang=window.__userLang||'ru';
+  if(window.__nativeLangs&&window.__nativeLangs.indexOf(lang)<0&&lang!=='en'&&window.translateText){
+    window.translateText(title,lang).then(function(tr){mTitle.textContent=tr;}).catch(function(){mTitle.textContent=title;});
+  }else{mTitle.textContent=title;}
+  modal.classList.add('open');
+  document.body.style.overflow='hidden';mBody.scrollTop=0;
+}
+mBack.onclick=function(){modal.classList.remove('open');document.body.style.overflow='';mBody.innerHTML='';};
+var modalLangBtn=document.getElementById('modalLangBtn');
+if(modalLangBtn){
+  modalLangBtn.onclick=function(){
+    var sheet=document.getElementById('langSheet');
+    if(sheet){sheet.style.display='block';}
+  };
+}
+
+// MutationObserver — переводит содержимое модала при каждом изменении
+(function(){
+  var lang=window.__userLang||'ru';
+  if(!lang||lang==='ru'||lang==='en')return;
+  if(window.__nativeLangs&&window.__nativeLangs.indexOf(lang)>=0)return;
+  var translateBatch=window.translateBatch||function(t){return Promise.resolve(t);};
+  var pending=null;
+  var observer=new MutationObserver(function(){
+    // Debounce — ждём пока инструмент закончит рендер
+    clearTimeout(pending);
+    pending=setTimeout(function(){
+      // Собираем все текстовые узлы в mBody
+      var els=[];
+      var texts=[];
+      mBody.querySelectorAll('p,span,b,label,button,h4,h3,h2,div.hint,div.result b,.section-title,option').forEach(function(el){
+        // Только непосредственный текст (не вложенные элементы)
+        for(var i=0;i<el.childNodes.length;i++){
+          var node=el.childNodes[i];
+          if(node.nodeType===3){// TEXT_NODE
+            var t=node.textContent.trim();
+            if(t&&t.length>1&&t.length<300&&!/^\d+[\d\s₾$€£%]*$/.test(t)){
+              els.push(node);
+              texts.push(t);
+            }
+          }
+        }
+      });
+      if(!texts.length)return;
+      translateBatch(texts,lang).then(function(translated){
+        translated.forEach(function(tr,i){
+          if(tr&&tr!==texts[i])els[i].textContent=tr;
+        });
+      }).catch(function(){});
+    },150);
+  });
+  observer.observe(mBody,{childList:true,subtree:true});
+  window.__modalObserver=observer;
+})();
 
 /* speak — браузерная озвучка с очисткой текста (без «восклицательный знак» и эмодзи) */
 function cleanForSpeech(text){
