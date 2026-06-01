@@ -1469,43 +1469,46 @@ if(modalLangBtn){
   };
 }
 
-// MutationObserver — переводит содержимое модала при каждом изменении
+// Автоперевод модала — перехватываем innerHTML setter
 (function(){
   var lang=window.__userLang||'ru';
   if(!lang||lang==='ru'||lang==='en')return;
   if(window.__nativeLangs&&window.__nativeLangs.indexOf(lang)>=0)return;
-  var translateBatch=window.translateBatch||function(t){return Promise.resolve(t);};
-  var pending=null;
-  var observer=new MutationObserver(function(){
-    // Debounce — ждём пока инструмент закончит рендер
-    clearTimeout(pending);
-    pending=setTimeout(function(){
-      // Собираем все текстовые узлы в mBody
-      var els=[];
-      var texts=[];
-      mBody.querySelectorAll('p,span,b,label,button,h4,h3,h2,div.hint,div.result b,.section-title,option').forEach(function(el){
-        // Только непосредственный текст (не вложенные элементы)
-        for(var i=0;i<el.childNodes.length;i++){
-          var node=el.childNodes[i];
-          if(node.nodeType===3){// TEXT_NODE
-            var t=node.textContent.trim();
-            if(t&&t.length>1&&t.length<300&&!/^\d+[\d\s₾$€£%]*$/.test(t)){
-              els.push(node);
-              texts.push(t);
-            }
-          }
-        }
+
+  function translateModalContent(){
+    var tb=window.translateBatch||function(t){return Promise.resolve(t);};
+    var nodes=[];var texts=[];
+    mBody.querySelectorAll('p,span,b,label,button,h4,h3,h2,a,option,li,td,th,div').forEach(function(el){
+      for(var i=0;i<el.childNodes.length;i++){
+        var node=el.childNodes[i];
+        if(node.nodeType!==3)continue;
+        var t=node.textContent.trim();
+        if(!t||t.length<2||t.length>400)continue;
+        if(/^[\d\s₾$€£%\+\-\.\:\/]+$/.test(t))continue;// числа/символы — пропуск
+        if(/^[🎤🔊📲💾←→✕⏰💡🎲✅❌⚠️📍🎫🛫🛬🗺️]+$/.test(t))continue;// только эмодзи — пропуск
+        nodes.push(node);texts.push(t);
+      }
+    });
+    if(!texts.length)return;
+    tb(texts,lang).then(function(translated){
+      translated.forEach(function(tr,i){
+        if(tr&&tr!==texts[i]&&tr.length>0)nodes[i].textContent=tr;
       });
-      if(!texts.length)return;
-      translateBatch(texts,lang).then(function(translated){
-        translated.forEach(function(tr,i){
-          if(tr&&tr!==texts[i])els[i].textContent=tr;
-        });
-      }).catch(function(){});
-    },150);
+    }).catch(function(){});
+  }
+
+  // Перехватываем innerHTML через Object.defineProperty
+  var _realBody=mBody;
+  var _orig=Object.getOwnPropertyDescriptor(Element.prototype,'innerHTML');
+  Object.defineProperty(_realBody,'innerHTML',{
+    set:function(val){
+      _orig.set.call(this,val);
+      // Даём браузеру отрендерить, потом переводим
+      setTimeout(translateModalContent,50);
+    },
+    get:function(){return _orig.get.call(this);}
   });
-  observer.observe(mBody,{childList:true,subtree:true});
-  window.__modalObserver=observer;
+  window.__translateModalContent=translateModalContent;
 })();
 
 /* speak — браузерная озвучка с очисткой текста (без «восклицательный знак» и эмодзи) */
