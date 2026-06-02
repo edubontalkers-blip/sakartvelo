@@ -1127,19 +1127,17 @@ async function autoTranslateUI(targetLang){
       'share_h','share_sub','f_terms','f_privacy','f_about','f_note',
       'consent','consent_no','back','ph','disclaimer','hello','chacha'];
     var delta={};
-    for(var i=0;i<keysToTranslate.length;i++){
-      var k=keysToTranslate[i];
+    // Parallel fetch — все запросы одновременно, не sequential
+    var fetchPromises=keysToTranslate.map(function(k){
       var val=enT[k];
-      if(!val)continue;
-      if(/<[a-z]/i.test(val)){delta[k]=val;continue;}
-      try{
-        var url='https://api.mymemory.translated.net/get?q='+encodeURIComponent(val)+'&langpair=en|'+targetLang;
-        var res=await fetch(url);
-        var data=await res.json();
+      if(!val||/<[a-z]/i.test(val)){delta[k]=val;return Promise.resolve();}
+      var url='https://api.mymemory.translated.net/get?q='+encodeURIComponent(val)+'&langpair=en|'+targetLang;
+      return fetch(url).then(function(res){return res.json();}).then(function(data){
         var tr=data&&data.responseData&&data.responseData.translatedText;
         if(tr&&tr.length>1&&tr!==val)delta[k]=tr;
-      }catch(e){}
-    }
+      }).catch(function(){});
+    });
+    await Promise.all(fetchPromises);
     Object.assign(translated,delta);
     try{sessionStorage.setItem(cacheKey,JSON.stringify(delta));}catch(e){}
   }
@@ -1218,10 +1216,14 @@ var SYSTEM=`You are Chacha (Чача) — a warm, helpful Georgian travel friend
 
 You ONLY help with tourism in Georgia (the Caucasus country). You can help book: hotels & apartments, car rental, tours & excursions, airport transfer, travel insurance.
 
+LANGUAGE — CRITICAL RULE:
+- The current site language is: ${userLang}
+- ALWAYS write your reply in this language, no matter what language the user's message is in.
+- Examples: if site lang is 'tr' reply in Turkish; 'de' → German; 'ar' → Arabic; 'he' → Hebrew; 'fa' → Farsi; 'fr' → French; 'es' → Spanish; 'ka' → Georgian; 'hy' → Armenian; 'ru'/'be'/'uk' → Russian. Never default to English unless site lang is 'en'.
+
 STYLE — VERY IMPORTANT (this fixes a known problem of being too long/slow):
 - Be SHORT and to the point. Phone screen. Lead with the answer, no long intros.
 - When the user wants something concrete (hostel, hotel, transfer), give the direct booking link FAST with 1-2 short lines, not paragraphs.
-- Reply in the SAME language the user writes in.
 - Warm but brief. Do NOT open every reply with "Gamarjoba genatsvale". Greet only on the very first message. Never say "gaumarjos".
 - Sign off simply as "Чача 🍶" (Russian) or "Chacha 🍶" (other languages) — and not every single message.
 
@@ -1579,15 +1581,15 @@ async function translateBatch(texts,targetLang){
       }
     }
   }catch(e){}
-  // Fallback — MyMemory напрямую
-  for(var i=0;i<needT.length;i++){
-    try{
-      var url='https://api.mymemory.translated.net/get?q='+encodeURIComponent(needT[i])+'&langpair=ru|'+targetLang;
-      var r2=await fetch(url);var d2=await r2.json();
+  // Fallback — MyMemory параллельно (Promise.all вместо sequential for)
+  var promises=needT.map(function(text,i){
+    var url='https://api.mymemory.translated.net/get?q='+encodeURIComponent(text)+'&langpair=ru|'+targetLang;
+    return fetch(url).then(function(r2){return r2.json();}).then(function(d2){
       var tr2=d2&&d2.responseData&&d2.responseData.translatedText;
-      if(tr2&&tr2!==needT[i]&&tr2.length>1){result[indices[i]]=tr2;cache[needT[i]]=tr2;}
-    }catch(e2){}
-  }
+      if(tr2&&tr2!==text&&tr2.length>1){result[indices[i]]=tr2;cache[text]=tr2;}
+    }).catch(function(){});
+  });
+  await Promise.all(promises);
   try{sessionStorage.setItem(cKey,JSON.stringify(cache));}catch(e){}
   return result;
 }
@@ -1627,29 +1629,9 @@ if(userLang!=='ru'){
 
 
 /* ===================== ИНСТРУМЕНТЫ (открываются по запросу) ===================== */
-// Defer tools init to after LCP — register event listeners now, init functions lazily
+// Tools init immediately — кнопки работают с первого клика
 var __toolsReady=false,__pendingTool=null;
-// Attach lightweight delegated listeners immediately so clicks never get lost
-['bento','consent'].forEach(function(id){
-  var el=document.getElementById(id);
-  if(el)el.addEventListener('click',function(e){
-    var t=e.target.closest('[data-tool]');
-    if(!t)return;
-    var name=t.getAttribute('data-tool');
-    if(__toolsReady){window.__route&&window.__route(name);}
-    else{__pendingTool=name;}
-  });
-});
-document.querySelector('footer').addEventListener('click',function(e){
-  var t=e.target.closest('[data-tool]');
-  if(!t)return;
-  e.preventDefault();
-  var name=t.getAttribute('data-tool');
-  if(__toolsReady){window.__route&&window.__route(name);}
-  else{__pendingTool=name;}
-});
 
-(window.requestIdleCallback||function(cb){setTimeout(cb,200)})(function(){
 (function(){
 "use strict";
 var translateText=window.translateText||function(t){return Promise.resolve(t);};
@@ -1678,29 +1660,30 @@ if(modalLangBtn){
   };
 }
 
-// Автоперевод модала — перехватываем innerHTML setter
+// Автоперевод модала — один батч-запрос для всего контента
 (function(){
-
   function translateModalContent(){
     var lang=window.__userLang||'ru';
-    if(lang==='ru'||lang==='en')return;// RU/EN — не надо переводить
+    // Нативные языки — встроены через TT(), перевод не нужен
+    if(window.__nativeLangs&&window.__nativeLangs.indexOf(lang)>=0)return;
+    if(lang==='en')return;
     var tb=window.translateBatch||function(t){return Promise.resolve(t);};
     var nodes=[];var texts=[];
-    mBody.querySelectorAll('p,span,b,label,button,h4,h3,h2,a,option,li,td,th,div').forEach(function(el){
+    mBody.querySelectorAll('p,span,b,label,button,h3,h2,a,li,td,th').forEach(function(el){
+      // Пропускаем элементы с дочерними тегами — берём только листовые текстовые узлы
       for(var i=0;i<el.childNodes.length;i++){
         var node=el.childNodes[i];
         if(node.nodeType!==3)continue;
         var t=node.textContent.trim();
         if(!t||t.length<2||t.length>400)continue;
-        if(/^[\d\s₾$€£%\+\-\.\:\/]+$/.test(t))continue;// числа/символы — пропуск
-        if(/^[🎤🔊📲💾←→✕⏰💡🎲✅❌⚠️📍🎫🛫🛬🗺️]+$/.test(t))continue;// только эмодзи — пропуск
+        if(/^[\d\s₾$€£%\+\-\.\:\/\→←]+$/.test(t))continue;
+        if(/^\p{Emoji}+$/u.test(t))continue;
         nodes.push(node);texts.push(t);
       }
     });
     if(!texts.length)return;
-    // Force translate even for "native" langs - user may have switched
-    var doTranslate=window.translateBatch||function(t){return Promise.resolve(t);};
-    doTranslate(texts,lang).then(function(translated){
+    // Один параллельный батч — не sequential await
+    tb(texts,lang).then(function(translated){
       translated.forEach(function(tr,i){
         if(tr&&tr!==texts[i]&&tr.length>0)nodes[i].textContent=tr;
       });
@@ -1713,8 +1696,8 @@ if(modalLangBtn){
   Object.defineProperty(_realBody,'innerHTML',{
     set:function(val){
       _orig.set.call(this,val);
-      // Даём браузеру отрендерить, потом переводим
-      setTimeout(translateModalContent,50);
+      // Даём браузеру отрендерить, потом переводим одним батчем
+      setTimeout(translateModalContent,80);
     },
     get:function(){return _orig.get.call(this);}
   });
@@ -2158,24 +2141,18 @@ async function autoTranslateToolTexts(targetLang){
   try{var raw=sessionStorage.getItem(cacheKey);if(raw&&JSON.parse(raw)){window.__ttxCache=JSON.parse(raw);return;}}catch(e){}
   var enTexts=TOOL_TEXTS_I18N['en'];
   var keys=Object.keys(enTexts);
-  // Переводим батчами по 20 (MyMemory ограничивает длину URL)
   var translated={};
-  var batchSize=20;
-  for(var i=0;i<keys.length;i+=batchSize){
-    var batch=keys.slice(i,i+batchSize);
-    for(var j=0;j<batch.length;j++){
-      var k=batch[j];
-      var val=enTexts[k];
-      // Пропускаем ключи с HTML-тегами — оставляем EN (безопасно)
-      if(/<[a-z]/.test(val)){translated[k]=val;continue;}
-      try{
-        var url='https://api.mymemory.translated.net/get?q='+encodeURIComponent(val)+'&langpair=en|'+targetLang;
-        var res=await fetch(url);var data=await res.json();
-        var tr=data&&data.responseData&&data.responseData.translatedText;
-        translated[k]=(tr&&tr!==val&&tr.length>1)?tr:val;
-      }catch(e){translated[k]=val;}
-    }
-  }
+  // Parallel — все запросы одновременно, без sequential for
+  var fetchAll=keys.map(function(k){
+    var val=enTexts[k];
+    if(/<[a-z]/.test(val)){translated[k]=val;return Promise.resolve();}
+    var url='https://api.mymemory.translated.net/get?q='+encodeURIComponent(val)+'&langpair=en|'+targetLang;
+    return fetch(url).then(function(res){return res.json();}).then(function(data){
+      var tr=data&&data.responseData&&data.responseData.translatedText;
+      translated[k]=(tr&&tr!==val&&tr.length>1)?tr:val;
+    }).catch(function(){translated[k]=val;});
+  });
+  await Promise.all(fetchAll);
   window.__ttxCache=translated;
   try{sessionStorage.setItem(cacheKey,JSON.stringify(translated));}catch(e){}
 }
@@ -3271,11 +3248,10 @@ document.querySelector('footer').addEventListener('click',function(e){
   var t=e.target.closest('[data-tool]');if(t){e.preventDefault();route(t.getAttribute('data-tool'))}});
 document.getElementById('consent').addEventListener('click',function(e){
   var t=e.target.closest('[data-tool]');if(t){e.preventDefault();route(t.getAttribute('data-tool'))}});
-// Mark ready and flush any pending click
+// Mark ready
 __toolsReady=true;
 if(__pendingTool){var _p=__pendingTool;__pendingTool=null;route(_p);}
 })();
-}); // end requestIdleCallback
 
 </script>
 
