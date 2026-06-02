@@ -29,10 +29,12 @@
 <!-- Шрифты: один распределённый запрос, display=swap чтоб не блокировать рендер -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://fonts.googleapis.com">
 <link rel="dns-prefetch" href="https://api.anthropic.com">
 <link rel="dns-prefetch" href="https://open.er-api.com">
 <link rel="dns-prefetch" href="https://api.mymemory.translated.net">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Manrope:wght@400;500;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
 
 <!-- AI-индексация: структурированные данные -->
 <script type="application/ld+json">
@@ -57,7 +59,7 @@
   --line:rgba(227,179,94,.22);
   --ok:#3f9d6a; --radius:20px;
   --shadow:0 18px 50px -18px rgba(0,0,0,.7);
-  --font-display:'Fraunces',Georgia,serif;
+  --font-display:'Fraunces',Georgia,serif;font-display:swap;
   --font-body:'Manrope',-apple-system,system-ui,sans-serif;
 }
 [data-theme="light"]{
@@ -433,7 +435,6 @@ img { decoding: async; }
 </style>
 <!-- Security -->
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
-<meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 <!-- Performance: preconnect -->
 <link rel="preconnect" href="https://api.anthropic.com">
@@ -455,6 +456,9 @@ img { decoding: async; }
   ]
 }
 </script>
+<link rel="preconnect" href="https://api.anthropic.com">
+<link rel="preconnect" href="https://playpager.com">
+<meta name="theme-color" content="#1a0d10">
 </head>
 <body data-theme="dark">
 <!-- ===== LANGUAGE PICKER ONBOARDING ===== -->
