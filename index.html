@@ -1527,7 +1527,8 @@ window.__nativeLangs=__nativeLangs;
 
 async function translateBatch(texts,targetLang){
   if(!texts||!texts.length)return texts;
-  if(__nativeLangs.indexOf(targetLang)>=0)return texts;
+  // Only skip if SAME as page language (Russian source)
+  if(targetLang==='ru')return texts;
   var cKey='sak_tr2_'+targetLang;
   var cache={};
   try{var r=sessionStorage.getItem(cKey);if(r)cache=JSON.parse(r);}catch(e){}
@@ -1637,11 +1638,10 @@ if(modalLangBtn){
 
 // Автоперевод модала — перехватываем innerHTML setter
 (function(){
-  var lang=window.__userLang||'ru';
-  if(!lang||lang==='ru'||lang==='en')return;
-  if(window.__nativeLangs&&window.__nativeLangs.indexOf(lang)>=0)return;
 
   function translateModalContent(){
+    var lang=window.__userLang||'ru';
+    if(lang==='ru'||lang==='en')return;// RU/EN — не надо переводить
     var tb=window.translateBatch||function(t){return Promise.resolve(t);};
     var nodes=[];var texts=[];
     mBody.querySelectorAll('p,span,b,label,button,h4,h3,h2,a,option,li,td,th,div').forEach(function(el){
@@ -1656,7 +1656,9 @@ if(modalLangBtn){
       }
     });
     if(!texts.length)return;
-    tb(texts,lang).then(function(translated){
+    // Force translate even for "native" langs - user may have switched
+    var doTranslate=window.translateBatch||function(t){return Promise.resolve(t);};
+    doTranslate(texts,lang).then(function(translated){
       translated.forEach(function(tr,i){
         if(tr&&tr!==texts[i]&&tr.length>0)nodes[i].textContent=tr;
       });
@@ -2970,11 +2972,34 @@ GAMES.g2048=function(area,ov){
     openArticle(card.getAttribute('data-slug'));
   });
 
-  function openArticle(slug){
-    var seoEl=document.getElementById('seoData');
-    if(!seoEl)return;
-    var pages;
-    try{pages=JSON.parse(seoEl.textContent||seoEl.innerHTML);}catch(e){return;}
+  // Cache for parsed SEO data - parse once, use many times
+var __seoCache=null;
+function getSeoPages(){
+  if(__seoCache)return __seoCache;
+  var el=document.getElementById('seoData');
+  if(!el)return [];
+  try{__seoCache=JSON.parse(el.textContent||el.innerHTML);}catch(e){__seoCache=[];}
+  return __seoCache;
+}
+
+// Tag click handler - clean and simple
+function tagSearch(kw){
+  var modal=document.getElementById('modal');
+  var mb=document.getElementById('modalBody');
+  if(modal)modal.classList.remove('open');
+  document.body.style.overflow='';
+  if(mb)mb.innerHTML='';
+  setTimeout(function(){
+    var inp=document.getElementById('chatInput');
+    var btn=document.getElementById('sendBtn');
+    if(inp){inp.value=kw;inp.focus();}
+    if(btn)btn.click();
+  },200);
+}
+window.tagSearch=tagSearch;
+
+function openArticle(slug){
+    var pages=getSeoPages();
     var page=null;
     for(var i=0;i<pages.length;i++){if(pages[i].slug===slug){page=pages[i];break;}}
     if(!page)return;
@@ -2993,7 +3018,8 @@ GAMES.g2048=function(area,ov){
       }).join('')+
       '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:16px">'+
         page.keywords.split(',').map(function(k){
-          return '<span style="background:var(--card-2);border:1px solid var(--line);border-radius:20px;padding:5px 12px;font-size:.8rem;color:var(--muted)">'+k.trim()+'</span>';
+          var kw=k.trim().replace(/"/g,'&quot;');
+          return '<button data-kw="'+kw+'" class="geo-tag-btn" style="background:var(--card-2);border:1px solid var(--line);border-radius:20px;padding:6px 14px;font-size:.8rem;color:var(--muted);cursor:pointer">'+k.trim()+'</button>';
         }).join('')+
       '</div>'+
       '<div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">'+
@@ -3001,6 +3027,14 @@ GAMES.g2048=function(area,ov){
         '<button id="askChachaBtn" style="background:var(--gold);border:none;border-radius:20px;padding:8px 14px;color:#1a0d10;font-size:.8rem;font-weight:700;cursor:pointer">🤖 Ask Chacha AI</button>'+
       '</div>'+
     '</div>';
+
+    // Auto-translate article content
+    var _lang=window.__userLang||'ru';
+    if(_lang!=='ru'&&_lang!=='en'){
+      setTimeout(function(){
+        if(window.__translateModalContent)window.__translateModalContent();
+      },100);
+    }
 
     // Ask Chacha — close modal and focus chat
     var askBtn=document.getElementById('askChachaBtn');
@@ -3016,9 +3050,19 @@ GAMES.g2048=function(area,ov){
         },300);
       };
     }
+    // Tag buttons - event delegation
+    mBody.addEventListener('click',function(e){
+      var btn=e.target.closest('.geo-tag-btn');
+      if(!btn)return;
+      var kw=btn.getAttribute('data-kw');
+      if(kw)tagSearch(kw);
+    });
   }
   // Export for reuse
   window.__openArticle=openArticle;
+  setTimeout(function(){try{getSeoPages();}catch(e){}},500);
+  // Preparse SEO data immediately so first click is instant
+  setTimeout(function(){try{getSeoPages();}catch(e){}},500);
 })();
 
 
