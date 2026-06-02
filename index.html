@@ -26,15 +26,15 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-<!-- Шрифты: один распределённый запрос, display=swap чтоб не блокировать рендер -->
+<!-- Шрифты: preconnect + async load, display=swap -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="dns-prefetch" href="https://fonts.googleapis.com">
 <link rel="dns-prefetch" href="https://api.anthropic.com">
 <link rel="dns-prefetch" href="https://open.er-api.com">
 <link rel="dns-prefetch" href="https://api.mymemory.translated.net">
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,900&family=Manrope:wght@400;700&display=optional" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,900&family=Manrope:wght@400;700&display=optional" rel="stylesheet"></noscript>
+<!-- Async font load: не блокирует рендер, display=swap гарантирует текст виден сразу -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,900&family=Manrope:wght@400;700&display=swap" media="print" onload="this.media='all';this.onload=null">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,900&family=Manrope:wght@400;700&display=swap"></noscript>
 
 <!-- AI-индексация: структурированные данные -->
 <script type="application/ld+json">
@@ -189,7 +189,7 @@ header.top{
 .msg{max-width:86%;padding:12px 15px;border-radius:16px;font-size:.96rem;
   animation:pop .3s ease;white-space:pre-wrap;word-wrap:break-word}
 @keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.msg.bot{background:var(--card-2);border:1px solid var(--line);
+.msg.bot{background:var(--card-2);border:1px solid var(--line);color:var(--ink);
   border-bottom-left-radius:5px;align-self:flex-start}
 .msg.me{background:linear-gradient(135deg,var(--wine-bright),var(--wine));
   color:#fff;border-bottom-right-radius:5px;align-self:flex-end}
@@ -200,7 +200,7 @@ header.top{
   text-align:center;transition:transform .15s
 }
 .msg.bot a.book:active{transform:scale(.97)}
-.ai-note{margin-top:8px;font-size:.72rem;line-height:1.3;color:var(--muted);opacity:.75;font-style:italic}
+.ai-note{margin-top:8px;font-size:.72rem;line-height:1.3;color:#a89a8e;font-style:italic}
 .typing{display:flex;gap:4px;padding:4px 0}
 .typing span{width:7px;height:7px;border-radius:50%;background:var(--gold);
   animation:blink 1.2s infinite}
@@ -241,7 +241,7 @@ header.top{
   padding:16px 18px;margin:18px 0;display:flex;gap:13px;align-items:flex-start
 }
 .law .ic{font-size:1.6rem;flex-shrink:0}
-.law h3{font-family:var(--font-display);font-size:1.05rem;margin-bottom:4px}
+.law h3,.law h2,.law .law-heading{font-family:var(--font-display);font-size:1.05rem;margin-bottom:4px}
 .law p{font-size:.88rem;color:var(--muted);margin-bottom:9px}
 .law a{display:inline-block;background:var(--gold);color:#3a2410;font-weight:700;
   padding:9px 16px;border-radius:11px;text-decoration:none;font-size:.86rem}
@@ -250,8 +250,7 @@ header.top{
 .section-title{font-family:var(--font-display);font-weight:900;font-size:1.5rem;
   margin:30px 0 4px;letter-spacing:-.5px}
 .section-sub{color:var(--muted);font-size:.92rem;margin-bottom:16px}
-.bento{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-bottom:22px;content-visibility:auto;contain-intrinsic-size:0 800px;
-  content-visibility:auto;contain-intrinsic-size:auto 700px}
+.bento{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-bottom:22px}
 .tile{
   background:var(--card);border:1px solid var(--line);border-radius:16px;
   padding:15px;cursor:pointer;
@@ -268,7 +267,7 @@ header.top{
 .tile:active{transform:scale(.97);border-color:var(--gold)}
 .tile.big{grid-column:span 2}
 .tile .ti{font-size:1.6rem}
-.tile h4{font-size:.98rem;font-weight:700;text-wrap:balance}
+.tile h3,.tile h4{font-size:.98rem;font-weight:700;text-wrap:balance}
 .tile p{font-size:.78rem;color:var(--muted);line-height:1.35}
 
 /* ===== МОДАЛКА ИНСТРУМЕНТА ===== */
@@ -429,6 +428,7 @@ body{top:0!important;}
 
 /* Performance 2026 */
 .guide-section, footer { content-visibility: auto; contain-intrinsic-size: 0 600px; }
+.bento { content-visibility: auto; contain-intrinsic-size: 0 800px; }
 img { decoding: async; }
 .tile:hover, .tile:active { will-change: transform; }
 * { -webkit-tap-highlight-color: transparent; }
@@ -456,10 +456,21 @@ img { decoding: async; }
 </script>
 <meta name="theme-color" content="#1a0d10">
 <style>
-/* Critical above-fold CSS - inline for instant render */
-h1{font-family:'Fraunces',Georgia,serif;font-size:clamp(2rem,8vw,3rem);font-weight:900;line-height:1.1;text-wrap:balance}
+/* Critical above-fold CSS — inline, zero network cost, eliminates LCP render delay */
+body{background:#120a0c;color:#f4e9dc;font-family:'Manrope',-apple-system,system-ui,sans-serif;margin:0;overflow-x:hidden}
+h1{font-family:'Fraunces',Georgia,serif;font-size:clamp(2rem,8vw,3rem);font-weight:900;line-height:1.1;text-wrap:balance;color:var(--ink,#f4e9dc)}
 .hero{text-align:center;padding:20px 16px 0}
-.trust{background:var(--card,#fff8f5);border-radius:50px;padding:10px 18px;display:inline-flex;align-items:center;gap:8px;font-size:.82rem;margin-bottom:16px}
+.trust{background:var(--card,#1d1113);border:1px solid rgba(227,179,94,.22);border-radius:50px;padding:10px 18px;display:inline-flex;align-items:center;gap:8px;font-size:.82rem;margin-bottom:16px;color:var(--ink,#f4e9dc)}
+header.top{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;max-width:760px;margin:0 auto}
+.logo{display:flex;align-items:center;gap:9px;font-family:'Fraunces',Georgia,serif;font-weight:900;font-size:1.28rem;letter-spacing:-.5px;color:var(--ink,#f4e9dc)}
+.logo b{color:var(--gold,#e3b35e)}
+.theme-btn{background:var(--card,#1d1113);border:1px solid rgba(227,179,94,.22);color:var(--ink,#f4e9dc);width:42px;height:42px;border-radius:50%;font-size:1.1rem;cursor:pointer;display:grid;place-items:center}
+.hero .em{color:var(--gold,#e3b35e);font-style:italic}
+[data-theme="light"]{background:#fff6f4}
+[data-theme="light"] h1{color:#da291c}
+[data-theme="light"] .trust{background:#fff;border-color:rgba(218,41,28,.16);color:#1f1413}
+[data-theme="light"] .theme-btn{background:#fff;border-color:rgba(218,41,28,.16);color:#1f1413}
+[data-theme="light"] .logo{color:#1f1413}
 </style>
 </head>
 <body data-theme="dark">
@@ -509,7 +520,7 @@ h1{font-family:'Fraunces',Georgia,serif;font-size:clamp(2rem,8vw,3rem);font-weig
 
   <section class="hero">
     <div class="trust" data-i18n="trust">🆓 Бесплатно навсегда · оплата через <b>проверенных гигантов</b></div>
-    <h1 data-i18n-html="h1">Твой друг <span class="em">Чача</span><br>в Грузии 🇬🇪</h1>
+    <h1 data-i18n-html="h1" elementtiming="lcp-h1">Твой друг <span class="em">Чача</span><br>в Грузии 🇬🇪</h1>
     <p class="greet" id="greet">გამარჯობა!</p>
     <p class="sub" data-i18n="sub">Не просто планировщик — заботливый спутник на всю поездку. Спроси что угодно про Грузию.</p>
   </section>
@@ -551,7 +562,7 @@ h1{font-family:'Fraunces',Georgia,serif;font-size:clamp(2rem,8vw,3rem);font-weig
   <section class="law">
     <span class="ic">🛡️</span>
     <div>
-      <h3 data-i18n="law_h">Новый закон 2026 — страховка обязательна</h3>
+      <h2 class="law-heading" data-i18n="law_h">Новый закон 2026 — страховка обязательна</h2>
       <p data-i18n="law_p">С 1 января 2026 каждый турист обязан иметь медстраховку (мин. 30 000 ₾ ≈ $11 000). Без неё могут не пустить. Оформи заранее — на границе дороже.</p>
       <a href="https://travelgeorgia.aldagi.ge/" target="_blank" rel="noopener" data-i18n="law_a">Оформить страховку →</a>
     </div>
@@ -570,26 +581,26 @@ h1{font-family:'Fraunces',Georgia,serif;font-size:clamp(2rem,8vw,3rem);font-weig
   <h2 class="section-title" data-i18n="tools_h">🧰 Полезное в Грузии</h2>
   <p class="section-sub" data-i18n="tools_sub">Всё что нужно на месте — работает каждый день поездки</p>
   <div class="bento" id="bento">
-    <button class="tile big" data-tool="translator"><span class="ti">🗣️</span><h4 data-i18n="t_translator_h">Переводчик турист ↔ грузин</h4><p data-i18n="t_translator_p">Говори на своём — Чача переведёт на грузинский голосом. Бесплатно.</p></button>
-    <button class="tile" data-tool="metro"><span class="ti">🚇</span><h4 data-i18n="t_metro_h">Метро Тбилиси</h4><p data-i18n="t_metro_p">Маршрут, цена, пересадка. Офлайн.</p></button>
-    <button class="tile" data-tool="phrases"><span class="ti">📖</span><h4 data-i18n="t_phrases_h">Разговорник</h4><p data-i18n="t_phrases_p">Грузинские фразы + произношение</p></button>
-    <button class="tile" data-tool="currency"><span class="ti">💱</span><h4 data-i18n="t_currency_h">Курс лари</h4><p data-i18n="t_currency_p">GEL в твою валюту</p></button>
-    <button class="tile" data-tool="radio"><span class="ti">📻</span><h4 data-i18n="t_radio_h">Радио разных стран</h4><p data-i18n="t_radio_p">Твоя страна + Грузия</p></button>
-    <button class="tile" data-tool="emergency"><span class="ti">🆘</span><h4 data-i18n="t_emergency_h">Экстренное</h4><p data-i18n="t_emergency_p">112, посольство, помощь</p></button>
-    <button class="tile" data-tool="tips"><span class="ti">🧮</span><h4 data-i18n="t_tips_h">Чаевые</h4><p data-i18n="t_tips_p">Делёж счёта супры</p></button>
-    <button class="tile" data-tool="checklist"><span class="ti">✅</span><h4 data-i18n="t_checklist_h">Чек-лист сборов</h4><p data-i18n="t_checklist_p">Со страховкой 2026</p></button>
-    <button class="tile" data-tool="food"><span class="ti">🍷</span><h4 data-i18n="t_food_h">Что заказать</h4><p data-i18n="t_food_p">Блюда и вино Грузии</p></button>
-    <button class="tile" data-tool="visa"><span class="ti">🛂</span><h4 data-i18n="t_visa_h">Дни визы</h4><p data-i18n="t_visa_p">Виза-фри год — счётчик</p></button>
-    <button class="tile" data-tool="alarm"><span class="ti">⏰</span><h4 data-i18n="t_alarm_h">Будильник</h4><p data-i18n="t_alarm_p">Не проспи экскурсию</p></button>
-    <button class="tile" data-tool="torch"><span class="ti">🔦</span><h4 data-i18n="t_torch_h">Фонарик</h4><p data-i18n="t_torch_p">Свет в темноте</p></button>
-    <button class="tile" data-tool="luggage"><span class="ti">🧳</span><h4 data-i18n="t_luggage_h">Камера хранения</h4><p data-i18n="t_luggage_p">Оставь багаж — гуляй налегке</p></button>
-    <button class="tile big" data-tool="prices"><span class="ti">🛡️</span><h4 data-i18n="t_prices_h">Честные цены 2026</h4><p data-i18n="t_prices_p">Сколько что стоит — не дай себя обсчитать. Такси, курс, метро, музеи.</p></button>
-    <button class="tile big" data-tool="story"><span class="ti">🌿</span><h4 data-i18n="t_story_h">Цитаты о Грузии</h4><p data-i18n="t_story_p">Выбери и поделись своей любимой цитатой о Грузии.</p></button>
-    <button class="tile big" data-tool="places"><span class="ti">📍</span><h4 data-i18n="t_places_h">Лучшие места — от туристов</h4><p data-i18n="t_places_p">Рестораны, кафе, достопримечательности. Добавляй сам и голосуй ❤️</p></button>
-        <button class="tile big" data-tool="games"><span class="ti">🎮</span><h4 data-i18n="t_games_h">Игры — убей время в дороге</h4><p data-i18n="t_games_p">Шахматы, нарды, змейка, 2048 и другие. Бесплатно, без регистрации.</p></button>
-    <button class="tile big" data-tool="airports"><span class="ti">✈️</span><h4 data-i18n="t_airports_h">Табло аэропортов Грузии</h4><p data-i18n="t_airports_p">Прилёты и вылеты Тбилиси, Батуми, Кутаиси — онлайн в реальном времени.</p></button>
-    <button class="tile big" data-tool="trains"><span class="ti">🚆</span><h4 data-i18n="t_trains_h">Поезда по Грузии</h4><p data-i18n="t_trains_p">Билеты Тбилиси↔Батуми, Кутаиси, Боржоми. Онлайн, с выбором мест.</p></button>
-    <button class="tile big" data-tool="flights"><span class="ti">🛫</span><h4 data-i18n="t_flights_h">Прямые рейсы в Грузию</h4><p data-i18n="t_flights_p">Откуда летят прямые в Тбилиси, Батуми и Кутаиси. Купи билет онлайн.</p></button>
+    <button class="tile big" data-tool="translator"><span class="ti">🗣️</span><h3 data-i18n="t_translator_h">Переводчик турист ↔ грузин</h3><p data-i18n="t_translator_p">Говори на своём — Чача переведёт на грузинский голосом. Бесплатно.</p></button>
+    <button class="tile" data-tool="metro"><span class="ti">🚇</span><h3 data-i18n="t_metro_h">Метро Тбилиси</h3><p data-i18n="t_metro_p">Маршрут, цена, пересадка. Офлайн.</p></button>
+    <button class="tile" data-tool="phrases"><span class="ti">📖</span><h3 data-i18n="t_phrases_h">Разговорник</h3><p data-i18n="t_phrases_p">Грузинские фразы + произношение</p></button>
+    <button class="tile" data-tool="currency"><span class="ti">💱</span><h3 data-i18n="t_currency_h">Курс лари</h3><p data-i18n="t_currency_p">GEL в твою валюту</p></button>
+    <button class="tile" data-tool="radio"><span class="ti">📻</span><h3 data-i18n="t_radio_h">Радио разных стран</h3><p data-i18n="t_radio_p">Твоя страна + Грузия</p></button>
+    <button class="tile" data-tool="emergency"><span class="ti">🆘</span><h3 data-i18n="t_emergency_h">Экстренное</h3><p data-i18n="t_emergency_p">112, посольство, помощь</p></button>
+    <button class="tile" data-tool="tips"><span class="ti">🧮</span><h3 data-i18n="t_tips_h">Чаевые</h3><p data-i18n="t_tips_p">Делёж счёта супры</p></button>
+    <button class="tile" data-tool="checklist"><span class="ti">✅</span><h3 data-i18n="t_checklist_h">Чек-лист сборов</h3><p data-i18n="t_checklist_p">Со страховкой 2026</p></button>
+    <button class="tile" data-tool="food"><span class="ti">🍷</span><h3 data-i18n="t_food_h">Что заказать</h3><p data-i18n="t_food_p">Блюда и вино Грузии</p></button>
+    <button class="tile" data-tool="visa"><span class="ti">🛂</span><h3 data-i18n="t_visa_h">Дни визы</h3><p data-i18n="t_visa_p">Виза-фри год — счётчик</p></button>
+    <button class="tile" data-tool="alarm"><span class="ti">⏰</span><h3 data-i18n="t_alarm_h">Будильник</h3><p data-i18n="t_alarm_p">Не проспи экскурсию</p></button>
+    <button class="tile" data-tool="torch"><span class="ti">🔦</span><h3 data-i18n="t_torch_h">Фонарик</h3><p data-i18n="t_torch_p">Свет в темноте</p></button>
+    <button class="tile" data-tool="luggage"><span class="ti">🧳</span><h3 data-i18n="t_luggage_h">Камера хранения</h3><p data-i18n="t_luggage_p">Оставь багаж — гуляй налегке</p></button>
+    <button class="tile big" data-tool="prices"><span class="ti">🛡️</span><h3 data-i18n="t_prices_h">Честные цены 2026</h3><p data-i18n="t_prices_p">Сколько что стоит — не дай себя обсчитать. Такси, курс, метро, музеи.</p></button>
+    <button class="tile big" data-tool="story"><span class="ti">🌿</span><h3 data-i18n="t_story_h">Цитаты о Грузии</h3><p data-i18n="t_story_p">Выбери и поделись своей любимой цитатой о Грузии.</p></button>
+    <button class="tile big" data-tool="places"><span class="ti">📍</span><h3 data-i18n="t_places_h">Лучшие места — от туристов</h3><p data-i18n="t_places_p">Рестораны, кафе, достопримечательности. Добавляй сам и голосуй ❤️</p></button>
+        <button class="tile big" data-tool="games"><span class="ti">🎮</span><h3 data-i18n="t_games_h">Игры — убей время в дороге</h3><p data-i18n="t_games_p">Шахматы, нарды, змейка, 2048 и другие. Бесплатно, без регистрации.</p></button>
+    <button class="tile big" data-tool="airports"><span class="ti">✈️</span><h3 data-i18n="t_airports_h">Табло аэропортов Грузии</h3><p data-i18n="t_airports_p">Прилёты и вылеты Тбилиси, Батуми, Кутаиси — онлайн в реальном времени.</p></button>
+    <button class="tile big" data-tool="trains"><span class="ti">🚆</span><h3 data-i18n="t_trains_h">Поезда по Грузии</h3><p data-i18n="t_trains_p">Билеты Тбилиси↔Батуми, Кутаиси, Боржоми. Онлайн, с выбором мест.</p></button>
+    <button class="tile big" data-tool="flights"><span class="ti">🛫</span><h3 data-i18n="t_flights_h">Прямые рейсы в Грузию</h3><p data-i18n="t_flights_p">Откуда летят прямые в Тбилиси, Батуми и Кутаиси. Купи билет онлайн.</p></button>
   </div>
 
   <!-- SHARE -->
@@ -649,12 +660,15 @@ function setTheme(t){root.setAttribute('data-theme',t);themeBtn.textContent=t===
 try{var st=localStorage.getItem('sak_theme');if(st)setTheme(st)}catch(e){}
 themeBtn.onclick=function(){setTheme(root.getAttribute('data-theme')==='dark'?'light':'dark')};
 
-/* ---------- Приветствие на языке устройства ---------- */
+/* ---------- Приветствие на языке устройства — defer to idle ---------- */
 var greets=['გამარჯობა!','Welcome!','Привет!','Bienvenue!','مرحبا','Hoş geldiniz!','Willkommen!','¡Hola!'];
 var gi=0, gEl=document.getElementById('greet');
-setInterval(function(){gi=(gi+1)%greets.length;gEl.style.opacity=0;
-  setTimeout(function(){gEl.textContent=greets[gi];gEl.style.opacity=1},250)},2600);
 gEl.style.transition='opacity .25s';
+// Defer interval start to after page is interactive — не жжём main thread при LCP
+(window.requestIdleCallback||function(cb){setTimeout(cb,500)})(function(){
+  setInterval(function(){gi=(gi+1)%greets.length;gEl.style.opacity=0;
+    setTimeout(function(){gEl.textContent=greets[gi];gEl.style.opacity=1},250)},2600);
+});
 
 /* ---------- Язык пользователя ---------- */
 /* ---------- Переключатель языка ---------- */
@@ -1612,8 +1626,30 @@ if(userLang!=='ru'){
 })();
 
 
-
 /* ===================== ИНСТРУМЕНТЫ (открываются по запросу) ===================== */
+// Defer tools init to after LCP — register event listeners now, init functions lazily
+var __toolsReady=false,__pendingTool=null;
+// Attach lightweight delegated listeners immediately so clicks never get lost
+['bento','consent'].forEach(function(id){
+  var el=document.getElementById(id);
+  if(el)el.addEventListener('click',function(e){
+    var t=e.target.closest('[data-tool]');
+    if(!t)return;
+    var name=t.getAttribute('data-tool');
+    if(__toolsReady){window.__route&&window.__route(name);}
+    else{__pendingTool=name;}
+  });
+});
+document.querySelector('footer').addEventListener('click',function(e){
+  var t=e.target.closest('[data-tool]');
+  if(!t)return;
+  e.preventDefault();
+  var name=t.getAttribute('data-tool');
+  if(__toolsReady){window.__route&&window.__route(name);}
+  else{__pendingTool=name;}
+});
+
+(window.requestIdleCallback||function(cb){setTimeout(cb,200)})(function(){
 (function(){
 "use strict";
 var translateText=window.translateText||function(t){return Promise.resolve(t);};
@@ -2929,8 +2965,6 @@ function openArticle(slug){
   // Export for reuse
   window.__openArticle=openArticle;
   setTimeout(function(){try{getSeoPages();}catch(e){}},500);
-  // Preparse SEO data immediately so first click is instant
-  setTimeout(function(){try{getSeoPages();}catch(e){}},500);
 })();
 
 
@@ -3230,13 +3264,18 @@ tools.about=function(){openModal('🍶 О нас');
 
 /* ============ РОУТЕР ============ */
 function route(name){if(tools[name])tools[name]()}
+window.__route=route;
 document.getElementById('bento').addEventListener('click',function(e){
   var t=e.target.closest('[data-tool]');if(t)route(t.getAttribute('data-tool'))});
 document.querySelector('footer').addEventListener('click',function(e){
   var t=e.target.closest('[data-tool]');if(t){e.preventDefault();route(t.getAttribute('data-tool'))}});
 document.getElementById('consent').addEventListener('click',function(e){
   var t=e.target.closest('[data-tool]');if(t){e.preventDefault();route(t.getAttribute('data-tool'))}});
+// Mark ready and flush any pending click
+__toolsReady=true;
+if(__pendingTool){var _p=__pendingTool;__pendingTool=null;route(_p);}
 })();
+}); // end requestIdleCallback
 
 </script>
 
