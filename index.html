@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="ru">
+<!DOCTYPE html><html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -400,12 +399,62 @@ footer .links{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin
   color:var(--gold)!important;
   font-weight:700!important;
 }
-/* Скрываем верхний бар который GT добавляет */
+/* Скрываем верхний бар */
 .goog-te-banner-frame.skiptranslate{display:none!important;}
 body{top:0!important;}
-/* Скрываем лишние элементы GT */
 .goog-te-gadget img{display:none!important;}
 .goog-logo-link{display:none!important;}
+/* ===== GT DROPDOWN — компактный на телефоне ===== */
+.goog-te-menu-frame{
+  max-width:260px!important;
+  left:16px!important;
+  right:auto!important;
+}
+.goog-te-menu2{
+  max-height:300px!important;
+  overflow-y:scroll!important;
+  -webkit-overflow-scrolling:touch!important;
+  width:240px!important;
+  max-width:240px!important;
+}
+.goog-te-menu2-item div,
+.goog-te-menu2-item:link div,
+.goog-te-menu2-item:visited div{
+  width:210px!important;
+  padding:8px 12px!important;
+  font-size:.9rem!important;
+}
+/* Одна колонка вместо таблицы */
+.goog-te-menu2 table,
+.goog-te-menu2 tbody,
+.goog-te-menu2 tr,
+.goog-te-menu2 td{
+  display:block!important;
+  width:100%!important;
+}
+
+/* ===== GEORGIA GUIDE SECTION ===== */
+.guide-section{margin-bottom:28px}
+.guide-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.guide-card{
+  background:var(--card);border:1px solid var(--line);border-radius:18px;
+  padding:16px 14px;cursor:pointer;text-align:left;
+  transition:transform .15s,border-color .15s;
+  display:flex;flex-direction:column;gap:4px;
+}
+.guide-card:active{transform:scale(.97);border-color:var(--gold)}
+.guide-card .gc-emoji{font-size:1.8rem;margin-bottom:4px}
+.guide-card .gc-title{font-family:var(--font-display);font-weight:900;font-size:.95rem;color:var(--ink);line-height:1.2}
+.guide-card .gc-sub{font-size:.78rem;color:var(--muted);line-height:1.3}
+.guide-card.big{grid-column:span 2;flex-direction:row;align-items:center;gap:14px;padding:14px 16px}
+.guide-card.big .gc-emoji{font-size:2.2rem;margin:0;flex-shrink:0}
+/* Guide article modal */
+.geo-article{padding:4px 0}
+.geo-article h2{font-family:var(--font-display);font-size:1.3rem;font-weight:900;color:var(--ink);margin-bottom:8px}
+.geo-article p{font-size:.95rem;line-height:1.6;color:var(--ink);margin-bottom:12px}
+.geo-article .geo-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.geo-article .geo-tag{background:var(--card-2);border:1px solid var(--line);border-radius:20px;padding:5px 12px;font-size:.8rem;color:var(--muted);cursor:pointer}
+.geo-article .geo-tag:active{border-color:var(--gold);color:var(--gold)}
 </style>
 <!-- Security -->
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
@@ -509,6 +558,15 @@ body{top:0!important;}
     </div>
   </section>
 
+  <!-- GEORGIA GUIDE -->
+  <section class="guide-section" id="guideSection">
+    <h2 class="section-title">🇬🇪 Georgia Guide</h2>
+    <p class="section-sub" id="guideSubtitle">Verified facts about Georgia — read before you go</p>
+    <div class="guide-grid" id="guideGrid">
+      <!-- Cards injected by JS -->
+    </div>
+  </section>
+
   <!-- ИНСТРУМЕНТЫ -->
   <h2 class="section-title" data-i18n="tools_h">🧰 Полезное в Грузии</h2>
   <p class="section-sub" data-i18n="tools_sub">Всё что нужно на месте — работает каждый день поездки</p>
@@ -555,6 +613,8 @@ body{top:0!important;}
     <a data-tool="about" data-i18n="f_about">О нас</a>
   </div>
   <p data-i18n="f_note">Чача — бесплатный помощник. Мы посредник: подбираем варианты, а бронирование и оплата проходят напрямую на официальных платформах. 🇬🇪</p>
+
+  <div style="margin-top:12px;text-align:center"><p style="color:var(--muted);font-size:.75rem">🇬🇪 <a href="/geo/tbilisi/" style="color:var(--muted)">Tbilisi</a> · <a href="/geo/kazbegi/" style="color:var(--muted)">Kazbegi</a> · <a href="/geo/svaneti/" style="color:var(--muted)">Svaneti</a> · <a href="/geo/batumi/" style="color:var(--muted)">Batumi</a> · <a href="/geo/kakheti/" style="color:var(--muted)">Kakheti Wine</a> · <a href="/geo/georgian-cuisine/" style="color:var(--muted)">Georgian Food</a></p></div>
 </footer>
 
 <!-- УНИВЕРСАЛЬНАЯ МОДАЛКА -->
@@ -605,6 +665,7 @@ gEl.style.transition='opacity .25s';
     ['fr','🇫🇷','Français'],['tr','🇹🇷','Türkçe'],['ar','🇸🇦','العربية'],
     ['he','🇮🇱','עברית'],['fa','🇮🇷','فارسی'],['es','🇪🇸','Español'],
     ['uk','🇺🇦','Українська'],['be','🇧🇾','Беларуская'],['ka','🇬🇪','ქართული'],
+    ['hy','🇦🇲','Հայերեն'],
     ['it','🇮🇹','Italiano'],['pl','🇵🇱','Polski'],['zh-CN','🇨🇳','中文'],
     ['ja','🇯🇵','日本語'],['ko','🇰🇷','한국어'],['hi','🇮🇳','हिन्दी'],['pt','🇵🇹','Português']
   ];
@@ -651,7 +712,7 @@ var I18N={
     law_p:'С 1 января 2026 каждый турист обязан иметь медстраховку (мин. 30 000 ₾ ≈ $11 000). Без неё могут не пустить. Оформи заранее — на границе дороже.',
     law_a:'Оформить страховку →',
     tools_h:'🧰 Полезное в Грузии',tools_sub:'Всё что нужно на месте — работает каждый день поездки',
-    t_translator_h:'Переводчик турист ↔ грузин',t_translator_p:'Говори на своём — Чача переведёт на грузинский голосом. Бесплатно.',
+    t_translator_h:'Переводчик турист ↔ грузин',t_translator_p:'Введи текст — увидишь перевод на грузинский на экране. Бесплатно.',
     t_metro_h:'Метро Тбилиси',t_metro_p:'Маршрут, цена, пересадка. Офлайн.',
     t_phrases_h:'Разговорник',t_phrases_p:'Грузинские фразы + озвучка',
     t_currency_h:'Курс лари',t_currency_p:'GEL в твою валюту',
@@ -683,7 +744,7 @@ var I18N={
     law_p:'From January 1, 2026 every tourist must have medical insurance (min. 30,000 ₾ ≈ $11,000). Without it you may be refused entry. Buy ahead — it costs more at the border.',
     law_a:'Get insurance →',
     tools_h:'🧰 Handy in Georgia',tools_sub:'Everything you need on the ground — useful every day of the trip',
-    t_translator_h:'Translator tourist ↔ Georgian',t_translator_p:'Speak your language — Chacha translates to Georgian by voice. Free.',
+    t_translator_h:'Translator tourist ↔ Georgian',t_translator_p:'Type in your language — see Georgian translation on screen. Free.',
     t_metro_h:'Tbilisi Metro',t_metro_p:'Route, price, transfer. Offline.',
     t_phrases_h:'Phrasebook',t_phrases_p:'Georgian phrases + audio',
     t_currency_h:'Lari rate',t_currency_p:'GEL to your currency',
@@ -1190,33 +1251,33 @@ function linkLabel(url){
   var LABELS={
     booking:{ru:'Забронировать отель',en:'Book hotel',de:'Hotel buchen',fr:'Réserver hôtel',
              tr:'Otel rezervasyonu',ar:'حجز فندق',he:'הזמן מלון',fa:'رزرو هتل',
-             es:'Reservar hotel',uk:'Забронювати готель',be:'Забранаваць гатэль',ka:'სასტუმროს ჯავშანი'},
+             es:'Reservar hotel',uk:'Забронювати готель',be:'Забранаваць гатэль',ka:'სასტუმროს ჯავშანი',hy:'Ամրագրել հյուրանոց'},
     rental:  {ru:'Арендовать авто',en:'Rent a car',de:'Auto mieten',fr:'Louer une voiture',
              tr:'Araba kirala',ar:'استئجار سيارة',he:'שכור רכב',fa:'اجاره ماشین',
-             es:'Alquilar coche',uk:'Орендувати авто',be:'Узяць аўтамабіль',ka:'მანქანის დაქირავება'},
+             es:'Alquilar coche',uk:'Орендувати авто',be:'Узяць аўтамабіль',ka:'მანქანის დაქირავება',hy:'Վարձել մեքենա'},
     tour:    {ru:'Найти тур',en:'Find a tour',de:'Tour finden',fr:'Trouver un tour',
              tr:'Tur bul',ar:'إيجاد جولة',he:'מצא סיור',fa:'پیدا کردن تور',
-             es:'Buscar tour',uk:'Знайти тур',be:'Знайсці тур',ka:'ტური',},
+             es:'Buscar tour',uk:'Знайти тур',be:'Знайсці тур',ka:'ტური',hy:'Գտնել շրջագայություն'},
     transfer:{ru:'Заказать трансфер',en:'Book transfer',de:'Transfer buchen',fr:'Réserver transfert',
              tr:'Transfer rezervasyonu',ar:'حجز نقل',he:'הזמן העברה',fa:'رزرو ترانسفر',
-             es:'Reservar traslado',uk:'Замовити трансфер',be:'Замовіць трансфер',ka:'ტრანსფერი'},
+             es:'Reservar traslado',uk:'Замовити трансфер',be:'Замовіць трансфер',ka:'ტრანსფერი',hy:'Ամրագրել տրանսֆեր'},
     flights: {ru:'Найти авиабилеты',en:'Find flights',de:'Flüge suchen',fr:'Trouver des vols',
              tr:'Uçuş bul',ar:'إيجاد رحلات',he:'מצא טיסות',fa:'پیدا کردن پرواز',
-             es:'Buscar vuelos',uk:'Знайти авіаквитки',be:'Знайсці авіябілеты',ka:'ფრენები'},
+             es:'Buscar vuelos',uk:'Знайти авіаквитки',be:'Знайсці авіябілеты',ka:'ფრენები',hy:'Գտնել չվերթներ'},
     esim:    {ru:'Купить eSIM',en:'Buy eSIM',de:'eSIM kaufen',fr:'Acheter eSIM',
              tr:'eSIM satın al',ar:'شراء eSIM',he:'קנה eSIM',fa:'خرید eSIM',
-             es:'Comprar eSIM',uk:'Купити eSIM',be:'Купіць eSIM',ka:'eSIM'},
+             es:'Comprar eSIM',uk:'Купити eSIM',be:'Купіць eSIM',ka:'eSIM',hy:'Գնել eSIM'},
     luggage: {ru:'Камера хранения',en:'Luggage storage',de:'Gepäckaufbewahrung',fr:'Consigne bagages',
              tr:'Bagaj emaneti',ar:'تخزين الأمتعة',he:'שמירת מטען',fa:'انبار چمدان',
-             es:'Consigna equipaje',uk:'Камера схову',be:'Камера захоўвання',ka:'ბარგის შენახვა'},
+             es:'Consigna equipaje',uk:'Камера схову',be:'Камера захоўвання',ka:'ბარგის შენახვა',hy:'Ուղեբեռի պահեստ'},
     insurance:{ru:'Страховка для въезда',en:'Travel insurance',de:'Reiseversicherung',fr:'Assurance voyage',
              tr:'Seyahat sigortası',ar:'تأمين السفر',he:'ביטוח נסיעות',fa:'بیمه سفر',
-             es:'Seguro de viaje',uk:'Страховка(UA)',be:'Страхоўка',ka:'სამოგზაურო დაზღვევა'},
+             es:'Seguro de viaje',uk:'Страховка(UA)',be:'Страхоўка',ka:'სამოგზაურო დაზღვევა',hy:'Ճամփորդական ապահովագրություն'},
     insExtra:{ru:'Доп. страховка',en:'Extra insurance',de:'Zusatzversicherung',fr:'Assurance extra',
              tr:'Ek sigorta',ar:'تأمين إضافي',he:'ביטוח נוסף',fa:'بیمه اضافی',
-             es:'Seguro extra',uk:'Додаткова страховка',be:'Дад. страхоўка',ka:'დამატებითი'},
+             es:'Seguro extra',uk:'Додаткова страховка',be:'Дад. страхоўка',ka:'დამატებითი',hy:'Լրացուցիչ ապահովագրություն'},
     open:    {ru:'Открыть',en:'Open',de:'Öffnen',fr:'Ouvrir',tr:'Aç',ar:'فتح',
-             he:'פתח',fa:'باز کن',es:'Abrir',uk:'Відкрити',be:'Адкрыць',ka:'გახსნა'}
+             he:'פתח',fa:'باز کن',es:'Abrir',uk:'Відкрити',be:'Адкрыць',ka:'გახსნა',hy:'Բացել'}
   };
   function lbl(key){
     var set=LABELS[key]||LABELS.open;
@@ -1509,6 +1570,8 @@ if(userLang!=='ru'){
 }
 })();
 
+
+
 /* ===================== ИНСТРУМЕНТЫ (открываются по запросу) ===================== */
 (function(){
 "use strict";
@@ -1520,7 +1583,7 @@ var modal=document.getElementById('modal'),
     mBack=document.getElementById('modalBack');
 var lang=window.__userLang||'ru';
 
-function openModal(title){
+function openModal(title){window.__openModal=openModal;
   // Translate title
   var lang=window.__userLang||'ru';
   if(window.__nativeLangs&&window.__nativeLangs.indexOf(lang)<0&&lang!=='en'&&window.translateText){
@@ -1823,6 +1886,41 @@ var TOOL_TEXTS_I18N={
     games_tip:'💡 Понравилось? Поделись сайтом с друзьями кнопкой «Поделиться» внизу 🍶',
     games_close:'✕ Закрыть',
   },
+
+  hy:{trust:'🆓 Անվճար · վճարումը <b>հուսալի ապրանքանիշերի</b> միջոցով',
+    h1:'Ձեր բարեկամ <span class="em">Չաչան</span><br>Վրաստանում 🇬🇪',
+    welcome:'Բարի գալուստ!',
+    sub:'Ոչ միայն պլանավորող — հոգատար ուղեկից ամբողջ ճանապարհորդության համար։ Հարցրե՛ք Վրաստանի մասին։',
+    trust_badge:'🆓 Անվճար · վճարումը հուսալի ապրանքանիշերի միջոցով',
+    back:'← Կայք',f_note:'sakartvelo.ai — Վրաստան AI ուղեցույց',
+    consent:'Ընդունել 🍶',consent_no:'Մերժել',
+    consent_text:'Մենք օգտագործում ենք միայն անհրաժեշտ cookie-ներ։',
+    disclaimer:'Չաչան AI է և կարող է սխալվել։ Ստուգե՛ք պատասխանները 🍶',
+    q_svaneti:'🏔️ Սվանեթի',q_batumi:'🏨 Բաթումի',q_kakheti:'🍷 Կախեթի',
+    q_transfer:'✈️ Տրանսֆեր',q_tbilisi:'🏙️ Թբիլիսի',q_kazbegi:'⛰️ Կազբեգի',
+    q_kutaisi:'🦅 Քութայիսի',q_bakuriani:'⛷️ Բակուրիանի',q_gudauri:'🪂 Գուդաուրի',
+    q_borjomi:'💧 Բորժոմի',q_vardzia:'🏛️ Վարձիա',q_ureki:'🏖️ Ուրեկի',
+    q_david:'🕌 Դավիթ Գարեջա',q_mtskheta:'⛪ Մցխեթա',q_sighnaghi:'🌹 Սիղնաղი',
+    dq_svaneti:'Ուզում եմ 3-օրյա շրջագայություն Սվանեթի',
+    dq_batumi:'Հյուրանոց Բաթումիում ծովի մոտ',
+    dq_kakheti:'Գինու շրջագայություն Կախեթիում',
+    dq_transfer:'Տրանսֆեր Թբիլիսիի օդանավակայանից',
+    dq_tbilisi:'Ինչ տեսնել Թբիլիսիում',
+    dq_kazbegi:'Կազբեգի Գերգեթի եկեղեցի արշավ',
+    dq_kutaisi:'Քութայիսի Պրոմեթևսի քարայր',
+    dq_bakuriani:'Դահուկ հանգիստ Բակուրիանիում',
+    dq_gudauri:'Գուդաուրի արշավ պարապլան',
+    dq_borjomi:'Բորժոմի հանքային ջրեր',
+    dq_vardzia:'Վարձիա քարայր վանք',
+    dq_ureki:'Ուրեկի լողափ սև ավազ',
+    dq_david:'Դավիթ Գարեջայի վանական համալիր',
+    dq_mtskheta:'Մցխեթա հին մայրաքաղաք',
+    dq_sighnaghi:'Սիղնաղի սիրո քաղաք գինի',
+    't_places_h':'Լավագույն վայրեր','t_places_p':'Ռեստորաններ, կաֆե, տեսարժան վայրեր ❤️',
+    't_games_h':'Խաղեր ճանապարհին','t_games_p':'Շախմատ և այլն։ Անվճար։',
+    't_airports_h':'Օդանավակայանների ցուցատախտակ','t_airports_p':'Ժամանումներ և մեկնումներ։',
+    't_trains_h':'Գնացքներ Վրաստանում','t_trains_p':'Տոմսեր Թբիլիսի↔Բաթումի։',
+    't_flights_h':'Ուղիղ չվերթներ Վրաստան','t_flights_p':'Ուղիղ չվերթներ Թբիլիսի, Բաթումի։'},
   en:{
     metro_hint:'Metro runs <b>6:00–24:00</b>. All city transport is cashless — cash not accepted.',
     metro_card_title:'💳 MetroMoney Card',
@@ -1835,6 +1933,9 @@ var TOOL_TEXTS_I18N={
     metro_result_direct:'Direct, on the',metro_result_red:'🔴 red',metro_result_green:'🟢 green',metro_result_line:'line.',
     metro_result_stops:'Stops:',metro_result_min:'min',
     metro_result_transfer:'🔄 Transfer at <b>Sadguris Moedani (Station Square)</b>.',metro_result_total:'Total stops:',metro_transfer_free:'(transfer is free)',
+    translator_hint_text:'Type in your language → see Georgian translation. Georgian types below → see translation back. Free.',
+    translator_geo_ph_text:'Georgian types here... ⌨️',
+    translator_tip_text:'💡 No Georgian keyboard? Tap «Georgian keyboard» button — Georgian can type on the screen.',
     translator_hint:'Speak or type in your language — we\'ll translate to Georgian and say it aloud. The Georgian can reply by voice or text — we\'ll translate back. Free, for simple conversations.',
     translator_me:'🙋 You → to Georgian',
     translator_me_ph:'Say 🎤 or type here...',
@@ -2006,25 +2107,26 @@ var tools={};
 tools.translator=function(){openModal(TT('translator_title'));
   var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   var myLang=(window.__userLang||'ru').slice(0,2);
+  var _hint=TTX('translator_hint_text')||'Type in your language → get Georgian translation on screen. Georgian types below → get translation back.';
   mBody.innerHTML=
-    '<p class="hint">'+TTX('translator_hint')+'</p>'+
+    '<p class="hint">'+_hint+'</p>'+
 
-    '<div class="result" style="margin-bottom:10px"><b>'+TTX('translator_me')+'</b>'+
-      '<textarea class="field" id="meText" rows="2" placeholder="'+TTX('translator_me_ph')+'" style="resize:vertical"></textarea>'+
-      '<div class="row2"><button class="btn" id="spkMe">'+TTX('translator_speak_me')+'</button>'+
-      '<button class="btn sec" id="goMe">'+TTX('translator_go_me')+'</button></div>'+
-      '<div id="meOut" style="display:none;margin-top:8px"></div>'+
+    '<div class="result" style="margin-bottom:10px">'+
+      '<b>'+TTX('translator_me')+'</b>'+
+      '<textarea class="field" id="meText" rows="3" placeholder="'+TTX('translator_me_ph')+'" style="resize:vertical"></textarea>'+
+      '<button class="btn" id="goMe" style="width:100%;margin-top:8px">'+TTX('translator_go_me')+'</button>'+
+      '<div id="meOut" style="display:none;margin-top:10px"></div>'+
     '</div>'+
 
-    '<div class="result"><b>'+TTX('translator_geo')+'</b>'+
-      '<textarea class="field" id="geText" rows="2" placeholder="'+TTX('translator_geo_ph')+'" style="resize:vertical"></textarea>'+
-      '<div class="row2"><button class="btn" id="spkGe">'+TTX('translator_speak_geo')+'</button>'+
-      '<button class="btn sec" id="goGe">'+TTX('translator_go_geo')+'</button></div>'+
-      '<button class="btn sec" id="kbToggle" style="margin-top:8px">'+TTX('translator_kb')+'</button>'+
+    '<div class="result">'+
+      '<b>'+TTX('translator_geo')+'</b>'+
+      '<textarea class="field" id="geText" rows="3" placeholder="'+TTX('translator_geo_ph_text')+'" style="resize:vertical"></textarea>'+
+      '<button class="btn" id="goGe" style="width:100%;margin-top:8px">'+TTX('translator_go_geo')+'</button>'+
+      '<button class="btn sec" id="kbToggle" style="margin-top:8px;width:100%">'+TTX('translator_kb')+'</button>'+
       '<div id="geKb" style="display:none;margin-top:10px"></div>'+
-      '<div id="geOut" style="display:none;margin-top:8px"></div>'+
+      '<div id="geOut" style="display:none;margin-top:10px"></div>'+
     '</div>'+
-    '<p class="hint" style="margin-top:12px">'+TTX('translator_tip')+'</p>';
+    '<p class="hint" style="margin-top:12px">'+TTX('translator_tip_text')+'</p>';
 
   function translate(text,from,to,outEl,speakLng){
     if(!text||!text.trim()){outEl.style.display='block';outEl.innerHTML='<span class="hint" style="margin:0">'+TTX('translator_empty')+'</span>';return}
@@ -2033,11 +2135,7 @@ tools.translator=function(){openModal(TT('translator_title'));
     fetch(url).then(function(r){return r.json()}).then(function(d){
       var tr=(d&&d.responseData&&d.responseData.translatedText)||'';
       if(!tr)throw 0;
-      outEl.innerHTML='<div style="font-size:1.4rem;font-weight:700;line-height:1.3;color:var(--gold)">'+tr+'</div>'+
-        '<button class="mini-say" data-say="'+tr.replace(/"/g,'&quot;')+'" data-lng="'+speakLng+'" style="margin-top:8px">'+TTX('speak_btn')+'</button>';
-      var sb=outEl.querySelector('.mini-say');
-      if(sb)sb.onclick=function(){speakFromButton(sb)};
-      speak(tr,speakLng);
+      outEl.innerHTML='<div style="font-size:1.4rem;font-weight:700;line-height:1.3;color:var(--gold);padding:12px;background:var(--card-2);border-radius:12px">'+tr+'</div>';
     }).catch(function(){outEl.innerHTML='<span class="hint" style="margin:0">'+TTX('translator_err')+'</span>'});
   }
   function listen(srcLang,targetTextarea,onDone){
@@ -2561,6 +2659,9 @@ tools.story=function(){
 };
 
 
+
+
+
 /* ============ ИГРЫ ============ */
 tools.games=function(){openModal(TT('games_title'));
   // embed = playpager (проверено, работает в iframe). local = встроенные (всегда работают, не тормозят).
@@ -2578,7 +2679,7 @@ tools.games=function(){openModal(TT('games_title'));
      type:'embed',url:'https://playpager.com/embed/chess/index.html'},
     {name:'🍄 Mario',
      desc:_ru?'Классическая платформа — прыгай и беги!':'Classic platformer — jump and run!',
-     type:'embed',url:'https://supermarioplay.com/games/super-mario-flash/'}
+     type:'mario'}
   ];
   mBody.innerHTML=
     '<p class="hint">'+TTX('games_hint')+'</p>'+
@@ -2610,6 +2711,8 @@ tools.games=function(){openModal(TT('games_title'));
         var frame=document.createElement('iframe');
         frame.src=g.url;frame.style.cssText='width:100%;flex:1;border:none';frame.allow='autoplay';
         area.appendChild(frame);
+      }else if(g.type==='mario'){
+        GAMES.mario(area,ov);
       }else{
         GAMES[g.game](area,ov);
       }
@@ -2680,6 +2783,287 @@ GAMES.tetris=function(area,ov){
 };
 
 // --- ЗМЕЙКА ---
+
+
+/* ===== MARIO (canvas platformer) ===== */
+GAMES.mario=function(area,ov){
+  var W=Math.min(area.clientWidth||320,360),H=420;
+  var wrap=document.createElement('div');
+  wrap.style.cssText='display:flex;flex-direction:column;align-items:center;width:100%;padding:8px';
+  var info=document.createElement('div');
+  info.style.cssText='color:#e3b35e;font-weight:700;font-size:.95rem;margin-bottom:8px;text-align:center';
+  info.textContent='🍄 Mario — Score: 0  Lives: 3';
+  var cv=document.createElement('canvas');
+  cv.width=W;cv.height=H;
+  cv.style.cssText='background:#6b88ff;border-radius:8px;touch-action:none;display:block';
+  var ctrls=document.createElement('div');
+  ctrls.style.cssText='display:flex;gap:12px;margin-top:10px;flex-wrap:wrap;justify-content:center';
+  ctrls.innerHTML=
+    '<button style="padding:12px 20px;background:#e3b35e;border:none;border-radius:12px;font-size:1.2rem;cursor:pointer" id="mleft">◀</button>'+
+    '<button style="padding:12px 24px;background:#e3b35e;border:none;border-radius:12px;font-size:1.2rem;cursor:pointer" id="mjump">🅰 Jump</button>'+
+    '<button style="padding:12px 20px;background:#e3b35e;border:none;border-radius:12px;font-size:1.2rem;cursor:pointer" id="mright">▶</button>';
+  wrap.appendChild(info);wrap.appendChild(cv);wrap.appendChild(ctrls);area.appendChild(wrap);
+
+  var ctx=cv.getContext('2d');
+  var score=0,lives=3,running=true;
+  
+  // Level tiles (1=ground, 2=brick, 3=coin block, 0=empty)
+  var TILE=40;
+  var level=[
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,2,0,3,0,2,0,0],
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,0,2,2,2,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
+    [1,1,1,1,0,0,1,1,1],
+    [1,1,1,1,0,0,1,1,1],
+    [1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1],
+  ];
+
+  // Enemies (Goombas)
+  var enemies=[
+    {x:200,y:280,vx:-1,w:30,h:30,alive:true},
+    {x:320,y:280,vx:-1.5,w:30,h:30,alive:true},
+  ];
+  // Coins
+  var coins=[
+    {x:160,y:200,taken:false},{x:180,y:200,taken:false},
+  ];
+  // Goal flag
+  var goal={x:330,y:200,reached:false};
+
+  var mario={x:40,y:260,w:28,h:36,vx:0,vy:0,onGround:false,dead:false,won:false};
+  var camX=0;
+  var keys={left:false,right:false,jump:false};
+  var jumpPressed=false;
+
+  function tileAt(wx,wy){
+    var col=Math.floor(wx/TILE);
+    var row=Math.floor(wy/TILE);
+    if(row<0||row>=level.length||col<0||col>=level[0].length)return 0;
+    return level[row][col];
+  }
+  function isSolid(wx,wy){var t=tileAt(wx,wy);return t===1||t===2||t===3;}
+
+  function drawTile(t,x,y){
+    if(t===1){ctx.fillStyle='#8b5e3c';ctx.fillRect(x,y,TILE,TILE);ctx.fillStyle='#5a8a00';ctx.fillRect(x,y,TILE,6);}
+    else if(t===2){ctx.fillStyle='#c47a2a';ctx.fillRect(x,y,TILE,TILE);ctx.strokeStyle='#8b5000';ctx.strokeRect(x,y,TILE,TILE);}
+    else if(t===3){ctx.fillStyle='#f0c000';ctx.fillRect(x,y,TILE,TILE);ctx.fillStyle='#c09000';ctx.font='bold 20px sans-serif';ctx.fillText('?',x+12,y+26);}
+  }
+
+  function update(){
+    if(!running||mario.dead||mario.won)return;
+    if(keys.right)mario.vx=Math.min(mario.vx+0.5,4);
+    else if(keys.left)mario.vx=Math.max(mario.vx-0.5,-4);
+    else mario.vx*=0.75;
+    if(keys.jump&&mario.onGround&&!jumpPressed){mario.vy=-12;mario.onGround=false;jumpPressed=true;}
+    if(!keys.jump)jumpPressed=false;
+    mario.vy=Math.min(mario.vy+0.6,14);
+    mario.x+=mario.vx;mario.y+=mario.vy;
+    // Level bounds
+    mario.x=Math.max(0,Math.min(mario.x,(level[0].length*TILE)-mario.w));
+    mario.onGround=false;
+    // Collision with tiles
+    var checks=[[mario.x,mario.y+mario.h],[mario.x+mario.w,mario.y+mario.h],[mario.x,mario.y],[mario.x+mario.w,mario.y]];
+    if(isSolid(mario.x+mario.vx,mario.y+mario.h-2)||isSolid(mario.x+mario.w+mario.vx,mario.y+mario.h-2)){
+      if(mario.vy>0){mario.y=Math.floor((mario.y+mario.h)/TILE)*TILE-mario.h;mario.vy=0;mario.onGround=true;}
+    }
+    if(isSolid(mario.x+mario.w/2,mario.y)&&mario.vy<0){mario.vy=0;}
+    if(isSolid(mario.x,mario.y+mario.h/2)||isSolid(mario.x,mario.y+mario.h/2+10)){mario.x+=3;}
+    if(isSolid(mario.x+mario.w,mario.y+mario.h/2)||isSolid(mario.x+mario.w,mario.y+mario.h/2+10)){mario.x-=3;}
+    // Fall off screen
+    if(mario.y>H+100){mario.dead=true;lives--;if(lives<=0){info.textContent='💀 Game Over! Score: '+score;return;}mario.x=40;mario.y=260;mario.vx=0;mario.vy=0;}
+    // Enemies
+    enemies.forEach(function(e){
+      if(!e.alive)return;
+      e.x+=e.vx;
+      if(isSolid(e.x,e.y+e.h+2)||isSolid(e.x+e.w,e.y+e.h+2)){/* on ground */}
+      else e.vy=(e.vy||0)+0.5;
+      e.y+=(e.vy||0);
+      if(e.x<0||e.x>level[0].length*TILE)e.vx*=-1;
+      // Mario stomps enemy
+      if(!mario.dead&&mario.x<e.x+e.w&&mario.x+mario.w>e.x&&mario.y<e.y+e.h&&mario.y+mario.h>e.y){
+        if(mario.vy>0&&mario.y+mario.h<e.y+e.h/2+10){e.alive=false;mario.vy=-8;score+=100;}
+        else{mario.dead=true;lives--;if(lives<=0){info.textContent='💀 Game Over! Score: '+score;}else{mario.x=40;mario.y=260;mario.vx=0;mario.vy=0;mario.dead=false;}}
+      }
+    });
+    // Coins
+    coins.forEach(function(c){
+      if(c.taken)return;
+      if(mario.x<c.x+20&&mario.x+mario.w>c.x&&mario.y<c.y+20&&mario.y+mario.h>c.y){c.taken=true;score+=50;}
+    });
+    // Goal
+    if(!goal.reached&&mario.x+mario.w>goal.x&&mario.y<goal.y+80&&mario.y+mario.h>goal.y){goal.reached=true;mario.won=true;info.textContent='🎉 You Win! Score: '+(score+500);}
+    camX=Math.max(0,Math.min(mario.x-W/3,(level[0].length*TILE)-W));
+    info.textContent='🍄 Mario  Score: '+score+'  Lives: '+lives+(mario.won?' 🎉 WIN!':'');
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    // Sky
+    ctx.fillStyle='#6b88ff';ctx.fillRect(0,0,W,H);
+    // Clouds
+    ctx.fillStyle='rgba(255,255,255,.8)';
+    [[50,60],[160,40],[260,70]].forEach(function(c){ctx.beginPath();ctx.arc(c[0]-camX%W,c[1],25,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(c[0]-camX%W+20,c[1]+5,18,0,Math.PI*2);ctx.fill();});
+    // Tiles
+    for(var r=0;r<level.length;r++)for(var c2=0;c2<level[r].length;c2++){if(level[r][c2])drawTile(level[r][c2],c2*TILE-camX,r*TILE);}
+    // Goal flag
+    if(!goal.reached){ctx.fillStyle='#fff';ctx.fillRect(goal.x-camX,goal.y,4,80);ctx.fillStyle='#e3b35e';ctx.fillRect(goal.x-camX+4,goal.y,20,14);}
+    // Coins
+    coins.forEach(function(c){if(!c.taken){ctx.fillStyle='#ffd700';ctx.beginPath();ctx.arc(c.x-camX+10,c.y+10,9,0,Math.PI*2);ctx.fill();}});
+    // Enemies
+    enemies.forEach(function(e){if(!e.alive)return;ctx.fillStyle='#8b4513';ctx.fillRect(e.x-camX,e.y,e.w,e.h);ctx.fillStyle='#fff';ctx.fillRect(e.x-camX+5,e.y+6,6,6);ctx.fillRect(e.x-camX+19,e.y+6,6,6);});
+    // Mario
+    if(!mario.dead){
+      ctx.fillStyle='#e63030';ctx.fillRect(mario.x-camX+4,mario.y,mario.w-8,12);// hat
+      ctx.fillStyle='#ffbb88';ctx.fillRect(mario.x-camX+2,mario.y+10,mario.w-4,14);// face
+      ctx.fillStyle='#003cff';ctx.fillRect(mario.x-camX,mario.y+22,mario.w,14);// body
+      ctx.fillStyle='#c47a2a';ctx.fillRect(mario.x-camX+2,mario.y+34,10,8);// shoe L
+      ctx.fillRect(mario.x-camX+mario.w-12,mario.y+34,10,8);// shoe R
+    }
+  }
+
+  var last=0;
+  function loop(ts){
+    if(!running)return;
+    if(ts-last>16){update();draw();last=ts;}
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+  ov._cleanup=function(){running=false;};
+
+  // Touch controls
+  document.getElementById('mleft').addEventListener('touchstart',function(e){e.preventDefault();keys.left=true;});
+  document.getElementById('mleft').addEventListener('touchend',function(){keys.left=false;});
+  document.getElementById('mright').addEventListener('touchstart',function(e){e.preventDefault();keys.right=true;});
+  document.getElementById('mright').addEventListener('touchend',function(){keys.right=false;});
+  document.getElementById('mjump').addEventListener('touchstart',function(e){e.preventDefault();keys.jump=true;});
+  document.getElementById('mjump').addEventListener('touchend',function(){keys.jump=false;});
+  // Keyboard
+  document.addEventListener('keydown',function(e){if(e.key==='ArrowLeft')keys.left=true;if(e.key==='ArrowRight')keys.right=true;if(e.key===' '||e.key==='ArrowUp')keys.jump=true;});
+  document.addEventListener('keyup',function(e){if(e.key==='ArrowLeft')keys.left=false;if(e.key==='ArrowRight')keys.right=false;if(e.key===' '||e.key==='ArrowUp')keys.jump=false;});
+};
+
+
+/* ===== GEORGIA GUIDE ===== */
+(function(){
+  var CARDS=[
+    {emoji:'🏙️',title:'Tbilisi',sub:'Capital · sulfur baths · Old Town',slug:'tbilisi',big:false},
+    {emoji:'🏔️',title:'Kazbegi',sub:'Mountains · Gergeti Church · 5047m',slug:'kazbegi',big:false},
+    {emoji:'🌊',title:'Batumi',sub:'Black Sea · subtropical · nightlife',slug:'batumi',big:false},
+    {emoji:'🍷',title:'Kakheti Wine',sub:'8000 years · 500 grape varieties',slug:'kakheti',big:false},
+    {emoji:'🗻',title:'Svaneti',sub:'Medieval towers · UNESCO · Mestia',slug:'svaneti',big:false},
+    {emoji:'🍽️',title:'Georgian Food',sub:'Khinkali · Khachapuri · Supra',slug:'georgian-cuisine',big:false},
+    {emoji:'🛕',title:'Mtskheta',sub:'Ancient capital · UNESCO · Christianity 327 AD',slug:'mtskheta',big:false},
+    {emoji:'🏛️',title:'Vardzia',sub:'Cave city · Queen Tamar · 12th century',slug:'vardzia',big:false},
+    {emoji:'💧',title:'Borjomi',sub:'Famous mineral water · national park',slug:'borjomi',big:false},
+    {emoji:'⛷️',title:'Gudauri Ski',sub:'2990m · powder snow · Dec–Apr',slug:'gudauri',big:false},
+    {emoji:'📜',title:'Georgian Alphabet',sub:'1600 years old · UNESCO masterpiece',slug:'georgian-alphabet',big:false},
+    {emoji:'🫙',title:'Qvevri Wine',sub:'UNESCO · ancient clay vessel tradition',slug:'qvevri-wine',big:false},
+  ];
+
+  var grid=document.getElementById('guideGrid');
+  if(!grid)return;
+
+  // Render cards
+  grid.innerHTML=CARDS.map(function(c){
+    return '<button class="guide-card'+(c.big?' big':'')+'" data-slug="'+c.slug+'">'+
+      '<span class="gc-emoji">'+c.emoji+'</span>'+
+      '<div><div class="gc-title">'+c.title+'</div>'+
+      '<div class="gc-sub">'+c.sub+'</div></div>'+
+    '</button>';
+  }).join('');
+
+  // Open article on click
+  grid.addEventListener('click',function(e){
+    var card=e.target.closest('[data-slug]');
+    if(!card)return;
+    var slug=card.getAttribute('data-slug');
+    openArticle(slug);
+  });
+
+  function openArticle(slug){
+    // Find page data from seoData
+    var seoEl=document.getElementById('seoData');
+    if(!seoEl)return;
+    var pages;
+    try{pages=JSON.parse(seoEl.textContent);}catch(e){return;}
+    var page=null;
+    for(var i=0;i<pages.length;i++){if(pages[i].slug===slug){page=pages[i];break;}}
+    if(!page)return;
+
+    // Open in modal
+    var _om=window.__openModal||window.openModal;
+      if(typeof _om==='function'){
+      _om(page.title);
+      var mBody=document.getElementById('modalBody');
+      if(!mBody)return;
+      // Format body into paragraphs
+      var paras=page.body.split('. ').filter(function(p){return p.trim().length>10;});
+      var html='<div class="geo-article">'+
+        paras.map(function(p){return p.trim()?'<p>'+p.trim()+'</p>':''}).join('')+
+        '<div class="geo-tags">'+
+          page.keywords.split(',').map(function(k){
+            return '<span class="geo-tag">'+k.trim()+'</span>';
+          }).join('')+
+        '</div>'+
+        '<p style="margin-top:16px"><a href="/geo/'+slug+'/" style="color:var(--gold);font-size:.85rem">🔗 Full page: sakartvelo.ai/geo/'+slug+'/</a></p>'+
+      '</div>';
+      mBody.innerHTML=html;
+    }
+  }
+
+  // Translate guide titles if needed
+  var lang=window.__userLang||'ru';
+  if(lang==='ru'||lang==='be'||lang==='uk'){
+    // Russian translations for card titles
+    var ruCards={
+      'tbilisi':'🏙️ Тбилиси',
+      'kazbegi':'🏔️ Казбеги',
+      'batumi':'🌊 Батуми',
+      'kakheti':'🍷 Вино Кахетии',
+      'svaneti':'🗻 Сванетия',
+      'georgian-cuisine':'🍽️ Грузинская кухня',
+      'mtskheta':'🛕 Мцхета',
+      'vardzia':'🏛️ Вардзия',
+      'borjomi':'💧 Боржоми',
+      'gudauri':'⛷️ Гудаури',
+      'georgian-alphabet':'📜 Грузинский алфавит',
+      'qvevri-wine':'🫙 Вино в квеври',
+    };
+    var ruSubs={
+      'tbilisi':'Столица · серные бани · Старый город',
+      'kazbegi':'Горы · церковь Гергети · 5047м',
+      'batumi':'Чёрное море · субтропики · ночная жизнь',
+      'kakheti':'8000 лет виноделия · 500 сортов',
+      'svaneti':'Средневековые башни · ЮНЕСКО',
+      'georgian-cuisine':'Хинкали · хачапури · суфра',
+      'mtskheta':'Древняя столица · ЮНЕСКО · 327 н.э.',
+      'vardzia':'Пещерный город · царица Тамара',
+      'borjomi':'Минеральная вода · национальный парк',
+      'gudauri':'2990м · пороша · декабрь–апрель',
+      'georgian-alphabet':'1600 лет · шедевр ЮНЕСКО',
+      'qvevri-wine':'ЮНЕСКО · древний метод в глиняных сосудах',
+    };
+    grid.querySelectorAll('[data-slug]').forEach(function(card){
+      var slug=card.getAttribute('data-slug');
+      if(ruCards[slug]){
+        var t=card.querySelector('.gc-title');
+        var s=card.querySelector('.gc-sub');
+        if(t)t.textContent=ruCards[slug];
+        if(s)s.textContent=ruSubs[slug]||s.textContent;
+      }
+    });
+    var sub=document.getElementById('guideSubtitle');
+    if(sub)sub.textContent='Проверенные факты о Грузии — читай перед поездкой';
+    var h=document.querySelector('#guideSection .section-title');
+    if(h)h.textContent='🇬🇪 Путеводитель по Грузии';
+  }
+})();
+
 
 /* ============ ЛУЧШИЕ МЕСТА ============ */
 tools.places=function(){openModal(TT('places_title'));
