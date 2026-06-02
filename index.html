@@ -22,7 +22,6 @@
 <meta name="twitter:title" content="Чача — AI-гид по Грузии 🇬🇪">
 <meta name="twitter:description" content="Бесплатный заботливый помощник для поездки в Грузию. 🍶">
 
-<!-- PWA manifest (inline через data-URI задаётся в JS) -->
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%237a1220'/%3E%3Ctext x='50' y='68' font-size='56' text-anchor='middle'%3E%F0%9F%8D%B6%3C/text%3E%3C/svg%3E">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -249,7 +248,7 @@ header.top{
 .section-title{font-family:var(--font-display);font-weight:900;font-size:1.5rem;
   margin:30px 0 4px;letter-spacing:-.5px}
 .section-sub{color:var(--muted);font-size:.92rem;margin-bottom:16px}
-.bento{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-bottom:22px;
+.bento{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-bottom:22px;content-visibility:auto;contain-intrinsic-size:0 800px;
   content-visibility:auto;contain-intrinsic-size:auto 700px}
 .tile{
   background:var(--card);border:1px solid var(--line);border-radius:16px;
@@ -271,7 +270,7 @@ header.top{
 .tile p{font-size:.78rem;color:var(--muted);line-height:1.35}
 
 /* ===== МОДАЛКА ИНСТРУМЕНТА ===== */
-.modal{position:fixed;inset:0;z-index:100;display:none;flex-direction:column;
+.modal{position:fixed;inset:0;will-change:transform;z-index:100;display:none;flex-direction:column;
   background:var(--bg)}
 .modal.open{display:flex}
 .modal-head{display:flex;align-items:center;gap:12px;padding:16px;
@@ -377,61 +376,22 @@ footer .links{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin
 .lp-other{margin-top:12px;width:100%;max-width:400px;background:var(--card-2);border:1px solid var(--line);border-radius:16px;padding:14px 16px;cursor:pointer;font-family:var(--font-body);font-size:.9rem;color:var(--muted);text-align:center}
 .lp-logo{font-family:var(--font-display);font-size:1.1rem;font-weight:900;margin-bottom:28px;color:var(--gold)}
 
-/* ===== Google Translate — floating widget ===== */
-#google_translate_element{
-  position:fixed;
-  bottom:calc(80px + env(safe-area-inset-bottom));
-  left:16px;
-  z-index:8000;
-}
-.goog-te-gadget-simple{
-  background:var(--card)!important;
-  border:1px solid var(--gold)!important;
-  border-radius:20px!important;
-  padding:6px 12px!important;
-  font-size:.82rem!important;
-  cursor:pointer!important;
-}
-.goog-te-gadget-simple span{
-  color:var(--ink)!important;
-}
-.goog-te-gadget-simple .goog-te-menu-value span{
-  color:var(--gold)!important;
-  font-weight:700!important;
-}
+
+
+
+
+
 /* Скрываем верхний бар */
-.goog-te-banner-frame.skiptranslate{display:none!important;}
+
 body{top:0!important;}
-.goog-te-gadget img{display:none!important;}
+
 .goog-logo-link{display:none!important;}
 /* ===== GT DROPDOWN — компактный на телефоне ===== */
-.goog-te-menu-frame{
-  max-width:260px!important;
-  left:16px!important;
-  right:auto!important;
-}
-.goog-te-menu2{
-  max-height:300px!important;
-  overflow-y:scroll!important;
-  -webkit-overflow-scrolling:touch!important;
-  width:240px!important;
-  max-width:240px!important;
-}
-.goog-te-menu2-item div,
-.goog-te-menu2-item:link div,
-.goog-te-menu2-item:visited div{
-  width:210px!important;
-  padding:8px 12px!important;
-  font-size:.9rem!important;
-}
+
+
+
 /* Одна колонка вместо таблицы */
-.goog-te-menu2 table,
-.goog-te-menu2 tbody,
-.goog-te-menu2 tr,
-.goog-te-menu2 td{
-  display:block!important;
-  width:100%!important;
-}
+
 
 /* ===== GEORGIA GUIDE SECTION ===== */
 .guide-section{margin-bottom:28px}
@@ -455,6 +415,21 @@ body{top:0!important;}
 .geo-article .geo-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
 .geo-article .geo-tag{background:var(--card-2);border:1px solid var(--line);border-radius:20px;padding:5px 12px;font-size:.8rem;color:var(--muted);cursor:pointer}
 .geo-article .geo-tag:active{border-color:var(--gold);color:var(--gold)}
+
+/* View Transitions API 2026 */
+@view-transition { navigation: auto; }
+::view-transition-old(root){ animation: 150ms ease-out fade-out; }
+::view-transition-new(root){ animation: 150ms ease-in fade-in; }
+@keyframes fade-out { from { opacity:1; } to { opacity:0; } }
+@keyframes fade-in { from { opacity:0; } to { opacity:1; } }
+/* Modal view transition */
+.modal{ view-transition-name: modal; }
+
+/* Performance 2026 */
+.guide-section, footer { content-visibility: auto; contain-intrinsic-size: 0 600px; }
+img { decoding: async; }
+.tile { will-change: transform; }
+* { -webkit-tap-highlight-color: transparent; }
 </style>
 <!-- Security -->
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
@@ -463,6 +438,23 @@ body{top:0!important;}
 <!-- Performance: preconnect -->
 <link rel="preconnect" href="https://api.anthropic.com">
 <link rel="preconnect" href="https://api.mymemory.translated.net">
+
+<script type="speculationrules">
+{
+  "prerender": [
+    {
+      "source": "list",
+      "urls": ["/geo/tbilisi/","/geo/kazbegi/","/geo/batumi/","/geo/svaneti/","/geo/kakheti/"]
+    }
+  ],
+  "prefetch": [
+    {
+      "source": "document",
+      "eagerness": "moderate"
+    }
+  ]
+}
+</script>
 </head>
 <body data-theme="dark">
 <!-- ===== LANGUAGE PICKER ONBOARDING ===== -->
@@ -492,6 +484,7 @@ body{top:0!important;}
 <header class="top">
   <div class="logo"><span class="mark">🍶</span> sakartvelo<b>.ai</b></div>
   <div style="display:flex;gap:8px;align-items:center">
+    <button class="theme-btn" id="installBtn" aria-label="Install app" title="Add to home screen" style="display:none">📲</button>
     <button class="theme-btn" id="langBtn" aria-label="Language" title="Choose language">🌐</button>
     <button class="theme-btn" id="themeBtn" aria-label="Тема">🌙</button>
   </div>
@@ -637,7 +630,7 @@ body{top:0!important;}
 </div>
 
 
-<link rel="manifest" href='data:application/json,%7B%22name%22%3A%22%D0%A7%D0%B0%D1%87%D0%B0%20%E2%80%94%20%D0%B3%D0%B8%D0%B4%20%D0%BF%D0%BE%20%D0%93%D1%80%D1%83%D0%B7%D0%B8%D0%B8%22%2C%22short_name%22%3A%22%D0%A7%D0%B0%D1%87%D0%B0%22%2C%22start_url%22%3A%22%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23120a0c%22%2C%22theme_color%22%3A%22%237a1220%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20100%20100'%253E%253Crect%20width%3D'100'%20height%3D'100'%20rx%3D'22'%20fill%3D'%25237a1220'%2F%253E%253Ctext%20x%3D'50'%20y%3D'70'%20font-size%3D'58'%20text-anchor%3D'middle'%253E%25F0%259F%258D%25B6%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22any%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D'>
+<link rel="manifest" href="/manifest.json">
 <script>
 /* ===================== SAKARTVELO.AI — ядро ===================== */
 (function(){
@@ -661,13 +654,17 @@ gEl.style.transition='opacity .25s';
 /* ---------- Переключатель языка ---------- */
 (function(){
   var LANGS=[
-    ['en','🇬🇧','English'],['ru','🇷🇺','Русский'],['de','🇩🇪','Deutsch'],
+    ['ru','🇷🇺','Русский'],['en','🇬🇧','English'],['de','🇩🇪','Deutsch'],
     ['fr','🇫🇷','Français'],['tr','🇹🇷','Türkçe'],['ar','🇸🇦','العربية'],
     ['he','🇮🇱','עברית'],['fa','🇮🇷','فارسی'],['es','🇪🇸','Español'],
     ['uk','🇺🇦','Українська'],['be','🇧🇾','Беларуская'],['ka','🇬🇪','ქართული'],
-    ['hy','🇦🇲','Հայերեն'],
-    ['it','🇮🇹','Italiano'],['pl','🇵🇱','Polski'],['zh-CN','🇨🇳','中文'],
-    ['ja','🇯🇵','日本語'],['ko','🇰🇷','한국어'],['hi','🇮🇳','हिन्दी'],['pt','🇵🇹','Português']
+    ['hy','🇦🇲','Հայերեն'],['az','🇦🇿','Azərbaycan'],['kk','🇰🇿','Қазақша'],
+    ['uz','🇺🇿','Ozbek'],['tk','🇹🇲','Türkmen'],['tg','🇹🇯','Тоҷикӣ'],
+    ['ky','🇰🇬','Кыргызча'],['lv','🇱🇻','Latviešu'],['lt','🇱🇹','Lietuvių'],
+    ['et','🇪🇪','Eesti'],['md','🇲🇩','Moldovenească'],
+    ['zh-CN','🇨🇳','中文'],['ja','🇯🇵','日本語'],['ko','🇰🇷','한국어'],
+    ['it','🇮🇹','Italiano'],['pl','🇵🇱','Polski'],['pt','🇵🇹','Português'],
+    ['nl','🇳🇱','Nederlands'],['hi','🇮🇳','हिन्दी'],['ro','🇷🇴','Română / Moldova']
   ];
   var saved=null;try{saved=localStorage.getItem('sak_lang');}catch(e){}
   if(saved){window.__forcedLang=saved;}
@@ -1470,15 +1467,52 @@ var deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',function(e){
   e.preventDefault();
   deferredPrompt=e;
-  // показываем кнопку установки если есть
-  var installBtn=document.getElementById('installBtn');
-  if(installBtn)installBtn.style.display='flex';
+  var btn=document.getElementById('installBtn');
+  if(btn){
+    btn.style.display='flex';
+    btn.onclick=function(){
+      if(!deferredPrompt)return;
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function(){
+        deferredPrompt=null;
+        btn.style.display='none';
+      });
+    };
+  }
 });
 window.addEventListener('appinstalled',function(){
+  var btn=document.getElementById('installBtn');
+  if(btn)btn.style.display='none';
   deferredPrompt=null;
-  var installBtn=document.getElementById('installBtn');
-  if(installBtn)installBtn.style.display='none';
 });
+
+// iOS Safari install hint
+(function(){
+  var isIos=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  var standalone=window.navigator.standalone===true;
+  if(!isIos||standalone)return;
+  try{if(localStorage.getItem('sak_ios_hint'))return;}catch(e){}
+  setTimeout(function(){
+    var lang=window.__userLang||'en';
+    var msg=lang==='ru'||lang==='be'||lang==='uk'?
+      '📲 Добавить на экран: нажми ↑ затем «На экран «Домой»»':
+      '📲 Add to home screen: tap ↑ then «Add to Home Screen»';
+    var d=document.createElement('div');
+    d.style.cssText='position:fixed;bottom:calc(24px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:var(--gold);color:#1a0d10;padding:12px 20px;border-radius:20px;font-size:.85rem;font-weight:700;z-index:8888;max-width:290px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.5);cursor:pointer';
+    d.textContent=msg;
+    d.onclick=function(){d.remove();try{localStorage.setItem('sak_ios_hint','1');}catch(e){}};
+    document.body.appendChild(d);
+    setTimeout(function(){if(d.parentNode){d.remove();}},5000);
+    try{localStorage.setItem('sak_ios_hint','1');}catch(e){}
+  },4000);
+})();
+
+// Service Worker
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('/sw.js').catch(function(){});
+  });
+}
 window.__installPWA=function(){
   if(!deferredPrompt)return;
   deferredPrompt.prompt();
@@ -2671,15 +2705,21 @@ tools.games=function(){openModal(TT('games_title'));
     {name:_ru?'🧱 Тетрис':'🧱 Tetris',
      desc:_ru?'Складывай фигуры, очищай ряды':'Stack pieces, clear lines',
      type:'local',game:'tetris'},
-    {name:_ru?'💣 Сапёр':'💣 Minesweeper',
-     desc:_ru?'Найди мины — не взорвись':'Find mines — don\'t explode',
-     type:'embed',url:'https://playpager.com/embed/minesweeper/index.html'},
     {name:_ru?'♟️ Шахматы':'♟️ Chess',
      desc:_ru?'Против компьютера или друга':'vs computer or friend',
      type:'embed',url:'https://playpager.com/embed/chess/index.html'},
-    {name:'🍄 Mario',
-     desc:_ru?'Классическая платформа — прыгай и беги!':'Classic platformer — jump and run!',
-     type:'mario'}
+    {name:_ru?'💣 Сапёр':'💣 Minesweeper',
+     desc:_ru?'Найди мины — не взорвись':'Find mines — don\'t explode',
+     type:'embed',url:'https://playpager.com/embed/minesweeper/index.html'},
+    {name:_ru?'🚢 Морской бой':'🚢 Battleship',
+     desc:_ru?'Топи флот противника — классика':'Sink the enemy fleet — classic',
+     type:'embed',url:'https://playpager.com/embed/battleship/index.html'},
+    {name:_ru?'🔢 Судоку':'🔢 Sudoku',
+     desc:_ru?'Заполни цифры 1–9':'Fill digits 1–9',
+     type:'embed',url:'https://playpager.com/embed/sudoku/index.html'},
+    {name:_ru?'🟦 2048':'🟦 2048',
+     desc:_ru?'Соединяй плитки до 2048':'Merge tiles to reach 2048',
+     type:'local',game:'g2048'}
   ];
   mBody.innerHTML=
     '<p class="hint">'+TTX('games_hint')+'</p>'+
@@ -2711,8 +2751,6 @@ tools.games=function(){openModal(TT('games_title'));
         var frame=document.createElement('iframe');
         frame.src=g.url;frame.style.cssText='width:100%;flex:1;border:none';frame.allow='autoplay';
         area.appendChild(frame);
-      }else if(g.type==='mario'){
-        GAMES.mario(area,ov);
       }else{
         GAMES[g.game](area,ov);
       }
@@ -2785,283 +2823,202 @@ GAMES.tetris=function(area,ov){
 // --- ЗМЕЙКА ---
 
 
-/* ===== MARIO (canvas platformer) ===== */
-GAMES.mario=function(area,ov){
-  var W=Math.min(area.clientWidth||320,360),H=420;
+
+/* ===== 2048 ===== */
+GAMES.g2048=function(area,ov){
+  var N=4,score=0,best=0;
+  var board=Array.from({length:N},function(){return Array(N).fill(0);});
   var wrap=document.createElement('div');
-  wrap.style.cssText='display:flex;flex-direction:column;align-items:center;width:100%;padding:8px';
-  var info=document.createElement('div');
-  info.style.cssText='color:#e3b35e;font-weight:700;font-size:.95rem;margin-bottom:8px;text-align:center';
-  info.textContent='🍄 Mario — Score: 0  Lives: 3';
+  wrap.style.cssText='display:flex;flex-direction:column;align-items:center;width:100%;padding:8px;user-select:none';
+  var scoreEl=document.createElement('div');
+  scoreEl.style.cssText='color:#e3b35e;font-weight:700;font-size:1rem;margin-bottom:8px';
   var cv=document.createElement('canvas');
-  cv.width=W;cv.height=H;
-  cv.style.cssText='background:#6b88ff;border-radius:8px;touch-action:none;display:block';
-  var ctrls=document.createElement('div');
-  ctrls.style.cssText='display:flex;gap:12px;margin-top:10px;flex-wrap:wrap;justify-content:center';
-  ctrls.innerHTML=
-    '<button style="padding:12px 20px;background:#e3b35e;border:none;border-radius:12px;font-size:1.2rem;cursor:pointer" id="mleft">◀</button>'+
-    '<button style="padding:12px 24px;background:#e3b35e;border:none;border-radius:12px;font-size:1.2rem;cursor:pointer" id="mjump">🅰 Jump</button>'+
-    '<button style="padding:12px 20px;background:#e3b35e;border:none;border-radius:12px;font-size:1.2rem;cursor:pointer" id="mright">▶</button>';
-  wrap.appendChild(info);wrap.appendChild(cv);wrap.appendChild(ctrls);area.appendChild(wrap);
-
+  var SIZE=Math.min(area.clientWidth||300,320);
+  cv.width=cv.height=SIZE;
+  cv.style.cssText='border-radius:10px;touch-action:none;display:block';
+  wrap.appendChild(scoreEl);wrap.appendChild(cv);area.appendChild(wrap);
   var ctx=cv.getContext('2d');
-  var score=0,lives=3,running=true;
-  
-  // Level tiles (1=ground, 2=brick, 3=coin block, 0=empty)
-  var TILE=40;
-  var level=[
-    [0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0],
-    [0,0,2,0,3,0,2,0,0],
-    [0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0],
-    [0,0,0,2,2,2,0,0,0],
-    [0,0,0,0,0,0,0,0,0],
-    [1,1,1,1,0,0,1,1,1],
-    [1,1,1,1,0,0,1,1,1],
-    [1,1,1,1,1,1,1,1,1],
-    [1,1,1,1,1,1,1,1,1],
-  ];
-
-  // Enemies (Goombas)
-  var enemies=[
-    {x:200,y:280,vx:-1,w:30,h:30,alive:true},
-    {x:320,y:280,vx:-1.5,w:30,h:30,alive:true},
-  ];
-  // Coins
-  var coins=[
-    {x:160,y:200,taken:false},{x:180,y:200,taken:false},
-  ];
-  // Goal flag
-  var goal={x:330,y:200,reached:false};
-
-  var mario={x:40,y:260,w:28,h:36,vx:0,vy:0,onGround:false,dead:false,won:false};
-  var camX=0;
-  var keys={left:false,right:false,jump:false};
-  var jumpPressed=false;
-
-  function tileAt(wx,wy){
-    var col=Math.floor(wx/TILE);
-    var row=Math.floor(wy/TILE);
-    if(row<0||row>=level.length||col<0||col>=level[0].length)return 0;
-    return level[row][col];
-  }
-  function isSolid(wx,wy){var t=tileAt(wx,wy);return t===1||t===2||t===3;}
-
-  function drawTile(t,x,y){
-    if(t===1){ctx.fillStyle='#8b5e3c';ctx.fillRect(x,y,TILE,TILE);ctx.fillStyle='#5a8a00';ctx.fillRect(x,y,TILE,6);}
-    else if(t===2){ctx.fillStyle='#c47a2a';ctx.fillRect(x,y,TILE,TILE);ctx.strokeStyle='#8b5000';ctx.strokeRect(x,y,TILE,TILE);}
-    else if(t===3){ctx.fillStyle='#f0c000';ctx.fillRect(x,y,TILE,TILE);ctx.fillStyle='#c09000';ctx.font='bold 20px sans-serif';ctx.fillText('?',x+12,y+26);}
-  }
-
-  function update(){
-    if(!running||mario.dead||mario.won)return;
-    if(keys.right)mario.vx=Math.min(mario.vx+0.5,4);
-    else if(keys.left)mario.vx=Math.max(mario.vx-0.5,-4);
-    else mario.vx*=0.75;
-    if(keys.jump&&mario.onGround&&!jumpPressed){mario.vy=-12;mario.onGround=false;jumpPressed=true;}
-    if(!keys.jump)jumpPressed=false;
-    mario.vy=Math.min(mario.vy+0.6,14);
-    mario.x+=mario.vx;mario.y+=mario.vy;
-    // Level bounds
-    mario.x=Math.max(0,Math.min(mario.x,(level[0].length*TILE)-mario.w));
-    mario.onGround=false;
-    // Collision with tiles
-    var checks=[[mario.x,mario.y+mario.h],[mario.x+mario.w,mario.y+mario.h],[mario.x,mario.y],[mario.x+mario.w,mario.y]];
-    if(isSolid(mario.x+mario.vx,mario.y+mario.h-2)||isSolid(mario.x+mario.w+mario.vx,mario.y+mario.h-2)){
-      if(mario.vy>0){mario.y=Math.floor((mario.y+mario.h)/TILE)*TILE-mario.h;mario.vy=0;mario.onGround=true;}
-    }
-    if(isSolid(mario.x+mario.w/2,mario.y)&&mario.vy<0){mario.vy=0;}
-    if(isSolid(mario.x,mario.y+mario.h/2)||isSolid(mario.x,mario.y+mario.h/2+10)){mario.x+=3;}
-    if(isSolid(mario.x+mario.w,mario.y+mario.h/2)||isSolid(mario.x+mario.w,mario.y+mario.h/2+10)){mario.x-=3;}
-    // Fall off screen
-    if(mario.y>H+100){mario.dead=true;lives--;if(lives<=0){info.textContent='💀 Game Over! Score: '+score;return;}mario.x=40;mario.y=260;mario.vx=0;mario.vy=0;}
-    // Enemies
-    enemies.forEach(function(e){
-      if(!e.alive)return;
-      e.x+=e.vx;
-      if(isSolid(e.x,e.y+e.h+2)||isSolid(e.x+e.w,e.y+e.h+2)){/* on ground */}
-      else e.vy=(e.vy||0)+0.5;
-      e.y+=(e.vy||0);
-      if(e.x<0||e.x>level[0].length*TILE)e.vx*=-1;
-      // Mario stomps enemy
-      if(!mario.dead&&mario.x<e.x+e.w&&mario.x+mario.w>e.x&&mario.y<e.y+e.h&&mario.y+mario.h>e.y){
-        if(mario.vy>0&&mario.y+mario.h<e.y+e.h/2+10){e.alive=false;mario.vy=-8;score+=100;}
-        else{mario.dead=true;lives--;if(lives<=0){info.textContent='💀 Game Over! Score: '+score;}else{mario.x=40;mario.y=260;mario.vx=0;mario.vy=0;mario.dead=false;}}
-      }
-    });
-    // Coins
-    coins.forEach(function(c){
-      if(c.taken)return;
-      if(mario.x<c.x+20&&mario.x+mario.w>c.x&&mario.y<c.y+20&&mario.y+mario.h>c.y){c.taken=true;score+=50;}
-    });
-    // Goal
-    if(!goal.reached&&mario.x+mario.w>goal.x&&mario.y<goal.y+80&&mario.y+mario.h>goal.y){goal.reached=true;mario.won=true;info.textContent='🎉 You Win! Score: '+(score+500);}
-    camX=Math.max(0,Math.min(mario.x-W/3,(level[0].length*TILE)-W));
-    info.textContent='🍄 Mario  Score: '+score+'  Lives: '+lives+(mario.won?' 🎉 WIN!':'');
-  }
-
+  var COLORS={0:'#2a1a1f',2:'#e3b35e',4:'#d4a04e',8:'#c47a2a',16:'#b56020',
+    32:'#a04010',64:'#903010',128:'#803020',256:'#702820',512:'#602020',
+    1024:'#501818',2048:'#ffd700'};
   function draw(){
-    ctx.clearRect(0,0,W,H);
-    // Sky
-    ctx.fillStyle='#6b88ff';ctx.fillRect(0,0,W,H);
-    // Clouds
-    ctx.fillStyle='rgba(255,255,255,.8)';
-    [[50,60],[160,40],[260,70]].forEach(function(c){ctx.beginPath();ctx.arc(c[0]-camX%W,c[1],25,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(c[0]-camX%W+20,c[1]+5,18,0,Math.PI*2);ctx.fill();});
-    // Tiles
-    for(var r=0;r<level.length;r++)for(var c2=0;c2<level[r].length;c2++){if(level[r][c2])drawTile(level[r][c2],c2*TILE-camX,r*TILE);}
-    // Goal flag
-    if(!goal.reached){ctx.fillStyle='#fff';ctx.fillRect(goal.x-camX,goal.y,4,80);ctx.fillStyle='#e3b35e';ctx.fillRect(goal.x-camX+4,goal.y,20,14);}
-    // Coins
-    coins.forEach(function(c){if(!c.taken){ctx.fillStyle='#ffd700';ctx.beginPath();ctx.arc(c.x-camX+10,c.y+10,9,0,Math.PI*2);ctx.fill();}});
-    // Enemies
-    enemies.forEach(function(e){if(!e.alive)return;ctx.fillStyle='#8b4513';ctx.fillRect(e.x-camX,e.y,e.w,e.h);ctx.fillStyle='#fff';ctx.fillRect(e.x-camX+5,e.y+6,6,6);ctx.fillRect(e.x-camX+19,e.y+6,6,6);});
-    // Mario
-    if(!mario.dead){
-      ctx.fillStyle='#e63030';ctx.fillRect(mario.x-camX+4,mario.y,mario.w-8,12);// hat
-      ctx.fillStyle='#ffbb88';ctx.fillRect(mario.x-camX+2,mario.y+10,mario.w-4,14);// face
-      ctx.fillStyle='#003cff';ctx.fillRect(mario.x-camX,mario.y+22,mario.w,14);// body
-      ctx.fillStyle='#c47a2a';ctx.fillRect(mario.x-camX+2,mario.y+34,10,8);// shoe L
-      ctx.fillRect(mario.x-camX+mario.w-12,mario.y+34,10,8);// shoe R
+    ctx.fillStyle='#1a0d10';ctx.fillRect(0,0,SIZE,SIZE);
+    var cell=SIZE/N,gap=6;
+    for(var r=0;r<N;r++){for(var c=0;c<N;c++){
+      var v=board[r][c];
+      var x=c*cell+gap,y=r*cell+gap,w=cell-gap*2;
+      ctx.fillStyle=COLORS[Math.min(v,2048)]||'#400';
+      ctx.beginPath();ctx.roundRect(x,y,w,w,8);ctx.fill();
+      if(v){
+        ctx.fillStyle=v<=4?'#1a0d10':'#fff';
+        ctx.font='bold '+(v<100?w*0.42:v<1000?w*0.34:w*0.28)+'px sans-serif';
+        ctx.textAlign='center';ctx.textBaseline='middle';
+        ctx.fillText(v,x+w/2,y+w/2);
+      }
+    }}
+    scoreEl.textContent='🟦 2048  Score: '+score;
+  }
+  function addRandom(){
+    var empty=[];
+    for(var r=0;r<N;r++)for(var c=0;c<N;c++)if(!board[r][c])empty.push([r,c]);
+    if(!empty.length)return;
+    var p=empty[Math.floor(Math.random()*empty.length)];
+    board[p[0]][p[1]]=Math.random()<0.9?2:4;
+  }
+  function compress(row){var f=row.filter(function(x){return x;});while(f.length<N)f.push(0);return f;}
+  function merge(row){
+    for(var i=0;i<N-1;i++){if(row[i]&&row[i]===row[i+1]){row[i]*=2;score+=row[i];row[i+1]=0;}}
+    return row;
+  }
+  function move(dir){
+    var moved=false;
+    for(var i=0;i<N;i++){
+      var row;
+      if(dir===0)row=board[i].slice();
+      else if(dir===1)row=board[i].slice().reverse();
+      else if(dir===2)row=board.map(function(r){return r[i];});
+      else row=board.map(function(r){return r[i];}).reverse();
+      var orig=row.slice();
+      row=compress(merge(compress(row)));
+      if(row.join()!==orig.join()){moved=true;}
+      if(dir===0)board[i]=row;
+      else if(dir===1)board[i]=row.reverse();
+      else if(dir===2)row.forEach(function(v,j){board[j][i]=v;});
+      else row.reverse().forEach(function(v,j){board[N-1-j][i]=v;});
     }
+    if(moved){addRandom();draw();}
   }
-
-  var last=0;
-  function loop(ts){
-    if(!running)return;
-    if(ts-last>16){update();draw();last=ts;}
-    requestAnimationFrame(loop);
-  }
-  requestAnimationFrame(loop);
-  ov._cleanup=function(){running=false;};
-
-  // Touch controls
-  document.getElementById('mleft').addEventListener('touchstart',function(e){e.preventDefault();keys.left=true;});
-  document.getElementById('mleft').addEventListener('touchend',function(){keys.left=false;});
-  document.getElementById('mright').addEventListener('touchstart',function(e){e.preventDefault();keys.right=true;});
-  document.getElementById('mright').addEventListener('touchend',function(){keys.right=false;});
-  document.getElementById('mjump').addEventListener('touchstart',function(e){e.preventDefault();keys.jump=true;});
-  document.getElementById('mjump').addEventListener('touchend',function(){keys.jump=false;});
-  // Keyboard
-  document.addEventListener('keydown',function(e){if(e.key==='ArrowLeft')keys.left=true;if(e.key==='ArrowRight')keys.right=true;if(e.key===' '||e.key==='ArrowUp')keys.jump=true;});
-  document.addEventListener('keyup',function(e){if(e.key==='ArrowLeft')keys.left=false;if(e.key==='ArrowRight')keys.right=false;if(e.key===' '||e.key==='ArrowUp')keys.jump=false;});
+  addRandom();addRandom();draw();
+  // Touch/swipe
+  var tx,ty;
+  cv.addEventListener('touchstart',function(e){e.preventDefault();tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:false});
+  cv.addEventListener('touchend',function(e){
+    e.preventDefault();
+    var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;
+    if(Math.abs(dx)>Math.abs(dy)){move(dx>0?1:0);}else{move(dy>0?3:2);}
+  },{passive:false});
+  document.addEventListener('keydown',function h(e){
+    if(e.key==='ArrowLeft')move(0);if(e.key==='ArrowRight')move(1);
+    if(e.key==='ArrowUp')move(2);if(e.key==='ArrowDown')move(3);
+  });
 };
 
 
 /* ===== GEORGIA GUIDE ===== */
 (function(){
   var CARDS=[
-    {emoji:'🏙️',title:'Tbilisi',sub:'Capital · sulfur baths · Old Town',slug:'tbilisi',big:false},
-    {emoji:'🏔️',title:'Kazbegi',sub:'Mountains · Gergeti Church · 5047m',slug:'kazbegi',big:false},
-    {emoji:'🌊',title:'Batumi',sub:'Black Sea · subtropical · nightlife',slug:'batumi',big:false},
-    {emoji:'🍷',title:'Kakheti Wine',sub:'8000 years · 500 grape varieties',slug:'kakheti',big:false},
-    {emoji:'🗻',title:'Svaneti',sub:'Medieval towers · UNESCO · Mestia',slug:'svaneti',big:false},
-    {emoji:'🍽️',title:'Georgian Food',sub:'Khinkali · Khachapuri · Supra',slug:'georgian-cuisine',big:false},
-    {emoji:'🛕',title:'Mtskheta',sub:'Ancient capital · UNESCO · Christianity 327 AD',slug:'mtskheta',big:false},
-    {emoji:'🏛️',title:'Vardzia',sub:'Cave city · Queen Tamar · 12th century',slug:'vardzia',big:false},
-    {emoji:'💧',title:'Borjomi',sub:'Famous mineral water · national park',slug:'borjomi',big:false},
-    {emoji:'⛷️',title:'Gudauri Ski',sub:'2990m · powder snow · Dec–Apr',slug:'gudauri',big:false},
-    {emoji:'📜',title:'Georgian Alphabet',sub:'1600 years old · UNESCO masterpiece',slug:'georgian-alphabet',big:false},
-    {emoji:'🫙',title:'Qvevri Wine',sub:'UNESCO · ancient clay vessel tradition',slug:'qvevri-wine',big:false},
+    {emoji:'🏙️',title:'Tbilisi',sub:'Capital · sulfur baths · Old Town',slug:'tbilisi'},
+    {emoji:'🏔️',title:'Kazbegi',sub:'Mountains · Gergeti Church · 5047m',slug:'kazbegi'},
+    {emoji:'🌊',title:'Batumi',sub:'Black Sea · subtropical · nightlife',slug:'batumi'},
+    {emoji:'🍷',title:'Kakheti Wine',sub:'8000 years · 500 grape varieties',slug:'kakheti'},
+    {emoji:'🗻',title:'Svaneti',sub:'Medieval towers · UNESCO · Mestia',slug:'svaneti'},
+    {emoji:'🍽️',title:'Georgian Food',sub:'Khinkali · Khachapuri · Supra',slug:'georgian-cuisine'},
+    {emoji:'🛕',title:'Mtskheta',sub:'Ancient capital · UNESCO · 327 AD',slug:'mtskheta'},
+    {emoji:'🏛️',title:'Vardzia',sub:'Cave city · Queen Tamar · 12th c.',slug:'vardzia'},
+    {emoji:'💧',title:'Borjomi',sub:'Famous mineral water · national park',slug:'borjomi'},
+    {emoji:'⛷️',title:'Gudauri Ski',sub:'2990m · powder snow · Dec–Apr',slug:'gudauri'},
+    {emoji:'📜',title:'Georgian Alphabet',sub:'1600 years old · UNESCO',slug:'georgian-alphabet'},
+    {emoji:'🫙',title:'Qvevri Wine',sub:'UNESCO · ancient clay vessel tradition',slug:'qvevri-wine'},
   ];
+
+  var RU_TITLES={
+    tbilisi:'🏙️ Тбилиси',kazbegi:'🏔️ Казбеги',batumi:'🌊 Батуми',
+    kakheti:'🍷 Вино Кахетии',svaneti:'🗻 Сванетия','georgian-cuisine':'🍽️ Грузинская кухня',
+    mtskheta:'🛕 Мцхета',vardzia:'🏛️ Вардзия',borjomi:'💧 Боржоми',
+    gudauri:'⛷️ Гудаури','georgian-alphabet':'📜 Грузинский алфавит','qvevri-wine':'🫙 Вино в квеври'
+  };
+  var RU_SUBS={
+    tbilisi:'Столица · серные бани · Старый город',kazbegi:'Горы · церковь Гергети · 5047м',
+    batumi:'Чёрное море · субтропики · ночная жизнь',kakheti:'8000 лет виноделия · 500 сортов',
+    svaneti:'Средневековые башни · ЮНЕСКО','georgian-cuisine':'Хинкали · хачапури · суфра',
+    mtskheta:'Древняя столица · ЮНЕСКО · 327 н.э.',vardzia:'Пещерный город · царица Тамара',
+    borjomi:'Минеральная вода · национальный парк',gudauri:'2990м · пороша · декабрь–апрель',
+    'georgian-alphabet':'1600 лет · шедевр ЮНЕСКО','qvevri-wine':'ЮНЕСКО · древний метод в квеври'
+  };
+
+  var lang=window.__userLang||'ru';
+  var isRu=lang==='ru'||lang==='be'||lang==='uk';
 
   var grid=document.getElementById('guideGrid');
   if(!grid)return;
 
   // Render cards
   grid.innerHTML=CARDS.map(function(c){
-    return '<button class="guide-card'+(c.big?' big':'')+'" data-slug="'+c.slug+'">'+
-      '<span class="gc-emoji">'+c.emoji+'</span>'+
-      '<div><div class="gc-title">'+c.title+'</div>'+
-      '<div class="gc-sub">'+c.sub+'</div></div>'+
+    var title=isRu?(RU_TITLES[c.slug]||c.emoji+' '+c.title):c.emoji+' '+c.title;
+    var sub=isRu?(RU_SUBS[c.slug]||c.sub):c.sub;
+    return '<button class="guide-card" data-slug="'+c.slug+'" style="display:flex;flex-direction:column;gap:4px">'+
+      '<div style="font-size:.95rem;font-weight:900;color:var(--ink);font-family:var(--font-display)">'+title+'</div>'+
+      '<div style="font-size:.78rem;color:var(--muted);line-height:1.3">'+sub+'</div>'+
     '</button>';
   }).join('');
 
-  // Open article on click
+  // Translate guide heading
+  var heading=document.querySelector('#guideSection .section-title');
+  var subtitle=document.getElementById('guideSubtitle');
+  if(heading&&isRu)heading.textContent='🇬🇪 Путеводитель по Грузии';
+  if(subtitle&&isRu)subtitle.textContent='Проверенные факты — читай перед поездкой';
+
+  // Click handler — instant response + open article
   grid.addEventListener('click',function(e){
     var card=e.target.closest('[data-slug]');
     if(!card)return;
-    var slug=card.getAttribute('data-slug');
-    openArticle(slug);
+    // Visual feedback immediately
+    card.style.opacity='0.7';
+    card.style.transform='scale(0.97)';
+    setTimeout(function(){card.style.opacity='';card.style.transform='';},200);
+    // Open article
+    openArticle(card.getAttribute('data-slug'));
   });
 
   function openArticle(slug){
-    // Find page data from seoData
     var seoEl=document.getElementById('seoData');
     if(!seoEl)return;
     var pages;
-    try{pages=JSON.parse(seoEl.textContent);}catch(e){return;}
+    try{pages=JSON.parse(seoEl.textContent||seoEl.innerHTML);}catch(e){return;}
     var page=null;
     for(var i=0;i<pages.length;i++){if(pages[i].slug===slug){page=pages[i];break;}}
     if(!page)return;
 
-    // Open in modal
-    var _om=window.__openModal||window.openModal;
-      if(typeof _om==='function'){
-      _om(page.title);
-      var mBody=document.getElementById('modalBody');
-      if(!mBody)return;
-      // Format body into paragraphs
-      var paras=page.body.split('. ').filter(function(p){return p.trim().length>10;});
-      var html='<div class="geo-article">'+
-        paras.map(function(p){return p.trim()?'<p>'+p.trim()+'</p>':''}).join('')+
-        '<div class="geo-tags">'+
-          page.keywords.split(',').map(function(k){
-            return '<span class="geo-tag">'+k.trim()+'</span>';
-          }).join('')+
-        '</div>'+
-        '<p style="margin-top:16px"><a href="/geo/'+slug+'/" style="color:var(--gold);font-size:.85rem">🔗 Full page: sakartvelo.ai/geo/'+slug+'/</a></p>'+
-      '</div>';
-      mBody.innerHTML=html;
+    var om=window.__openModal||window.openModal;
+    if(typeof om!=='function')return;
+    om(page.title);
+
+    var mBody=document.getElementById('modalBody');
+    if(!mBody)return;
+
+    var paras=page.body.split('. ').filter(function(p){return p.trim().length>10;});
+    mBody.innerHTML='<div style="padding:4px 0">'+
+      paras.map(function(p){
+        return '<p style="font-size:.95rem;line-height:1.6;margin-bottom:12px">'+p.trim()+(p.slice(-1)!=='.'?'.':'')+'</p>';
+      }).join('')+
+      '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:16px">'+
+        page.keywords.split(',').map(function(k){
+          return '<span style="background:var(--card-2);border:1px solid var(--line);border-radius:20px;padding:5px 12px;font-size:.8rem;color:var(--muted)">'+k.trim()+'</span>';
+        }).join('')+
+      '</div>'+
+      '<div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">'+
+        '<a href="/geo/'+slug+'/" style="background:var(--card-2);border:1px solid var(--line);border-radius:20px;padding:8px 14px;color:var(--muted);font-size:.8rem;text-decoration:none">🔗 Full article</a>'+
+        '<button id="askChachaBtn" style="background:var(--gold);border:none;border-radius:20px;padding:8px 14px;color:#1a0d10;font-size:.8rem;font-weight:700;cursor:pointer">🤖 Ask Chacha AI</button>'+
+      '</div>'+
+    '</div>';
+
+    // Ask Chacha — close modal and focus chat
+    var askBtn=document.getElementById('askChachaBtn');
+    if(askBtn){
+      askBtn.onclick=function(){
+        var modal=document.getElementById('modal');
+        if(modal)modal.classList.remove('open');
+        document.body.style.overflow='';
+        mBody.innerHTML='';
+        setTimeout(function(){
+          var inp=document.getElementById('chatInput');
+          if(inp)inp.focus();
+        },300);
+      };
     }
   }
-
-  // Translate guide titles if needed
-  var lang=window.__userLang||'ru';
-  if(lang==='ru'||lang==='be'||lang==='uk'){
-    // Russian translations for card titles
-    var ruCards={
-      'tbilisi':'🏙️ Тбилиси',
-      'kazbegi':'🏔️ Казбеги',
-      'batumi':'🌊 Батуми',
-      'kakheti':'🍷 Вино Кахетии',
-      'svaneti':'🗻 Сванетия',
-      'georgian-cuisine':'🍽️ Грузинская кухня',
-      'mtskheta':'🛕 Мцхета',
-      'vardzia':'🏛️ Вардзия',
-      'borjomi':'💧 Боржоми',
-      'gudauri':'⛷️ Гудаури',
-      'georgian-alphabet':'📜 Грузинский алфавит',
-      'qvevri-wine':'🫙 Вино в квеври',
-    };
-    var ruSubs={
-      'tbilisi':'Столица · серные бани · Старый город',
-      'kazbegi':'Горы · церковь Гергети · 5047м',
-      'batumi':'Чёрное море · субтропики · ночная жизнь',
-      'kakheti':'8000 лет виноделия · 500 сортов',
-      'svaneti':'Средневековые башни · ЮНЕСКО',
-      'georgian-cuisine':'Хинкали · хачапури · суфра',
-      'mtskheta':'Древняя столица · ЮНЕСКО · 327 н.э.',
-      'vardzia':'Пещерный город · царица Тамара',
-      'borjomi':'Минеральная вода · национальный парк',
-      'gudauri':'2990м · пороша · декабрь–апрель',
-      'georgian-alphabet':'1600 лет · шедевр ЮНЕСКО',
-      'qvevri-wine':'ЮНЕСКО · древний метод в глиняных сосудах',
-    };
-    grid.querySelectorAll('[data-slug]').forEach(function(card){
-      var slug=card.getAttribute('data-slug');
-      if(ruCards[slug]){
-        var t=card.querySelector('.gc-title');
-        var s=card.querySelector('.gc-sub');
-        if(t)t.textContent=ruCards[slug];
-        if(s)s.textContent=ruSubs[slug]||s.textContent;
-      }
-    });
-    var sub=document.getElementById('guideSubtitle');
-    if(sub)sub.textContent='Проверенные факты о Грузии — читай перед поездкой';
-    var h=document.querySelector('#guideSection .section-title');
-    if(h)h.textContent='🇬🇪 Путеводитель по Грузии';
-  }
+  // Export for reuse
+  window.__openArticle=openArticle;
 })();
 
 
@@ -3371,29 +3328,10 @@ document.getElementById('consent').addEventListener('click',function(e){
 
 </script>
 
-<!-- Google Translate Widget -->
-<div id="google_translate_element"></div>
-<script>
-function googleTranslateElementInit(){
-  try{
-    new google.translate.TranslateElement({
-      pageLanguage:'ru',
-      layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
-      autoDisplay:false,
-      multilanguagePage:true
-    },'google_translate_element');
-  }catch(e){}
-}
-</script>
-<script 
-  src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
-  async defer
-  onerror="document.getElementById('google_translate_element').style.display='none'">
-</script>
 
 
 <!-- ===== 100 SEO PAGES ===== -->
-<script type="application/json" id="seoData">
+<script type="text/x-seo-data" id="seoData">
 [
 {
 "slug": "tbilisi",
