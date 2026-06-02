@@ -1,37 +1,25 @@
 [build]
   publish = "."
 
+[[plugins]]
+  package = "@netlify/plugin-functions-install-core"
+
+[functions]
+  directory = "netlify/functions"
+
+# Redirect /geo/* to index.html for SEO pages (SPA routing)
 [[redirects]]
-  from = "http://sakartvelo.ai/*"
-  to = "https://sakartvelo.ai/:splat"
-  status = 301
-  force = true
+  from = "/geo/*"
+  to = "/index.html"
+  status = 200
 
-[[redirects]]
-  from = "http://www.sakartvelo.ai/*"
-  to = "https://sakartvelo.ai/:splat"
-  status = 301
-  force = true
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
 
-[[redirects]]
-  from = "https://www.sakartvelo.ai/*"
-  to = "https://sakartvelo.ai/:splat"
-  status = 301
-  force = true
-
-[build.processing]
-  skip_processing = false
-
-[build.processing.css]
-  bundle = true
-  minify = true
-
-[build.processing.js]
-  bundle = false
-  minify = true
-
-[build.processing.html]
-  pretty_urls = true
-
-[build.processing.images]
-  compress = true
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Content-Type = "application/xml"
