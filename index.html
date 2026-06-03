@@ -4225,34 +4225,67 @@ if(__pendingTool){var _p=__pendingTool;__pendingTool=null;route(_p);}
     if(pages[i].slug===slug){page=pages[i];break;}
   }
   if(!page)return;
-  
-  // Update meta tags for this SEO page
-  document.title=page.title+' | sakartvelo.ai';
+
+  // Определяем язык пользователя
+  var lang='en';
+  try{lang=localStorage.getItem('sak_lang')||'en';}catch(e){}
+  var isRuLike=lang==='ru'||lang==='be'||lang==='uk';
+  var langKey=isRuLike?'ru':lang;
+
+  // Берём перевод из GUIDE_ARTICLES если есть — иначе из seoData (EN)
+  var ga=typeof GUIDE_ARTICLES!=='undefined'?GUIDE_ARTICLES:{};
+  var ga_page=ga[slug];
+  var displayTitle=page.title;
+  var displayBody=page.body;
+  var displayBack='← Back to sakartvelo.ai';
+  var displayExplore='Explore Georgia:';
+
+  if(ga_page){
+    if(langKey!=='en'&&ga_page['title_'+langKey])displayTitle=ga_page['title_'+langKey];
+    if(langKey!=='en'&&ga_page['body_'+langKey])displayBody=ga_page['body_'+langKey];
+  }
+
+  // Локализуем кнопки
+  var backLabels={ru:'← Назад на sakartvelo.ai',tr:'← sakartvelo.ai\'ye dön',
+    hy:'← Վернуться к sakartvelo.ai',he:'← חזרה ל-sakartvelo.ai',
+    az:'← sakartvelo.ai-a qayıt',de:'← Zurück zu sakartvelo.ai',
+    fr:'← Retour à sakartvelo.ai',es:'← Volver a sakartvelo.ai',
+    uk:'← Назад на sakartvelo.ai',zh:'← 返回 sakartvelo.ai',pl:'← Powrót do sakartvelo.ai'};
+  var exploreLabels={ru:'Исследуй Грузию:',tr:'Gürcistan\'ı keşfet:',
+    hy:'Ուսումնասիրեք Վրաստանը:',he:'גלה את גיאורגיה:',
+    az:'Gürcüstanı kəşf et:',de:'Entdecke Georgien:',
+    fr:'Explorez la Géorgie:',es:'Explora Georgia:',
+    uk:'Досліджуй Грузію:',zh:'探索格鲁吉亚:',pl:'Odkryj Gruzję:'};
+  if(backLabels[lang])displayBack=backLabels[lang];
+  if(exploreLabels[lang])displayExplore=exploreLabels[lang];
+
+  // Update meta tags
+  document.title=displayTitle+' | sakartvelo.ai';
   var desc=document.querySelector('meta[name="description"]');
-  if(desc)desc.setAttribute('content',page.body.slice(0,155)+'...');
+  if(desc)desc.setAttribute('content',displayBody.slice(0,155)+'...');
   var kw=document.querySelector('meta[name="keywords"]');
   if(kw)kw.setAttribute('content',page.keywords);
-  
+
   // Add canonical
   var canon=document.querySelector('link[rel="canonical"]');
   if(canon)canon.setAttribute('href','https://sakartvelo.ai/geo/'+slug+'/');
-  
-  // Add structured data for article
+
+  // Add structured data
   var ld=document.createElement('script');
   ld.type='application/ld+json';
   ld.textContent=JSON.stringify({
     "@context":"https://schema.org",
     "@type":"Article",
-    "headline":page.title,
-    "description":page.body.slice(0,200),
+    "headline":displayTitle,
+    "description":displayBody.slice(0,200),
     "url":"https://sakartvelo.ai/geo/"+slug+"/",
     "publisher":{"@type":"Organization","name":"sakartvelo.ai","url":"https://sakartvelo.ai"},
     "about":{"@type":"Place","name":"Georgia","description":"Country in the Caucasus"},
     "keywords":page.keywords
   });
   document.head.appendChild(ld);
-  
-  // Render SEO page content
+
+  // Render page in user's language
   document.body.innerHTML=''+
     '<style>'+
     'body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;max-width:800px;margin:0 auto;padding:20px;line-height:1.7;color:#1a1a1a;background:#fff}'+
@@ -4264,13 +4297,13 @@ if(__pendingTool){var _p=__pendingTool;__pendingTool=null;route(_p);}
     '.related h3{font-size:1rem;color:#666;margin-bottom:12px}'+
     '.tag{display:inline-block;background:#f5f5f5;border-radius:20px;padding:4px 12px;margin:4px;font-size:.85rem;color:#333;text-decoration:none}'+
     '</style>'+
-    '<a href="https://sakartvelo.ai" class="back">🍶 Back to sakartvelo.ai — AI Guide to Georgia</a>'+
-    '<h1>'+page.title+'</h1>'+
-    '<div class="meta">🇬🇪 Georgia Travel Guide · sakartvelo.ai</div>'+
-    '<p>'+page.body.replace(/\.(?=\s[A-Z])/g,'.</p><p>')+'</p>'+
+    '<a href="https://sakartvelo.ai" class="back">🍶 '+displayBack+'</a>'+
+    '<h1>'+displayTitle+'</h1>'+
+    '<div class="meta">🇬🇪 sakartvelo.ai</div>'+
+    '<p>'+displayBody.replace(/\. /g,'.</p><p>')+'</p>'+
     '<div class="related">'+
-      '<h3>Explore Georgia:</h3>'+
-      '<a href="/geo/tbilisi/" class="tag">🏛️ Tbilisi</a>'+
+      '<h3>'+displayExplore+'</h3>'+
+      '<a href="/geo/tbilisi/" class="tag">🏙️ Tbilisi</a>'+
       '<a href="/geo/kazbegi/" class="tag">🏔️ Kazbegi</a>'+
       '<a href="/geo/svaneti/" class="tag">🗻 Svaneti</a>'+
       '<a href="/geo/batumi/" class="tag">🌊 Batumi</a>'+
