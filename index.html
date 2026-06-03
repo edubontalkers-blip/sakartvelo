@@ -399,14 +399,14 @@ body{top:0!important;}
 .guide-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .guide-card{
   background:var(--card);border:1px solid var(--line);border-radius:18px;
-  padding:16px 14px;cursor:pointer;text-align:left;
+  padding:16px 14px;text-align:left;text-decoration:none;
   transition:transform .15s,border-color .15s;
   display:flex;flex-direction:column;gap:4px;
 }
+.guide-card:hover{transform:scale(.98);border-color:var(--gold)}
 .guide-card:active{transform:scale(.97);border-color:var(--gold)}
-.guide-card .gc-emoji{font-size:1.8rem;margin-bottom:4px}
-.guide-card .gc-title{font-family:var(--font-display);font-weight:900;font-size:.95rem;color:var(--ink);line-height:1.2}
-.guide-card .gc-sub{font-size:.78rem;color:var(--muted);line-height:1.3}
+.guide-card .gc-title,.gc-title{font-family:var(--font-display);font-weight:900;font-size:.95rem;color:var(--ink);line-height:1.2}
+.guide-card .gc-sub,.gc-sub{font-size:.78rem;color:var(--muted);line-height:1.3}
 .guide-card.big{grid-column:span 2;flex-direction:row;align-items:center;gap:14px;padding:14px 16px}
 .guide-card.big .gc-emoji{font-size:2.2rem;margin:0;flex-shrink:0}
 /* Guide article modal */
@@ -573,54 +573,54 @@ header.top{display:flex;align-items:center;justify-content:space-between;padding
     <h2 class="section-title" id="guideTitle">🇬🇪 Georgia Guide</h2>
     <p class="section-sub" id="guideSubtitle">Verified facts about Georgia — read before you go</p>
     <div class="guide-grid" id="guideGrid">
-      <button class="guide-card" onclick="window.__openSlug('tbilisi')">
-        <div style="font-size:.95rem;font-weight:900;color:var(--ink);font-family:var(--font-display)" id="gc-tbilisi-title">🏙️ Tbilisi</div>
-        <div style="font-size:.78rem;color:var(--muted);line-height:1.3" id="gc-tbilisi-sub">Capital · sulfur baths · Old Town</div>
-      </button>
-      <button class="guide-card" onclick="window.__openSlug('kazbegi')">
-        <div style="font-size:.95rem;font-weight:900;color:var(--ink);font-family:var(--font-display)" id="gc-kazbegi-title">🏔️ Kazbegi</div>
-        <div style="font-size:.78rem;color:var(--muted);line-height:1.3" id="gc-kazbegi-sub">Mountains · Gergeti Church · 5047m</div>
-      </button>
-      <button class="guide-card" onclick="window.__openSlug('batumi')">
-        <div style="font-size:.95rem;font-weight:900;color:var(--ink);font-family:var(--font-display)" id="gc-batumi-title">🌊 Batumi</div>
-        <div style="font-size:.78rem;color:var(--muted);line-height:1.3" id="gc-batumi-sub">Black Sea · subtropical · nightlife</div>
-      </button>
-      <button class="guide-card" onclick="window.__openSlug('kakheti')">
-        <div style="font-size:.95rem;font-weight:900;color:var(--ink);font-family:var(--font-display)" id="gc-kakheti-title">🍷 Kakheti Wine</div>
-        <div style="font-size:.78rem;color:var(--muted);line-height:1.3" id="gc-kakheti-sub">8000 years · 500 grape varieties</div>
-      </button>
-      <button class="guide-card" onclick="window.__openSlug('svaneti')">
-        <div style="font-size:.95rem;font-weight:900;color:var(--ink);font-family:var(--font-display)" id="gc-svaneti-title">🗻 Svaneti</div>
-        <div style="font-size:.78rem;color:var(--muted);line-height:1.3" id="gc-svaneti-sub">Medieval towers · UNESCO · Mestia</div>
-      </button>
-      <button class="guide-card" onclick="window.__openSlug('georgian-cuisine')">
-        <div style="font-size:.95rem;font-weight:900;color:var(--ink);font-family:var(--font-display)" id="gc-food-title">🍽️ Georgian Food</div>
-        <div style="font-size:.78rem;color:var(--muted);line-height:1.3" id="gc-food-sub">Khinkali · Khachapuri · Supra</div>
-      </button>
-      <button class="guide-card" onclick="window.__openSlug('mtskheta')">
-        <div style="font-size:.95rem;font-weight:900;color:var(--ink);font-family:var(--font-display)" id="gc-mtskheta-title">🛕 Mtskheta</div>
-        <div style="font-size:.78rem;color:var(--muted);line-height:1.3" id="gc-mtskheta-sub">Ancient capital · UNESCO · 327 AD</div>
-      </button>
-      <button class="guide-card" onclick="window.__openSlug('vardzia')">
-        <div style="font-size:.95rem;font-weight:900;color:var(--ink);font-family:var(--font-display)" id="gc-vardzia-title">🏛️ Vardzia</div>
-        <div style="font-size:.78rem;color:var(--muted);line-height:1.3" id="gc-vardzia-sub">Cave city · Queen Tamar · 12th c.</div>
-      </button>
-      <button class="guide-card" onclick="window.__openSlug('borjomi')">
-        <div style="font-size:.95rem;font-weight:900;color:var(--ink);font-family:var(--font-display)" id="gc-borjomi-title">💧 Borjomi</div>
-        <div style="font-size:.78rem;color:var(--muted);line-height:1.3" id="gc-borjomi-sub">Famous mineral water · national park</div>
-      </button>
-      <button class="guide-card" onclick="window.__openSlug('gudauri')">
-        <div style="font-size:.95rem;font-weight:900;color:var(--ink);font-family:var(--font-display)" id="gc-gudauri-title">⛷️ Gudauri Ski</div>
-        <div style="font-size:.78rem;color:var(--muted);line-height:1.3" id="gc-gudauri-sub">2990m · powder snow · Dec–Apr</div>
-      </button>
-      <button class="guide-card" onclick="window.__openSlug('georgian-alphabet')">
-        <div style="font-size:.95rem;font-weight:900;color:var(--ink);font-family:var(--font-display)" id="gc-alphabet-title">📜 Georgian Alphabet</div>
-        <div style="font-size:.78rem;color:var(--muted);line-height:1.3" id="gc-alphabet-sub">1600 years old · UNESCO</div>
-      </button>
-      <button class="guide-card" onclick="window.__openSlug('qvevri-wine')">
-        <div style="font-size:.95rem;font-weight:900;color:var(--ink);font-family:var(--font-display)" id="gc-qvevri-title">🫙 Qvevri Wine</div>
-        <div style="font-size:.78rem;color:var(--muted);line-height:1.3" id="gc-qvevri-sub">UNESCO · ancient clay vessel tradition</div>
-      </button>
+      <a href="/geo/tbilisi/" class="guide-card">
+        <div class="gc-title" id="gc-tbilisi-title">🏙️ Tbilisi</div>
+        <div class="gc-sub" id="gc-tbilisi-sub">Capital · sulfur baths · Old Town</div>
+      </a>
+      <a href="/geo/kazbegi/" class="guide-card">
+        <div class="gc-title" id="gc-kazbegi-title">🏔️ Kazbegi</div>
+        <div class="gc-sub" id="gc-kazbegi-sub">Mountains · Gergeti Church · 5047m</div>
+      </a>
+      <a href="/geo/batumi/" class="guide-card">
+        <div class="gc-title" id="gc-batumi-title">🌊 Batumi</div>
+        <div class="gc-sub" id="gc-batumi-sub">Black Sea · subtropical · nightlife</div>
+      </a>
+      <a href="/geo/kakheti/" class="guide-card">
+        <div class="gc-title" id="gc-kakheti-title">🍷 Kakheti Wine</div>
+        <div class="gc-sub" id="gc-kakheti-sub">8000 years · 500 grape varieties</div>
+      </a>
+      <a href="/geo/svaneti/" class="guide-card">
+        <div class="gc-title" id="gc-svaneti-title">🗻 Svaneti</div>
+        <div class="gc-sub" id="gc-svaneti-sub">Medieval towers · UNESCO · Mestia</div>
+      </a>
+      <a href="/geo/georgian-cuisine/" class="guide-card">
+        <div class="gc-title" id="gc-food-title">🍽️ Georgian Food</div>
+        <div class="gc-sub" id="gc-food-sub">Khinkali · Khachapuri · Supra</div>
+      </a>
+      <a href="/geo/mtskheta/" class="guide-card">
+        <div class="gc-title" id="gc-mtskheta-title">🛕 Mtskheta</div>
+        <div class="gc-sub" id="gc-mtskheta-sub">Ancient capital · UNESCO · 327 AD</div>
+      </a>
+      <a href="/geo/vardzia/" class="guide-card">
+        <div class="gc-title" id="gc-vardzia-title">🏛️ Vardzia</div>
+        <div class="gc-sub" id="gc-vardzia-sub">Cave city · Queen Tamar · 12th c.</div>
+      </a>
+      <a href="/geo/borjomi/" class="guide-card">
+        <div class="gc-title" id="gc-borjomi-title">💧 Borjomi</div>
+        <div class="gc-sub" id="gc-borjomi-sub">Famous mineral water · national park</div>
+      </a>
+      <a href="/geo/gudauri/" class="guide-card">
+        <div class="gc-title" id="gc-gudauri-title">⛷️ Gudauri Ski</div>
+        <div class="gc-sub" id="gc-gudauri-sub">2990m · powder snow · Dec–Apr</div>
+      </a>
+      <a href="/geo/georgian-alphabet/" class="guide-card">
+        <div class="gc-title" id="gc-alphabet-title">📜 Georgian Alphabet</div>
+        <div class="gc-sub" id="gc-alphabet-sub">1600 years old · UNESCO</div>
+      </a>
+      <a href="/geo/qvevri-wine/" class="guide-card">
+        <div class="gc-title" id="gc-qvevri-title">🫙 Qvevri Wine</div>
+        <div class="gc-sub" id="gc-qvevri-sub">UNESCO · ancient clay vessel tradition</div>
+      </a>
     </div>
   </section>
 
