@@ -2977,7 +2977,8 @@ var GAMES={};
 
 /* ===== GEORGIA GUIDE ===== */
 // Данные карточек встроены в файл — работают локально без сети
-var GUIDE_ARTICLES={
+// window.GUIDE_ARTICLES — глобально для SEO страниц
+var GUIDE_ARTICLES=window.GUIDE_ARTICLES={
   'tbilisi':{slug:'tbilisi',title:'Tbilisi — Capital of Georgia',
     title_ru:'Тбилиси — столица Грузии',
     body_ru:'Тбилиси — столица и крупнейший город Грузии с населением около 1,1 миллиона человек. Основан в V веке царём Вахтангом I Горгасали на берегу реки Мтквари (Кура). Название происходит от грузинского слова «тбили» (тёплый) — из-за природных серных источников. Старый город Абанотубани знаменит резными деревянными балконами и купольными серными банями, работающими с V века. Крепость Нарикала возвышается над городом и датируется IV веком. В городе более 40 театров и 30 музеев.',
@@ -4208,7 +4209,9 @@ if(__pendingTool){var _p=__pendingTool;__pendingTool=null;route(_p);}
 
 <script>
 /* ===== SEO PAGES ===== */
+// Ждём загрузки всего скрипта чтобы GUIDE_ARTICLES был доступен
 (function(){
+  function initSeoPage(){
   var seoEl=document.getElementById('seoData');
   if(!seoEl)return;
   var pages;
@@ -4312,6 +4315,13 @@ if(__pendingTool){var _p=__pendingTool;__pendingTool=null;route(_p);}
       '<a href="/geo/georgian-cuisine/" class="tag">🍽️ Food</a>'+
       '<a href="https://sakartvelo.ai" class="tag">🤖 Ask Chacha AI</a>'+
     '</div>';
+  }
+  // Запускаем после загрузки DOM — GUIDE_ARTICLES уже доступен
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',initSeoPage);
+  }else{
+    initSeoPage();
+  }
 })();
 </script>
 </body>
