@@ -1419,6 +1419,9 @@ STYLE:
 - Concrete request (hotel/transfer) → give booking link fast, 1-2 lines max.
 - Warm but brief. Greet only on first message.
 - Sign off as "Чача 🍶" (Russian) or "Chacha 🍶" (others) — not every message.
+- When giving links use ONLY plain URL format on its own line — NO Markdown [text](url) format.
+- Example: "Отели в Тбилиси:\nhttps://booking.com/..." — NOT "[Найти отель](https://...)"
+- Never write text inside square brackets followed by parentheses.
 
 FREE REMINDER: One short line max that you are free, e.g. "Я бесплатный 😊". Don't overdo.
 
@@ -1529,17 +1532,33 @@ function addMessage(text,who){
 // Рендерит текст бота: убирает ссылки из потока, делает их кнопками, рендерит **bold**
 function renderBotContent(div,text){
   var urlRe=/(https?:\/\/[^\s)<]+)/g;
-  var urls=text.match(urlRe)||[];
-  // убираем ссылки из текста
-  var clean=text.replace(urlRe,'').replace(/\n{3,}/g,'\n\n').trim();
-  // рендерим **bold** и убираем лишние звёздочки
+  // Сначала извлекаем Markdown ссылки [текст](url) → отдельные кнопки
+  var mdLinks=[];
+  var clean=text.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g,function(m,label,url){
+    if(isTrusted(url))mdLinks.push({url:url,label:label});
+    return '';
+  });
+  // Убираем голые URL из текста
+  var urls=clean.match(urlRe)||[];
+  clean=clean.replace(urlRe,'').replace(/\n{3,}/g,'\n\n').trim();
+  // Убираем висячие стрелки и пустые скобки после удаления ссылок
+  clean=clean.replace(/👉\s*$/gm,'').replace(/\[\s*\]\s*$/gm,'').trim();
+  // Рендерим **bold**
   var html=escapeHtml(clean)
     .replace(/\*\*(.+?)\*\*/g,'<b>$1</b>')
     .replace(/\*([^*]+)\*/g,'$1')
     .replace(/\n/g,'<br>');
-  // удаляем висячие '--' в конце
   html=html.replace(/\s*--\s*$/,'').trim();
   div.innerHTML=html;
+  // Кнопки из Markdown ссылок (с оригинальным текстом)
+  mdLinks.forEach(function(m){
+    var a=document.createElement('a');a.className='book';a.href=m.url;a.target='_blank';
+    a.rel='noopener';
+    // Используем label из Markdown если он короткий и информативный
+    a.textContent=(m.label&&m.label.length<50&&m.label.length>2)?m.label:linkLabel(m.url);
+    div.appendChild(a);
+  });
+  // Кнопки из голых URL
   urls.forEach(function(u){
     if(!isTrusted(u))return;
     var a=document.createElement('a');a.className='book';a.href=u;a.target='_blank';
