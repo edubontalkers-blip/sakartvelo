@@ -69,6 +69,7 @@
   --shadow:0 18px 50px -22px rgba(218,41,28,.30);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+a,button,[onclick]{touch-action:manipulation;}
 html{scroll-behavior:smooth}
 /* Плавные переходы между состояниями (2026, прогрессивно) */
 @view-transition{navigation:auto}
@@ -400,8 +401,10 @@ body{top:0!important;}
 .guide-card{
   background:var(--card);border:1px solid var(--line);border-radius:18px;
   padding:16px 14px;text-align:left;text-decoration:none;
-  transition:transform .15s,border-color .15s;
+  transition:transform .12s,border-color .12s;
   display:flex;flex-direction:column;gap:4px;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+  cursor:pointer;
 }
 .guide-card:hover{transform:scale(.98);border-color:var(--gold)}
 .guide-card:active{transform:scale(.97);border-color:var(--gold)}
@@ -427,7 +430,6 @@ body{top:0!important;}
 .modal{ view-transition-name: modal; }
 
 /* Performance 2026 */
-.guide-section, footer { content-visibility: auto; contain-intrinsic-size: 0 600px; }
 .bento { content-visibility: auto; contain-intrinsic-size: 0 800px; }
 img { decoding: async; }
 .tile:hover, .tile:active { will-change: transform; }
@@ -629,7 +631,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;padding
   <h2 class="section-title" data-i18n="tools_h">🧰 Полезное в Грузии</h2>
   <p class="section-sub" data-i18n="tools_sub">Всё что нужно на месте — работает каждый день поездки</p>
   <div class="bento" id="bento">
-    <button class="tile big" data-tool="translator"><span class="ti">🗣️</span><h3 data-i18n="t_translator_h">Переводчик турист ↔ грузин</h3><p data-i18n="t_translator_p">Говори на своём — Чача переведёт на грузинский голосом. Бесплатно.</p></button>
+    <button class="tile big" data-tool="translator"><span class="ti">🗣️</span><h3 data-i18n="t_translator_h">Переводчик турист - грузин</h3><p data-i18n="t_translator_p">Говори на своём — Чача переведёт на грузинский голосом. Бесплатно.</p></button>
     <button class="tile" data-tool="metro"><span class="ti">🚇</span><h3 data-i18n="t_metro_h">Метро Тбилиси</h3><p data-i18n="t_metro_p">Маршрут, цена, пересадка. Офлайн.</p></button>
     <button class="tile" data-tool="phrases"><span class="ti">📖</span><h3 data-i18n="t_phrases_h">Разговорник</h3><p data-i18n="t_phrases_p">Грузинские фразы + произношение</p></button>
     <button class="tile" data-tool="currency"><span class="ti">💱</span><h3 data-i18n="t_currency_h">Курс лари</h3><p data-i18n="t_currency_p">GEL в твою валюту</p></button>
@@ -647,7 +649,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;padding
     <button class="tile big" data-tool="places"><span class="ti">📍</span><h3 data-i18n="t_places_h">Лучшие места — от туристов</h3><p data-i18n="t_places_p">Рестораны, кафе, достопримечательности. Добавляй сам и голосуй ❤️</p></button>
         <button class="tile big" data-tool="games"><span class="ti">🎮</span><h3 data-i18n="t_games_h">Игры — убей время в дороге</h3><p data-i18n="t_games_p">Шахматы, нарды, змейка, 2048 и другие. Бесплатно, без регистрации.</p></button>
     <button class="tile big" data-tool="airports"><span class="ti">✈️</span><h3 data-i18n="t_airports_h">Табло аэропортов Грузии</h3><p data-i18n="t_airports_p">Прилёты и вылеты Тбилиси, Батуми, Кутаиси — онлайн в реальном времени.</p></button>
-    <button class="tile big" data-tool="trains"><span class="ti">🚆</span><h3 data-i18n="t_trains_h">Поезда по Грузии</h3><p data-i18n="t_trains_p">Билеты Тбилиси↔Батуми, Кутаиси, Боржоми. Онлайн, с выбором мест.</p></button>
+    <button class="tile big" data-tool="trains"><span class="ti">🚆</span><h3 data-i18n="t_trains_h">Поезда по Грузии</h3><p data-i18n="t_trains_p">Билеты Тбилиси\u2194Батуми, Кутаиси, Боржоми. Онлайн, с выбором мест.</p></button>
     <button class="tile big" data-tool="flights"><span class="ti">🛫</span><h3 data-i18n="t_flights_h">Прямые рейсы в Грузию</h3><p data-i18n="t_flights_p">Откуда летят прямые в Тбилиси, Батуми и Кутаиси. Купи билет онлайн.</p></button>
   </div>
 
@@ -782,7 +784,7 @@ var I18N={
     law_p:'С 1 января 2026 каждый турист обязан иметь медстраховку (мин. 30 000 ₾ ≈ $11 000). Без неё могут не пустить. Оформи заранее — на границе дороже.',
     law_a:'Оформить страховку →',
     tools_h:'🧰 Полезное в Грузии',tools_sub:'Всё что нужно на месте — работает каждый день поездки',
-    t_translator_h:'Переводчик турист ↔ грузин',t_translator_p:'Введи текст — увидишь перевод на грузинский на экране. Бесплатно.',
+    t_translator_h:'Переводчик турист - грузин',t_translator_p:'Введи текст — увидишь перевод на грузинский на экране. Бесплатно.',
     t_metro_h:'Метро Тбилиси',t_metro_p:'Маршрут, цена, пересадка. Офлайн.',
     t_phrases_h:'Разговорник',t_phrases_p:'Грузинские фразы + озвучка',
     t_currency_h:'Курс лари',t_currency_p:'GEL в твою валюту',
@@ -800,7 +802,7 @@ var I18N={
     share_h:'Поделиться 🍶',share_sub:'Расскажи друзьям, кто едет в Грузию',
     f_terms:'Условия',f_privacy:'Конфиденциальность',f_about:'О нас',
     f_note:'Чача — бесплатный помощник. Мы посредник: подбираем варианты, а бронирование и оплата проходят напрямую на официальных платформах. 🇬🇪',
-    consent:'Принимаю 🍶',consent_no:'Отклонить',consent_text:'Мы используем только необходимые cookie для работы сайта (тема, чек-лист, согласие) — они хранятся в вашем телефоне, не на сервере.',disclaimer:'Чача — AI и может ошибаться. Проверяйте ответы 🍶','t_places_h':'Лучшие места — от туристов','t_places_p':'Рестораны, кафе, достопримечательности. Добавляй сам и голосуй ❤️','t_games_h':'Игры — убей время в дороге','t_games_p':'Шахматы, нарды, змейка, 2048 и другие. Бесплатно, без регистрации.','t_airports_h':'Табло аэропортов Грузии','t_airports_p':'Прилёты и вылеты Тбилиси, Батуми, Кутаиси — онлайн.','t_trains_h':'Поезда по Грузии','t_trains_p':'Билеты Тбилиси↔Батуми, Кутаиси, Боржоми. Онлайн.','t_flights_h':'Прямые рейсы в Грузию','t_flights_p':'Откуда летят прямые в Тбилиси, Батуми, Кутаиси.'},
+    consent:'Принимаю 🍶',consent_no:'Отклонить',consent_text:'Мы используем только необходимые cookie для работы сайта (тема, чек-лист, согласие) — они хранятся в вашем телефоне, не на сервере.',disclaimer:'Чача — AI и может ошибаться. Проверяйте ответы 🍶',t_places_h:'Лучшие места — от туристов',t_places_p:'Рестораны, кафе, достопримечательности. Добавляй сам и голосуй ❤️',t_games_h:'Игры — убей время в дороге',t_games_p:'Шахматы, нарды, змейка, 2048 и другие. Бесплатно, без регистрации.',t_airports_h:'Табло аэропортов Грузии',t_airports_p:'Прилёты и вылеты Тбилиси, Батуми, Кутаиси — онлайн.',t_trains_h:'Поезда по Грузии',t_trains_p:'Билеты Тбилиси\u2194Батуми, Кутаиси, Боржоми. Онлайн.',t_flights_h:'Прямые рейсы в Грузию',t_flights_p:'Откуда летят прямые в Тбилиси, Батуми, Кутаиси.'},
   en:{trust:'🆓 Free forever · pay via <b>trusted global brands</b>',
     h1:'Your friend <span class="em">Chacha</span><br>in Georgia 🇬🇪',
     sub:'Not just a planner — a caring companion for your whole trip. Ask anything about Georgia.',
@@ -814,7 +816,7 @@ var I18N={
     law_p:'From January 1, 2026 every tourist must have medical insurance (min. 30,000 ₾ ≈ $11,000). Without it you may be refused entry. Buy ahead — it costs more at the border.',
     law_a:'Get insurance →',
     tools_h:'🧰 Handy in Georgia',tools_sub:'Everything you need on the ground — useful every day of the trip',
-    t_translator_h:'Translator tourist ↔ Georgian',t_translator_p:'Type in your language — see Georgian translation on screen. Free.',
+    t_translator_h:'Translator tourist \u2194 Georgian',t_translator_p:'Type in your language — see Georgian translation on screen. Free.',
     t_metro_h:'Tbilisi Metro',t_metro_p:'Route, price, transfer. Offline.',
     t_phrases_h:'Phrasebook',t_phrases_p:'Georgian phrases + pronunciation',
     t_currency_h:'Lari rate',t_currency_p:'GEL to your currency',
@@ -835,7 +837,7 @@ var I18N={
     link_book:'Book hotel',link_rent:'Rent a car',link_find:'Find a tour',
     link_book2:'Book transfer',link_find2:'Find flights',link_buy:'Buy eSIM',
     link_lugg:'Luggage storage',link_insu:'Travel insurance',link_extr:'Extra insurance',
-    consent:'Accept 🍶',consent_no:'Decline',consent_text:'We use only essential cookies to run the site (theme, checklist, consent) — stored on your phone, not our server.',disclaimer:'Chacha is AI and can make mistakes. Please double-check responses 🍶','t_places_h':'Best places — from tourists','t_places_p':'Restaurants, cafes, sights. Add your own and vote ❤️','t_camera_h':'Photo with Chacha','t_camera_p':'Take a photo from camera or gallery → Georgian film effect and caption for social media.','t_games_h':'Games — kill time on the road','t_games_p':'Chess, backgammon, snake, 2048 and more. Free, no registration.','t_airports_h':'Georgia airport boards','t_airports_p':'Arrivals and departures Tbilisi, Batumi, Kutaisi — online.','t_trains_h':'Trains in Georgia','t_trains_p':'Tickets Tbilisi↔Batumi, Kutaisi, Borjomi. Online.','t_flights_h':'Direct flights to Georgia','t_flights_p':'Direct flights to Tbilisi, Batumi and Kutaisi.'},
+    consent:'Accept 🍶',consent_no:'Decline',consent_text:'We use only essential cookies to run the site (theme, checklist, consent) — stored on your phone, not our server.',disclaimer:'Chacha is AI and can make mistakes. Please double-check responses 🍶',t_places_h:'Best places — from tourists',t_places_p:'Restaurants, cafes, sights. Add your own and vote ❤️',t_camera_h:'Photo with Chacha',t_camera_p:'Take a photo from camera or gallery → Georgian film effect and caption for social media.',t_games_h:'Games — kill time on the road',t_games_p:'Chess, backgammon, snake, 2048 and more. Free, no registration.',t_airports_h:'Georgia airport boards',t_airports_p:'Arrivals and departures Tbilisi, Batumi, Kutaisi — online.',t_trains_h:'Trains in Georgia',t_trains_p:'Tickets Tbilisi\u2194Batumi, Kutaisi, Borjomi. Online.',t_flights_h:'Direct flights to Georgia',t_flights_p:'Direct flights to Tbilisi, Batumi and Kutaisi.'},
   ka:{trust:'🆓 უფასო სამუდამოდ · გადახდა <b>სანდო ბრენდებით</b>',
     h1:'შენი მეგობარი <span class="em">ჭაჭა</span><br>საქართველოში 🇬🇪',
     sub:'არა მხოლოდ დამგეგმავი — მზრუნველი თანამგზავრი მთელი მოგზაურობისთვის. იკითხე ყველაფერი საქართველოზე.',
@@ -849,7 +851,7 @@ var I18N={
     law_p:'2026 წლის 1 იანვრიდან ყველა ტურისტს სჭირდება სამედიცინო დაზღვევა (მინ. 30 000 ₾ ≈ $11 000). მის გარეშე შესვლა შეიძლება აიკრძალოს. გააფორმე წინასწარ.',
     law_a:'დაზღვევის გაფორმება →',
     tools_h:'🧰 სასარგებლო საქართველოში',tools_sub:'ყველაფერი ადგილზე — ყოველდღე მოგზაურობისას',
-    t_translator_h:'მთარგმნელი ტურისტი ↔ ქართველი',t_translator_p:'ისაუბრე შენს ენაზე — ჭაჭა თარგმნის ქართულად ხმით. უფასოდ.',
+    t_translator_h:'მთარგმნელი ტურისტი \u2194 ქართველი',t_translator_p:'ისაუბრე შენს ენაზე — ჭაჭა თარგმნის ქართულად ხმით. უფასოდ.',
     t_metro_h:'თბილისის მეტრო',t_metro_p:'მარშრუტი, ფასი, გადასვლა. ოფლაინ.',
     t_phrases_h:'სასაუბრო',t_phrases_p:'ქართული ფრაზები + ხმა',
     t_currency_h:'ლარის კურსი',t_currency_p:'GEL შენს ვალუტაში',
@@ -867,7 +869,7 @@ var I18N={
     share_h:'გააზიარე 🍶',share_sub:'უთხარი მეგობრებს, ვინც საქართველოში მოდის',
     f_terms:'პირობები',f_privacy:'კონფიდენციალურობა',f_about:'ჩვენ შესახებ',
     f_note:'ჭაჭა უფასო დამხმარეა. ჩვენ შუამავალი ვართ: ვთავაზობთ ვარიანტებს, ჯავშანი და გადახდა კი პირდაპირ ოფიციალურ პლატფორმებზე ხდება. 🇬🇪',
-    consent:'ვეთანხმები 🍶',consent_no:'უარყოფა',consent_text:'ვიყენებთ მხოლოდ აუცილებელ cookie-ს საიტის მუშაობისთვის — ინახება თქვენს ტელეფონში, არა სერვერზე.',disclaimer:'ჭაჭა არის AI და შეიძლება შეცდეს. გთხოვთ გადაამოწმოთ პასუხები 🍶','t_places_h':'საუკეთესო ადგილები — ტურისტებისგან','t_places_p':'რესტორნები, კაფეები, ღირსშესანიშნაობები. დაამატე და მისცე ხმა ❤️','t_camera_h':'ფოტო ჭაჭასთან','t_camera_p':'გადაიღე ფოტო კამერით ან გალერეიდან → ქართული კინო ეფექტი.','t_games_h':'თამაშები — გაატარე დრო','t_games_p':'შახმატი, ნარდი, გველი, 2048 და სხვა. უფასოდ.','t_airports_h':'საქართველოს აეროპორტების ბორდი','t_airports_p':'ჩამოსვლა და გამგზავრება თბილისი, ბათუმი, ქუთაისი.','t_trains_h':'მატარებლები საქართველოში','t_trains_p':'ბილეთები თბილისი↔ბათუმი, ქუთაისი, ბორჯომი.','t_flights_h':'პირდაპირი რეისები საქართველოში','t_flights_p':'პირდაპირი რეისები თბილისში, ბათუმსა და ქუთაისში.'},
+    consent:'ვეთანხმები 🍶',consent_no:'უარყოფა',consent_text:'ვიყენებთ მხოლოდ აუცილებელ cookie-ს საიტის მუშაობისთვის — ინახება თქვენს ტელეფონში, არა სერვერზე.',disclaimer:'ჭაჭა არის AI და შეიძლება შეცდეს. გთხოვთ გადაამოწმოთ პასუხები 🍶',t_places_h:'საუკეთესო ადგილები — ტურისტებისგან',t_places_p:'რესტორნები, კაფეები, ღირსშესანიშნაობები. დაამატე და მისცე ხმა ❤️',t_camera_h:'ფოტო ჭაჭასთან',t_camera_p:'გადაიღე ფოტო კამერით ან გალერეიდან → ქართული კინო ეფექტი.',t_games_h:'თამაშები — გაატარე დრო',t_games_p:'შახმატი, ნარდი, გველი, 2048 და სხვა. უფასოდ.',t_airports_h:'საქართველოს აეროპორტების ბორდი',t_airports_p:'ჩამოსვლა და გამგზავრება თბილისი, ბათუმი, ქუთაისი.',t_trains_h:'მატარებლები საქართველოში',t_trains_p:'ბილეთები თბილისი\u2194ბათუმი, ქუთაისი, ბორჯომი.',t_flights_h:'პირდაპირი რეისები საქართველოში',t_flights_p:'პირდაპირი რეისები თბილისში, ბათუმსა და ქუთაისში.'},
   tr:{trust:'🆓 Sonsuza dek ücretsiz · ödeme <b>güvenilir devlerle</b>',
     h1:'Gürcistan\'daki<br>dostun <span class="em">Çaça</span> 🇬🇪',
     sub:'Sadece bir planlayıcı değil — tüm yolculuğun için özenli bir yol arkadaşı. Gürcistan hakkında her şeyi sor.',
@@ -881,7 +883,7 @@ var I18N={
     law_p:'1 Ocak 2026\'dan itibaren her turistin sağlık sigortası olması gerekir (min. 30.000 ₾ ≈ $11.000). Olmadan girişe izin verilmeyebilir. Önceden al — sınırda daha pahalı.',
     law_a:'Sigorta al →',
     tools_h:'🧰 Gürcistan\'da işine yarar',tools_sub:'Yerinde ihtiyacın olan her şey — yolculuğun her günü',
-    t_translator_h:'Çevirmen turist ↔ Gürcü',t_translator_p:'Kendi dilinde konuş — Çaça sesle Gürcüceye çevirir. Ücretsiz.',
+    t_translator_h:'Çevirmen turist \u2194 Gürcü',t_translator_p:'Kendi dilinde konuş — Çaça sesle Gürcüceye çevirir. Ücretsiz.',
     t_metro_h:'Tiflis Metrosu',t_metro_p:'Güzergah, fiyat, aktarma. Çevrimdışı.',
     t_phrases_h:'Konuşma kılavuzu',t_phrases_p:'Gürcüce ifadeler + ses',
     t_currency_h:'Lari kuru',t_currency_p:'GEL kendi paranda',
@@ -899,7 +901,7 @@ var I18N={
     share_h:'Paylaş 🍶',share_sub:'Gürcistan\'a gidecek arkadaşlarına söyle',
     f_terms:'Koşullar',f_privacy:'Gizlilik',f_about:'Hakkımızda',
     f_note:'Çaça ücretsiz bir yardımcıdır. Biz aracıyız: seçenekler öneririz, rezervasyon ve ödeme doğrudan resmi platformlarda yapılır. 🇬🇪',
-    consent:'Kabul ediyorum 🍶',consent_no:'Reddet',consent_text:'Sitenin çalışması için yalnızca gerekli çerezleri kullanırız (tema, liste, onay) — sunucuda değil, telefonunuzda saklanır.',disclaimer:'Çaça bir yapay zekadır ve hata yapabilir. Lütfen yanıtları kontrol edin 🍶','t_places_h':'En iyi yerler — turistlerden','t_places_p':'Restoranlar, kafeler, gezilecek yerler. Ekle ve oy ver ❤️','t_camera_h':'Çaça ile fotoğraf','t_camera_p':'Kameradan veya galeriden fotoğraf çek → Gürcü film efekti.','t_games_h':'Oyunlar — yolda vakit geçir','t_games_p':'Satranç, tavla, yılan, 2048 ve daha fazlası. Ücretsiz.','t_airports_h':'Gürcistan havalimanı tabloları','t_airports_p':'Tiflis, Batum, Kutaisi varış ve kalkışları — çevrimiçi.','t_trains_h':'Gürcistan\'da trenler','t_trains_p':'Biletler Tiflis↔Batum, Kutaisi, Borjomi.','t_flights_h':'Gürcistan\'a direkt uçuşlar','t_flights_p':'Tiflis, Batum ve Kutaisi\'ye direkt uçuşlar.'},
+    consent:'Kabul ediyorum 🍶',consent_no:'Reddet',consent_text:'Sitenin çalışması için yalnızca gerekli çerezleri kullanırız (tema, liste, onay) — sunucuda değil, telefonunuzda saklanır.',disclaimer:'Çaça bir yapay zekadır ve hata yapabilir. Lütfen yanıtları kontrol edin 🍶',t_places_h:'En iyi yerler — turistlerden',t_places_p:'Restoranlar, kafeler, gezilecek yerler. Ekle ve oy ver ❤️',t_camera_h:'Çaça ile fotoğraf',t_camera_p:'Kameradan veya galeriden fotoğraf çek → Gürcü film efekti.',t_games_h:'Oyunlar — yolda vakit geçir',t_games_p:'Satranç, tavla, yılan, 2048 ve daha fazlası. Ücretsiz.',t_airports_h:'Gürcistan havalimanı tabloları',t_airports_p:'Tiflis, Batum, Kutaisi varış ve kalkışları — çevrimiçi.',t_trains_h:'Gürcistan\'da trenler',t_trains_p:'Biletler Tiflis\u2194Batum, Kutaisi, Borjomi.',t_flights_h:'Gürcistan\'a direkt uçuşlar',t_flights_p:'Tiflis, Batum ve Kutaisi\'ye direkt uçuşlar.'},
   ar:{trust:'🆓 مجاني للأبد · الدفع عبر <b>علامات عالمية موثوقة</b>',
     h1:'صديقك <span class="em">تشاتشا</span><br>في جورجيا 🇬🇪',
     sub:'ليس مجرد مخطط — رفيق مهتم طوال رحلتك. اسأل أي شيء عن جورجيا.',
@@ -913,7 +915,7 @@ var I18N={
     law_p:'من 1 يناير 2026 يجب على كل سائح امتلاك تأمين صحي (بحد أدنى 30,000 ₾ ≈ 11,000$). بدونه قد يُمنع الدخول. احصل عليه مسبقًا — فهو أغلى على الحدود.',
     law_a:'احصل على التأمين →',
     tools_h:'🧰 مفيد في جورجيا',tools_sub:'كل ما تحتاجه على الأرض — كل يوم من رحلتك',
-    t_translator_h:'مترجم سائح ↔ جورجي',t_translator_p:'تحدث بلغتك — تشاتشا يترجم إلى الجورجية صوتيًا. مجانًا.',
+    t_translator_h:'مترجم سائح \u2194 جورجي',t_translator_p:'تحدث بلغتك — تشاتشا يترجم إلى الجورجية صوتيًا. مجانًا.',
     t_metro_h:'مترو تبليسي',t_metro_p:'المسار، السعر، التحويل. دون إنترنت.',
     t_phrases_h:'كتاب العبارات',t_phrases_p:'عبارات جورجية + صوت',
     t_currency_h:'سعر اللاري',t_currency_p:'GEL بعملتك',
@@ -931,7 +933,7 @@ var I18N={
     share_h:'شارك 🍶',share_sub:'أخبر أصدقاءك المسافرين إلى جورجيا',
     f_terms:'الشروط',f_privacy:'الخصوصية',f_about:'من نحن',
     f_note:'تشاتشا مساعد مجاني. نحن وسيط: نقترح الخيارات، بينما يتم الحجز والدفع مباشرة على المنصات الرسمية. 🇬🇪',
-    consent:'أوافق 🍶',consent_no:'رفض',consent_text:'نستخدم فقط ملفات تعريف الارتباط الضرورية لتشغيل الموقع — تُحفظ على هاتفك وليس على خادمنا.',disclaimer:'تشاتشا ذكاء اصطناعي وقد يخطئ. يرجى التحقق من الإجابات 🍶','t_places_h':'أفضل الأماكن — من السياح','t_places_p':'مطاعم، مقاهٍ، معالم سياحية. أضف وصوّت ❤️','t_camera_h':'صورة مع تشاتشا','t_camera_p':'التقط صورة من الكاميرا أو المعرض → تأثير السينما الجورجية.','t_games_h':'ألعاب — اقتل الوقت في الطريق','t_games_p':'شطرنج، طاولة، ثعبان، 2048 والمزيد. مجانًا.','t_airports_h':'لوحات مطارات جورجيا','t_airports_p':'وصول ومغادرة تبليسي، باتومي، كوتايسي — مباشر.','t_trains_h':'قطارات جورجيا','t_trains_p':'تذاكر تبليسي↔باتومي، كوتايسي، بورجومي.','t_flights_h':'رحلات مباشرة إلى جورجيا','t_flights_p':'رحلات مباشرة إلى تبليسي، باتومي وكوتايسي.'},
+    consent:'أوافق 🍶',consent_no:'رفض',consent_text:'نستخدم فقط ملفات تعريف الارتباط الضرورية لتشغيل الموقع — تُحفظ على هاتفك وليس على خادمنا.',disclaimer:'تشاتشا ذكاء اصطناعي وقد يخطئ. يرجى التحقق من الإجابات 🍶',t_places_h:'أفضل الأماكن — من السياح',t_places_p:'مطاعم، مقاهٍ، معالم سياحية. أضف وصوّت ❤️',t_camera_h:'صورة مع تشاتشا',t_camera_p:'التقط صورة من الكاميرا أو المعرض → تأثير السينما الجورجية.',t_games_h:'ألعاب — اقتل الوقت في الطريق',t_games_p:'شطرنج، طاولة، ثعبان، 2048 والمزيد. مجانًا.',t_airports_h:'لوحات مطارات جورجيا',t_airports_p:'وصول ومغادرة تبليسي، باتومي، كوتايسي — مباشر.',t_trains_h:'قطارات جورجيا',t_trains_p:'تذاكر تبليسي\u2194باتومي، كوتايسي، بورجومي.',t_flights_h:'رحلات مباشرة إلى جورجيا',t_flights_p:'رحلات مباشرة إلى تبليسي، باتومي وكوتايسي.'},
   uk:{trust:'🆓 Безкоштовно назавжди · оплата через <b>перевірених гігантів</b>',
     h1:'Твій друг <span class="em">Чача</span><br>у Грузії 🇬🇪',
     sub:'Не просто планувальник — турботливий супутник на всю поїздку. Запитай будь-що про Грузію.',
@@ -945,7 +947,7 @@ var I18N={
     law_p:'З 1 січня 2026 кожен турист зобов\'язаний мати медстраховку (мін. 30 000 ₾ ≈ $11 000). Без неї можуть не пустити. Оформи заздалегідь — на кордоні дорожче.',
     law_a:'Оформити страховку →',
     tools_h:'🧰 Корисне у Грузії',tools_sub:'Все що потрібно на місці — працює кожен день поїздки',
-    t_translator_h:'Перекладач турист ↔ грузин',t_translator_p:'Говори своєю — Чача перекладе грузинською голосом. Безкоштовно.',
+    t_translator_h:'Перекладач турист - грузин',t_translator_p:'Говори своєю — Чача перекладе грузинською голосом. Безкоштовно.',
     t_metro_h:'Метро Тбілісі',t_metro_p:'Маршрут, ціна, пересадка. Офлайн.',
     t_phrases_h:'Розмовник',t_phrases_p:'Грузинські фрази + озвучка',
     t_currency_h:'Курс ларі',t_currency_p:'GEL у твою валюту',
@@ -963,7 +965,7 @@ var I18N={
     share_h:'Поділитись 🍶',share_sub:'Розкажи друзям, хто їде до Грузії',
     f_terms:'Умови',f_privacy:'Конфіденційність',f_about:'Про нас',
     f_note:'Чача — безкоштовний помічник. Ми посередник: підбираємо варіанти, а бронювання і оплата проходять напряму на офіційних платформах. 🇬🇪',
-    consent:'Приймаю 🍶',consent_no:'Відхилити',consent_text:'Ми використовуємо лише необхідні cookie для роботи сайту — вони зберігаються у вашому телефоні, не на сервері.',disclaimer:'Чача — AI і може помилятися. Перевіряйте відповіді 🍶','t_places_h':'Найкращі місця — від туристів','t_places_p':'Ресторани, кафе, пам\'ятки. Додавай сам і голосуй ❤️','t_camera_h':'Фото з Чачею','t_camera_p':'Зроби фото з камери або галереї → грузинський кіноефект.','t_games_h':'Ігри — вбий час в дорозі','t_games_p':'Шахи, нарди, змійка, 2048 та інші. Безкоштовно.','t_airports_h':'Табло аеропортів Грузії','t_airports_p':'Прильоти та вильоти Тбілісі, Батумі, Кутаїсі.','t_trains_h':'Поїзди по Грузії','t_trains_p':'Квитки Тбілісі↔Батумі, Кутаїсі, Боржомі.','t_flights_h':'Прямі рейси до Грузії','t_flights_p':'Прямі рейси до Тбілісі, Батумі та Кутаїсі.'},
+    consent:'Приймаю 🍶',consent_no:'Відхилити',consent_text:'Ми використовуємо лише необхідні cookie для роботи сайту — вони зберігаються у вашому телефоні, не на сервері.',disclaimer:'Чача — AI і може помилятися. Перевіряйте відповіді 🍶',t_places_h:'Найкращі місця — від туристів',t_places_p:'Ресторани, кафе, пам\'ятки. Додавай сам і голосуй ❤️',t_camera_h:'Фото з Чачею',t_camera_p:'Зроби фото з камери або галереї → грузинський кіноефект.',t_games_h:'Ігри — вбий час в дорозі',t_games_p:'Шахи, нарди, змійка, 2048 та інші. Безкоштовно.',t_airports_h:'Табло аеропортів Грузії',t_airports_p:'Прильоти та вильоти Тбілісі, Батумі, Кутаїсі.',t_trains_h:'Поїзди по Грузії',t_trains_p:'Квитки Тбілісі\u2194Батумі, Кутаїсі, Боржомі.',t_flights_h:'Прямі рейси до Грузії',t_flights_p:'Прямі рейси до Тбілісі, Батумі та Кутаїсі.'},
   be:{trust:'🆓 Бясплатна назаўжды · аплата праз <b>правераных гігантаў</b>',
     h1:'Твой сябар <span class="em">Чача</span><br>у Грузіі 🇬🇪',
     sub:'Не проста планавальнік — клапатлівы спадарожнік на ўсю паездку. Спытай усё пра Грузію.',
@@ -977,7 +979,7 @@ var I18N={
     law_p:'З 1 студзеня 2026 кожны турыст абавязаны мець медстрахоўку (мін. 30 000 ₾ ≈ $11 000). Без яе могуць не пусціць. Аформі загадзя — на мяжы даражэй.',
     law_a:'Аформіць страхоўку →',
     tools_h:'🧰 Карыснае ў Грузіі',tools_sub:'Усё што трэба на месцы — працуе кожны дзень паездкі',
-    t_translator_h:'Перакладчык турыст ↔ грузін',t_translator_p:'Гавары сваёй — Чача перакладзе на грузінскую голасам. Бясплатна.',
+    t_translator_h:'Перакладчык турыст \u2194 грузін',t_translator_p:'Гавары сваёй — Чача перакладзе на грузінскую голасам. Бясплатна.',
     t_metro_h:'Метро Тбілісі',t_metro_p:'Маршрут, цана, перасадка. Афлайн.',
     t_phrases_h:'Размоўнік',t_phrases_p:'Грузінскія фразы + азвучка',
     t_currency_h:'Курс лары',t_currency_p:'GEL у тваю валюту',
@@ -995,7 +997,7 @@ var I18N={
     share_h:'Падзяліцца 🍶',share_sub:'Раскажы сябрам, хто едзе ў Грузію',
     f_terms:'Умовы',f_privacy:'Канфідэнцыяльнасць',f_about:'Пра нас',
     f_note:'Чача — бясплатны памочнік. Мы пасярэднік: падбіраем варыянты, а браніраванне і аплата праходзяць напрамую на афіцыйных платформах. 🇬🇪',
-    consent:'Прымаю 🍶',consent_no:'Адхіліць',consent_text:'Мы выкарыстоўваем толькі неабходныя cookie для працы сайта — яны захоўваюцца ў вашым тэлефоне, не на серверы.',disclaimer:'Чача — AI і можа памыляцца. Правярайце адказы 🍶','t_places_h':'Лепшыя месцы — ад турыстаў','t_places_p':'Рэстараны, кавярні, славутасці. Дадавай сам і галасуй ❤️','t_camera_h':'Фота з Чачам','t_camera_p':'Зрабі фота з камеры або галерэі → грузінскі кінаэфект.','t_games_h':'Гульні — забі час у дарозе','t_games_p':'Шахматы, нарды, змейка, 2048 і іншыя. Бясплатна.','t_airports_h':'Табло аэрапортаў Грузіі','t_airports_p':'Прылёты і вылеты Тбілісі, Батумі, Кутаісі.','t_trains_h':'Цягнікі па Грузіі','t_trains_p':'Білеты Тбілісі↔Батумі, Кутаісі, Боржомі.','t_flights_h':'Прамыя рэйсы ў Грузію','t_flights_p':'Прамыя рэйсы ў Тбілісі, Батумі і Кутаісі.'},
+    consent:'Прымаю 🍶',consent_no:'Адхіліць',consent_text:'Мы выкарыстоўваем толькі неабходныя cookie для працы сайта — яны захоўваюцца ў вашым тэлефоне, не на серверы.',disclaimer:'Чача — AI і можа памыляцца. Правярайце адказы 🍶',t_places_h:'Лепшыя месцы — ад турыстаў',t_places_p:'Рэстараны, кавярні, славутасці. Дадавай сам і галасуй ❤️',t_camera_h:'Фота з Чачам',t_camera_p:'Зрабі фота з камеры або галерэі → грузінскі кінаэфект.',t_games_h:'Гульні — забі час у дарозе',t_games_p:'Шахматы, нарды, змейка, 2048 і іншыя. Бясплатна.',t_airports_h:'Табло аэрапортаў Грузіі',t_airports_p:'Прылёты і вылеты Тбілісі, Батумі, Кутаісі.',t_trains_h:'Цягнікі па Грузіі',t_trains_p:'Білеты Тбілісі\u2194Батумі, Кутаісі, Боржомі.',t_flights_h:'Прамыя рэйсы ў Грузію',t_flights_p:'Прамыя рэйсы ў Тбілісі, Батумі і Кутаісі.'},
   he:{trust:'🆓 חינם לתמיד · תשלום דרך <b>מותגים בינלאומיים אמינים</b>',
     h1:'החבר שלך <span class="em">צ\'אצ\'ה</span><br>בגאורגיה 🇬🇪',
     sub:'לא רק מתכנן — חבר מסור לאורך כל הטיול. שאל כל דבר על גאורגיה.',
@@ -1009,7 +1011,7 @@ var I18N={
     law_p:'מ-1 בינואר 2026 כל תייר חייב בביטוח רפואי (מינ. 30,000 ₾ ≈ $11,000). בלעדיו עשויים לא לאפשר כניסה. קנה מראש — בגבול יקר יותר.',
     law_a:'קבל ביטוח →',
     tools_h:'🧰 שימושי בגאורגיה',tools_sub:'כל מה שצריך במקום — עובד כל יום של הטיול',
-    t_translator_h:'מתרגם תייר ↔ גאורגי',t_translator_p:'דבר בשפתך — צ\'אצ\'ה יתרגם לגאורגית בקול. חינם.',
+    t_translator_h:'מתרגם תייר \u2194 גאורגי',t_translator_p:'דבר בשפתך — צ\'אצ\'ה יתרגם לגאורגית בקול. חינם.',
     t_metro_h:'מטרו טביליסי',t_metro_p:'מסלול, מחיר, העברה. אופליין.',
     t_phrases_h:'ספר שיחות',t_phrases_p:'ביטויים גאורגיים + אודיו',
     t_currency_h:'שער הלארי',t_currency_p:'GEL למטבע שלך',
@@ -1027,7 +1029,7 @@ var I18N={
     share_h:'שתף 🍶',share_sub:'ספר לחברים שנוסעים לגאורגיה',
     f_terms:'תנאים',f_privacy:'פרטיות',f_about:'אודות',
     f_note:'צ\'אצ\'ה הוא עוזר חינמי. אנחנו מתווכים: מציעים אפשרויות, בעוד ההזמנה והתשלום מתבצעים ישירות בפלטפורמות הרשמיות. 🇬🇪',
-    consent:'מקבל 🍶',consent_no:'דחה',consent_text:'אנו משתמשים רק בעוגיות הכרחיות להפעלת האתר — מאוחסנות בטלפון שלך, לא בשרת שלנו.',disclaimer:'צ\'אצ\'ה הוא AI ועלול לטעות. אנא בדוק את התשובות 🍶','t_places_h':'המקומות הטובים ביותר — מתיירים','t_places_p':'מסעדות, בתי קפה, אתרים. הוסף בעצמך והצבע ❤️','t_camera_h':'צילום עם צ\'אצ\'ה','t_camera_p':'צלם תמונה מהמצלמה או הגלריה → אפקט קולנוע גאורגי.','t_games_h':'משחקים — הרוג זמן בדרך','t_games_p':'שחמט, שש-בש, נחש, 2048 ועוד. חינם.','t_airports_h':'לוחות תצוגה בנמלי תעופה בגאורגיה','t_airports_p':'הגעות ויציאות טביליסי, באטומי, קוטאיסי.','t_trains_h':'רכבות בגאורגיה','t_trains_p':'כרטיסים טביליסי↔באטומי, קוטאיסי, בורג\'ומי.','t_flights_h':'טיסות ישירות לגאורגיה','t_flights_p':'טיסות ישירות לטביליסי, באטומי וקוטאיסי.'},
+    consent:'מקבל 🍶',consent_no:'דחה',consent_text:'אנו משתמשים רק בעוגיות הכרחיות להפעלת האתר — מאוחסנות בטלפון שלך, לא בשרת שלנו.',disclaimer:'צ\'אצ\'ה הוא AI ועלול לטעות. אנא בדוק את התשובות 🍶',t_places_h:'המקומות הטובים ביותר — מתיירים',t_places_p:'מסעדות, בתי קפה, אתרים. הוסף בעצמך והצבע ❤️',t_camera_h:'צילום עם צ\'אצ\'ה',t_camera_p:'צלם תמונה מהמצלמה או הגלריה → אפקט קולנוע גאורגי.',t_games_h:'משחקים — הרוג זמן בדרך',t_games_p:'שחמט, שש-בש, נחש, 2048 ועוד. חינם.',t_airports_h:'לוחות תצוגה בנמלי תעופה בגאורגיה',t_airports_p:'הגעות ויציאות טביליסי, באטומי, קוטאיסי.',t_trains_h:'רכבות בגאורגיה',t_trains_p:'כרטיסים טביליסי\u2194באטומי, קוטאיסי, בורג\'ומי.',t_flights_h:'טיסות ישירות לגאורגיה',t_flights_p:'טיסות ישירות לטביליסי, באטומי וקוטאיסי.'},
   fr:{trust:'🆓 Gratuit pour toujours · paiement via <b>marques mondiales de confiance</b>',
     h1:'Ton ami <span class="em">Chacha</span><br>en Géorgie 🇬🇪',
     sub:'Pas juste un planificateur — un compagnon attentionné pour tout ton voyage. Pose toutes tes questions sur la Géorgie.',
@@ -1041,7 +1043,7 @@ var I18N={
     law_p:'Depuis le 1er janvier 2026, chaque touriste doit avoir une assurance médicale (min. 30 000 ₾ ≈ 11 000$). Sans elle, l\'entrée peut être refusée. Prenez-la à l\'avance — à la frontière c\'est plus cher.',
     law_a:'Prendre une assurance →',
     tools_h:'🧰 Utile en Géorgie',tools_sub:'Tout ce dont vous avez besoin sur place — utile chaque jour du voyage',
-    t_translator_h:'Traducteur touriste ↔ géorgien',t_translator_p:'Parle ta langue — Chacha traduit en géorgien par la voix. Gratuit.',
+    t_translator_h:'Traducteur touriste \u2194 géorgien',t_translator_p:'Parle ta langue — Chacha traduit en géorgien par la voix. Gratuit.',
     t_metro_h:'Métro de Tbilissi',t_metro_p:'Itinéraire, prix, correspondance. Hors ligne.',
     t_phrases_h:'Guide de conversation',t_phrases_p:'Phrases géorgiennes + audio',
     t_currency_h:'Taux du lari',t_currency_p:'GEL dans ta devise',
@@ -1059,7 +1061,7 @@ var I18N={
     share_h:'Partager 🍶',share_sub:'Dis à tes amis qui vont en Géorgie',
     f_terms:'Conditions',f_privacy:'Confidentialité',f_about:'À propos',
     f_note:'Chacha est un assistant gratuit. Nous sommes intermédiaires : nous suggérons des options, tandis que la réservation et le paiement se font directement sur les plateformes officielles. 🇬🇪',
-    consent:'J\'accepte 🍶',consent_no:'Refuser',consent_text:'Nous utilisons uniquement les cookies nécessaires au fonctionnement du site — stockés sur votre téléphone, pas sur notre serveur.',disclaimer:'Chacha est une IA et peut se tromper. Veuillez vérifier les réponses 🍶','t_places_h':'Meilleurs endroits — par les touristes','t_places_p':'Restaurants, cafés, sites. Ajoutez et votez ❤️','t_camera_h':'Photo avec Chacha','t_camera_p':'Prenez une photo avec la caméra ou la galerie → effet cinéma géorgien.','t_games_h':'Jeux — tuer le temps en route','t_games_p':'Échecs, backgammon, snake, 2048 et plus. Gratuit.','t_airports_h':'Tableaux des aéroports de Géorgie','t_airports_p':'Arrivées et départs Tbilissi, Batoumi, Koutaïssi.','t_trains_h':'Trains en Géorgie','t_trains_p':'Billets Tbilissi↔Batoumi, Koutaïssi, Borjomi.','t_flights_h':'Vols directs vers la Géorgie','t_flights_p':'Vols directs vers Tbilissi, Batoumi et Koutaïssi.'},
+    consent:'J\'accepte 🍶',consent_no:'Refuser',consent_text:'Nous utilisons uniquement les cookies nécessaires au fonctionnement du site — stockés sur votre téléphone, pas sur notre serveur.',disclaimer:'Chacha est une IA et peut se tromper. Veuillez vérifier les réponses 🍶',t_places_h:'Meilleurs endroits — par les touristes',t_places_p:'Restaurants, cafés, sites. Ajoutez et votez ❤️',t_camera_h:'Photo avec Chacha',t_camera_p:'Prenez une photo avec la caméra ou la galerie → effet cinéma géorgien.',t_games_h:'Jeux — tuer le temps en route',t_games_p:'Échecs, backgammon, snake, 2048 et plus. Gratuit.',t_airports_h:'Tableaux des aéroports de Géorgie',t_airports_p:'Arrivées et départs Tbilissi, Batoumi, Koutaïssi.',t_trains_h:'Trains en Géorgie',t_trains_p:'Billets Tbilissi\u2194Batoumi, Koutaïssi, Borjomi.',t_flights_h:'Vols directs vers la Géorgie',t_flights_p:'Vols directs vers Tbilissi, Batoumi et Koutaïssi.'},
   es:{trust:'🆓 Gratis para siempre · pago a través de <b>marcas globales de confianza</b>',
     h1:'Tu amigo <span class="em">Chacha</span><br>en Georgia 🇬🇪',
     sub:'No solo un planificador — un compañero atento durante todo tu viaje. Pregunta lo que quieras sobre Georgia.',
@@ -1073,7 +1075,7 @@ var I18N={
     law_p:'Desde el 1 de enero de 2026, cada turista debe tener un seguro médico (mín. 30.000 ₾ ≈ $11.000). Sin él pueden negar la entrada. Contrátalo antes — en la frontera es más caro.',
     law_a:'Obtener seguro →',
     tools_h:'🧰 Útil en Georgia',tools_sub:'Todo lo que necesitas allí — útil cada día del viaje',
-    t_translator_h:'Traductor turista ↔ georgiano',t_translator_p:'Habla tu idioma — Chacha traduce al georgiano por voz. Gratis.',
+    t_translator_h:'Traductor turista \u2194 georgiano',t_translator_p:'Habla tu idioma — Chacha traduce al georgiano por voz. Gratis.',
     t_metro_h:'Metro de Tiflis',t_metro_p:'Ruta, precio, transbordo. Sin conexión.',
     t_phrases_h:'Guía de conversación',t_phrases_p:'Frases georgianas + audio',
     t_currency_h:'Tipo de cambio lari',t_currency_p:'GEL a tu moneda',
@@ -1091,7 +1093,7 @@ var I18N={
     share_h:'Compartir 🍶',share_sub:'Cuéntaselo a los amigos que van a Georgia',
     f_terms:'Términos',f_privacy:'Privacidad',f_about:'Sobre nosotros',
     f_note:'Chacha es un asistente gratuito. Somos intermediarios: sugerimos opciones, mientras que la reserva y el pago se realizan directamente en plataformas oficiales. 🇬🇪',
-    consent:'Acepto 🍶',consent_no:'Rechazar',consent_text:'Usamos solo las cookies necesarias para el funcionamiento del sitio — almacenadas en tu teléfono, no en nuestro servidor.',disclaimer:'Chacha es IA y puede cometer errores. Por favor verifica las respuestas 🍶','t_places_h':'Mejores lugares — de turistas','t_places_p':'Restaurantes, cafés, lugares de interés. Añade y vota ❤️','t_camera_h':'Foto con Chacha','t_camera_p':'Toma una foto con la cámara o galería → efecto cine georgiano.','t_games_h':'Juegos — mata el tiempo en el camino','t_games_p':'Ajedrez, backgammon, serpiente, 2048 y más. Gratis.','t_airports_h':'Paneles de aeropuertos de Georgia','t_airports_p':'Llegadas y salidas Tiflis, Batumi, Kutaisi.','t_trains_h':'Trenes en Georgia','t_trains_p':'Billetes Tiflis↔Batumi, Kutaisi, Borjomi.','t_flights_h':'Vuelos directos a Georgia','t_flights_p':'Vuelos directos a Tiflis, Batumi y Kutaisi.'},
+    consent:'Acepto 🍶',consent_no:'Rechazar',consent_text:'Usamos solo las cookies necesarias para el funcionamiento del sitio — almacenadas en tu teléfono, no en nuestro servidor.',disclaimer:'Chacha es IA y puede cometer errores. Por favor verifica las respuestas 🍶',t_places_h:'Mejores lugares — de turistas',t_places_p:'Restaurantes, cafés, lugares de interés. Añade y vota ❤️',t_camera_h:'Foto con Chacha',t_camera_p:'Toma una foto con la cámara o galería → efecto cine georgiano.',t_games_h:'Juegos — mata el tiempo en el camino',t_games_p:'Ajedrez, backgammon, serpiente, 2048 y más. Gratis.',t_airports_h:'Paneles de aeropuertos de Georgia',t_airports_p:'Llegadas y salidas Tiflis, Batumi, Kutaisi.',t_trains_h:'Trenes en Georgia',t_trains_p:'Billetes Tiflis\u2194Batumi, Kutaisi, Borjomi.',t_flights_h:'Vuelos directos a Georgia',t_flights_p:'Vuelos directos a Tiflis, Batumi y Kutaisi.'},
   de:{trust:'🆓 Für immer kostenlos · Zahlung über <b>vertrauenswürdige Weltmarken</b>',
     h1:'Dein Freund <span class="em">Chacha</span><br>in Georgien 🇬🇪',
     sub:'Nicht nur ein Planer — ein fürsorglicher Begleiter für deine gesamte Reise. Frag alles über Georgien.',
@@ -1105,7 +1107,7 @@ var I18N={
     law_p:'Ab 1. Januar 2026 muss jeder Tourist eine Krankenversicherung haben (mind. 30.000 ₾ ≈ 11.000$). Ohne sie kann die Einreise verweigert werden. Im Voraus abschließen — an der Grenze ist es teurer.',
     law_a:'Versicherung abschließen →',
     tools_h:'🧰 Nützlich in Georgien',tools_sub:'Alles was du vor Ort brauchst — jeden Tag der Reise',
-    t_translator_h:'Übersetzer Tourist ↔ Georgier',t_translator_p:'Sprich deine Sprache — Chacha übersetzt per Stimme ins Georgische. Kostenlos.',
+    t_translator_h:'Übersetzer Tourist \u2194 Georgier',t_translator_p:'Sprich deine Sprache — Chacha übersetzt per Stimme ins Georgische. Kostenlos.',
     t_metro_h:'Tiflis Metro',t_metro_p:'Route, Preis, Umstieg. Offline.',
     t_phrases_h:'Sprachführer',t_phrases_p:'Georgische Phrasen + Audio',
     t_currency_h:'Lari-Kurs',t_currency_p:'GEL in deine Währung',
@@ -1123,7 +1125,7 @@ var I18N={
     share_h:'Teilen 🍶',share_sub:'Erzähl Freunden, die nach Georgien fahren',
     f_terms:'Bedingungen',f_privacy:'Datenschutz',f_about:'Über uns',
     f_note:'Chacha ist ein kostenloser Assistent. Wir sind Vermittler: Wir schlagen Optionen vor, während Buchung und Zahlung direkt auf offiziellen Plattformen erfolgen. 🇬🇪',
-    consent:'Akzeptieren 🍶',consent_no:'Ablehnen',consent_text:'Wir verwenden nur notwendige Cookies für den Betrieb der Website — gespeichert auf Ihrem Telefon, nicht auf unserem Server.',disclaimer:'Chacha ist KI und kann Fehler machen. Bitte überprüfen Sie die Antworten 🍶','t_places_h':'Beste Orte — von Touristen','t_places_p':'Restaurants, Cafés, Sehenswürdigkeiten. Füge hinzu und stimme ab ❤️','t_camera_h':'Foto mit Chacha','t_camera_p':'Mach ein Foto mit der Kamera oder Galerie → Georgischer Kinoeffekt.','t_games_h':'Spiele — Zeit auf der Reise vertreiben','t_games_p':'Schach, Backgammon, Schlange, 2048 und mehr. Kostenlos.','t_airports_h':'Georgiens Flughafen-Anzeigetafeln','t_airports_p':'Ankünfte und Abflüge Tiflis, Batumi, Kutaissi.','t_trains_h':'Züge in Georgien','t_trains_p':'Tickets Tiflis↔Batumi, Kutaissi, Borjomi.','t_flights_h':'Direktflüge nach Georgien','t_flights_p':'Direktflüge nach Tiflis, Batumi und Kutaissi.'},
+    consent:'Akzeptieren 🍶',consent_no:'Ablehnen',consent_text:'Wir verwenden nur notwendige Cookies für den Betrieb der Website — gespeichert auf Ihrem Telefon, nicht auf unserem Server.',disclaimer:'Chacha ist KI und kann Fehler machen. Bitte überprüfen Sie die Antworten 🍶',t_places_h:'Beste Orte — von Touristen',t_places_p:'Restaurants, Cafés, Sehenswürdigkeiten. Füge hinzu und stimme ab ❤️',t_camera_h:'Foto mit Chacha',t_camera_p:'Mach ein Foto mit der Kamera oder Galerie → Georgischer Kinoeffekt.',t_games_h:'Spiele — Zeit auf der Reise vertreiben',t_games_p:'Schach, Backgammon, Schlange, 2048 und mehr. Kostenlos.',t_airports_h:'Georgiens Flughafen-Anzeigetafeln',t_airports_p:'Ankünfte und Abflüge Tiflis, Batumi, Kutaissi.',t_trains_h:'Züge in Georgien',t_trains_p:'Tickets Tiflis\u2194Batumi, Kutaissi, Borjomi.',t_flights_h:'Direktflüge nach Georgien',t_flights_p:'Direktflüge nach Tiflis, Batumi und Kutaissi.'},
   fa:{trust:'🆓 همیشه رایگان · پرداخت از طریق <b>برندهای معتبر جهانی</b>',
     h1:'دوست تو <span class="em">چاچا</span><br>در گرجستان 🇬🇪',
     sub:'فقط یک برنامه‌ریز نیست — همراهی دلسوز در تمام سفرت. هر چیزی درباره گرجستان بپرس.',
@@ -1137,7 +1139,7 @@ var I18N={
     law_p:'از ۱ ژانویه ۲۰۲۶ هر گردشگر باید بیمه درمانی داشته باشد (حداقل ۳۰٬۰۰۰ ₾ ≈ ۱۱٬۰۰۰$). بدون آن ممکن است اجازه ورود ندهند. از قبل تهیه کن.',
     law_a:'تهیه بیمه →',
     tools_h:'🧰 مفید در گرجستان',tools_sub:'هر چه در محل لازم داری — هر روز سفرت',
-    t_translator_h:'مترجم گردشگر ↔ گرجی',t_translator_p:'به زبان خودت صحبت کن — چاچا با صدا به گرجی ترجمه می‌کند. رایگان.',
+    t_translator_h:'مترجم گردشگر \u2194 گرجی',t_translator_p:'به زبان خودت صحبت کن — چاچا با صدا به گرجی ترجمه می‌کند. رایگان.',
     t_metro_h:'مترو تفلیس',t_metro_p:'مسیر، قیمت، تعویض. آفلاین.',
     t_phrases_h:'کتاب عبارات',t_phrases_p:'عبارات گرجی + صدا',
     t_currency_h:'نرخ لاری',t_currency_p:'GEL به ارز تو',
@@ -1155,7 +1157,7 @@ var I18N={
     share_h:'به اشتراک بگذار 🍶',share_sub:'به دوستانی که به گرجستان می‌روند بگو',
     f_terms:'شرایط',f_privacy:'حریم خصوصی',f_about:'درباره ما',
     f_note:'چاچا دستیار رایگان است. ما واسطه هستیم: گزینه‌ها را پیشنهاد می‌دهیم، اما رزرو و پرداخت مستقیماً در پلتفرم‌های رسمی انجام می‌شود. 🇬🇪',
-    consent:'می‌پذیرم 🍶',consent_no:'رد',consent_text:'فقط از کوکی‌های ضروری برای کارکرد سایت استفاده می‌کنیم — روی گوشی شما ذخیره می‌شود، نه سرور ما.',disclaimer:'چاچا هوش مصنوعی است و ممکن است اشتباه کند. لطفاً پاسخ‌ها را بررسی کنید 🍶','t_places_h':'بهترین مکان‌ها — از گردشگران','t_places_p':'رستوران‌ها، کافه‌ها، جاذبه‌ها. اضافه کن و رأی بده ❤️','t_games_h':'بازی‌ها — وقت را در راه بکش','t_games_p':'شطرنج، تخته‌نرد، مار، 2048 و بیشتر. رایگان.','t_airports_h':'تابلوهای فرودگاه‌های گرجستان','t_airports_p':'ورود و خروج تفلیس، باتومی، کوتایسی.','t_trains_h':'قطارهای گرجستان','t_trains_p':'بلیط تفلیس↔باتومی، کوتایسی، بورجومی.','t_flights_h':'پروازهای مستقیم به گرجستان','t_flights_p':'پروازهای مستقیم به تفلیس، باتومی و کوتایسی.'},
+    consent:'می‌پذیرم 🍶',consent_no:'رد',consent_text:'فقط از کوکی‌های ضروری برای کارکرد سایت استفاده می‌کنیم — روی گوشی شما ذخیره می‌شود، نه سرور ما.',disclaimer:'چاچا هوش مصنوعی است و ممکن است اشتباه کند. لطفاً پاسخ‌ها را بررسی کنید 🍶',t_places_h:'بهترین مکان‌ها — از گردشگران',t_places_p:'رستوران‌ها، کافه‌ها، جاذبه‌ها. اضافه کن و رأی بده ❤️',t_games_h:'بازی‌ها — وقت را در راه بکش',t_games_p:'شطرنج، تخته‌نرد، مار، 2048 و بیشتر. رایگان.',t_airports_h:'تابلوهای فرودگاه‌های گرجستان',t_airports_p:'ورود و خروج تفلیس، باتومی، کوتایسی.',t_trains_h:'قطارهای گرجستان',t_trains_p:'بلیط تفلیس\u2194باتومی، کوتایسی، بورجومی.',t_flights_h:'پروازهای مستقیم به گرجستان',t_flights_p:'پروازهای مستقیم به تفلیس، باتومی و کوتایسی.'},
   hy:{
     trust:'🆓 Անվճար · վճարումը <b>վստահելի հարթակների</b> միջոցով',
     sub:'Ոչ պարզապես պլանավորող — ձեր ողջ ճամփորդության ուղեկից։ Հարցրեք ցանկացած բան Վրաստանի մասին։',
@@ -1178,7 +1180,7 @@ var I18N={
     t_prices_h:'Tatarakanner 2026',t_prices_p:'Байц gины — chi khatapahes',
     t_games_h:'Хаherogh',t_games_p:'Shahmaty, нарді, вилаk, 2048։ Aнвizar.',
     t_airports_h:'Враstаnakanatni odjakhanner',t_airports_p:'Тбилилиsи, Батуми, Кутаіsы',
-    t_trains_h:'Враstаnakanatni koghevardanner',t_trains_p:'Тбилилиsі↔Батуми',
+    t_trains_h:'Враstаnakanatni koghevardanner',t_trains_p:'Тбилилиsі\u2194Батуми',
     t_flights_h:'Oors рейsner Враstан',t_flights_p:'Ours рейsner Тбилилиsи',
     share_h:'Kaisketsek 🍶',share_sub:'Asatsel barer vorونk getnum en Vrаstаn',
     f_terms:'Пайманнер',f_privacy:'গопniutyun',f_about:'Masin',
@@ -1209,7 +1211,7 @@ var I18N={
     t_prices_h:'Ədalətli qiymətlər 2026',t_prices_p:'Nə qədər xərclənir — aldatdırma',
     t_games_h:'Oyunlar — yolda vaxt öldür',t_games_p:'Şahmat, nərd, ilan, 2048. Pulsuz.',
     t_airports_h:'Gürcüstan hava limanları',t_airports_p:'Tbilisi, Batumi, Kutaisi gəliş-gedişi',
-    t_trains_h:'Gürcüstan qatarları',t_trains_p:'Tbilisi↔Batumi biletləri',
+    t_trains_h:'Gürcüstan qatarları',t_trains_p:'Tbilisi\u2194Batumi biletləri',
     t_flights_h:'Gürcüstana birbaşa uçuşlar',t_flights_p:'Tbilisi, Batumi, Kutaisiyə',
     share_h:'Paylaş 🍶',share_sub:'Gürcüstana gedən dostlarına de',
     f_terms:'Şərtlər',f_privacy:'Məxfilik',f_about:'Haqqımızda',
@@ -1240,7 +1242,7 @@ var I18N={
     t_prices_h:'2026年公道价格',t_prices_p:'物价参考——避免被宰',
     t_games_h:'游戏——路上打发时间',t_games_p:'象棋、蛇形、2048等。免费。',
     t_airports_h:'格鲁吉亚机场航班',t_airports_p:'第比利斯、巴统、库塔伊西到港离港',
-    t_trains_h:'格鲁吉亚火车',t_trains_p:'第比利斯↔巴统车票',
+    t_trains_h:'格鲁吉亚火车',t_trains_p:'第比利斯\u2194巴统车票',
     t_flights_h:'直飞格鲁吉亚航班',t_flights_p:'飞往第比利斯、巴统、库塔伊西',
     share_h:'分享 🍶',share_sub:'告诉前往格鲁吉亚的朋友',
     f_terms:'条款',f_privacy:'隐私',f_about:'关于我们',
@@ -1271,7 +1273,7 @@ var I18N={
     t_prices_h:'Uczciwe ceny 2026',t_prices_p:'Co ile kosztuje — nie daj się naciągnąć',
     t_games_h:'Gry — zabij czas w drodze',t_games_p:'Szachy, wąż, 2048 i więcej. Bezpłatnie.',
     t_airports_h:'Lotniska Gruzji',t_airports_p:'Przyloty i odloty Tbilisi, Batumi, Kutaisi',
-    t_trains_h:'Pociągi w Gruzji',t_trains_p:'Bilety Tbilisi↔Batumi, Kutaisi',
+    t_trains_h:'Pociągi w Gruzji',t_trains_p:'Bilety Tbilisi\u2194Batumi, Kutaisi',
     t_flights_h:'Loty bezpośrednie do Gruzji',t_flights_p:'Do Tbilisi, Batumi i Kutaisi',
     share_h:'Udostępnij 🍶',share_sub:'Powiedz znajomym jadącym do Gruzji',
     f_terms:'Regulamin',f_privacy:'Prywatność',f_about:'O nas',
@@ -1280,22 +1282,22 @@ var I18N={
     disclaimer:'Chacha to AI i może popełniać błędy. Sprawdź odpowiedzi 🍶',
     ph:'Wyślij wiadomość do Chachy...',back:'← Wróć'
   },
-  kk:{trust:'🆓 Мәңгі тегін · <b>сенімді брендтер</b> арқылы төлем',sub:'Жай жоспарлаушы емес — бүкіл сапарыңыздың қамқор серігі.',law_h:'2026 жаңа заң — сақтандыру міндетті',law_p:'2026 жылдың 1 қаңтарынан бастап әрбір турист медициналық сақтандыруы болуы керек (min. 30 000 ₾).',law_a:'Сақтандыруды ресімдеу →',tools_h:'🧰 Грузияда пайдалы',tools_sub:'Жерінде қажет нәрсенің бәрі',t_translator_h:'Аудармашы',t_translator_p:'Тіліңізде теріңіз — грузин тіліндегі аударманы көріңіз',t_metro_h:'Тбилиси метросы',t_metro_p:'Маршрут, баға, ауысу. Офлайн.',t_phrases_h:'Сөздік',t_phrases_p:'Грузин сөздері + айтылым',t_currency_h:'Лари бағамы',t_currency_p:'GEL сіздің валютаңызға',t_emergency_h:'Жедел жәрдем',t_emergency_p:'112, елшілік, көмек',t_tips_h:'Чаевые',t_tips_p:'Супра есебін бөлу',t_checklist_h:'Жиналыс тізімі',t_checklist_p:'2026 сақтандыруымен',t_food_h:'Не тапсырыс беруге',t_food_p:'Грузин тағамдары мен шарабы',t_visa_h:'Виза күндері',t_visa_p:'Визасыз жыл — есептегіш',t_alarm_h:'Дабыл',t_alarm_p:'Экскурсияны жіберіп алма',t_torch_h:'Шам',t_torch_p:'Қараңғыда жарық',t_luggage_h:'Багаж сақтау',t_luggage_p:'Чемоданды тастап — жеңіл жүр',t_prices_h:'Әділ бағалар 2026',t_prices_p:'Нені қанша тұрады',t_games_h:'Ойындар',t_games_p:'Шахмат, жылан, 2048. Тегін.',t_airports_h:'Грузия әуежайлары',t_airports_p:'Тбилиси, Батуми, Кутаиси',t_trains_h:'Грузия пойыздары',t_trains_p:'Тбилиси↔Батуми билеттері',t_flights_h:'Тікелей рейстер',t_flights_p:'Тбилиси, Батуми, Кутаисиге',share_h:'Бөлісу 🍶',share_sub:'Грузияға баратын достарыңа айт',f_terms:'Шарттар',f_privacy:'Құпиялылық',f_about:'Біз туралы',f_note:'Чача тегін көмекші. 🇬🇪',consent:'Келісемін 🍶',consent_no:'Бас тарту',disclaimer:'Чача — AI, қателесуі мүмкін 🍶',ph:'Чачаға хабарлама жазыңыз...',back:'← Артқа'},
-  uz:{trust:'🆓 Abadiy bepul · <b>ishonchli brendlar</b>',sub:'Butun sayohatingizning gʻamxoʻr sherigi.',law_h:'2026 yangi qonun — sugʻurta majburiy',law_p:'2026 yil 1 yanvardan har bir turist tibbiy sugʻurtaga ega boʻlishi kerak.',law_a:'Sugʻurtani rasmiylashtirish →',tools_h:'🧰 Gruziyada foydali',tools_sub:'Joyida kerak boʻlgan hamma narsa',t_translator_h:'Tarjimon',t_translator_p:'Tilingizda yozing',t_metro_h:'Tbilisi metropoliteni',t_metro_p:'Marshrut, narx. Oflayn.',t_phrases_h:'Soʻzlashuv qoʻllanmasi',t_phrases_p:'Gruzin iboralari + talaffuz',t_currency_h:'Lari kursi',t_currency_p:'GEL sizning valyutangizga',t_emergency_h:'Tez yordam',t_emergency_p:'112, elchixona',t_tips_h:'Choy puli',t_tips_p:'Supra hisobini boʻlish',t_checklist_h:'Yigʻish roʻyxati',t_checklist_p:'2026 sugʻurtasi bilan',t_food_h:'Nima buyurtirish kerak',t_food_p:'Gruzin taomlari',t_visa_h:'Viza kunlari',t_visa_p:'Vizasiz yil',t_alarm_h:'Uyg otgich',t_alarm_p:'Ekskursiyani oʻtkazib yubormang',t_torch_h:'Chiroq',t_torch_p:'Qorongʻuda yorugʻlik',t_luggage_h:'Bagaj saqlash',t_luggage_p:'Chamodanlarni qoʻyib',t_prices_h:'Adolatli narxlar 2026',t_prices_p:'Nima qancha turadi',t_games_h:'Oʻyinlar',t_games_p:'Shaxmat, ilon, 2048. Bepul.',t_airports_h:'Gruziya aeroportlari',t_airports_p:'Tbilisi, Batumi, Kutaisi',t_trains_h:'Gruziya poezdlari',t_trains_p:'Tbilisi↔Batumi',t_flights_h:'Togʻridan togʻri reyslar',t_flights_p:'Tbilisi, Batumi, Kutaisiga',share_h:'Ulashish 🍶',share_sub:'Gruziyaga boradigan doʻstlaringga ayt',f_terms:'Shartlar',f_privacy:'Maxfiylik',f_about:'Biz haqimizda',f_note:'Chacha bepul AI yordamchi. 🇬🇪',consent:'Roziman 🍶',consent_no:'Rad etish',disclaimer:'Chacha AI, xato qilishi mumkin 🍶',ph:'Chachaga xabar yozing...',back:'← Orqaga'},
-  tk:{trust:'🆓 Hemişe mugt · <b>ynamly brendler</b>',sub:'Tutuş syýahatyňyzyň aladaly ýoldaşy.',law_h:'2026 täze kanun — ätiýaçlandyryş hökmany',law_p:'2026-njy ýylyň 1-nji ýanwaryndan her syýahatçy lukmançylyk ätiýaçlandyrmasyna eýe bolmaly.',law_a:'Ätiýaçlandyrmak →',tools_h:'🧰 Gruziýada peýdaly',tools_sub:'Ýerinde gerek bolan hemme zat',t_translator_h:'Terjimeçi',t_translator_p:'Öz diliňizde ýazyň',t_metro_h:'Tbilisi metro',t_metro_p:'Ugur, baha. Oflaýn.',t_phrases_h:'Gürrüňdeşlik',t_phrases_p:'Gruzin sözleri',t_currency_h:'Lari kursy',t_currency_p:'GEL siziň walýutaňyza',t_emergency_h:'Tiz kömek',t_emergency_p:'112, ilçilik',t_tips_h:'Çaý pul',t_tips_p:'Hasaby paýlaşmak',t_checklist_h:'Ýygnanyş sanawy',t_checklist_p:'2026 ätiýaçlandyrmasy bilen',t_food_h:'Näme sargyt etmeli',t_food_p:'Gruzin tagamlary',t_visa_h:'Wiza günleri',t_visa_p:'Wizasyz ýyl',t_alarm_h:'Alarm',t_alarm_p:'Gezelenç wagtyny ötürme',t_torch_h:'El çyrasy',t_torch_p:'Garaňkylykda ýagtylyk',t_luggage_h:'Goş saklamak',t_luggage_p:'Çemodanlary goý',t_prices_h:'Adalatly bahalar 2026',t_prices_p:'Näme näçe dur',t_games_h:'Oýunlar',t_games_p:'Küşt, ýylan, 2048. Mugt.',t_airports_h:'Gruziýa aeroportlary',t_airports_p:'Tbilisi, Batumi, Kutaisi',t_trains_h:'Gruziýa otlulary',t_trains_p:'Tbilisi↔Batumi',t_flights_h:'Göni gatnawlar',t_flights_p:'Tbilisi, Batumi',share_h:'Paýlaşmak 🍶',share_sub:'Gruziýa gidýän dostlaryňa aýt',f_terms:'Şertler',f_privacy:'Gizlinlik',f_about:'Biz hakda',f_note:'Chacha mugt AI kömekçisi. 🇬🇪',consent:'Razyman 🍶',consent_no:'Ret etmek',disclaimer:'Chacha AI, ýalňyşyp biler 🍶',ph:'Chachä habar iberiň...',back:'← Yzyna'},
-  tg:{trust:'🆓 Ройгон барои ҳамеша · <b>бренди эътимоднок</b>',sub:'Ҳамроҳи ғамхори тамоми сафар.',law_h:'Қонуни нави соли 2026 — суғурта ҳатмист',law_p:'Аз 1-уми январи 2026 ҳар сайёҳ суғуртаи тиббӣ бояд дошта бошад.',law_a:'Суғурта гирифтан →',tools_h:'🧰 Дар Гурҷистон муфид',tools_sub:'Ҳама чизе ки дар ҷо лозим аст',t_translator_h:'Тарҷумон',t_translator_p:'Бо забони худ нависед',t_metro_h:'Метрои Тбилиси',t_metro_p:'Масир, нарх. Офлайн.',t_phrases_h:'Луғати гуфтугӯ',t_phrases_p:'Ибораҳои гурҷӣ',t_currency_h:'Курси лари',t_currency_p:'GEL ба асъори шумо',t_emergency_h:'Ёрии таъҷилӣ',t_emergency_p:'112, сафорат',t_tips_h:'Чаевые',t_tips_p:'Тақсими ҳисоб',t_checklist_h:'Рӯйхати ҷамъоварӣ',t_checklist_p:'Бо суғуртаи 2026',t_food_h:'Чӣ фармоиш додан',t_food_p:'Таомҳои гурҷӣ',t_visa_h:'Рӯзҳои виза',t_visa_p:'Соли бевиза',t_alarm_h:'Зангӯлаи бедоркунак',t_alarm_p:'Саёҳатро аз даст надеҳ',t_torch_h:'Чароғак',t_torch_p:'Нур дар торикӣ',t_luggage_h:'Нигоҳдории бор',t_luggage_p:'Борро гузор',t_prices_h:'Нархҳои одилона 2026',t_prices_p:'Чӣ чанд арзиш дорад',t_games_h:'Бозиҳо',t_games_p:'Шоҳмот, мор, 2048. Ройгон.',t_airports_h:'Фурудгоҳҳои Гурҷистон',t_airports_p:'Тбилиси, Батуми, Кутаиси',t_trains_h:'Қатораҳои Гурҷистон',t_trains_p:'Тбилиси↔Батуми',t_flights_h:'Парвозҳои мустақим',t_flights_p:'Ба Тбилиси, Батуми',share_h:'Мубодила 🍶',share_sub:'Ба дӯстони ба Гурҷистон равандагон гӯй',f_terms:'Шартҳо',f_privacy:'Махфият',f_about:'Дар бораи мо',f_note:'Чача дастёри AI ройгон аст. 🇬🇪',consent:'Розиям 🍶',consent_no:'Рад кардан',disclaimer:'Чача AI аст ва хато карда метавонад 🍶',ph:'Ба Чача паём фиристед...',back:'← Бозгашт'},
-  ky:{trust:'🆓 Түбөлүк акысыз · <b>ишенимдүү бренддер</b>',sub:'Бүтүндөй сапарыңызда жанашкан жолдош.',law_h:'2026-жылдын жаңы мыйзамы — камсыздандыруу милдеттүү',law_p:'2026-жылдын 1-январынан баштап ар бир турист медициналык камсыздандырууга ээ болуусу керек.',law_a:'Камсыздандыруу алуу →',tools_h:'🧰 Грузияда пайдалуу',tools_sub:'Жерде керек болгон баары',t_translator_h:'Котормочу',t_translator_p:'Өз тилиңизде жазыңыз',t_metro_h:'Тбилиси метросу',t_metro_p:'Маршрут, баа. Офлайн.',t_phrases_h:'Сүйлөшүү',t_phrases_p:'Грузин сөздөрү',t_currency_h:'Лари курсу',t_currency_p:'GEL сиздин валютаңызга',t_emergency_h:'Тез жардам',t_emergency_p:'112, элчилик',t_tips_h:'Чай акча',t_tips_p:'Эсепти бөлүшүү',t_checklist_h:'Жыйноо тизмеси',t_checklist_p:'2026 камсыздандыруу менен',t_food_h:'Эмне заказ берүү',t_food_p:'Грузин тамактары',t_visa_h:'Виза күндөрү',t_visa_p:'Визасыз жыл',t_alarm_h:'Ойготкуч',t_alarm_p:'Экскурсияны өткөрүп жибербе',t_torch_h:'Чырак',t_torch_p:'Каранкыда жарык',t_luggage_h:'Жүк сактоо',t_luggage_p:'Чемоданды коюп кет',t_prices_h:'Адилеттүү баалар 2026',t_prices_p:'Эмне канча турат',t_games_h:'Оюндар',t_games_p:'Шахмат, жылан, 2048. Акысыз.',t_airports_h:'Грузия аэропорттору',t_airports_p:'Тбилиси, Батуми, Кутаиси',t_trains_h:'Грузия поезддери',t_trains_p:'Тбилиси↔Батуми',t_flights_h:'Түз рейстер',t_flights_p:'Тбилиси, Батуми',share_h:'Бөлүшүү 🍶',share_sub:'Грузияга баратын досторуңа айт',f_terms:'Шарттар',f_privacy:'Купуялык',f_about:'Биз жөнүндө',f_note:'Чача акысыз AI жардамчы. 🇬🇪',consent:'Макулмун 🍶',consent_no:'Баш тартуу',disclaimer:'Чача AI, жаңылышы мүмкүн 🍶',ph:'Чачага кабар жибер...',back:'← Артка'},
-  ja:{trust:'🆓 永久無料 · <b>信頼できるブランド</b>での支払い',sub:'旅全体の心強いパートナー。ジョージアについて何でも聞いてください。',law_h:'2026年新法律 — 保険が必須',law_p:'2026年1月1日から、すべての観光客は医療保険が必要です（最低30,000₾）。',law_a:'保険を申し込む →',tools_h:'🧰 ジョージアで役立つ',tools_sub:'現地で必要なすべて',t_translator_h:'翻訳',t_translator_p:'あなたの言語で入力 — グルジア語訳を確認',t_metro_h:'トビリシ地下鉄',t_metro_p:'ルート、料金、乗り換え。オフライン。',t_phrases_h:'会話ガイド',t_phrases_p:'グルジア語フレーズ＋発音',t_currency_h:'ラリ為替レート',t_currency_p:'GELをあなたの通貨に',t_emergency_h:'緊急援助',t_emergency_p:'112、大使館',t_tips_h:'チップ',t_tips_p:'スプラの会計を分割',t_checklist_h:'荷造りリスト',t_checklist_p:'2026年保険付き',t_food_h:'何を注文するか',t_food_p:'グルジア料理とワイン',t_visa_h:'ビザ日数',t_visa_p:'ビザなし年間 — カウンター',t_alarm_h:'アラーム',t_alarm_p:'ツアーを見逃さないで',t_torch_h:'懐中電灯',t_torch_p:'暗闇の中の光',t_luggage_h:'荷物預かり',t_luggage_p:'荷物を預けて',t_prices_h:'適正価格 2026',t_prices_p:'料金目安',t_games_h:'ゲーム',t_games_p:'チェス、スネーク、2048。無料。',t_airports_h:'空港案内板',t_airports_p:'トビリシ、バトゥミ、クタイシ',t_trains_h:'ジョージアの列車',t_trains_p:'トビリシ↔バトゥミ',t_flights_h:'直行便',t_flights_p:'トビリシ、バトゥミ、クタイシへ',share_h:'シェア 🍶',share_sub:'ジョージアに行く友人に教えよう',f_terms:'利用規約',f_privacy:'プライバシー',f_about:'私たちについて',f_note:'チャチャは無料AIアシスタント。 🇬🇪',consent:'同意します 🍶',consent_no:'拒否',disclaimer:'チャチャはAIです。回答を確認してください 🍶',ph:'チャチャにメッセージを送る...',back:'← 戻る'},
-  ko:{trust:'🆓 영원히 무료 · <b>신뢰할 수 있는 브랜드</b>로 결제',sub:'여행 내내 함께하는 든든한 동반자. 조지아에 대해 무엇이든 물어보세요.',law_h:'2026년 새 법률 — 보험 필수',law_p:'2026년 1월 1일부터 모든 관광객은 의료 보험이 필요합니다 (최소 30,000₾).',law_a:'보험 가입하기 →',tools_h:'🧰 조지아에서 유용한 것',tools_sub:'현장에서 필요한 모든 것',t_translator_h:'번역기',t_translator_p:'당신의 언어로 입력 — 조지아어 번역 확인',t_metro_h:'트빌리시 지하철',t_metro_p:'노선, 요금, 환승. 오프라인.',t_phrases_h:'회화 가이드',t_phrases_p:'조지아어 표현 + 발음',t_currency_h:'라리 환율',t_currency_p:'GEL을 당신의 통화로',t_emergency_h:'긴급 도움',t_emergency_p:'112, 대사관',t_tips_h:'팁',t_tips_p:'수프라 계산서 분할',t_checklist_h:'짐 목록',t_checklist_p:'2026 보험 포함',t_food_h:'무엇을 주문할까',t_food_p:'조지아 음식과 와인',t_visa_h:'비자 일수',t_visa_p:'무비자 연간 — 카운터',t_alarm_h:'알람',t_alarm_p:'투어를 놓치지 마세요',t_torch_h:'손전등',t_torch_p:'어둠 속의 빛',t_luggage_h:'수하물 보관',t_luggage_p:'짐을 맡기고',t_prices_h:'적정 가격 2026',t_prices_p:'요금 기준',t_games_h:'게임',t_games_p:'체스, 뱀, 2048. 무료.',t_airports_h:'공항 안내판',t_airports_p:'트빌리시, 바투미, 쿠타이시',t_trains_h:'조지아 기차',t_trains_p:'트빌리시↔바투미',t_flights_h:'직항편',t_flights_p:'트빌리시, 바투미, 쿠타이시행',share_h:'공유 🍶',share_sub:'조지아에 가는 친구에게 알려줘',f_terms:'약관',f_privacy:'개인정보',f_about:'우리에 대해',f_note:'차차는 무료 AI 어시스턴트. 🇬🇪',consent:'동의합니다 🍶',consent_no:'거부',disclaimer:'차차는 AI이며 실수할 수 있습니다 🍶',ph:'차차에게 메시지 보내기...',back:'← 뒤로'},
-  it:{trust:'🆓 Gratis per sempre · pagamento tramite <b>marchi affidabili</b>',sub:'Non solo un pianificatore — un compagno premuroso per tutto il viaggio.',law_h:'Nuova legge 2026 — assicurazione obbligatoria',law_p:'Dal 1 gennaio 2026 ogni turista deve avere un assicurazione medica (min. 30.000 ₾).',law_a:'Stipula assicurazione →',tools_h:'🧰 Utile in Georgia',tools_sub:'Tutto ciò di cui hai bisogno sul posto',t_translator_h:'Traduttore',t_translator_p:'Scrivi nella tua lingua — vedi la traduzione',t_metro_h:'Metro di Tbilisi',t_metro_p:'Percorso, prezzo, coincidenze. Offline.',t_phrases_h:'Guida alla conversazione',t_phrases_p:'Frasi georgiane + pronuncia',t_currency_h:'Tasso Lari',t_currency_p:'GEL nella tua valuta',t_emergency_h:'Emergenze',t_emergency_p:'112, ambasciata',t_tips_h:'Mance',t_tips_p:'Dividi il conto della supra',t_checklist_h:'Lista bagagli',t_checklist_p:'Con assicurazione 2026',t_food_h:'Cosa ordinare',t_food_p:'Piatti georgiani e vino',t_visa_h:'Giorni visto',t_visa_p:'Anno senza visto — contatore',t_alarm_h:'Sveglia',t_alarm_p:'Non perdere il tour',t_torch_h:'Torcia',t_torch_p:'Luce nel buio',t_luggage_h:'Deposito bagagli',t_luggage_p:'Lascia i bagagli',t_prices_h:'Prezzi equi 2026',t_prices_p:'Quanto costa cosa',t_games_h:'Giochi',t_games_p:'Scacchi, serpente, 2048. Gratis.',t_airports_h:'Aeroporti Georgia',t_airports_p:'Tbilisi, Batumi, Kutaisi',t_trains_h:'Treni in Georgia',t_trains_p:'Tbilisi↔Batumi',t_flights_h:'Voli diretti',t_flights_p:'Per Tbilisi, Batumi, Kutaisi',share_h:'Condividi 🍶',share_sub:'Dillo agli amici che vanno in Georgia',f_terms:'Termini',f_privacy:'Privacy',f_about:'Chi siamo',f_note:'Chacha è un assistente AI gratuito. 🇬🇪',consent:'Accetto 🍶',consent_no:'Rifiuta',disclaimer:'Chacha è AI e può sbagliare 🍶',ph:'Invia un messaggio a Chacha...',back:'← Indietro'},
-  pt:{trust:'🆓 Grátis para sempre · pagamento via <b>marcas confiáveis</b>',sub:'Não é apenas um planejador — é um companheiro atencioso em toda a viagem.',law_h:'Nova lei 2026 — seguro obrigatório',law_p:'A partir de 1 de janeiro de 2026, todo turista deve ter seguro médico (mín. 30.000 ₾).',law_a:'Contratar seguro →',tools_h:'🧰 Útil na Geórgia',tools_sub:'Tudo que você precisa no local',t_translator_h:'Tradutor',t_translator_p:'Escreva no seu idioma — veja a tradução',t_metro_h:'Metro de Tbilisi',t_metro_p:'Rota, preço, baldeação. Offline.',t_phrases_h:'Guia de conversação',t_phrases_p:'Frases georgianas + pronúncia',t_currency_h:'Taxa Lari',t_currency_p:'GEL para sua moeda',t_emergency_h:'Emergências',t_emergency_p:'112, embaixada',t_tips_h:'Gorjetas',t_tips_p:'Dividir a conta da supra',t_checklist_h:'Lista de bagagem',t_checklist_p:'Com seguro 2026',t_food_h:'O que pedir',t_food_p:'Pratos georgianos e vinho',t_visa_h:'Dias de visto',t_visa_p:'Ano sem visto — contador',t_alarm_h:'Despertador',t_alarm_p:'Não perca o tour',t_torch_h:'Lanterna',t_torch_p:'Luz no escuro',t_luggage_h:'Depósito de bagagem',t_luggage_p:'Deixe as malas',t_prices_h:'Preços justos 2026',t_prices_p:'O que custa o quê',t_games_h:'Jogos',t_games_p:'Xadrez, cobra, 2048. Grátis.',t_airports_h:'Aeroportos da Geórgia',t_airports_p:'Tbilisi, Batumi, Kutaisi',t_trains_h:'Comboios na Geórgia',t_trains_p:'Tbilisi↔Batumi',t_flights_h:'Voos diretos',t_flights_p:'Para Tbilisi, Batumi, Kutaisi',share_h:'Compartilhar 🍶',share_sub:'Conta para amigos que vão à Geórgia',f_terms:'Termos',f_privacy:'Privacidade',f_about:'Sobre nós',f_note:'Chacha é um assistente AI gratuito. 🇬🇪',consent:'Concordo 🍶',consent_no:'Recusar',disclaimer:'Chacha é IA e pode errar 🍶',ph:'Envie uma mensagem para Chacha...',back:'← Voltar'},
-  nl:{trust:'🆓 Altijd gratis · betaling via <b>vertrouwde merken</b>',sub:'Niet alleen een planner — een zorgzame reispartner voor de hele reis.',law_h:'Nieuwe wet 2026 — verzekering verplicht',law_p:'Vanaf 1 januari 2026 moet elke toerist een reisverzekering hebben (min. 30.000 ₾).',law_a:'Verzekering afsluiten →',tools_h:'🧰 Handig in Georgië',tools_sub:'Alles wat je ter plaatse nodig hebt',t_translator_h:'Vertaler',t_translator_p:'Typ in uw taal — zie de Georgische vertaling',t_metro_h:'Metro van Tbilisi',t_metro_p:'Route, prijs, overstap. Offline.',t_phrases_h:'Conversatiegids',t_phrases_p:'Georgische zinnen + uitspraak',t_currency_h:'Lari wisselkoers',t_currency_p:'GEL naar uw valuta',t_emergency_h:'Noodhulp',t_emergency_p:'112, ambassade',t_tips_h:'Fooi',t_tips_p:'Rekening delen bij supra',t_checklist_h:'Paklijst',t_checklist_p:'Met verzekering 2026',t_food_h:'Wat bestellen',t_food_p:'Georgische gerechten en wijn',t_visa_h:'Visadagen',t_visa_p:'Visumvrij jaar — teller',t_alarm_h:'Wekker',t_alarm_p:'Mis uw tour niet',t_torch_h:'Zaklamp',t_torch_p:'Licht in het donker',t_luggage_h:'Bagageopslag',t_luggage_p:'Koffers opslaan',t_prices_h:'Eerlijke prijzen 2026',t_prices_p:'Wat kost wat',t_games_h:'Spellen',t_games_p:'Schaken, slang, 2048. Gratis.',t_airports_h:'Luchthavens Georgië',t_airports_p:'Tbilisi, Batumi, Kutaisi',t_trains_h:'Treinen in Georgië',t_trains_p:'Tbilisi↔Batumi',t_flights_h:'Directe vluchten',t_flights_p:'Naar Tbilisi, Batumi, Kutaisi',share_h:'Delen 🍶',share_sub:'Vertel vrienden die naar Georgië gaan',f_terms:'Voorwaarden',f_privacy:'Privacy',f_about:'Over ons',f_note:'Chacha is een gratis AI-assistent. 🇬🇪',consent:'Ik ga akkoord 🍶',consent_no:'Weigeren',disclaimer:'Chacha is AI en kan fouten maken 🍶',ph:'Stuur een bericht naar Chacha...',back:'← Terug'},
-  hi:{trust:'🆓 हमेशा के लिए मुफ़्त · <b>विश्वसनीय ब्रांड</b> के माध्यम से भुगतान',sub:'केवल एक प्लानर नहीं — पूरी यात्रा में आपका देखभाल करने वाला साथी।',law_h:'2026 नया कानून — बीमा अनिवार्य',law_p:'1 जनवरी 2026 से, हर पर्यटक के पास चिकित्सा बीमा होना चाहिए (न्यूनतम 30,000 ₾)।',law_a:'बीमा प्राप्त करें →',tools_h:'🧰 जॉर्जिया में उपयोगी',tools_sub:'वहाँ जो कुछ भी चाहिए',t_translator_h:'अनुवादक',t_translator_p:'अपनी भाषा में टाइप करें',t_metro_h:'त्बिलिसी मेट्रो',t_metro_p:'मार्ग, मूल्य, स्थानांतरण। ऑफलाइन।',t_phrases_h:'वार्तालाप गाइड',t_phrases_p:'जॉर्जियाई वाक्यांश + उच्चारण',t_currency_h:'लारी विनिमय दर',t_currency_p:'GEL को अपनी मुद्रा में',t_emergency_h:'आपातकालीन सहायता',t_emergency_p:'112, दूतावास',t_tips_h:'टिप्स',t_tips_p:'सुप्रा बिल बाँटना',t_checklist_h:'पैकिंग सूची',t_checklist_p:'2026 बीमा के साथ',t_food_h:'क्या ऑर्डर करें',t_food_p:'जॉर्जियाई व्यंजन और वाइन',t_visa_h:'वीज़ा दिन',t_visa_p:'वीज़ा-मुक्त वर्ष — काउंटर',t_alarm_h:'अलार्म',t_alarm_p:'अपना टूर मत चूकें',t_torch_h:'टॉर्च',t_torch_p:'अंधेरे में रोशनी',t_luggage_h:'सामान भंडारण',t_luggage_p:'बैग छोड़ें',t_prices_h:'उचित मूल्य 2026',t_prices_p:'क्या कितने का',t_games_h:'गेम',t_games_p:'शतरंज, साँप, 2048। मुफ़्त।',t_airports_h:'जॉर्जिया हवाई अड्डे',t_airports_p:'त्बिलिसी, बटुमी, कुतैसी',t_trains_h:'जॉर्जिया की ट्रेनें',t_trains_p:'त्बिलिसी↔बटुमी',t_flights_h:'सीधी उड़ानें',t_flights_p:'त्बिलिसी, बटुमी, कुतैसी के लिए',share_h:'शेयर करें 🍶',share_sub:'जॉर्जिया जाने वाले दोस्तों को बताएँ',f_terms:'नियम',f_privacy:'गोपनीयता',f_about:'हमारे बारे में',f_note:'चाचा एक मुफ़्त AI सहायक है। 🇬🇪',consent:'मैं सहमत हूँ 🍶',consent_no:'अस्वीकार',disclaimer:'चाचा AI है और गलती कर सकता है 🍶',ph:'चाचा को संदेश भेजें...',back:'← वापस'},
-  ro:{trust:'🆓 Gratuit pentru totdeauna · plată prin <b>branduri de încredere</b>',sub:'Nu doar un planificator — un companion grijuliu pe tot parcursul călătoriei.',law_h:'Lege nouă 2026 — asigurare obligatorie',law_p:'De la 1 ianuarie 2026, fiecare turist trebuie să aibă asigurare medicală (min. 30.000 ₾).',law_a:'Obține asigurare →',tools_h:'🧰 Util în Georgia',tools_sub:'Tot ce ai nevoie la fața locului',t_translator_h:'Traducător',t_translator_p:'Scrie în limba ta — vezi traducerea',t_metro_h:'Metroul din Tbilisi',t_metro_p:'Rută, preț, transfer. Offline.',t_phrases_h:'Ghid de conversație',t_phrases_p:'Expresii georgiene + pronunție',t_currency_h:'Cursul Lari',t_currency_p:'GEL în moneda ta',t_emergency_h:'Ajutor de urgență',t_emergency_p:'112, ambasadă',t_tips_h:'Bacșiș',t_tips_p:'Împarte nota de la supra',t_checklist_h:'Lista de bagaje',t_checklist_p:'Cu asigurare 2026',t_food_h:'Ce să comand',t_food_p:'Bucătărie georgiană și vin',t_visa_h:'Zile viză',t_visa_p:'An fără viză — contor',t_alarm_h:'Ceas deșteptător',t_alarm_p:'Nu rata turul',t_torch_h:'Lanternă',t_torch_p:'Lumină în întuneric',t_luggage_h:'Depozit bagaje',t_luggage_p:'Lasă bagajele',t_prices_h:'Prețuri corecte 2026',t_prices_p:'Cât costă ce',t_games_h:'Jocuri',t_games_p:'Șah, șarpe, 2048. Gratuit.',t_airports_h:'Aeroporturi Georgia',t_airports_p:'Tbilisi, Batumi, Kutaisi',t_trains_h:'Trenuri Georgia',t_trains_p:'Tbilisi↔Batumi',t_flights_h:'Zboruri directe',t_flights_p:'Spre Tbilisi, Batumi, Kutaisi',share_h:'Distribuie 🍶',share_sub:'Spune prietenilor care merg în Georgia',f_terms:'Termeni',f_privacy:'Confidențialitate',f_about:'Despre noi',f_note:'Chacha este un asistent AI gratuit. 🇬🇪',consent:'Sunt de acord 🍶',consent_no:'Refuz',disclaimer:'Chacha este AI și poate greși 🍶',ph:'Trimite un mesaj lui Chacha...',back:'← Înapoi'},
-  lv:{trust:'🆓 Bezmaksas uz visiem laikiem · <b>uzticami zīmoli</b>',sub:'Rūpīgs ceļabiedrs visā ceļojumā.',law_h:'Jauns likums 2026 — apdrošināšana obligāta',law_p:'No 2026. gada 1. janvāra katram tūristam jābūt medicīniskai apdrošināšanai.',law_a:'Noformēt apdrošināšanu →',tools_h:'🧰 Noderīgs Gruzijā',tools_sub:'Viss, kas nepieciešams vietā',t_translator_h:'Tulks',t_translator_p:'Rakstiet savā valodā',t_metro_h:'Tbilisi metro',t_metro_p:'Maršruts, cena, pārsēšanās.',t_phrases_h:'Sarunvārdnīca',t_phrases_p:'Gruzīnu frāzes + izruna',t_currency_h:'Lari kurss',t_currency_p:'GEL jūsu valūtā',t_emergency_h:'Neatliekamā palīdzība',t_emergency_p:'112, vēstniecība',t_tips_h:'Dzeramnauda',t_tips_p:'Sadalīt supras rēķinu',t_checklist_h:'Iepakošanas saraksts',t_checklist_p:'Ar 2026 apdrošināšanu',t_food_h:'Ko pasūtīt',t_food_p:'Gruzīnu ēdieni un vīns',t_visa_h:'Vīzas dienas',t_visa_p:'Bezvīzu gads — skaitītājs',t_alarm_h:'Modinātājs',t_alarm_p:'Nepalaidiet garām ekskursiju',t_torch_h:'Lukturītis',t_torch_p:'Gaisma tumsā',t_luggage_h:'Bagāžas glabātava',t_luggage_p:'Atstājiet bagāžu',t_prices_h:'Godīgas cenas 2026',t_prices_p:'Kas cik maksā',t_games_h:'Spēles',t_games_p:'Šahs, čūska, 2048. Bezmaksas.',t_airports_h:'Gruzijas lidostas',t_airports_p:'Tbilisi, Batumi, Kutaisi',t_trains_h:'Gruzijas vilcieni',t_trains_p:'Tbilisi↔Batumi',t_flights_h:'Tiešie reisi',t_flights_p:'Uz Tbilisi, Batumi',share_h:'Dalīties 🍶',share_sub:'Pastāsti draugiem, kas dodas uz Gruziju',f_terms:'Noteikumi',f_privacy:'Privātums',f_about:'Par mums',f_note:'Chacha ir bezmaksas AI asistents. 🇬🇪',consent:'Piekrītu 🍶',consent_no:'Atteikties',disclaimer:'Chacha ir AI un var kļūdīties 🍶',ph:'Sūtīt ziņojumu Chacha...',back:'← Atpakaļ'},
-  lt:{trust:'🆓 Amžinai nemokama · <b>patikimi prekių ženklai</b>',sub:'Rūpestingas kelionės draugas visą kelionę.',law_h:'Naujas 2026 m. įstatymas — draudimas privalomas',law_p:'Nuo 2026 m. sausio 1 d. kiekvienas turistas turi turėti medicininį draudimą.',law_a:'Gauti draudimą →',tools_h:'🧰 Naudinga Gruzijoje',tools_sub:'Viskas, ko reikia vietoje',t_translator_h:'Vertėjas',t_translator_p:'Rašykite savo kalba',t_metro_h:'Tbilisio metro',t_metro_p:'Maršrutas, kaina, persėdimas.',t_phrases_h:'Pokalbių vadovas',t_phrases_p:'Gruzinų frazės + tarimas',t_currency_h:'Lario kursas',t_currency_p:'GEL į jūsų valiutą',t_emergency_h:'Skubi pagalba',t_emergency_p:'112, ambasada',t_tips_h:'Arbatpinigiai',t_tips_p:'Pasidalinti supros sąskaita',t_checklist_h:'Pakavimo sąrašas',t_checklist_p:'Su 2026 draudimu',t_food_h:'Ką užsisakyti',t_food_p:'Gruzinų patiekalai ir vynas',t_visa_h:'Vizos dienos',t_visa_p:'Bevizis metai — skaitiklis',t_alarm_h:'Žadintuvas',t_alarm_p:'Nepraleiskite ekskursijos',t_torch_h:'Žibintuvėlis',t_torch_p:'Šviesa tamsoje',t_luggage_h:'Bagažo saugykla',t_luggage_p:'Palikite bagažą',t_prices_h:'Sąžiningos kainos 2026',t_prices_p:'Kas kiek kainuoja',t_games_h:'Žaidimai',t_games_p:'Šachmatai, gyvatė, 2048. Nemokamai.',t_airports_h:'Gruzijos oro uostai',t_airports_p:'Tbilisis, Batumis, Kutaisis',t_trains_h:'Gruzijos traukiniai',t_trains_p:'Tbilisis↔Batumis',t_flights_h:'Tiesioginiai skrydžiai',t_flights_p:'Į Tbilisį, Batumį',share_h:'Dalintis 🍶',share_sub:'Pasakyk draugams, kurie vyksta į Gruziją',f_terms:'Sąlygos',f_privacy:'Privatumas',f_about:'Apie mus',f_note:'Chacha yra nemokamas AI asistentas. 🇬🇪',consent:'Sutinku 🍶',consent_no:'Atsisakyti',disclaimer:'Chacha yra AI ir gali klysti 🍶',ph:'Siųsti žinutę Chacha...',back:'← Atgal'},
-  et:{trust:'🆓 Igavesti tasuta · <b>usaldusväärsed kaubamärgid</b>',sub:'Hooliv reisikaaslane kogu reisi jooksul.',law_h:'Uus 2026. aasta seadus — kindlustus kohustuslik',law_p:'Alates 1. jaanuarist 2026 peab igal turistil olema ravikindlustus.',law_a:'Hangi kindlustus →',tools_h:'🧰 Kasulik Gruusias',tools_sub:'Kõik, mida kohapeal vaja',t_translator_h:'Tõlk',t_translator_p:'Kirjuta oma keeles',t_metro_h:'Thbilisi metroo',t_metro_p:'Marsruut, hind, ümbersõit.',t_phrases_h:'Vestlusraamat',t_phrases_p:'Gruusia väljendid + hääldus',t_currency_h:'Lari kurs',t_currency_p:'GEL sinu valuutasse',t_emergency_h:'Kiirabi',t_emergency_p:'112, saatkond',t_tips_h:'Jootraha',t_tips_p:'Jaga supra arvet',t_checklist_h:'Pakkimise nimekiri',t_checklist_p:'2026 kindlustusega',t_food_h:'Mida tellida',t_food_p:'Gruusia road ja vein',t_visa_h:'Viisapäevad',t_visa_p:'Viisavaba aasta — loendur',t_alarm_h:'Äratuskell',t_alarm_p:'Ära jäta ekskursiooni vahele',t_torch_h:'Taskulamp',t_torch_p:'Valgus pimeduses',t_luggage_h:'Pagasihoidla',t_luggage_p:'Jäta pagasi',t_prices_h:'Ausad hinnad 2026',t_prices_p:'Mis maksab mida',t_games_h:'Mängud',t_games_p:'Male, madu, 2048. Tasuta.',t_airports_h:'Gruusia lennujaamad',t_airports_p:'Thbilisi, Batumi, Kutaisi',t_trains_h:'Gruusia rongid',t_trains_p:'Thbilisi↔Batumi',t_flights_h:'Otselennud',t_flights_p:'Thbilisisse, Batumisse',share_h:'Jaga 🍶',share_sub:'Räägi sõpradele, kes Gruusiasse lähevad',f_terms:'Tingimused',f_privacy:'Privaatsus',f_about:'Meist',f_note:'Chacha on tasuta AI assistent. 🇬🇪',consent:'Nõustun 🍶',consent_no:'Keeldu',disclaimer:'Chacha on AI ja võib eksida 🍶',ph:'Saada sõnum Chachale...',back:'← Tagasi'},
-  md:{trust:'🆓 Gratuit pentru totdeauna · <b>branduri de încredere</b>',sub:'Companion grijuliu pe tot parcursul călătoriei.',law_h:'Lege nouă 2026 — asigurare obligatorie',law_p:'De la 1 ianuarie 2026, fiecare turist trebuie să aibă asigurare medicală.',law_a:'Obține asigurare →',tools_h:'🧰 Util în Georgia',tools_sub:'Tot ce ai nevoie la fața locului',t_translator_h:'Traducător',t_translator_p:'Scrie în limba ta',t_metro_h:'Metroul din Tbilisi',t_metro_p:'Rută, preț, transfer.',t_phrases_h:'Ghid de conversație',t_phrases_p:'Expresii georgiene + pronunție',t_currency_h:'Cursul Lari',t_currency_p:'GEL în moneda ta',t_emergency_h:'Ajutor de urgență',t_emergency_p:'112, ambasadă',t_tips_h:'Bacșiș',t_tips_p:'Împarte nota',t_checklist_h:'Lista de bagaje',t_checklist_p:'Cu asigurare 2026',t_food_h:'Ce să comand',t_food_p:'Bucătărie georgiană',t_visa_h:'Zile viză',t_visa_p:'An fără viză',t_alarm_h:'Ceas deșteptător',t_alarm_p:'Nu rata turul',t_torch_h:'Lanternă',t_torch_p:'Lumină în întuneric',t_luggage_h:'Depozit bagaje',t_luggage_p:'Lasă bagajele',t_prices_h:'Prețuri corecte 2026',t_prices_p:'Cât costă',t_games_h:'Jocuri',t_games_p:'Șah, șarpe, 2048. Gratuit.',t_airports_h:'Aeroporturi Georgia',t_airports_p:'Tbilisi, Batumi, Kutaisi',t_trains_h:'Trenuri Georgia',t_trains_p:'Tbilisi↔Batumi',t_flights_h:'Zboruri directe',t_flights_p:'Spre Tbilisi',share_h:'Distribuie 🍶',share_sub:'Spune prietenilor care merg în Georgia',f_terms:'Termeni',f_privacy:'Confidențialitate',f_about:'Despre noi',f_note:'Chacha este un asistent AI gratuit. 🇬🇪',consent:'Sunt de acord 🍶',consent_no:'Refuz',disclaimer:'Chacha este AI și poate greși 🍶',ph:'Trimite un mesaj lui Chacha...',back:'← Înapoi'}
+  kk:{trust:'🆓 Мәңгі тегін · <b>сенімді брендтер</b> арқылы төлем',sub:'Жай жоспарлаушы емес — бүкіл сапарыңыздың қамқор серігі.',law_h:'2026 жаңа заң — сақтандыру міндетті',law_p:'2026 жылдың 1 қаңтарынан бастап әрбір турист медициналық сақтандыруы болуы керек (min. 30 000 ₾).',law_a:'Сақтандыруды ресімдеу →',tools_h:'🧰 Грузияда пайдалы',tools_sub:'Жерінде қажет нәрсенің бәрі',t_translator_h:'Аудармашы',t_translator_p:'Тіліңізде теріңіз — грузин тіліндегі аударманы көріңіз',t_metro_h:'Тбилиси метросы',t_metro_p:'Маршрут, баға, ауысу. Офлайн.',t_phrases_h:'Сөздік',t_phrases_p:'Грузин сөздері + айтылым',t_currency_h:'Лари бағамы',t_currency_p:'GEL сіздің валютаңызға',t_emergency_h:'Жедел жәрдем',t_emergency_p:'112, елшілік, көмек',t_tips_h:'Чаевые',t_tips_p:'Супра есебін бөлу',t_checklist_h:'Жиналыс тізімі',t_checklist_p:'2026 сақтандыруымен',t_food_h:'Не тапсырыс беруге',t_food_p:'Грузин тағамдары мен шарабы',t_visa_h:'Виза күндері',t_visa_p:'Визасыз жыл — есептегіш',t_alarm_h:'Дабыл',t_alarm_p:'Экскурсияны жіберіп алма',t_torch_h:'Шам',t_torch_p:'Қараңғыда жарық',t_luggage_h:'Багаж сақтау',t_luggage_p:'Чемоданды тастап — жеңіл жүр',t_prices_h:'Әділ бағалар 2026',t_prices_p:'Нені қанша тұрады',t_games_h:'Ойындар',t_games_p:'Шахмат, жылан, 2048. Тегін.',t_airports_h:'Грузия әуежайлары',t_airports_p:'Тбилиси, Батуми, Кутаиси',t_trains_h:'Грузия пойыздары',t_trains_p:'Тбилиси\u2194Батуми билеттері',t_flights_h:'Тікелей рейстер',t_flights_p:'Тбилиси, Батуми, Кутаисиге',share_h:'Бөлісу 🍶',share_sub:'Грузияға баратын достарыңа айт',f_terms:'Шарттар',f_privacy:'Құпиялылық',f_about:'Біз туралы',f_note:'Чача тегін көмекші. 🇬🇪',consent:'Келісемін 🍶',consent_no:'Бас тарту',disclaimer:'Чача — AI, қателесуі мүмкін 🍶',ph:'Чачаға хабарлама жазыңыз...',back:'← Артқа'},
+  uz:{trust:'🆓 Abadiy bepul · <b>ishonchli brendlar</b>',sub:'Butun sayohatingizning gʻamxoʻr sherigi.',law_h:'2026 yangi qonun — sugʻurta majburiy',law_p:'2026 yil 1 yanvardan har bir turist tibbiy sugʻurtaga ega boʻlishi kerak.',law_a:'Sugʻurtani rasmiylashtirish →',tools_h:'🧰 Gruziyada foydali',tools_sub:'Joyida kerak boʻlgan hamma narsa',t_translator_h:'Tarjimon',t_translator_p:'Tilingizda yozing',t_metro_h:'Tbilisi metropoliteni',t_metro_p:'Marshrut, narx. Oflayn.',t_phrases_h:'Soʻzlashuv qoʻllanmasi',t_phrases_p:'Gruzin iboralari + talaffuz',t_currency_h:'Lari kursi',t_currency_p:'GEL sizning valyutangizga',t_emergency_h:'Tez yordam',t_emergency_p:'112, elchixona',t_tips_h:'Choy puli',t_tips_p:'Supra hisobini boʻlish',t_checklist_h:'Yigʻish roʻyxati',t_checklist_p:'2026 sugʻurtasi bilan',t_food_h:'Nima buyurtirish kerak',t_food_p:'Gruzin taomlari',t_visa_h:'Viza kunlari',t_visa_p:'Vizasiz yil',t_alarm_h:'Uyg otgich',t_alarm_p:'Ekskursiyani oʻtkazib yubormang',t_torch_h:'Chiroq',t_torch_p:'Qorongʻuda yorugʻlik',t_luggage_h:'Bagaj saqlash',t_luggage_p:'Chamodanlarni qoʻyib',t_prices_h:'Adolatli narxlar 2026',t_prices_p:'Nima qancha turadi',t_games_h:'Oʻyinlar',t_games_p:'Shaxmat, ilon, 2048. Bepul.',t_airports_h:'Gruziya aeroportlari',t_airports_p:'Tbilisi, Batumi, Kutaisi',t_trains_h:'Gruziya poezdlari',t_trains_p:'Tbilisi\u2194Batumi',t_flights_h:'Togʻridan togʻri reyslar',t_flights_p:'Tbilisi, Batumi, Kutaisiga',share_h:'Ulashish 🍶',share_sub:'Gruziyaga boradigan doʻstlaringga ayt',f_terms:'Shartlar',f_privacy:'Maxfiylik',f_about:'Biz haqimizda',f_note:'Chacha bepul AI yordamchi. 🇬🇪',consent:'Roziman 🍶',consent_no:'Rad etish',disclaimer:'Chacha AI, xato qilishi mumkin 🍶',ph:'Chachaga xabar yozing...',back:'← Orqaga'},
+  tk:{trust:'🆓 Hemişe mugt · <b>ynamly brendler</b>',sub:'Tutuş syýahatyňyzyň aladaly ýoldaşy.',law_h:'2026 täze kanun — ätiýaçlandyryş hökmany',law_p:'2026-njy ýylyň 1-nji ýanwaryndan her syýahatçy lukmançylyk ätiýaçlandyrmasyna eýe bolmaly.',law_a:'Ätiýaçlandyrmak →',tools_h:'🧰 Gruziýada peýdaly',tools_sub:'Ýerinde gerek bolan hemme zat',t_translator_h:'Terjimeçi',t_translator_p:'Öz diliňizde ýazyň',t_metro_h:'Tbilisi metro',t_metro_p:'Ugur, baha. Oflaýn.',t_phrases_h:'Gürrüňdeşlik',t_phrases_p:'Gruzin sözleri',t_currency_h:'Lari kursy',t_currency_p:'GEL siziň walýutaňyza',t_emergency_h:'Tiz kömek',t_emergency_p:'112, ilçilik',t_tips_h:'Çaý pul',t_tips_p:'Hasaby paýlaşmak',t_checklist_h:'Ýygnanyş sanawy',t_checklist_p:'2026 ätiýaçlandyrmasy bilen',t_food_h:'Näme sargyt etmeli',t_food_p:'Gruzin tagamlary',t_visa_h:'Wiza günleri',t_visa_p:'Wizasyz ýyl',t_alarm_h:'Alarm',t_alarm_p:'Gezelenç wagtyny ötürme',t_torch_h:'El çyrasy',t_torch_p:'Garaňkylykda ýagtylyk',t_luggage_h:'Goş saklamak',t_luggage_p:'Çemodanlary goý',t_prices_h:'Adalatly bahalar 2026',t_prices_p:'Näme näçe dur',t_games_h:'Oýunlar',t_games_p:'Küşt, ýylan, 2048. Mugt.',t_airports_h:'Gruziýa aeroportlary',t_airports_p:'Tbilisi, Batumi, Kutaisi',t_trains_h:'Gruziýa otlulary',t_trains_p:'Tbilisi\u2194Batumi',t_flights_h:'Göni gatnawlar',t_flights_p:'Tbilisi, Batumi',share_h:'Paýlaşmak 🍶',share_sub:'Gruziýa gidýän dostlaryňa aýt',f_terms:'Şertler',f_privacy:'Gizlinlik',f_about:'Biz hakda',f_note:'Chacha mugt AI kömekçisi. 🇬🇪',consent:'Razyman 🍶',consent_no:'Ret etmek',disclaimer:'Chacha AI, ýalňyşyp biler 🍶',ph:'Chachä habar iberiň...',back:'← Yzyna'},
+  tg:{trust:'🆓 Ройгон барои ҳамеша · <b>бренди эътимоднок</b>',sub:'Ҳамроҳи ғамхори тамоми сафар.',law_h:'Қонуни нави соли 2026 — суғурта ҳатмист',law_p:'Аз 1-уми январи 2026 ҳар сайёҳ суғуртаи тиббӣ бояд дошта бошад.',law_a:'Суғурта гирифтан →',tools_h:'🧰 Дар Гурҷистон муфид',tools_sub:'Ҳама чизе ки дар ҷо лозим аст',t_translator_h:'Тарҷумон',t_translator_p:'Бо забони худ нависед',t_metro_h:'Метрои Тбилиси',t_metro_p:'Масир, нарх. Офлайн.',t_phrases_h:'Луғати гуфтугӯ',t_phrases_p:'Ибораҳои гурҷӣ',t_currency_h:'Курси лари',t_currency_p:'GEL ба асъори шумо',t_emergency_h:'Ёрии таъҷилӣ',t_emergency_p:'112, сафорат',t_tips_h:'Чаевые',t_tips_p:'Тақсими ҳисоб',t_checklist_h:'Рӯйхати ҷамъоварӣ',t_checklist_p:'Бо суғуртаи 2026',t_food_h:'Чӣ фармоиш додан',t_food_p:'Таомҳои гурҷӣ',t_visa_h:'Рӯзҳои виза',t_visa_p:'Соли бевиза',t_alarm_h:'Зангӯлаи бедоркунак',t_alarm_p:'Саёҳатро аз даст надеҳ',t_torch_h:'Чароғак',t_torch_p:'Нур дар торикӣ',t_luggage_h:'Нигоҳдории бор',t_luggage_p:'Борро гузор',t_prices_h:'Нархҳои одилона 2026',t_prices_p:'Чӣ чанд арзиш дорад',t_games_h:'Бозиҳо',t_games_p:'Шоҳмот, мор, 2048. Ройгон.',t_airports_h:'Фурудгоҳҳои Гурҷистон',t_airports_p:'Тбилиси, Батуми, Кутаиси',t_trains_h:'Қатораҳои Гурҷистон',t_trains_p:'Тбилиси\u2194Батуми',t_flights_h:'Парвозҳои мустақим',t_flights_p:'Ба Тбилиси, Батуми',share_h:'Мубодила 🍶',share_sub:'Ба дӯстони ба Гурҷистон равандагон гӯй',f_terms:'Шартҳо',f_privacy:'Махфият',f_about:'Дар бораи мо',f_note:'Чача дастёри AI ройгон аст. 🇬🇪',consent:'Розиям 🍶',consent_no:'Рад кардан',disclaimer:'Чача AI аст ва хато карда метавонад 🍶',ph:'Ба Чача паём фиристед...',back:'← Бозгашт'},
+  ky:{trust:'🆓 Түбөлүк акысыз · <b>ишенимдүү бренддер</b>',sub:'Бүтүндөй сапарыңызда жанашкан жолдош.',law_h:'2026-жылдын жаңы мыйзамы — камсыздандыруу милдеттүү',law_p:'2026-жылдын 1-январынан баштап ар бир турист медициналык камсыздандырууга ээ болуусу керек.',law_a:'Камсыздандыруу алуу →',tools_h:'🧰 Грузияда пайдалуу',tools_sub:'Жерде керек болгон баары',t_translator_h:'Котормочу',t_translator_p:'Өз тилиңизде жазыңыз',t_metro_h:'Тбилиси метросу',t_metro_p:'Маршрут, баа. Офлайн.',t_phrases_h:'Сүйлөшүү',t_phrases_p:'Грузин сөздөрү',t_currency_h:'Лари курсу',t_currency_p:'GEL сиздин валютаңызга',t_emergency_h:'Тез жардам',t_emergency_p:'112, элчилик',t_tips_h:'Чай акча',t_tips_p:'Эсепти бөлүшүү',t_checklist_h:'Жыйноо тизмеси',t_checklist_p:'2026 камсыздандыруу менен',t_food_h:'Эмне заказ берүү',t_food_p:'Грузин тамактары',t_visa_h:'Виза күндөрү',t_visa_p:'Визасыз жыл',t_alarm_h:'Ойготкуч',t_alarm_p:'Экскурсияны өткөрүп жибербе',t_torch_h:'Чырак',t_torch_p:'Каранкыда жарык',t_luggage_h:'Жүк сактоо',t_luggage_p:'Чемоданды коюп кет',t_prices_h:'Адилеттүү баалар 2026',t_prices_p:'Эмне канча турат',t_games_h:'Оюндар',t_games_p:'Шахмат, жылан, 2048. Акысыз.',t_airports_h:'Грузия аэропорттору',t_airports_p:'Тбилиси, Батуми, Кутаиси',t_trains_h:'Грузия поезддери',t_trains_p:'Тбилиси\u2194Батуми',t_flights_h:'Түз рейстер',t_flights_p:'Тбилиси, Батуми',share_h:'Бөлүшүү 🍶',share_sub:'Грузияга баратын досторуңа айт',f_terms:'Шарттар',f_privacy:'Купуялык',f_about:'Биз жөнүндө',f_note:'Чача акысыз AI жардамчы. 🇬🇪',consent:'Макулмун 🍶',consent_no:'Баш тартуу',disclaimer:'Чача AI, жаңылышы мүмкүн 🍶',ph:'Чачага кабар жибер...',back:'← Артка'},
+  ja:{trust:'🆓 永久無料 · <b>信頼できるブランド</b>での支払い',sub:'旅全体の心強いパートナー。ジョージアについて何でも聞いてください。',law_h:'2026年新法律 — 保険が必須',law_p:'2026年1月1日から、すべての観光客は医療保険が必要です（最低30,000₾）。',law_a:'保険を申し込む →',tools_h:'🧰 ジョージアで役立つ',tools_sub:'現地で必要なすべて',t_translator_h:'翻訳',t_translator_p:'あなたの言語で入力 — グルジア語訳を確認',t_metro_h:'トビリシ地下鉄',t_metro_p:'ルート、料金、乗り換え。オフライン。',t_phrases_h:'会話ガイド',t_phrases_p:'グルジア語フレーズ＋発音',t_currency_h:'ラリ為替レート',t_currency_p:'GELをあなたの通貨に',t_emergency_h:'緊急援助',t_emergency_p:'112、大使館',t_tips_h:'チップ',t_tips_p:'スプラの会計を分割',t_checklist_h:'荷造りリスト',t_checklist_p:'2026年保険付き',t_food_h:'何を注文するか',t_food_p:'グルジア料理とワイン',t_visa_h:'ビザ日数',t_visa_p:'ビザなし年間 — カウンター',t_alarm_h:'アラーム',t_alarm_p:'ツアーを見逃さないで',t_torch_h:'懐中電灯',t_torch_p:'暗闇の中の光',t_luggage_h:'荷物預かり',t_luggage_p:'荷物を預けて',t_prices_h:'適正価格 2026',t_prices_p:'料金目安',t_games_h:'ゲーム',t_games_p:'チェス、スネーク、2048。無料。',t_airports_h:'空港案内板',t_airports_p:'トビリシ、バトゥミ、クタイシ',t_trains_h:'ジョージアの列車',t_trains_p:'トビリシ\u2194バトゥミ',t_flights_h:'直行便',t_flights_p:'トビリシ、バトゥミ、クタイシへ',share_h:'シェア 🍶',share_sub:'ジョージアに行く友人に教えよう',f_terms:'利用規約',f_privacy:'プライバシー',f_about:'私たちについて',f_note:'チャチャは無料AIアシスタント。 🇬🇪',consent:'同意します 🍶',consent_no:'拒否',disclaimer:'チャチャはAIです。回答を確認してください 🍶',ph:'チャチャにメッセージを送る...',back:'← 戻る'},
+  ko:{trust:'🆓 영원히 무료 · <b>신뢰할 수 있는 브랜드</b>로 결제',sub:'여행 내내 함께하는 든든한 동반자. 조지아에 대해 무엇이든 물어보세요.',law_h:'2026년 새 법률 — 보험 필수',law_p:'2026년 1월 1일부터 모든 관광객은 의료 보험이 필요합니다 (최소 30,000₾).',law_a:'보험 가입하기 →',tools_h:'🧰 조지아에서 유용한 것',tools_sub:'현장에서 필요한 모든 것',t_translator_h:'번역기',t_translator_p:'당신의 언어로 입력 — 조지아어 번역 확인',t_metro_h:'트빌리시 지하철',t_metro_p:'노선, 요금, 환승. 오프라인.',t_phrases_h:'회화 가이드',t_phrases_p:'조지아어 표현 + 발음',t_currency_h:'라리 환율',t_currency_p:'GEL을 당신의 통화로',t_emergency_h:'긴급 도움',t_emergency_p:'112, 대사관',t_tips_h:'팁',t_tips_p:'수프라 계산서 분할',t_checklist_h:'짐 목록',t_checklist_p:'2026 보험 포함',t_food_h:'무엇을 주문할까',t_food_p:'조지아 음식과 와인',t_visa_h:'비자 일수',t_visa_p:'무비자 연간 — 카운터',t_alarm_h:'알람',t_alarm_p:'투어를 놓치지 마세요',t_torch_h:'손전등',t_torch_p:'어둠 속의 빛',t_luggage_h:'수하물 보관',t_luggage_p:'짐을 맡기고',t_prices_h:'적정 가격 2026',t_prices_p:'요금 기준',t_games_h:'게임',t_games_p:'체스, 뱀, 2048. 무료.',t_airports_h:'공항 안내판',t_airports_p:'트빌리시, 바투미, 쿠타이시',t_trains_h:'조지아 기차',t_trains_p:'트빌리시\u2194바투미',t_flights_h:'직항편',t_flights_p:'트빌리시, 바투미, 쿠타이시행',share_h:'공유 🍶',share_sub:'조지아에 가는 친구에게 알려줘',f_terms:'약관',f_privacy:'개인정보',f_about:'우리에 대해',f_note:'차차는 무료 AI 어시스턴트. 🇬🇪',consent:'동의합니다 🍶',consent_no:'거부',disclaimer:'차차는 AI이며 실수할 수 있습니다 🍶',ph:'차차에게 메시지 보내기...',back:'← 뒤로'},
+  it:{trust:'🆓 Gratis per sempre · pagamento tramite <b>marchi affidabili</b>',sub:'Non solo un pianificatore — un compagno premuroso per tutto il viaggio.',law_h:'Nuova legge 2026 — assicurazione obbligatoria',law_p:'Dal 1 gennaio 2026 ogni turista deve avere un assicurazione medica (min. 30.000 ₾).',law_a:'Stipula assicurazione →',tools_h:'🧰 Utile in Georgia',tools_sub:'Tutto ciò di cui hai bisogno sul posto',t_translator_h:'Traduttore',t_translator_p:'Scrivi nella tua lingua — vedi la traduzione',t_metro_h:'Metro di Tbilisi',t_metro_p:'Percorso, prezzo, coincidenze. Offline.',t_phrases_h:'Guida alla conversazione',t_phrases_p:'Frasi georgiane + pronuncia',t_currency_h:'Tasso Lari',t_currency_p:'GEL nella tua valuta',t_emergency_h:'Emergenze',t_emergency_p:'112, ambasciata',t_tips_h:'Mance',t_tips_p:'Dividi il conto della supra',t_checklist_h:'Lista bagagli',t_checklist_p:'Con assicurazione 2026',t_food_h:'Cosa ordinare',t_food_p:'Piatti georgiani e vino',t_visa_h:'Giorni visto',t_visa_p:'Anno senza visto — contatore',t_alarm_h:'Sveglia',t_alarm_p:'Non perdere il tour',t_torch_h:'Torcia',t_torch_p:'Luce nel buio',t_luggage_h:'Deposito bagagli',t_luggage_p:'Lascia i bagagli',t_prices_h:'Prezzi equi 2026',t_prices_p:'Quanto costa cosa',t_games_h:'Giochi',t_games_p:'Scacchi, serpente, 2048. Gratis.',t_airports_h:'Aeroporti Georgia',t_airports_p:'Tbilisi, Batumi, Kutaisi',t_trains_h:'Treni in Georgia',t_trains_p:'Tbilisi\u2194Batumi',t_flights_h:'Voli diretti',t_flights_p:'Per Tbilisi, Batumi, Kutaisi',share_h:'Condividi 🍶',share_sub:'Dillo agli amici che vanno in Georgia',f_terms:'Termini',f_privacy:'Privacy',f_about:'Chi siamo',f_note:'Chacha è un assistente AI gratuito. 🇬🇪',consent:'Accetto 🍶',consent_no:'Rifiuta',disclaimer:'Chacha è AI e può sbagliare 🍶',ph:'Invia un messaggio a Chacha...',back:'← Indietro'},
+  pt:{trust:'🆓 Grátis para sempre · pagamento via <b>marcas confiáveis</b>',sub:'Não é apenas um planejador — é um companheiro atencioso em toda a viagem.',law_h:'Nova lei 2026 — seguro obrigatório',law_p:'A partir de 1 de janeiro de 2026, todo turista deve ter seguro médico (mín. 30.000 ₾).',law_a:'Contratar seguro →',tools_h:'🧰 Útil na Geórgia',tools_sub:'Tudo que você precisa no local',t_translator_h:'Tradutor',t_translator_p:'Escreva no seu idioma — veja a tradução',t_metro_h:'Metro de Tbilisi',t_metro_p:'Rota, preço, baldeação. Offline.',t_phrases_h:'Guia de conversação',t_phrases_p:'Frases georgianas + pronúncia',t_currency_h:'Taxa Lari',t_currency_p:'GEL para sua moeda',t_emergency_h:'Emergências',t_emergency_p:'112, embaixada',t_tips_h:'Gorjetas',t_tips_p:'Dividir a conta da supra',t_checklist_h:'Lista de bagagem',t_checklist_p:'Com seguro 2026',t_food_h:'O que pedir',t_food_p:'Pratos georgianos e vinho',t_visa_h:'Dias de visto',t_visa_p:'Ano sem visto — contador',t_alarm_h:'Despertador',t_alarm_p:'Não perca o tour',t_torch_h:'Lanterna',t_torch_p:'Luz no escuro',t_luggage_h:'Depósito de bagagem',t_luggage_p:'Deixe as malas',t_prices_h:'Preços justos 2026',t_prices_p:'O que custa o quê',t_games_h:'Jogos',t_games_p:'Xadrez, cobra, 2048. Grátis.',t_airports_h:'Aeroportos da Geórgia',t_airports_p:'Tbilisi, Batumi, Kutaisi',t_trains_h:'Comboios na Geórgia',t_trains_p:'Tbilisi\u2194Batumi',t_flights_h:'Voos diretos',t_flights_p:'Para Tbilisi, Batumi, Kutaisi',share_h:'Compartilhar 🍶',share_sub:'Conta para amigos que vão à Geórgia',f_terms:'Termos',f_privacy:'Privacidade',f_about:'Sobre nós',f_note:'Chacha é um assistente AI gratuito. 🇬🇪',consent:'Concordo 🍶',consent_no:'Recusar',disclaimer:'Chacha é IA e pode errar 🍶',ph:'Envie uma mensagem para Chacha...',back:'← Voltar'},
+  nl:{trust:'🆓 Altijd gratis · betaling via <b>vertrouwde merken</b>',sub:'Niet alleen een planner — een zorgzame reispartner voor de hele reis.',law_h:'Nieuwe wet 2026 — verzekering verplicht',law_p:'Vanaf 1 januari 2026 moet elke toerist een reisverzekering hebben (min. 30.000 ₾).',law_a:'Verzekering afsluiten →',tools_h:'🧰 Handig in Georgië',tools_sub:'Alles wat je ter plaatse nodig hebt',t_translator_h:'Vertaler',t_translator_p:'Typ in uw taal — zie de Georgische vertaling',t_metro_h:'Metro van Tbilisi',t_metro_p:'Route, prijs, overstap. Offline.',t_phrases_h:'Conversatiegids',t_phrases_p:'Georgische zinnen + uitspraak',t_currency_h:'Lari wisselkoers',t_currency_p:'GEL naar uw valuta',t_emergency_h:'Noodhulp',t_emergency_p:'112, ambassade',t_tips_h:'Fooi',t_tips_p:'Rekening delen bij supra',t_checklist_h:'Paklijst',t_checklist_p:'Met verzekering 2026',t_food_h:'Wat bestellen',t_food_p:'Georgische gerechten en wijn',t_visa_h:'Visadagen',t_visa_p:'Visumvrij jaar — teller',t_alarm_h:'Wekker',t_alarm_p:'Mis uw tour niet',t_torch_h:'Zaklamp',t_torch_p:'Licht in het donker',t_luggage_h:'Bagageopslag',t_luggage_p:'Koffers opslaan',t_prices_h:'Eerlijke prijzen 2026',t_prices_p:'Wat kost wat',t_games_h:'Spellen',t_games_p:'Schaken, slang, 2048. Gratis.',t_airports_h:'Luchthavens Georgië',t_airports_p:'Tbilisi, Batumi, Kutaisi',t_trains_h:'Treinen in Georgië',t_trains_p:'Tbilisi\u2194Batumi',t_flights_h:'Directe vluchten',t_flights_p:'Naar Tbilisi, Batumi, Kutaisi',share_h:'Delen 🍶',share_sub:'Vertel vrienden die naar Georgië gaan',f_terms:'Voorwaarden',f_privacy:'Privacy',f_about:'Over ons',f_note:'Chacha is een gratis AI-assistent. 🇬🇪',consent:'Ik ga akkoord 🍶',consent_no:'Weigeren',disclaimer:'Chacha is AI en kan fouten maken 🍶',ph:'Stuur een bericht naar Chacha...',back:'← Terug'},
+  hi:{trust:'🆓 हमेशा के लिए मुफ़्त · <b>विश्वसनीय ब्रांड</b> के माध्यम से भुगतान',sub:'केवल एक प्लानर नहीं — पूरी यात्रा में आपका देखभाल करने वाला साथी।',law_h:'2026 नया कानून — बीमा अनिवार्य',law_p:'1 जनवरी 2026 से, हर पर्यटक के पास चिकित्सा बीमा होना चाहिए (न्यूनतम 30,000 ₾)।',law_a:'बीमा प्राप्त करें →',tools_h:'🧰 जॉर्जिया में उपयोगी',tools_sub:'वहाँ जो कुछ भी चाहिए',t_translator_h:'अनुवादक',t_translator_p:'अपनी भाषा में टाइप करें',t_metro_h:'त्बिलिसी मेट्रो',t_metro_p:'मार्ग, मूल्य, स्थानांतरण। ऑफलाइन।',t_phrases_h:'वार्तालाप गाइड',t_phrases_p:'जॉर्जियाई वाक्यांश + उच्चारण',t_currency_h:'लारी विनिमय दर',t_currency_p:'GEL को अपनी मुद्रा में',t_emergency_h:'आपातकालीन सहायता',t_emergency_p:'112, दूतावास',t_tips_h:'टिप्स',t_tips_p:'सुप्रा बिल बाँटना',t_checklist_h:'पैकिंग सूची',t_checklist_p:'2026 बीमा के साथ',t_food_h:'क्या ऑर्डर करें',t_food_p:'जॉर्जियाई व्यंजन और वाइन',t_visa_h:'वीज़ा दिन',t_visa_p:'वीज़ा-मुक्त वर्ष — काउंटर',t_alarm_h:'अलार्म',t_alarm_p:'अपना टूर मत चूकें',t_torch_h:'टॉर्च',t_torch_p:'अंधेरे में रोशनी',t_luggage_h:'सामान भंडारण',t_luggage_p:'बैग छोड़ें',t_prices_h:'उचित मूल्य 2026',t_prices_p:'क्या कितने का',t_games_h:'गेम',t_games_p:'शतरंज, साँप, 2048। मुफ़्त।',t_airports_h:'जॉर्जिया हवाई अड्डे',t_airports_p:'त्बिलिसी, बटुमी, कुतैसी',t_trains_h:'जॉर्जिया की ट्रेनें',t_trains_p:'त्बिलिसी\u2194बटुमी',t_flights_h:'सीधी उड़ानें',t_flights_p:'त्बिलिसी, बटुमी, कुतैसी के लिए',share_h:'शेयर करें 🍶',share_sub:'जॉर्जिया जाने वाले दोस्तों को बताएँ',f_terms:'नियम',f_privacy:'गोपनीयता',f_about:'हमारे बारे में',f_note:'चाचा एक मुफ़्त AI सहायक है। 🇬🇪',consent:'मैं सहमत हूँ 🍶',consent_no:'अस्वीकार',disclaimer:'चाचा AI है और गलती कर सकता है 🍶',ph:'चाचा को संदेश भेजें...',back:'← वापस'},
+  ro:{trust:'🆓 Gratuit pentru totdeauna · plată prin <b>branduri de încredere</b>',sub:'Nu doar un planificator — un companion grijuliu pe tot parcursul călătoriei.',law_h:'Lege nouă 2026 — asigurare obligatorie',law_p:'De la 1 ianuarie 2026, fiecare turist trebuie să aibă asigurare medicală (min. 30.000 ₾).',law_a:'Obține asigurare →',tools_h:'🧰 Util în Georgia',tools_sub:'Tot ce ai nevoie la fața locului',t_translator_h:'Traducător',t_translator_p:'Scrie în limba ta — vezi traducerea',t_metro_h:'Metroul din Tbilisi',t_metro_p:'Rută, preț, transfer. Offline.',t_phrases_h:'Ghid de conversație',t_phrases_p:'Expresii georgiene + pronunție',t_currency_h:'Cursul Lari',t_currency_p:'GEL în moneda ta',t_emergency_h:'Ajutor de urgență',t_emergency_p:'112, ambasadă',t_tips_h:'Bacșiș',t_tips_p:'Împarte nota de la supra',t_checklist_h:'Lista de bagaje',t_checklist_p:'Cu asigurare 2026',t_food_h:'Ce să comand',t_food_p:'Bucătărie georgiană și vin',t_visa_h:'Zile viză',t_visa_p:'An fără viză — contor',t_alarm_h:'Ceas deșteptător',t_alarm_p:'Nu rata turul',t_torch_h:'Lanternă',t_torch_p:'Lumină în întuneric',t_luggage_h:'Depozit bagaje',t_luggage_p:'Lasă bagajele',t_prices_h:'Prețuri corecte 2026',t_prices_p:'Cât costă ce',t_games_h:'Jocuri',t_games_p:'Șah, șarpe, 2048. Gratuit.',t_airports_h:'Aeroporturi Georgia',t_airports_p:'Tbilisi, Batumi, Kutaisi',t_trains_h:'Trenuri Georgia',t_trains_p:'Tbilisi\u2194Batumi',t_flights_h:'Zboruri directe',t_flights_p:'Spre Tbilisi, Batumi, Kutaisi',share_h:'Distribuie 🍶',share_sub:'Spune prietenilor care merg în Georgia',f_terms:'Termeni',f_privacy:'Confidențialitate',f_about:'Despre noi',f_note:'Chacha este un asistent AI gratuit. 🇬🇪',consent:'Sunt de acord 🍶',consent_no:'Refuz',disclaimer:'Chacha este AI și poate greși 🍶',ph:'Trimite un mesaj lui Chacha...',back:'← Înapoi'},
+  lv:{trust:'🆓 Bezmaksas uz visiem laikiem · <b>uzticami zīmoli</b>',sub:'Rūpīgs ceļabiedrs visā ceļojumā.',law_h:'Jauns likums 2026 — apdrošināšana obligāta',law_p:'No 2026. gada 1. janvāra katram tūristam jābūt medicīniskai apdrošināšanai.',law_a:'Noformēt apdrošināšanu →',tools_h:'🧰 Noderīgs Gruzijā',tools_sub:'Viss, kas nepieciešams vietā',t_translator_h:'Tulks',t_translator_p:'Rakstiet savā valodā',t_metro_h:'Tbilisi metro',t_metro_p:'Maršruts, cena, pārsēšanās.',t_phrases_h:'Sarunvārdnīca',t_phrases_p:'Gruzīnu frāzes + izruna',t_currency_h:'Lari kurss',t_currency_p:'GEL jūsu valūtā',t_emergency_h:'Neatliekamā palīdzība',t_emergency_p:'112, vēstniecība',t_tips_h:'Dzeramnauda',t_tips_p:'Sadalīt supras rēķinu',t_checklist_h:'Iepakošanas saraksts',t_checklist_p:'Ar 2026 apdrošināšanu',t_food_h:'Ko pasūtīt',t_food_p:'Gruzīnu ēdieni un vīns',t_visa_h:'Vīzas dienas',t_visa_p:'Bezvīzu gads — skaitītājs',t_alarm_h:'Modinātājs',t_alarm_p:'Nepalaidiet garām ekskursiju',t_torch_h:'Lukturītis',t_torch_p:'Gaisma tumsā',t_luggage_h:'Bagāžas glabātava',t_luggage_p:'Atstājiet bagāžu',t_prices_h:'Godīgas cenas 2026',t_prices_p:'Kas cik maksā',t_games_h:'Spēles',t_games_p:'Šahs, čūska, 2048. Bezmaksas.',t_airports_h:'Gruzijas lidostas',t_airports_p:'Tbilisi, Batumi, Kutaisi',t_trains_h:'Gruzijas vilcieni',t_trains_p:'Tbilisi\u2194Batumi',t_flights_h:'Tiešie reisi',t_flights_p:'Uz Tbilisi, Batumi',share_h:'Dalīties 🍶',share_sub:'Pastāsti draugiem, kas dodas uz Gruziju',f_terms:'Noteikumi',f_privacy:'Privātums',f_about:'Par mums',f_note:'Chacha ir bezmaksas AI asistents. 🇬🇪',consent:'Piekrītu 🍶',consent_no:'Atteikties',disclaimer:'Chacha ir AI un var kļūdīties 🍶',ph:'Sūtīt ziņojumu Chacha...',back:'← Atpakaļ'},
+  lt:{trust:'🆓 Amžinai nemokama · <b>patikimi prekių ženklai</b>',sub:'Rūpestingas kelionės draugas visą kelionę.',law_h:'Naujas 2026 m. įstatymas — draudimas privalomas',law_p:'Nuo 2026 m. sausio 1 d. kiekvienas turistas turi turėti medicininį draudimą.',law_a:'Gauti draudimą →',tools_h:'🧰 Naudinga Gruzijoje',tools_sub:'Viskas, ko reikia vietoje',t_translator_h:'Vertėjas',t_translator_p:'Rašykite savo kalba',t_metro_h:'Tbilisio metro',t_metro_p:'Maršrutas, kaina, persėdimas.',t_phrases_h:'Pokalbių vadovas',t_phrases_p:'Gruzinų frazės + tarimas',t_currency_h:'Lario kursas',t_currency_p:'GEL į jūsų valiutą',t_emergency_h:'Skubi pagalba',t_emergency_p:'112, ambasada',t_tips_h:'Arbatpinigiai',t_tips_p:'Pasidalinti supros sąskaita',t_checklist_h:'Pakavimo sąrašas',t_checklist_p:'Su 2026 draudimu',t_food_h:'Ką užsisakyti',t_food_p:'Gruzinų patiekalai ir vynas',t_visa_h:'Vizos dienos',t_visa_p:'Bevizis metai — skaitiklis',t_alarm_h:'Žadintuvas',t_alarm_p:'Nepraleiskite ekskursijos',t_torch_h:'Žibintuvėlis',t_torch_p:'Šviesa tamsoje',t_luggage_h:'Bagažo saugykla',t_luggage_p:'Palikite bagažą',t_prices_h:'Sąžiningos kainos 2026',t_prices_p:'Kas kiek kainuoja',t_games_h:'Žaidimai',t_games_p:'Šachmatai, gyvatė, 2048. Nemokamai.',t_airports_h:'Gruzijos oro uostai',t_airports_p:'Tbilisis, Batumis, Kutaisis',t_trains_h:'Gruzijos traukiniai',t_trains_p:'Tbilisis\u2194Batumis',t_flights_h:'Tiesioginiai skrydžiai',t_flights_p:'Į Tbilisį, Batumį',share_h:'Dalintis 🍶',share_sub:'Pasakyk draugams, kurie vyksta į Gruziją',f_terms:'Sąlygos',f_privacy:'Privatumas',f_about:'Apie mus',f_note:'Chacha yra nemokamas AI asistentas. 🇬🇪',consent:'Sutinku 🍶',consent_no:'Atsisakyti',disclaimer:'Chacha yra AI ir gali klysti 🍶',ph:'Siųsti žinutę Chacha...',back:'← Atgal'},
+  et:{trust:'🆓 Igavesti tasuta · <b>usaldusväärsed kaubamärgid</b>',sub:'Hooliv reisikaaslane kogu reisi jooksul.',law_h:'Uus 2026. aasta seadus — kindlustus kohustuslik',law_p:'Alates 1. jaanuarist 2026 peab igal turistil olema ravikindlustus.',law_a:'Hangi kindlustus →',tools_h:'🧰 Kasulik Gruusias',tools_sub:'Kõik, mida kohapeal vaja',t_translator_h:'Tõlk',t_translator_p:'Kirjuta oma keeles',t_metro_h:'Thbilisi metroo',t_metro_p:'Marsruut, hind, ümbersõit.',t_phrases_h:'Vestlusraamat',t_phrases_p:'Gruusia väljendid + hääldus',t_currency_h:'Lari kurs',t_currency_p:'GEL sinu valuutasse',t_emergency_h:'Kiirabi',t_emergency_p:'112, saatkond',t_tips_h:'Jootraha',t_tips_p:'Jaga supra arvet',t_checklist_h:'Pakkimise nimekiri',t_checklist_p:'2026 kindlustusega',t_food_h:'Mida tellida',t_food_p:'Gruusia road ja vein',t_visa_h:'Viisapäevad',t_visa_p:'Viisavaba aasta — loendur',t_alarm_h:'Äratuskell',t_alarm_p:'Ära jäta ekskursiooni vahele',t_torch_h:'Taskulamp',t_torch_p:'Valgus pimeduses',t_luggage_h:'Pagasihoidla',t_luggage_p:'Jäta pagasi',t_prices_h:'Ausad hinnad 2026',t_prices_p:'Mis maksab mida',t_games_h:'Mängud',t_games_p:'Male, madu, 2048. Tasuta.',t_airports_h:'Gruusia lennujaamad',t_airports_p:'Thbilisi, Batumi, Kutaisi',t_trains_h:'Gruusia rongid',t_trains_p:'Thbilisi\u2194Batumi',t_flights_h:'Otselennud',t_flights_p:'Thbilisisse, Batumisse',share_h:'Jaga 🍶',share_sub:'Räägi sõpradele, kes Gruusiasse lähevad',f_terms:'Tingimused',f_privacy:'Privaatsus',f_about:'Meist',f_note:'Chacha on tasuta AI assistent. 🇬🇪',consent:'Nõustun 🍶',consent_no:'Keeldu',disclaimer:'Chacha on AI ja võib eksida 🍶',ph:'Saada sõnum Chachale...',back:'← Tagasi'},
+  md:{trust:'🆓 Gratuit pentru totdeauna · <b>branduri de încredere</b>',sub:'Companion grijuliu pe tot parcursul călătoriei.',law_h:'Lege nouă 2026 — asigurare obligatorie',law_p:'De la 1 ianuarie 2026, fiecare turist trebuie să aibă asigurare medicală.',law_a:'Obține asigurare →',tools_h:'🧰 Util în Georgia',tools_sub:'Tot ce ai nevoie la fața locului',t_translator_h:'Traducător',t_translator_p:'Scrie în limba ta',t_metro_h:'Metroul din Tbilisi',t_metro_p:'Rută, preț, transfer.',t_phrases_h:'Ghid de conversație',t_phrases_p:'Expresii georgiene + pronunție',t_currency_h:'Cursul Lari',t_currency_p:'GEL în moneda ta',t_emergency_h:'Ajutor de urgență',t_emergency_p:'112, ambasadă',t_tips_h:'Bacșiș',t_tips_p:'Împarte nota',t_checklist_h:'Lista de bagaje',t_checklist_p:'Cu asigurare 2026',t_food_h:'Ce să comand',t_food_p:'Bucătărie georgiană',t_visa_h:'Zile viză',t_visa_p:'An fără viză',t_alarm_h:'Ceas deșteptător',t_alarm_p:'Nu rata turul',t_torch_h:'Lanternă',t_torch_p:'Lumină în întuneric',t_luggage_h:'Depozit bagaje',t_luggage_p:'Lasă bagajele',t_prices_h:'Prețuri corecte 2026',t_prices_p:'Cât costă',t_games_h:'Jocuri',t_games_p:'Șah, șarpe, 2048. Gratuit.',t_airports_h:'Aeroporturi Georgia',t_airports_p:'Tbilisi, Batumi, Kutaisi',t_trains_h:'Trenuri Georgia',t_trains_p:'Tbilisi\u2194Batumi',t_flights_h:'Zboruri directe',t_flights_p:'Spre Tbilisi',share_h:'Distribuie 🍶',share_sub:'Spune prietenilor care merg în Georgia',f_terms:'Termeni',f_privacy:'Confidențialitate',f_about:'Despre noi',f_note:'Chacha este un asistent AI gratuit. 🇬🇪',consent:'Sunt de acord 🍶',consent_no:'Refuz',disclaimer:'Chacha este AI și poate greși 🍶',ph:'Trimite un mesaj lui Chacha...',back:'← Înapoi'}
 };
 var RTL_LANGS={ar:1,fa:1,he:1};
 var L=I18N[userLang]?userLang:'en';   // если язык не поддержан — английский
@@ -1439,11 +1441,11 @@ STYLE:
 - Example: "Отели в Тбилиси:\nhttps://booking.com/..." — NOT "[Найти отель](https://...)"
 - Never write text inside square brackets followed by parentheses.
 
-FREE REMINDER: One short line max that you are free, e.g. "Я бесплатный 😊". Don't overdo.
+FREE REMINDER: One short line max that you are free, e.g. "Я бесплатный 😊". Don\'t overdo.
 
 RULES:
 - Ask travel dates if missing.
-- Mention mandatory 2026 insurance ONCE early (min 30000 GEL ≈ $11000). Don't repeat.
+- Mention mandatory 2026 insurance ONCE early (min 30000 GEL ≈ $11000). Don\'t repeat.
 - NEVER invent phone numbers or addresses.
 - NEVER discuss politics/conflicts — deflect: "Я простой гид 🍶 давай подберём поездку".
 - REFUSE off-topic politely.
@@ -1942,7 +1944,7 @@ function cleanForSpeech(text){
   // убрать markdown и спецсимволы, которые TTS проговаривает вслух
   t=t.replace(/[*_`~#>|]/g,' ');
   t=t.replace(/https?:\/\/\S+/g,' ');      // не читать ссылки
-  t=t.replace(/[•·►▶✓✔→←↔]/g,' ');
+  t=t.replace(/[•·►▶✓✔→←\u2194]/g,' ');
   t=t.replace(/\s{2,}/g,' ').trim();
   return t;
 }
@@ -2078,7 +2080,7 @@ var TOOL_I18N={
   zh:{metro_title:"🚇 第比利斯地铁",phrases_title:"📖 常用语手册",currency_title:"💱 拉里汇率",emergency_title:"🆘 紧急帮助",tips_title:"🧮 小费",checklist_title:"✅ 打包清单",food_title:"🍷 点什么好",visa_title:"🛂 签证天数计数器",alarm_title:"⏰ 闹钟",torch_title:"🔦 手电筒",luggage_title:"🧳 行李寄存",prices_title:"🛡️ 公道价格 2026",games_title:"🎮 路上游戏",places_title:"📍 最佳景点",airports_title:"✈️ 机场航班信息",trains_title:"🚆 格鲁吉亚火车",flights_title:"🛫 直飞航班",translator_title:"🗣️ 翻译器"},
   pl:{metro_title:"🚇 Metro Tbilisi",phrases_title:"📖 Rozmówki",currency_title:"💱 Kurs Lari",emergency_title:"🆘 Pomoc w nagłych przypadkach",tips_title:"🧮 Napiwki",checklist_title:"✅ Lista Pakowania",food_title:"🍷 Co Zamówić",visa_title:"🛂 Licznik Dni Wizowych",alarm_title:"⏰ Alarm",torch_title:"🔦 Latarka",luggage_title:"🧳 Przechowalnia Bagażu",prices_title:"🛡️ Uczciwe Ceny 2026",games_title:"🎮 Gry w Drodze",places_title:"📍 Najlepsze Miejsca",airports_title:"✈️ Tablice Lotniskowe",trains_title:"🚆 Pociągi w Gruzji",flights_title:"🛫 Loty Bezpośrednie",translator_title:"🗣️ Tłumacz"},
   kk:{metro_title:"🚇 Тбилиси метросы",phrases_title:"📖 Сөздік",currency_title:"💱 Лари бағамы",emergency_title:"🆘 Жедел жәрдем",tips_title:"🧮 Чаевые",checklist_title:"✅ Жиналыс тізімі",food_title:"🍷 Не тапсырыс беруге",visa_title:"🛂 Виза күн санауышы",alarm_title:"⏰ Дабыл",torch_title:"🔦 Шам",luggage_title:"🧳 Багаж сақтау",prices_title:"🛡️ Әділ бағалар 2026",games_title:"🎮 Жол ойындары",places_title:"📍 Үздік орындар",airports_title:"✈️ Әуежай кестесі",trains_title:"🚆 Грузия пойыздары",flights_title:"🛫 Тікелей рейстер",translator_title:"🗣️ Аудармашы"},
-  uz:{metro_title:"🚇 Tbilisi metropoliteni",phrases_title:"📖 So'zlashuv qo'llanmasi",currency_title:"💱 Lari kursi",emergency_title:"🆘 Tez tibbiy yordam",tips_title:"🧮 Chaypora",checklist_title:"✅ Yig'ish ro'yxati",food_title:"🍷 Nima buyurtirish kerak",visa_title:"🛂 Viza kunlari hisoblagichi",alarm_title:"⏰ Uyg'otgich",torch_title:"🔦 Chiroq",luggage_title:"🧳 Bagaj saqlash",prices_title:"🛡️ Adolatli narxlar 2026",games_title:"🎮 Yo'l o'yinlari",places_title:"📍 Eng yaxshi joylar",airports_title:"✈️ Aeroport jadvali",trains_title:"🚆 Gruziya poezdlari",flights_title:"🛫 To'g'ridan to'g'ri reyslar",translator_title:"🗣️ Tarjimon"},
+  uz:{metro_title:"🚇 Tbilisi metropoliteni",phrases_title:"📖 Soʻzlashuv qoʻllanmasi",currency_title:"💱 Lari kursi",emergency_title:"🆘 Tez tibbiy yordam",tips_title:"🧮 Chaypora",checklist_title:"✅ Yigʻish roʻyxati",food_title:"🍷 Nima buyurtirish kerak",visa_title:"🛂 Viza kunlari hisoblagichi",alarm_title:"⏰ Uyg otgich",torch_title:"🔦 Chiroq",luggage_title:"🧳 Bagaj saqlash",prices_title:"🛡️ Adolatli narxlar 2026",games_title:"🎮 Yoʻl oʻyinlari",places_title:"📍 Eng yaxshi joylar",airports_title:"✈️ Aeroport jadvali",trains_title:"🚆 Gruziya poezdlari",flights_title:"🛫 Togʻridan togʻri reyslar",translator_title:"🗣️ Tarjimon"},
   tk:{metro_title:"🚇 Tbilisi metro",phrases_title:"📖 Gürrüňdeşlik gollanmasy",currency_title:"💱 Lari kursy",emergency_title:"🆘 Tiz kömek",tips_title:"🧮 Çaýpul",checklist_title:"✅ Ýygnanmak sanawy",food_title:"🍷 Näme sargyt etmeli",visa_title:"🛂 Wiza günleri",alarm_title:"⏰ Habardar ediji",torch_title:"🔦 El çyrasy",luggage_title:"🧳 Goş saklamak",prices_title:"🛡️ Adalatly bahalar 2026",games_title:"🎮 Ýol oýunlary",places_title:"📍 Iň gowy ýerler",airports_title:"✈️ Howa menzili",trains_title:"🚆 Gruziýa otlulary",flights_title:"🛫 Göni gatnawlar",translator_title:"🗣️ Terjimeçi"},
   tg:{metro_title:"🚇 Метрои Тбилиси",phrases_title:"📖 Роҳнамои гуфтугӯ",currency_title:"💱 Курси лари",emergency_title:"🆘 Ёрии таъҷилӣ",tips_title:"🧮 Чаевые",checklist_title:"✅ Рӯйхати ҷамъоварӣ",food_title:"🍷 Чӣ фармоиш додан",visa_title:"🛂 Ҳисобкунаки рӯзҳои виза",alarm_title:"⏰ Зангӯлаи бедоркунак",torch_title:"🔦 Чароғак",luggage_title:"🧳 Нигоҳдории бор",prices_title:"🛡️ Нархҳои одилона 2026",games_title:"🎮 Бозиҳои роҳ",places_title:"📍 Беҳтарин ҷойҳо",airports_title:"✈️ Тахтаи фурудгоҳ",trains_title:"🚆 Қатораҳои Гурҷистон",flights_title:"🛫 Парвозҳои мустақим",translator_title:"🗣️ Тарҷумон"},
   ky:{metro_title:"🚇 Тбилиси метросу",phrases_title:"📖 Сүйлөшүү колдонмосу",currency_title:"💱 Лари курсу",emergency_title:"🆘 Тез жардам",tips_title:"🧮 Чай акча",checklist_title:"✅ Жыйноо тизмеси",food_title:"🍷 Эмне заказ берүү",visa_title:"🛂 Виза күндөрүнүн эсептегичи",alarm_title:"⏰ Ойготкуч",torch_title:"🔦 Чырак",luggage_title:"🧳 Жүк сактоо",prices_title:"🛡️ Адилеттүү баалар 2026",games_title:"🎮 Жол оюндары",places_title:"📍 Мыкты жерлер",airports_title:"✈️ Аэропорт такталары",trains_title:"🚆 Грузия поезддери",flights_title:"🛫 Түз рейстер",translator_title:"🗣️ Котормочу"},
@@ -2107,7 +2109,7 @@ var TOOL_TEXTS_I18N={
     metro_to:'Куда:',
     metro_go:'Построить маршрут',
     metro_bus_title:'🚌 Полезные автобусы',
-    metro_bus_body:'• <b>№337</b> (синий) — аэропорт ↔ центр (пл. Свободы, Руставели, вокзал). 1/1.5 ₾. Днём примерно с 7:00 до 23:00, каждые 15–20 мин. Ночью лучше Bolt/Yandex или трансфер.<br>• <b>№88</b> — Руставели → Ваке и Сабуртало (удобно до Ваке-парка).<br>• Маршруты и время удобнее смотреть в Google Maps — там точные данные по автобусам Тбилиси.',
+    metro_bus_body:'• <b>№337</b> (синий) — аэропорт \u2194 центр (пл. Свободы, Руставели, вокзал). 1/1.5 ₾. Днём примерно с 7:00 до 23:00, каждые 15–20 мин. Ночью лучше Bolt/Yandex или трансфер.<br>• <b>№88</b> — Руставели → Ваке и Сабуртало (удобно до Ваке-парка).<br>• Маршруты и время удобнее смотреть в Google Maps — там точные данные по автобусам Тбилиси.',
     metro_tip:'💡 Лайфхак: вошёл в метро по MetroMoney → автобус №337 в аэропорт будет бесплатным, если сел в течение 90 минут.',
     metro_red:'🔴 Красная',metro_green:'🟢 Зелёная',
     metro_result_direct:'Без пересадки, по',metro_result_red:'🔴 красной',metro_result_green:'🟢 зелёной',metro_result_line:'линии.',
@@ -2230,18 +2232,18 @@ var TOOL_TEXTS_I18N={
     dq_david:'Դավիթ Գարեջայի վանական համալիր',
     dq_mtskheta:'Մցխեթա հին մայրաքաղաք',
     dq_sighnaghi:'Սիղնաղի սիրո քաղաք գինի',
-    't_places_h':'Լավագույն վայրեր','t_places_p':'Ռեստորաններ, կաֆե, տեսարժան վայրեր ❤️',
-    't_games_h':'Խաղեր ճանապարհին','t_games_p':'Շախմատ և այլն։ Անվճար։',
-    't_airports_h':'Օդանավակայանների ցուցատախտակ','t_airports_p':'Ժամանումներ և մեկնումներ։',
-    't_trains_h':'Գնացքներ Վրաստանում','t_trains_p':'Տոմսեր Թբիլիսի↔Բաթումի։',
-    't_flights_h':'Ուղիղ չվերթներ Վրաստան','t_flights_p':'Ուղիղ չվերթներ Թբիլիսի, Բաթումի։'},
+    't_places_h':'Լավագույն վայրեր',t_places_p:'Ռեստորաններ, կաֆե, տեսարժան վայրեր ❤️',
+    't_games_h':'Խաղեր ճանապարհին',t_games_p:'Շախմատ և այլն։ Անվճար։',
+    't_airports_h':'Օդանավակայանների ցուցատախտակ',t_airports_p:'Ժամանումներ և մեկնումներ։',
+    't_trains_h':'Գնացքներ Վրաստանում',t_trains_p:'Տոմսեր Թբիլիսի\u2194Բաթումի։',
+    't_flights_h':'Ուղիղ չվերթներ Վրաստան',t_flights_p:'Ուղիղ չվերթներ Թբիլիսի, Բաթումի։'},
   en:{
     metro_hint:'Metro runs <b>6:00–24:00</b>. All city transport is cashless — cash not accepted.',
     metro_card_title:'💳 MetroMoney Card',
     metro_card_body:'Buy at metro ticket office (sign «MS», not the orange bank kiosk). Card — <b>2 ₾</b>, ride — <b>1 ₾</b>. After tapping, enjoy <b>90 minutes</b> of free metro, bus and minibus transfers. Foreign card/Apple/Google Pay at turnstile — <b>1.5 ₾</b>, no free transfers. MetroMoney is the better deal.',
     metro_from:'From:',metro_to:'To:',metro_go:'Get route',
     metro_bus_title:'🚌 Useful buses',
-    metro_bus_body:'• <b>Bus 337</b> (blue) — airport ↔ city centre (Freedom Square, Rustaveli, train station). 1/1.5 ₾. Approx 7:00–23:00, every 15–20 min. At night use Bolt/Yandex or a transfer.<br>• <b>Bus 88</b> — Rustaveli → Vake & Saburtalo (handy for Vake Park).<br>• Check routes and times in Google Maps — it has live Tbilisi bus data.',
+    metro_bus_body:'• <b>Bus 337</b> (blue) — airport \u2194 city centre (Freedom Square, Rustaveli, train station). 1/1.5 ₾. Approx 7:00–23:00, every 15–20 min. At night use Bolt/Yandex or a transfer.<br>• <b>Bus 88</b> — Rustaveli → Vake & Saburtalo (handy for Vake Park).<br>• Check routes and times in Google Maps — it has live Tbilisi bus data.',
     metro_tip:'💡 Tip: tap MetroMoney at metro → bus 337 to the airport is free if you board within 90 minutes.',
     metro_red:'🔴 Red line',metro_green:'🟢 Green line',
     metro_result_direct:'Direct, on the',metro_result_red:'🔴 red',metro_result_green:'🟢 green',metro_result_line:'line.',
@@ -2334,7 +2336,7 @@ var TOOL_TEXTS_I18N={
     flights_footer:'💡 Departure city is auto-detected by your location. You can change dates and cities in the search. We are a free intermediary 🍶',
     // trains
     trains_hint:'Official Georgian Railways tickets online — seat selection, card payment, email confirmation. We are a free intermediary 🍶',
-    trains_warning_title:'Important:',trains_warning_body:'Tickets go on sale <b>14–20 days</b> before departure. In summer (June–September) Tbilisi↔Batumi sells out fast — book ahead.',
+    trains_warning_title:'Important:',trains_warning_body:'Tickets go on sale <b>14–20 days</b> before departure. In summer (June–September) Tbilisi\u2194Batumi sells out fast — book ahead.',
     trains_tip_tbs_bus:'Most popular route. Beautiful mountain and sea views. Book early in summer.',
     trains_tip_tbs_kut:'Handy if flying from Kutaisi airport (KUT) or visiting the caves.',
     trains_tip_bus_tbs:'Return route. Morning and evening departures.',
@@ -3023,52 +3025,54 @@ tools.story=function(){
     var total=quotes.length;
     mBody.innerHTML=
       '<div style="text-align:center;padding:8px 0 4px;color:var(--muted);font-size:.82rem">'+(idx+1)+' / '+total+'</div>'+
-      '<div style="background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px 20px;margin:8px 0;text-align:center;min-height:220px;display:flex;flex-direction:column;justify-content:center;gap:16px">'+
-        '<div style="font-size:3.2rem">'+q.e+'</div>'+
-        '<div style="font-family:var(--font-display);font-size:1.15rem;font-weight:600;line-height:1.5;color:var(--ink)">'+q.q+'</div>'+
-        '<div style="font-size:.8rem;color:var(--muted);font-style:italic">— '+q.a+'</div>'+
+      '<div style="background:var(--card);border:1px solid var(--gold);border-radius:20px;padding:28px 24px;margin:8px 0;text-align:center;min-height:200px;display:flex;flex-direction:column;justify-content:center;gap:20px">'+
+        '<div style="font-size:2.8rem;color:var(--gold);line-height:1;opacity:.5;margin-bottom:-12px;font-family:Georgia,serif">&#10077;</div>'+
+        '<div style="font-family:var(--font-display);font-size:1.12rem;font-weight:700;line-height:1.65;color:var(--ink);letter-spacing:-.01em">'+q.q+'</div>'+
+        '<div style="font-size:.82rem;color:var(--gold);font-style:italic;letter-spacing:.04em">&#8212; '+q.a+'</div>'+
       '</div>'+
       '<div style="display:flex;gap:9px;margin-top:4px">'+
-        '<button class="btn sec" id="qPrev" style="flex:1">←</button>'+
-        '<button class="btn" id="qNext" style="flex:2">→</button>'+
-        '<button class="btn sec" id="qShare" style="flex:1">📲</button>'+
+        '<button class="btn sec" id="qPrev" style="flex:1">&#8592;</button>'+
+        '<button class="btn" id="qNext" style="flex:2">&#8594;</button>'+
+        '<button class="btn sec" id="qShare" style="flex:1">&#128242;</button>'+
       '</div>'+
-      (lang!=='en'&&!quotesCache?'<p class="hint" style="margin-top:10px;text-align:center">🌐 Translating...</p>':'');
-    document.getElementById('qPrev').onclick=function(){currentIdx=(currentIdx-1+quotes.length)%quotes.length;renderQuote(currentIdx);};
-    document.getElementById('qNext').onclick=function(){currentIdx=(currentIdx+1)%quotes.length;renderQuote(currentIdx);};
-    document.getElementById('qShare').onclick=function(){
-      var text=q.e+' '+q.q+' — '+q.a+' sakartvelo.ai';
-      if(navigator.share){navigator.share({text:text,url:'https://sakartvelo.ai'}).catch(function(){});}
-      else if(navigator.clipboard){navigator.clipboard.writeText(text).then(function(){
-        var b=document.getElementById('qShare');if(b){b.textContent='✅';setTimeout(function(){b.textContent='📲';},1500);}
-      });}
-    };
-  }
+      (lang!=='en'&&!quotesCache?'<p style="margin-top:10px;text-align:center;font-size:.8rem;color:var(--muted)">🌐 Translating...</p>':'');}
 
   renderQuote(0);
   if(lang==='en'||lang==='ka')return;
   if(quotesCache&&quotesCache.length===QUOTES_EN.length){quotes=quotesCache;renderQuote(currentIdx);return;}
-  // Один запрос к Anthropic — все цитаты батчем
+  // Translate ALL quotes in smart batches via Anthropic
   (async function(){
     try{
-      var pairs=QUOTES_EN.map(function(q,i){return i+'|||'+q.q;}).join('\n');
-      var res=await fetch('/.netlify/functions/claude',{method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:2000,
-          system:'Translate quotes from English to language code: '+lang+'. Return ONLY index|||translation pairs, one per line.',
-          messages:[{role:'user',content:pairs}]})
-      });
-      var d=await res.json();
-      var text=d&&d.content&&d.content[0]&&d.content[0].text||'';
-      var map={};
-      text.split('\n').forEach(function(line){
-        var sep=line.indexOf('|||');if(sep<0)return;
-        var idx=parseInt(line.slice(0,sep).trim()),val=line.slice(sep+3).trim();
-        if(!isNaN(idx)&&val&&!/MYMEMORY|YOU USED ALL/i.test(val))map[idx]=val;
-      });
-      var translated=QUOTES_EN.map(function(q,i){return{e:q.e,q:map[i]||q.q,a:q.a};});
-      quotes=translated;
-      try{sessionStorage.setItem(qCacheKey,JSON.stringify(translated));}catch(e){}
+      var nativeLangs=['ru','en','ka','tr','he','az','de','fr','es','uk','be','hy','zh','pl','lv','lt','et','it','pt','nl','hi','ro','kk','uz','ja','ko'];
+      if(nativeLangs.indexOf(lang)<0)return; // skip unsupported
+      var batchSize=55; // ~55 quotes per request fits in 8k tokens
+      var allTranslated=QUOTES_EN.map(function(q){return{e:q.e,q:q.q,a:q.a};});
+      var batches=[];
+      for(var b=0;b<QUOTES_EN.length;b+=batchSize){
+        batches.push(b);
+      }
+      // Translate all batches
+      for(var bi=0;bi<batches.length;bi++){
+        var bStart=batches[bi];
+        var bEnd=Math.min(bStart+batchSize,QUOTES_EN.length);
+        var batch=QUOTES_EN.slice(bStart,bEnd);
+        var pairs=batch.map(function(q,i){return (bStart+i)+'|||'+q.q;}).join('\n');
+        var res=await fetch('/.netlify/functions/claude',{method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:8000,
+            system:'Translate these quotes about Georgia to language code: '+lang+'. Keep them poetic and dignified. Return ONLY: number|||translation (one per line, no other text).',
+            messages:[{role:'user',content:pairs}]})
+        });
+        var d=await res.json();
+        var text=d&&d.content&&d.content[0]&&d.content[0].text||'';
+        text.split('\n').forEach(function(line){
+          var sep=line.indexOf('|||');if(sep<0)return;
+          var idx=parseInt(line.slice(0,sep).trim()),val=line.slice(sep+3).trim();
+          if(!isNaN(idx)&&val&&idx>=0&&idx<allTranslated.length)allTranslated[idx].q=val;
+        });
+      }
+      quotes=allTranslated;
+      try{sessionStorage.setItem(qCacheKey,JSON.stringify(allTranslated));}catch(e){}
       renderQuote(currentIdx);
     }catch(e){}
   })();
@@ -3158,14 +3162,18 @@ var GUIDE_ARTICLES=window.GUIDE_ARTICLES={
     title_uk:'Тбілісі — столиця Грузії',body_uk:'Тбілісі — столиця і найбільше місто Грузії з населенням близько 1,1 мільйона осіб. Заснований у 5 столітті царем Вахтангом I Горгасалі на березі річки Мтквари. Назва походить від грузинського слова тбілі (теплий) — через природні сірчані гарячі джерела. Старе місто відоме різьбленими дерев\'яними балконами і купольними сірчаними лазнями, що працюють з 5 століття. Фортеця Нарікала датується 4 століттям. У місті понад 40 театрів і 30 музеїв.',
     title_zh:'第比利斯——格鲁吉亚首都',body_zh:'第比利斯是格鲁吉亚首都和最大城市，人口约110万。公元5世纪由瓦赫唐一世国王建于姆特克瓦里河畔。城市名称源于格鲁吉亚语tbili（温暖），指当地天然硫磺温泉。老城区以精雕细琢的木制阳台和5世纪起运营的穹顶硫磺浴而闻名。纳里卡拉城堡可追溯至4世纪。市内有40多家剧院和30座博物馆。',
     title_pl:'Tbilisi — Stolica Gruzji',body_pl:'Tbilisi to stolica i największe miasto Gruzji, zamieszkane przez około 1,1 miliona mieszkańców. Założone w V wieku przez króla Wachtanga I Gorgasalego nad brzegiem rzeki Mtkwari. Nazwa pochodzi od gruzińskiego słowa tbili (ciepły), nawiązując do naturalnych gorących źródeł siarkowych. Stare Miasto słynie z rzeźbionych drewnianych balkonów i kopułowych łaźni siarkowych działających od V wieku. Forteca Narikala pochodzi z IV wieku. W mieście działa ponad 40 teatrów i 30 muzeów.',
-    body:'Tbilisi (Georgian: თბილისი) is the capital and largest city of Georgia, with a population of about 1.1 million. Founded in the 5th century AD by King Vakhtang I Gorgasali, the city sits along the Mtkvari (Kura) River. The name derives from the Georgian word \'tbili\' (warm), referring to the natural sulfur hot springs. The city covers 726 km² and sits at an elevation of 380–770 metres above sea level. Tbilisi has been the capital of Georgia since 1122 AD when King David the Builder recaptured it from the Seljuk Turks. The Old Town (Abanotubani) is renowned for its carved wooden balconies and domed sulfur baths, which have been operating since the 5th century. Narikala Fortress, overlooking the city, dates back to the 4th century and has been rebuilt by Arabs, Persians and Mongols. The city hosts over 40 theatres and 30 museums.',keywords:'Tbilisi travel guide, Georgia capital, things to do in Tbilisi'},
+    body:'Tbilisi (Georgian: თბილისი) is the capital and largest city of Georgia, with a population of about 1.1 million. Founded in the 5th century AD by King Vakhtang I Gorgasali, the city sits along the Mtkvari (Kura) River. The name derives from the Georgian word \'tbili\' (warm), referring to the natural sulfur hot springs. The city covers 726 km² and sits at an elevation of 380–770 metres above sea level. Tbilisi has been the capital of Georgia since 1122 AD when King David the Builder recaptured it from the Seljuk Turks. The Old Town (Abanotubani) is renowned for its carved wooden balconies and domed sulfur baths, which have been operating since the 5th century. Narikala Fortress, overlooking the city, dates back to the 4th century and has been rebuilt by Arabs, Persians and Mongols. The city hosts over 40 theatres and 30 museums.',keywords:'Tbilisi travel guide, Georgia capital, things to do in Tbilisi',
+    title_ar:'تبليسي — عاصمة جورجيا',body_ar:'تبليسي هي عاصمة جورجيا وأكبر مدنها بعدد سكان يبلغ نحو 1.1 مليون نسمة. أسسها الملك فاختانغ الأول غورغاسالي في القرن الخامس الميلادي على ضفاف نهر مكتفاري. يشتق اسمها من الكلمة الجورجية تبيلي - الدافئة إشارة إلى الينابيع الكبريتية الطبيعية. تشتهر المدينة القديمة بشرفاتها الخشبية المنحوتة وحماماتها الكبريتية المقببة التي تعمل منذ القرن الخامس. يعود قلعة ناريكالا المطلة على المدينة إلى القرن الرابع.',
+    title_fa:'تفلیس — پایتخت گرجستان',body_fa:'تفلیس پایتخت و بزرگترین شهر گرجستان با جمعیت حدود 1.1 میلیون نفر است. در قرن پنجم میلادی توسط پادشاه واختانگ اول گورگاسالی در کنار رودخانه مته‌کوارى بنا شد. نام آن از کلمه گرجی تبیلی به معنای گرم گرفته شده که به چشمه‌های گوگردی طبیعی اشاره دارد. شهر قدیمی به بالکن‌های چوبی منبت‌کاری شده و گرمابه‌های گنبدی گوگردی مشهور است.',
+    title_ka:'თბილისი — საქართველოს დედაქალაქი',body_ka:'თბილისი საქართველოს დედაქალაქი და უდიდესი ქალაქია, მოსახლეობა დაახლოებით 1,1 მილიონი. დაარსდა V საუკუნეში მეფე ვახტანგ I გორგასლის მიერ მტკვრის პირად. სახელი მომდინარეობს ქართული სიტყვიდან თბილი, ბუნებრივ გოგირდის წყლებთან დაკავშირებით. ძველი ქალაქი ცნობილია კბილანა-ბალკონებით და V საუკუნიდან მოქმედი გოგირდის აბანოებით. ნარიყალა მოიცავს IV საუკუნეს.',
+    body:'Tbilisi (Georgian: თბილისი) is the capital and largest city of Georgia, with a population of about 1.1 million. Founded in the 5th century AD by King Vakhtang I Gorgasali, the city sits along the Mtkvari (Kura) River. The name derives from the Georgian word tbili (warm), referring to the natural sulfur hot springs. The Old Town is renowned for its carved wooden balconies and domed sulfur baths operating since the 5th century. Narikala Fortress overlooks the city and dates back to the 4th century. The city hosts over 40 theatres and 30 museums.',keywords:'Tbilisi travel guide, Georgia capital, things to do in Tbilisi'},
   'kazbegi':{slug:'kazbegi',title:'Kazbegi — Gateway to the High Caucasus',
     title_ru:'Казбеги — ворота Большого Кавказа',
     body_ru:'Казбеги (официально Степанцминда) — небольшой город на северо-востоке Грузии на высоте 1740 метров, в 157 км от Тбилиси по Военно-Грузинской дороге. Город расположен у подножия горы Казбек (5047 м) — третьей по высоте вершины Грузии. Гергетская Троицкая церковь XIV века стоит на холме на высоте 2170 метров над уровнем моря. Церковь служила хранилищем грузинских национальных сокровищ во время персидских и монгольских нашествий. Дорога из Тбилиси проходит через Крестовый перевал на высоте 2395 метров.',
 
     title_tr:'Kazbegi — Yüksek Kafkasya\'nın Kapısı',body_tr:'Kazbegi, Gürcistan\'ın kuzey doğusunda 1.740 metre yükseklikte, Tiflis\'ten 157 km uzaklıkta küçük bir kasabadır. Kasaba, Gürcistan\'ın üçüncü en yüksek zirvesi olan 5.047 metre yüksekliğindeki Kazbek Dağı\'nın eteğinde yer almaktadır. 2.170 metrede bir tepe üzerinde yer alan 14. yüzyıldan kalma Gergeti Üçlü Kilisesi, istilaları sırasında Gürcü ulusal hazineleri için sığınak görevi görmüştür. Tiflis\'ten geçiş, 2.395 metredeki Jvari Geçidi\'nden geçer.',
     title_hy:'Կazbeгі — Բardzr Կavkasі darрas',body_hy:'Каzbegi Vrastandali hanrayin-arevelк masi 1740 m barjutyun vra, Tbilisiiс 157 km, Vrastanakanatni Kayakan Jarjaparhov e. Qaghaky 5047 m-ov Kazbek sari etakum e. XIV dariats Gergeti Sampsnі ekeghetsin 2170 m-ov kaghaky vra e ev istilalanerum Vrast pashtvants zkaratsutyan apastaran е. Tbilisiiс jarjaparhume 2395 m-ov Jvari antskalov e.',
-    title_he:'קזבגי — שער הקווקז הגבוה',body_he:'קזבגי היא עיירה קטנה בצפון-מזרח גיאורגיה בגובה 1,740 מטר, 157 ק"מ מטביליסי. העיירה שוכנת למרגלות הר קזבק (5,047 מ\') — הפסגה השלישית בגובהה בגיאורגיה. כנסיית גרגטי מהמאה ה-14, בגובה 2,170 מ\', שימשה מקלט לאוצרות הלאומיים הגיאורגיים. הנסיעה מטביליסי עוברת דרך מעבר ג\'וארי בגובה 2,395 מ\'.',
+    title_he:'קזבגי — שער הקווקז הגבוה',body_he:'קזבגי היא עיירה קטנה בצפון-מזרח גיאורגיה בגובה 1,740 מטר, 157 קמ מטביליסי. העיירה שוכנת למרגלות הר קזבק (5,047 מ) — הפסגה השלישית בגובהה בגיאורגיה. כנסיית גרגטי מהמאה ה-14, בגובה 2,170 מ, שימשה מקלט לאוצרות הלאומיים הגיאורגיים. הנסיעה מטביליסי עוברת דרך מעבר גוארי בגובה 2,395 מ\'.',
     title_az:'Kazbegi — Yüksək Qafqazın Qapısı',body_az:'Kazbegi Gürcüstanın şimal-şərqindəki kiçik qəsəbədir, 1740 m yüksəklikdə, Tbilisidən 157 km. Qəsəbə 5047 m-lik Kazbek dağının ətəyindədir. XIV əsr Gergeti Kilsəsi 2170 m yüksəklikdədir və işğallar zamanı gürcü xəzinələrinə sığınacaq olub. Tbilisidən yol 2395 m-lik Cvari keçidindən keçir.',
     title_de:'Kazbegi — Tor zum Hohen Kaukasus',body_de:'Kazbegi ist eine kleine Stadt im Nordosten Georgiens auf 1.740 m, 157 km von Tiflis entfernt. Die Stadt liegt am Fuße des Kazbek-Berges (5.047 m). Die Dreifaltigkeitskirche von Gergeti aus dem 14. Jahrhundert, auf 2.170 Metern gelegen, diente als Zuflucht für georgische Nationalschätze. Die Fahrt von Tiflis führt über den Dschari-Pass auf 2.395 m.',
     title_fr:'Kazbegi — Porte du Haut-Caucase',body_fr:'Kazbegi est une petite ville du nord-est de la Géorgie à 1 740 mètres, à 157 km de Tbilissi. La ville est au pied du mont Kazbek (5 047 m). L\'église de la Trinité de Guergeti du XIVe siècle, à 2 170 mètres, a servi de refuge pour les trésors nationaux géorgiens. La route depuis Tbilissi passe par le col de Jvari à 2 395 mètres.',
@@ -3308,14 +3316,15 @@ var GUIDE_ARTICLES=window.GUIDE_ARTICLES={
     title_uk:'Грузинський алфавіт — шедевр ЮНЕСКО',body_uk:'Грузинський алфавіт має близько 1600 років історії. Існують три письма: Асомтаврулі (5 ст.), Нусхурі (9 ст.) і Мхедрулі (11 ст.). Мхедрулі містить 33 літери — 5 голосних і 28 приголосних. Додано до ЮНЕСКО у 2016 р. Найдавніший відомий зразок датується 430 р. н.е.',
     title_zh:'格鲁吉亚字母——联合国教科文组织杰作',body_zh:'格鲁吉亚字母有约1600年历史。现存三种字体：5世纪阿索姆塔弗鲁利、9世纪努斯胡里和11世纪现代姆赫德鲁利。姆赫德鲁利含33个字母——5元音28辅音。2016年列入联合国教科文组织非遗名录。最古老已知样本可追溯至430年。',
     title_pl:'Alfabet Gruziński — Arcydzieło UNESCO',body_pl:'Alfabet gruziński ma historię liczącą około 1600 lat. Istnieją trzy pisma: Asomtavruli (V w.), Nuskhuri (IX w.) i nowoczesny Mkhedruli (XI w.). Mkhedruli zawiera 33 litery — 5 samogłosek i 28 spółgłosek. Wpisane na listę UNESCO w 2016 roku. Najstarszy znany przykład pochodzi z 430 roku n.e.',
+    title_ar:'الأبجدية الجورجية — تراث يونسكو',body_ar:'للأبجدية الجورجية تاريخ يمتد نحو 1600 عام. توجد ثلاثة خطوط: أسومتافرولي من القرن الخامس ونوسخوري من القرن التاسع ومخيدرولي الحديث من القرن الحادي عشر. يحتوي مخيدرولي على 33 حرفا. أضيف الخط الجورجي لقائمة يونسكو عام 2016.',
     body:'The Georgian alphabet has a history of approximately 1,600 years. Three scripts exist: Asomtavruli (ecclesiastical, 5th century), Nuskhuri (ecclesiastical, 9th century) and Mkhedruli (modern, 11th century). Mkhedruli contains 33 letters — 5 vowels and 28 consonants. The Georgian script was added to UNESCO\'s Representative List of Intangible Cultural Heritage in 2016.',keywords:'Georgian alphabet, Mkhedruli, UNESCO, oldest writing systems'},
   'qvevri-wine':{slug:'qvevri-wine',title:'Qvevri Wine — 8000 Years of Georgian Tradition',
     title_ru:'Вино в квеври — 8000 лет грузинской традиции',
     body_ru:'Грузинский метод ферментации и выдержки вина в квеври — больших глиняных сосудах, закопанных в землю — включён в список нематериального культурного наследия ЮНЕСКО в 2013 году. Квеври объёмом от 20 до 3000 литров покрывают изнутри пчелиным воском. Вино ферментируется в квеври 6 месяцев в контакте с кожицей, семенами и гребнями — что даёт янтарные вина с высоким содержанием танинов. Этот метод контактного виноделия на тысячелетия старше всех известных европейских стилей. Древнейшие свидетельства виноделия в квеври датируются 6000 годом до н.э.',
-
+    title_ar:'نبيذ الكفيفري — 8000 عام من التقاليد الجورجية',body_ar:'طريقة التخمير الجورجية في الكفيفري ضمن قائمة يونسكو 2013. الكفيفري من 20 حتى 3000 لتر مبطن بالشمع. يتخمر النبيذ 6 أشهر مع القشور لإنتاج خمر كهرماني.',
     title_tr:'Qvevri Şarabı — 8000 Yıllık Gürcü Geleneği',body_tr:'Gürcü şarabını yeraltına gömülü büyük kil kaplarda — qvevri\'de — fermente etme yöntemi 2013\'te UNESCO Listesi\'ne eklenmiştir. Qvevri\'ler 20-3.000 litre arasında değişir ve içleri balmumu ile kaplanır. Şarap 6 ay boyunca üzüm kabuğu ve çekirdekle temas halinde fermente olur ve kehribar renkli şaraplar üretir. En eski kanıtlar MÖ 6.000\'e dayanmaktadır.',
     title_hy:'Qvevri Gin — 8000 Tarvin Vrааstandali Avandut',body_hy:'Vrааstandali qvevridum gin katarutyunits 2013-in UNESCO-і siyahısına daxil edildi. Qvevriners 20-ic 3000 litr en ev nersidum mozov patasirazvum. Giny 6 amsov khaghoghakhni kori, ssermery ev tsarakhnerov katarumе ev antar-guyni gin arтadrumov. Ambov hin tsuvumer МС 6000-ic datirumе.',
-    title_he:'יין קבברי — 8000 שנות מסורת גיאורגית',body_he:'השיטה הגיאורגית לתסיסת יין בקבווארי — כלים גדולים מחרס הקבורים באדמה — נוספה לרשימת אונסק"ו ב-2013. קבווארי בין 20 ל-3,000 ליטר ומצופים בשעווה. היין מתסס 6 חודשים עם קליפות וגרעינים — ומייצר יינות ענבר. הראיות הקדומות ביותר ל-6,000 לפנה"ס.',
+    title_he:'יין קבברי — 8000 שנות מסורת גיאורגית',body_he:'השיטה הגיאורגית לתסיסת יין בקבווארי נוספה לאונסקו ב-2013. קבווארי בין 20 ל-3000 ליטר ומצופים בשעווה. היין מתסס 6 חודשים עם קליפות וגרעינים ומייצר יינות ענבר.',
     title_az:'Qvevri Şərab — 8000 İllik Gürcü Ənənəsi',body_az:'Yerə basdırılmış böyük gil qablarda — qevridə — gürcü şərabı qıcqırtma üsulu 2013-cü ildə UNESCO siyahısına daxil edildi. Qevrilər 20-3000 litr, içərisi bal mumu ilə. Şərab 6 ay üzüm qabığı ilə qıcqırır — kəhrəba rəngli şərablar. Ən qədim sübutlar e.ə. 6000-ci ilə aiddir.',
     title_de:'Kwevri-Wein — 8000 Jahre georgische Tradition',body_de:'Die georgische Methode, Wein in Kwevri — in der Erde vergrabene Tonbehälter — zu fermentieren, wurde 2013 in die UNESCO-Liste aufgenommen. Kwevri fassen 20-3.000 Liter und sind mit Bienenwachs ausgekleidet. Der Wein fermentiert 6 Monate mit Traubenschalen — bernsteinfarbene Weine. Die ältesten Belege stammen aus 6.000 v. Chr.',
     title_fr:'Vin en Qvevri — 8000 Ans de Tradition Géorgienne',body_fr:'La méthode géorgienne de fermentation du vin dans des qvevri — de grandes jarres en argile enterrées — a été ajoutée à l\'UNESCO en 2013. Les qvevri ont 20 à 3 000 litres et sont revêtus de cire d\'abeille. Le vin fermente 6 mois avec les peaux — vins de couleur ambrée. Les preuves les plus anciennes remontent à 6 000 av. J.-C.',
@@ -3323,6 +3332,8 @@ var GUIDE_ARTICLES=window.GUIDE_ARTICLES={
     title_uk:'Вино в квеврі — 8000 років грузинської традиції',body_uk:'Грузинський метод бродіння вина в квеврі — закопаних глиняних посудинах — внесений до ЮНЕСКО у 2013 р. Квеврі від 20 до 3000 л, покриті бджолиним воском. Вино бродить 6 місяців зі шкіркою — янтарні вина. Найдавніші свідчення — 6000 р. до н.е.',
     title_zh:'陶罐葡萄酒——8000年格鲁吉亚传统',body_zh:'将葡萄酒在埋入地下的大型陶罐（克韦夫里）中发酵的格鲁吉亚方法于2013年列入联合国教科文组织名录。容量20-3000升，内壁涂蜂蜡。葡萄酒与葡萄皮接触发酵6个月，酿出琥珀色葡萄酒。最古老证据追溯至公元前6000年。',
     title_pl:'Wino w Qvevri — 8000 Lat Gruzińskiej Tradycji',body_pl:'Gruzińska metoda fermentacji wina w qvevri — dużych glinianych naczyniach zakopanych w ziemi — została wpisana na listę UNESCO w 2013 roku. Qvevri mają pojemność 20-3000 litrów i są wyłożone woskiem. Wino fermentuje 6 miesięcy ze skórkami — wina bursztynowej barwy. Najstarsze dowody z 6000 lat p.n.e.',
+    title_ar:'نبيذ الكفيفري — 8000 عام من التقاليد',body_ar:'طريقة التخمير الجورجية في الكفيفري ضمن قائمة اليونسكو 2013. الكفيفري 20-3000 لتر مبطن بالشمع. يتخمر النبيذ 6 أشهر مع القشور لإنتاج خمر كهرماني.',
+    title_ka:'ღვინო კვევრში — 8000 წლის ქართული ტრადიცია',body_ka:'ქართული კვევრის ღვინის დამზადების მეთოდი შეიყვანეს იუნესკოს სიაში 2013 წელს. კვევრები 20-3000 ლიტრის ტევადობისაა და ფუტკრის ცვილით არის დაფარული. ღვინო ყურძნის კანთან კონტაქტში 6 თვე დუღს.',
     body:'The Georgian method of fermenting and ageing wine in qvevri — large clay vessels buried underground — was added to the UNESCO List of Intangible Cultural Heritage of Humanity in 2013. Qvevri range in size from 20 litres to 3,000 litres and are lined with beeswax. Wine ferments in qvevri for 6 months in contact with grape skins, seeds and stems — producing amber-coloured wines. The oldest evidence of qvevri winemaking dates to 6,000 BC.',keywords:'Qvevri wine Georgia, UNESCO, amber wine, natural wine, Kakheti'}
 };
 
@@ -3527,6 +3538,246 @@ var GUIDE_ARTICLES=window.GUIDE_ARTICLES={
       'gc-gudauri-title':'⛷️ Gudauri Ski','gc-gudauri-sub':'2990m · puszysty śnieg · Gru–Kwi',
       'gc-alphabet-title':'📜 Alfabet gruziński','gc-alphabet-sub':'1600 lat · UNESCO',
       'gc-qvevri-title':'🫙 Wino Qvevri','gc-qvevri-sub':'UNESCO · starożytna tradycja'
+    },
+    ar:{
+      guideTitle:'🇬🇪 دليل جورجيا',guideSub:'حقائق موثقة — اقرأها قبل السفر',
+      'gc-tbilisi-title':'🏙️ تبليسي','gc-tbilisi-sub':'العاصمة · حمامات الكبريت · المدينة القديمة',
+      'gc-kazbegi-title':'🏔️ كازبيغي','gc-kazbegi-sub':'الجبال · كنيسة غيرغيتي · 5047م',
+      'gc-batumi-title':'🌊 باتومي','gc-batumi-sub':'البحر الأسود · مناخ شبه استوائي · الحياة الليلية',
+      'gc-kakheti-title':'🍷 نبيذ كاخيتي','gc-kakheti-sub':'8000 سنة · 500 نوع عنب',
+      'gc-svaneti-title':'🗻 سفانيتي','gc-svaneti-sub':'أبراج العصور الوسطى · يونسكو',
+      'gc-food-title':'🍽️ المطبخ الجورجي','gc-food-sub':'خينكالي · خاتشابوري · سوفرا',
+      'gc-mtskheta-title':'🛕 متسخيتا','gc-mtskheta-sub':'العاصمة القديمة · يونسكو',
+      'gc-vardzia-title':'🏛️ فارديا','gc-vardzia-sub':'مدينة الكهوف · الملكة تامار',
+      'gc-borjomi-title':'💧 بورجومي','gc-borjomi-sub':'المياه المعدنية · المتنزه الوطني',
+      'gc-gudauri-title':'⛷️ غوداوري للتزلج','gc-gudauri-sub':'2990م · ثلج ناعم · ديسمبر–أبريل',
+      'gc-alphabet-title':'📜 الأبجدية الجورجية','gc-alphabet-sub':'1600 عام · يونسكو',
+      'gc-qvevri-title':'🫙 نبيذ كفيفري','gc-qvevri-sub':'يونسكو · تقليد الجرة الطينية القديمة'
+    },
+    fa:{
+      guideTitle:'🇬🇪 راهنمای گرجستان',guideSub:'حقایق تأیید شده — قبل از سفر بخوانید',
+      'gc-tbilisi-title':'🏙️ تفلیس','gc-tbilisi-sub':'پایتخت · حمام‌های گوگردی · شهر قدیمی',
+      'gc-kazbegi-title':'🏔️ کازبگی','gc-kazbegi-sub':'کوه‌ها · کلیسای گرگتی · 5047 متر',
+      'gc-batumi-title':'🌊 باتومی','gc-batumi-sub':'دریای سیاه · نیمه‌گرمسیری · زندگی شبانه',
+      'gc-kakheti-title':'🍷 شراب کاخیتی','gc-kakheti-sub':'8000 سال · 500 نوع انگور',
+      'gc-svaneti-title':'🗻 سوانتی','gc-svaneti-sub':'برج‌های قرون وسطایی · یونسکو',
+      'gc-food-title':'🍽️ آشپزی گرجستانی','gc-food-sub':'خینکالی · خاچاپوری · سوفره',
+      'gc-mtskheta-title':'🛕 متسختا','gc-mtskheta-sub':'پایتخت باستانی · یونسکو',
+      'gc-vardzia-title':'🏛️ وارذیا','gc-vardzia-sub':'شهر غاری · ملکه تامار',
+      'gc-borjomi-title':'💧 بورجومی','gc-borjomi-sub':'آب معدنی · پارک ملی',
+      'gc-gudauri-title':'⛷️ گوداوری اسکی','gc-gudauri-sub':'2990 متر · برف پودری · دسامبر–آوریل',
+      'gc-alphabet-title':'📜 الفبای گرجی','gc-alphabet-sub':'1600 ساله · یونسکو',
+      'gc-qvevri-title':'🫙 شراب کِوِوری','gc-qvevri-sub':'یونسکو · سنت کوزه سفالی'
+    },
+    ka:{
+      guideTitle:'🇬🇪 საქართველოს გზამკვლევი',guideSub:'დამოწმებული ფაქტები — წაიკითხე სამგზავროდ',
+      'gc-tbilisi-title':'🏙️ თბილისი','gc-tbilisi-sub':'დედაქალაქი · გოგირდის აბანოები · ძველი ქალაქი',
+      'gc-kazbegi-title':'🏔️ კაზბეგი','gc-kazbegi-sub':'მთები · გერგეტის სამება · 5047მ',
+      'gc-batumi-title':'🌊 ბათუმი','gc-batumi-sub':'შავი ზღვა · სუბტროპიკული · ღამის ცხოვრება',
+      'gc-kakheti-title':'🍷 კახური ღვინო','gc-kakheti-sub':'8000 წელი · 500 ჯიში',
+      'gc-svaneti-title':'🗻 სვანეთი','gc-svaneti-sub':'შუასაუკუნეების კოშკები · იუნესკო',
+      'gc-food-title':'🍽️ ქართული სამზარეულო','gc-food-sub':'ხინკალი · ხაჭაპური · სუფრა',
+      'gc-mtskheta-title':'🛕 მცხეთა','gc-mtskheta-sub':'ძველი დედაქალაქი · იუნესკო',
+      'gc-vardzia-title':'🏛️ ვარძია','gc-vardzia-sub':'გამოქვაბულთა ქალაქი · დედოფალი თამარი',
+      'gc-borjomi-title':'💧 ბორჯომი','gc-borjomi-sub':'მინერალური წყალი · ეროვნული პარკი',
+      'gc-gudauri-title':'⛷️ გუდაური სკი','gc-gudauri-sub':'2990მ · ფხვიერი თოვლი · დეკ–აპრ',
+      'gc-alphabet-title':'📜 ქართული ანბანი','gc-alphabet-sub':'1600 წლის · იუნესკო',
+      'gc-qvevri-title':'🫙 ქვევრის ღვინო','gc-qvevri-sub':'იუნესკო · ძველი ქვევრის ტრადიცია'
+    },
+    be:{
+      guideTitle:'🇬🇪 Даведнік па Грузіі',guideSub:'Правераныя факты — чытай перад паездкай',
+      'gc-tbilisi-title':'🏙️ Тбілісі','gc-tbilisi-sub':'Сталіца · серныя лазні · Стары горад',
+      'gc-kazbegi-title':'🏔️ Казбегі','gc-kazbegi-sub':'Горы · царква Гергеці · 5047м',
+      'gc-batumi-title':'🌊 Батумі','gc-batumi-sub':'Чорнае мора · субтропікі · начное жыццё',
+      'gc-kakheti-title':'🍷 Віно Кахеціі','gc-kakheti-sub':'8000 гадоў · 500 сартоў',
+      'gc-svaneti-title':'🗻 Сванеція','gc-svaneti-sub':'Сярэднявечныя вежы · ЮНЕСКА',
+      'gc-food-title':'🍽️ Грузінская кухня','gc-food-sub':'Хінкалі · хачапуры · суфра',
+      'gc-mtskheta-title':'🛕 Мцхета','gc-mtskheta-sub':'Старажытная сталіца · ЮНЕСКА',
+      'gc-vardzia-title':'🏛️ Вардзія','gc-vardzia-sub':'Пячорны горад · цярыца Тамара',
+      'gc-borjomi-title':'💧 Баржомі','gc-borjomi-sub':'Мінеральная вада · нацыянальны парк',
+      'gc-gudauri-title':'⛷️ Гудаўры','gc-gudauri-sub':'2990м · пухлы снег · сне–кра',
+      'gc-alphabet-title':'📜 Грузінскі алфавіт','gc-alphabet-sub':'1600 гадоў · ЮНЕСКА',
+      'gc-qvevri-title':'🫙 Віно ў квеўры','gc-qvevri-sub':'ЮНЕСКА · старажытная традыцыя'
+    },
+    kk:{
+      guideTitle:'🇬🇪 Грузия бойынша нұсқаулық',guideSub:'Тексерілген деректер — жолға шығар алдында оқыңыз',
+      'gc-tbilisi-title':'🏙️ Тбилиси','gc-tbilisi-sub':'Астана · күкірт моншалары · Ескі қала',
+      'gc-kazbegi-title':'🏔️ Казбеги','gc-kazbegi-sub':'Таулар · Гергети шіркеуі · 5047м',
+      'gc-batumi-title':'🌊 Батуми','gc-batumi-sub':'Қара теңіз · субтропик · түнгі өмір',
+      'gc-kakheti-title':'🍷 Кахетия шарабы','gc-kakheti-sub':'8000 жыл · 500 сорт жүзім',
+      'gc-svaneti-title':'🗻 Сванети','gc-svaneti-sub':'Ортағасырлық мұнаралар · ЮНЕСКО',
+      'gc-food-title':'🍽️ Грузин тағамы','gc-food-sub':'Хинкали · Хачапури · Суфра',
+      'gc-mtskheta-title':'🛕 Мцхета','gc-mtskheta-sub':'Ежелгі астана · ЮНЕСКО',
+      'gc-vardzia-title':'🏛️ Вардзия','gc-vardzia-sub':'Үңгір қаласы · патшайым Тамара',
+      'gc-borjomi-title':'💧 Боржоми','gc-borjomi-sub':'Минералды су · ұлттық парк',
+      'gc-gudauri-title':'⛷️ Гудаури тауы','gc-gudauri-sub':'2990м · ұнтақты қар · желт–сәу',
+      'gc-alphabet-title':'📜 Грузин әліпбиі','gc-alphabet-sub':'1600 жыл · ЮНЕСКО',
+      'gc-qvevri-title':'🫙 Квеври шарабы','gc-qvevri-sub':'ЮНЕСКО · ежелгі сазды ыдыс дәстүрі'
+    },
+    ja:{
+      guideTitle:'🇬🇪 ジョージア観光ガイド',guideSub:'旅の前に読む確かな情報',
+      'gc-tbilisi-title':'🏙️ トビリシ','gc-tbilisi-sub':'首都 · 硫黄温泉 · 旧市街',
+      'gc-kazbegi-title':'🏔️ カズベギ','gc-kazbegi-sub':'山岳 · ゲルゲティ教会 · 5047m',
+      'gc-batumi-title':'🌊 バトゥミ','gc-batumi-sub':'黒海 · 亜熱帯 · ナイトライフ',
+      'gc-kakheti-title':'🍷 カヘティのワイン','gc-kakheti-sub':'8000年の歴史 · 500品種',
+      'gc-svaneti-title':'🗻 スヴァネティ','gc-svaneti-sub':'中世の塔 · ユネスコ',
+      'gc-food-title':'🍽️ ジョージア料理','gc-food-sub':'ヒンカリ · ハチャプリ · スプラ',
+      'gc-mtskheta-title':'🛕 ムツヘタ','gc-mtskheta-sub':'古代の首都 · ユネスコ',
+      'gc-vardzia-title':'🏛️ ヴァルジア','gc-vardzia-sub':'洞窟都市 · タマル女王',
+      'gc-borjomi-title':'💧 ボルジョミ','gc-borjomi-sub':'ミネラルウォーター · 国立公園',
+      'gc-gudauri-title':'⛷️ グダウリスキー','gc-gudauri-sub':'2990m · パウダースノー · 12月–4月',
+      'gc-alphabet-title':'📜 ジョージア文字','gc-alphabet-sub':'1600年の歴史 · ユネスコ',
+      'gc-qvevri-title':'🫙 クヴェヴリワイン','gc-qvevri-sub':'ユネスコ · 古代の陶器の伝統'
+    },
+    ko:{
+      guideTitle:'🇬🇪 조지아 여행 가이드',guideSub:'출발 전 읽는 검증된 정보',
+      'gc-tbilisi-title':'🏙️ 트빌리시','gc-tbilisi-sub':'수도 · 유황 온천 · 구시가지',
+      'gc-kazbegi-title':'🏔️ 카즈베기','gc-kazbegi-sub':'산악 · 게르게티 교회 · 5047m',
+      'gc-batumi-title':'🌊 바투미','gc-batumi-sub':'흑해 · 아열대 · 나이트라이프',
+      'gc-kakheti-title':'🍷 카헤티 와인','gc-kakheti-sub':'8000년 역사 · 500 품종',
+      'gc-svaneti-title':'🗻 스바네티','gc-svaneti-sub':'중세 탑 · 유네스코',
+      'gc-food-title':'🍽️ 조지아 음식','gc-food-sub':'힌칼리 · 하차푸리 · 수프라',
+      'gc-mtskheta-title':'🛕 므츠헤타','gc-mtskheta-sub':'고대 수도 · 유네스코',
+      'gc-vardzia-title':'🏛️ 바르지아','gc-vardzia-sub':'동굴 도시 · 타마르 여왕',
+      'gc-borjomi-title':'💧 보르조미','gc-borjomi-sub':'미네랄 워터 · 국립공원',
+      'gc-gudauri-title':'⛷️ 구다우리 스키','gc-gudauri-sub':'2990m · 파우더 스노우 · 12월–4월',
+      'gc-alphabet-title':'📜 조지아 알파벳','gc-alphabet-sub':'1600년 · 유네스코',
+      'gc-qvevri-title':'🫙 크베브리 와인','gc-qvevri-sub':'유네스코 · 고대 토기 전통'
+    },
+    it:{
+      guideTitle:'🇬🇪 Guida alla Georgia',guideSub:'Fatti verificati — da leggere prima di partire',
+      'gc-tbilisi-title':'🏙️ Tbilisi','gc-tbilisi-sub':'Capitale · bagni sulfurei · città vecchia',
+      'gc-kazbegi-title':'🏔️ Kazbegi','gc-kazbegi-sub':'Montagne · Chiesa Gergeti · 5047m',
+      'gc-batumi-title':'🌊 Batumi','gc-batumi-sub':'Mar Nero · subtropicale · vita notturna',
+      'gc-kakheti-title':'🍷 Vino di Kakheti','gc-kakheti-sub':'8000 anni · 500 varietà di uva',
+      'gc-svaneti-title':'🗻 Svaneti','gc-svaneti-sub':'Torri medievali · UNESCO',
+      'gc-food-title':'🍽️ Cucina georgiana','gc-food-sub':'Khinkali · Khachapuri · Supra',
+      'gc-mtskheta-title':'🛕 Mtskheta','gc-mtskheta-sub':'Antica capitale · UNESCO',
+      'gc-vardzia-title':'🏛️ Vardzia','gc-vardzia-sub':'Città rupestre · Regina Tamar',
+      'gc-borjomi-title':'💧 Borjomi','gc-borjomi-sub':'Acqua minerale · parco nazionale',
+      'gc-gudauri-title':'⛷️ Gudauri Sci','gc-gudauri-sub':'2990m · neve polverosa · Dic–Apr',
+      'gc-alphabet-title':'📜 Alfabeto georgiano','gc-alphabet-sub':'1600 anni · UNESCO',
+      'gc-qvevri-title':'🫙 Vino Qvevri','gc-qvevri-sub':'UNESCO · antica tradizione argilla'
+    },
+    pt:{
+      guideTitle:'🇬🇪 Guia da Geórgia',guideSub:'Factos verificados — leia antes de viajar',
+      'gc-tbilisi-title':'🏙️ Tbilisi','gc-tbilisi-sub':'Capital · banhos de enxofre · cidade velha',
+      'gc-kazbegi-title':'🏔️ Kazbegi','gc-kazbegi-sub':'Montanhas · Igreja Gergeti · 5047m',
+      'gc-batumi-title':'🌊 Batumi','gc-batumi-sub':'Mar Negro · subtropical · vida noturna',
+      'gc-kakheti-title':'🍷 Vinho de Kakheti','gc-kakheti-sub':'8000 anos · 500 variedades',
+      'gc-svaneti-title':'🗻 Svaneti','gc-svaneti-sub':'Torres medievais · UNESCO',
+      'gc-food-title':'🍽️ Cozinha georgiana','gc-food-sub':'Khinkali · Khachapuri · Supra',
+      'gc-mtskheta-title':'🛕 Mtskheta','gc-mtskheta-sub':'Capital antiga · UNESCO',
+      'gc-vardzia-title':'🏛️ Vardzia','gc-vardzia-sub':'Cidade rupestre · Rainha Tamar',
+      'gc-borjomi-title':'💧 Borjomi','gc-borjomi-sub':'Água mineral · parque nacional',
+      'gc-gudauri-title':'⛷️ Ski Gudauri','gc-gudauri-sub':'2990m · neve em pó · Dez–Abr',
+      'gc-alphabet-title':'📜 Alfabeto georgiano','gc-alphabet-sub':'1600 anos · UNESCO',
+      'gc-qvevri-title':'🫙 Vinho Qvevri','gc-qvevri-sub':'UNESCO · tradição vasilha argila'
+    },
+    nl:{
+      guideTitle:'🇬🇪 Reisgids Georgië',guideSub:'Geverifieerde feiten — lees voor vertrek',
+      'gc-tbilisi-title':'🏙️ Tbilisi','gc-tbilisi-sub':'Hoofdstad · zwavelbaden · oude stad',
+      'gc-kazbegi-title':'🏔️ Kazbegi','gc-kazbegi-sub':'Bergen · Gergeti kerk · 5047m',
+      'gc-batumi-title':'🌊 Batumi','gc-batumi-sub':'Zwarte Zee · subtropisch · nachtleven',
+      'gc-kakheti-title':'🍷 Wijn van Kakheti','gc-kakheti-sub':'8000 jaar · 500 druivenrassen',
+      'gc-svaneti-title':'🗻 Swanetia','gc-svaneti-sub':'Middeleeuwse torens · UNESCO',
+      'gc-food-title':'🍽️ Georgische keuken','gc-food-sub':'Khinkali · Khachapuri · Supra',
+      'gc-mtskheta-title':'🛕 Mzcheta','gc-mtskheta-sub':'Antieke hoofdstad · UNESCO',
+      'gc-vardzia-title':'🏛️ Wardsia','gc-vardzia-sub':'Grottenstad · Koningin Tamar',
+      'gc-borjomi-title':'💧 Bordsomi','gc-borjomi-sub':'Mineraalwater · nationaal park',
+      'gc-gudauri-title':'⛷️ Gudauri Ski','gc-gudauri-sub':'2990m · poedersneeuw · Dec–Apr',
+      'gc-alphabet-title':'📜 Georgisch alfabet','gc-alphabet-sub':'1600 jaar · UNESCO',
+      'gc-qvevri-title':'🫙 Kwevri-wijn','gc-qvevri-sub':'UNESCO · oude kleitradtitie'
+    },
+    hi:{
+      guideTitle:'🇬🇪 जॉर्जिया यात्रा गाइड',guideSub:'सत्यापित तथ्य — यात्रा से पहले पढ़ें',
+      'gc-tbilisi-title':'🏙️ त्बिलिसी','gc-tbilisi-sub':'राजधानी · गंधक स्नान · पुराना शहर',
+      'gc-kazbegi-title':'🏔️ काज़बेगी','gc-kazbegi-sub':'पहाड़ · गेरगेती चर्च · 5047मी',
+      'gc-batumi-title':'🌊 बटुमी','gc-batumi-sub':'काला सागर · उपोष्णकटिबंधीय · नाइटलाइफ',
+      'gc-kakheti-title':'🍷 काखेती वाइन','gc-kakheti-sub':'8000 साल · 500 किस्में',
+      'gc-svaneti-title':'🗻 स्वानेती','gc-svaneti-sub':'मध्यकालीन टॉवर · यूनेस्को',
+      'gc-food-title':'🍽️ जॉर्जियाई व्यंजन','gc-food-sub':'खिन्काली · खाचापुरी · सुप्रा',
+      'gc-mtskheta-title':'🛕 मत्सखेता','gc-mtskheta-sub':'प्राचीन राजधानी · यूनेस्को',
+      'gc-vardzia-title':'🏛️ वार्जिया','gc-vardzia-sub':'गुफा नगर · रानी तामार',
+      'gc-borjomi-title':'💧 बोरजोमी','gc-borjomi-sub':'मिनरल वाटर · राष्ट्रीय उद्यान',
+      'gc-gudauri-title':'⛷️ गुदाउरी स्की','gc-gudauri-sub':'2990मी · पाउडर स्नो · दिस–अप्र',
+      'gc-alphabet-title':'📜 जॉर्जियाई वर्णमाला','gc-alphabet-sub':'1600 साल · यूनेस्को',
+      'gc-qvevri-title':'🫙 क्वेवरी वाइन','gc-qvevri-sub':'यूनेस्को · प्राचीन मिट्टी परंपरा'
+    },
+    ro:{
+      guideTitle:'🇬🇪 Ghid Georgia',guideSub:'Fapte verificate — citește înainte de plecare',
+      'gc-tbilisi-title':'🏙️ Tbilisi','gc-tbilisi-sub':'Capitală · băi cu sulf · orașul vechi',
+      'gc-kazbegi-title':'🏔️ Kazbegi','gc-kazbegi-sub':'Munți · Biserica Gergeti · 5047m',
+      'gc-batumi-title':'🌊 Batumi','gc-batumi-sub':'Marea Neagră · subtropical · viață de noapte',
+      'gc-kakheti-title':'🍷 Vin din Kakheti','gc-kakheti-sub':'8000 ani · 500 soiuri',
+      'gc-svaneti-title':'🗻 Svanetia','gc-svaneti-sub':'Turnuri medievale · UNESCO',
+      'gc-food-title':'🍽️ Bucătăria georgiană','gc-food-sub':'Khinkali · Khachapuri · Supra',
+      'gc-mtskheta-title':'🛕 Mtskheta','gc-mtskheta-sub':'Capitală antică · UNESCO',
+      'gc-vardzia-title':'🏛️ Vardzia','gc-vardzia-sub':'Oraș rupestru · Regina Tamar',
+      'gc-borjomi-title':'💧 Borjomi','gc-borjomi-sub':'Apă minerală · parc național',
+      'gc-gudauri-title':'⛷️ Gudauri Ski','gc-gudauri-sub':'2990m · zăpadă pudră · Dec–Apr',
+      'gc-alphabet-title':'📜 Alfabetul georgian','gc-alphabet-sub':'1600 ani · UNESCO',
+      'gc-qvevri-title':'🫙 Vin Qvevri','gc-qvevri-sub':'UNESCO · tradiție veche ceramică'
+    },
+    lv:{
+      guideTitle:'🇬🇪 Gruzijas ceļvedis',guideSub:'Pārbaudīti fakti — izlasi pirms brauciena',
+      'gc-tbilisi-title':'🏙️ Tbilisi','gc-tbilisi-sub':'Galvaspilsēta · sēra vannas · vecpilsēta',
+      'gc-kazbegi-title':'🏔️ Kazbegi','gc-kazbegi-sub':'Kalni · Gergeti baznīca · 5047m',
+      'gc-batumi-title':'🌊 Batumi','gc-batumi-sub':'Melnā jūra · subtropiskais · nakts dzīve',
+      'gc-kakheti-title':'🍷 Kakhetijas vīns','gc-kakheti-sub':'8000 gadi · 500 šķirnes',
+      'gc-svaneti-title':'🗻 Svanetia','gc-svaneti-sub':'Viduslaiku torņi · UNESCO',
+      'gc-food-title':'🍽️ Gruzīnu virtuve','gc-food-sub':'Chinkali · Chachapuri · Supra',
+      'gc-mtskheta-title':'🛕 Mzcheta','gc-mtskheta-sub':'Senā galvaspilsēta · UNESCO',
+      'gc-vardzia-title':'🏛️ Vardzia','gc-vardzia-sub':'Alu pilsēta · karaliene Tamara',
+      'gc-borjomi-title':'💧 Borjomi','gc-borjomi-sub':'Minerālūdens · nacionālais parks',
+      'gc-gudauri-title':'⛷️ Gudauri Ski','gc-gudauri-sub':'2990m · pūdersnigs · Dec–Apr',
+      'gc-alphabet-title':'📜 Gruzīnu alfabēts','gc-alphabet-sub':'1600 gadi · UNESCO',
+      'gc-qvevri-title':'🫙 Kvevri vīns','gc-qvevri-sub':'UNESCO · senā māla trauciņa tradīcija'
+    },
+    lt:{
+      guideTitle:'🇬🇪 Gruzijos kelionių vadovas',guideSub:'Patikrinti faktai — skaityk prieš kelionę',
+      'gc-tbilisi-title':'🏙️ Tbilisis','gc-tbilisi-sub':'Sostinė · sieros vonios · senamiestis',
+      'gc-kazbegi-title':'🏔️ Kazbegi','gc-kazbegi-sub':'Kalnai · Gergeti bažnyčia · 5047m',
+      'gc-batumi-title':'🌊 Batumis','gc-batumi-sub':'Juodoji jūra · subtropinis · naktinis gyvenimas',
+      'gc-kakheti-title':'🍷 Kakhetijos vynas','gc-kakheti-sub':'8000 metų · 500 veislių',
+      'gc-svaneti-title':'🗻 Svanetia','gc-svaneti-sub':'Viduramžių bokštai · UNESCO',
+      'gc-food-title':'🍽️ Gruzinų virtuvė','gc-food-sub':'Chinkali · Chačapuri · Supra',
+      'gc-mtskheta-title':'🛕 Mccheta','gc-mtskheta-sub':'Senoji sostinė · UNESCO',
+      'gc-vardzia-title':'🏛️ Vardzia','gc-vardzia-sub':'Olų miestas · karalienė Tamar',
+      'gc-borjomi-title':'💧 Bordžomis','gc-borjomi-sub':'Mineralinis vanduo · nacionalinis parkas',
+      'gc-gudauri-title':'⛷️ Gudauri slidinėjimas','gc-gudauri-sub':'2990m · purus sniegas · Gr–Bal',
+      'gc-alphabet-title':'📜 Gruzinų abėcėlė','gc-alphabet-sub':'1600 metų · UNESCO',
+      'gc-qvevri-title':'🫙 Kvevri vynas','gc-qvevri-sub':'UNESCO · senoji molinė tradicija'
+    },
+    et:{
+      guideTitle:'🇬🇪 Gruusia reisijuht',guideSub:'Kontrollitud faktid — loe enne reisi',
+      'gc-tbilisi-title':'🏙️ Thbilisi','gc-tbilisi-sub':'Pealinn · väävelbad · vanalinn',
+      'gc-kazbegi-title':'🏔️ Kazbegi','gc-kazbegi-sub':'Mäed · Gergeti kirik · 5047m',
+      'gc-batumi-title':'🌊 Batumi','gc-batumi-sub':'Must meri · subtroopika · öine elu',
+      'gc-kakheti-title':'🍷 Kahhetia vein','gc-kakheti-sub':'8000 aastat · 500 sorti',
+      'gc-svaneti-title':'🗻 Svanetia','gc-svaneti-sub':'Keskaegne tornid · UNESCO',
+      'gc-food-title':'🍽️ Gruusia köök','gc-food-sub':'Tšinkali · Hatšapuri · Supra',
+      'gc-mtskheta-title':'🛕 Thbilisi·Mzcheta','gc-mtskheta-sub':'Vana pealinn · UNESCO',
+      'gc-vardzia-title':'🏛️ Vardzia','gc-vardzia-sub':'Koobaste linn · kuninganna Tamar',
+      'gc-borjomi-title':'💧 Borjomi','gc-borjomi-sub':'Mineraalvesi · rahvuspark',
+      'gc-gudauri-title':'⛷️ Gudauri suusatamine','gc-gudauri-sub':'2990m · pulberlumi · Dets–Apr',
+      'gc-alphabet-title':'📜 Gruusia tähestik','gc-alphabet-sub':'1600 aastat · UNESCO',
+      'gc-qvevri-title':'🫙 Kvevri vein','gc-qvevri-sub':'UNESCO · vana savinõu traditsioon'
+    },
+    md:{
+      guideTitle:'🇬🇪 Ghid Georgia',guideSub:'Fapte verificate — citește înainte de plecare',
+      'gc-tbilisi-title':'🏙️ Tbilisi','gc-tbilisi-sub':'Capitală · băi cu sulf · oraș vechi',
+      'gc-kazbegi-title':'🏔️ Kazbegi','gc-kazbegi-sub':'Munți · Biserica Gergeti · 5047m',
+      'gc-batumi-title':'🌊 Batumi','gc-batumi-sub':'Marea Neagră · subtropical',
+      'gc-kakheti-title':'🍷 Vin Kakheti','gc-kakheti-sub':'8000 ani · 500 soiuri',
+      'gc-svaneti-title':'🗻 Svanetia','gc-svaneti-sub':'Turnuri medievale · UNESCO',
+      'gc-food-title':'🍽️ Bucătărie georgiană','gc-food-sub':'Khinkali · Khachapuri',
+      'gc-mtskheta-title':'🛕 Mtskheta','gc-mtskheta-sub':'Capitală antică · UNESCO',
+      'gc-vardzia-title':'🏛️ Vardzia','gc-vardzia-sub':'Oraș rupestru · Tamar',
+      'gc-borjomi-title':'💧 Borjomi','gc-borjomi-sub':'Apă minerală · parc',
+      'gc-gudauri-title':'⛷️ Gudauri','gc-gudauri-sub':'2990m · zăpadă · Dec–Apr',
+      'gc-alphabet-title':'📜 Alfabetul georgian','gc-alphabet-sub':'1600 ani · UNESCO',
+      'gc-qvevri-title':'🫙 Vin Qvevri','gc-qvevri-sub':'UNESCO · tradiție veche'
     }
   };
 
