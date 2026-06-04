@@ -510,12 +510,26 @@ header.top{display:flex;align-items:center;justify-content:space-between;padding
   </div>
 </header>
 
-<!-- Language sheet -->
-<div id="langSheet" style="position:fixed;inset:0;z-index:9999;display:none;background:rgba(0,0,0,.65);backdrop-filter:blur(4px)" role="dialog" aria-modal="true">
-  <div style="position:absolute;bottom:0;left:0;right:0;background:var(--card);border-radius:24px 24px 0 0;padding:20px 16px calc(24px + env(safe-area-inset-bottom));max-height:80vh;overflow-y:auto">
-    <div style="font-family:var(--font-display);font-size:1.2rem;font-weight:900;color:var(--ink);text-align:center;margin-bottom:16px">🌐 Choose language</div>
-    <div id="langList" style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px;contain:content"></div>
-    <button id="langClose" style="width:100%;margin-top:14px;padding:12px;background:var(--card-2);border:1px solid var(--line);border-radius:14px;color:var(--muted);font-size:.9rem;cursor:pointer">✕ Close</button>
+<!-- Language sheet — iOS drum picker -->
+<div id="langSheet" style="position:fixed;inset:0;z-index:9999;display:none;background:rgba(0,0,0,.7);backdrop-filter:blur(6px)" role="dialog" aria-modal="true">
+  <div style="position:absolute;bottom:0;left:0;right:0;background:var(--card);border-radius:28px 28px 0 0;padding-bottom:calc(20px + env(safe-area-inset-bottom))">
+    <!-- Header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 20px 12px">
+      <button id="langClose" style="background:none;border:none;color:var(--muted);font-size:.95rem;cursor:pointer;padding:4px 8px;touch-action:manipulation">✕</button>
+      <div style="font-family:var(--font-display);font-size:1.05rem;font-weight:800;color:var(--ink)">🌐 Language</div>
+      <button id="langConfirm" style="background:none;border:none;color:var(--gold);font-size:.95rem;font-weight:700;cursor:pointer;padding:4px 8px;touch-action:manipulation">Done</button>
+    </div>
+    <!-- Drum picker container -->
+    <div style="position:relative;height:216px;overflow:hidden">
+      <!-- Selection highlight -->
+      <div style="position:absolute;top:50%;left:0;right:0;height:44px;transform:translateY(-50%);background:var(--card-2);border-top:1px solid var(--gold);border-bottom:1px solid var(--gold);pointer-events:none;z-index:2"></div>
+      <!-- Fade top -->
+      <div style="position:absolute;top:0;left:0;right:0;height:80px;background:linear-gradient(to bottom,var(--card),transparent);pointer-events:none;z-index:3"></div>
+      <!-- Fade bottom -->
+      <div style="position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to top,var(--card),transparent);pointer-events:none;z-index:3"></div>
+      <!-- Scrollable list -->
+      <div id="langList" style="height:100%;overflow-y:scroll;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:86px 0"></div>
+    </div>
   </div>
 </div>
 
@@ -576,7 +590,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;padding
     <h2 class="section-title" id="guideTitle">🇬🇪 Georgia Guide</h2>
     <p class="section-sub" id="guideSubtitle">Verified facts about Georgia — read before you go</p>
     <div class="guide-grid" id="guideGrid">
-      <a href="/geo/tbilisi/" class="guide-card">
+      <a href="/geo/tbilisi/" class="guide-card" id="gc-tbilisi">
         <div class="gc-title" id="gc-tbilisi-title">🏙️ Tbilisi</div>
         <div class="gc-sub" id="gc-tbilisi-sub">Capital · sulfur baths · Old Town</div>
       </a>
@@ -747,27 +761,80 @@ gEl.style.transition='opacity .25s';
   var listEl=document.getElementById('langList');
   var btn=document.getElementById('langBtn');
   var closeBtn=document.getElementById('langClose');
+  var confirmBtn=document.getElementById('langConfirm');
   if(!sheet||!listEl||!btn)return;
   var curLang=saved||(navigator.language||'en').slice(0,2).toLowerCase();
+
+  // Build drum picker items
+  var ITEM_H=44;
   listEl.innerHTML=LANGS.map(function(l){
-    var active=l[0]===curLang||l[0].slice(0,2)===curLang;
-    return '<button data-l="'+l[0]+'" style="display:flex;align-items:center;gap:8px;padding:12px;border-radius:12px;border:1px solid '+(active?'var(--gold)':'var(--line)')+';background:var(--card-2);color:var(--ink);font-family:var(--font-body);font-size:.88rem;cursor:pointer;text-align:left">'+
-      '<span style="font-size:1.3rem">'+l[1]+'</span><span>'+l[2]+'</span></button>';
+    return '<div data-l="'+l[0]+'" style="height:'+ITEM_H+'px;display:flex;align-items:center;justify-content:center;gap:10px;scroll-snap-align:center;cursor:pointer;font-size:1rem;color:var(--ink);font-family:var(--font-body);flex-shrink:0">'+
+      '<span style="font-size:1.4rem">'+l[1]+'</span>'+
+      '<span style="font-size:1rem;font-weight:500">'+l[2]+'</span>'+
+    '</div>';
   }).join('');
-  function openSheet(){sheet.style.display='block';document.body.style.overflow='hidden';}
-  function closeSheet(){sheet.style.display='none';document.body.style.overflow='';}
+
+  // Scroll to current language
+  function scrollToLang(code, smooth){
+    var idx=LANGS.findIndex(function(l){return l[0]===code||l[0].slice(0,2)===code;});
+    if(idx<0)idx=0;
+    listEl.scrollTo({top:idx*ITEM_H, behavior:smooth?'smooth':'auto'});
+  }
+
+  // Get currently centered language
+  function getSelectedLang(){
+    var idx=Math.round(listEl.scrollTop/ITEM_H);
+    idx=Math.max(0,Math.min(idx,LANGS.length-1));
+    return LANGS[idx][0];
+  }
+
+  // Highlight center item on scroll
+  listEl.addEventListener('scroll',function(){
+    var idx=Math.round(listEl.scrollTop/ITEM_H);
+    listEl.querySelectorAll('[data-l]').forEach(function(el,i){
+      el.style.opacity=Math.abs(i-idx)===0?'1':Math.abs(i-idx)===1?'0.5':'0.25';
+      el.style.transform='scale('+(Math.abs(i-idx)===0?'1.05':'1')+')';
+      el.style.transition='opacity .15s,transform .15s';
+    });
+  });
+
+  function openSheet(){
+    sheet.style.display='block';
+    document.body.style.overflow='hidden';
+    scrollToLang(curLang, false);
+    setTimeout(function(){listEl.dispatchEvent(new Event('scroll'));},50);
+  }
+
+  function closeSheet(){
+    sheet.style.display='none';
+    document.body.style.overflow='';
+  }
+
+  function applyLang(){
+    var lang=getSelectedLang();
+    try{localStorage.setItem('sak_lang',lang);}catch(e){}
+    closeSheet();
+    location.reload();
+  }
+
   btn.onclick=openSheet;
   if(closeBtn)closeBtn.onclick=closeSheet;
+  if(confirmBtn)confirmBtn.onclick=applyLang;
   sheet.onclick=function(e){if(e.target===sheet)closeSheet();};
-  listEl.querySelectorAll('[data-l]').forEach(function(b){
-    b.onclick=function(){
-      try{localStorage.setItem('sak_lang',b.getAttribute('data-l'));}catch(e){}
-      location.reload();
-    };
+
+  // Tap on item scrolls to it
+  listEl.querySelectorAll('[data-l]').forEach(function(el,i){
+    el.onclick=function(){listEl.scrollTo({top:i*ITEM_H,behavior:'smooth'});};
   });
 })();
 
-var userLang=window.__forcedLang||(navigator.language||'en').slice(0,2).toLowerCase();
+var userLang=window.__forcedLang||(function(){
+  try{
+    var urlLang=new URLSearchParams(window.location.search).get('lang');
+    if(urlLang){try{localStorage.setItem('sak_lang',urlLang);}catch(e){}return urlLang;}
+  }catch(e){}
+  return (navigator.language||'en').slice(0,2).toLowerCase();
+})();
 
 /* ---------- Локализация интерфейса (по языку устройства гостя) ---------- */
 var I18N={
@@ -1421,33 +1488,45 @@ try{if(window.__t){var _ct=document.querySelector('[data-i18n="consent_text"]');
 
 /* ---------- Системный промпт Чачи — динамический по текущему языку ---------- */
 function getSystem(){
-  var lang=window.__userLang||userLang||'en';
+  // Всегда берём актуальный язык — из localStorage (после смены через барабан)
+  var lang='en';
+  try{lang=localStorage.getItem('sak_lang')||window.__userLang||userLang||'en';}catch(e){lang=window.__userLang||userLang||'en';}
+  window.__userLang=lang; // синхронизируем
+  // Маппинг языковых кодов в названия для промпта
+  var langNames={ru:'Russian',tr:'Turkish',de:'German',fr:'French',ar:'Arabic',
+    he:'Hebrew',fa:'Farsi/Persian',es:'Spanish',ka:'Georgian',hy:'Armenian',
+    uk:'Ukrainian',be:'Belarusian',az:'Azerbaijani',kk:'Kazakh',uz:'Uzbek',
+    tk:'Turkmen',tg:'Tajik',ky:'Kyrgyz',md:'Moldovan/Romanian',
+    zh:'Chinese','zh-CN':'Chinese',ja:'Japanese',ko:'Korean',
+    it:'Italian',pl:'Polish',pt:'Portuguese',nl:'Dutch',
+    hi:'Hindi',ro:'Romanian',lv:'Latvian',lt:'Lithuanian',et:'Estonian',
+    en:'English'};
+  var langName=langNames[lang]||'English';
   return `You are Chacha (Чача) — a warm, helpful Georgian travel friend for Sakartvelo.ai. NOT a salesperson. NOT chatty.
 
 You ONLY help with tourism in Georgia (the Caucasus country). You can help book: hotels & apartments, car rental, tours & excursions, airport transfer, travel insurance.
 
 LANGUAGE — ABSOLUTE RULE:
-- Site language right now: ${lang}
-- You MUST reply in this language. No exceptions.
-- ru/be/uk → Russian. tr → Turkish. de → German. fr → French. ar → Arabic. he → Hebrew. fa → Farsi. es → Spanish. ka → Georgian. hy → Armenian. en → English. All others → English.
-- NEVER reply in English when lang is not 'en'.
+- User language: ${langName} (code: ${lang})
+- You MUST reply ONLY in ${langName}. No exceptions. Never switch to English unless lang is 'en'.
+- Use correct script: Armenian→Հայերեն only, Hebrew→עברית only, Arabic→العربية only, Georgian→ქართული only, Chinese→中文 only, Russian→кириллица only.
+- NEVER mix languages or scripts. NEVER use Latin letters for non-Latin script languages.
 
 STYLE:
 - SHORT. Phone screen. Lead with answer, no intros.
 - Concrete request (hotel/transfer) → give booking link fast, 1-2 lines max.
 - Warm but brief. Greet only on first message.
-- Sign off as "Чача 🍶" (Russian) or "Chacha 🍶" (others) — not every message.
+- Sign off as "Чача 🍶" (Russian/CIS) or "Chacha 🍶" (others) — not every message.
 - When giving links use ONLY plain URL format on its own line — NO Markdown [text](url) format.
-- Example: "Отели в Тбилиси:\nhttps://booking.com/..." — NOT "[Найти отель](https://...)"
 - Never write text inside square brackets followed by parentheses.
 
-FREE REMINDER: One short line max that you are free, e.g. "Я бесплатный 😊". Don\'t overdo.
+FREE REMINDER: One short line max that you are free. Don't overdo.
 
 RULES:
 - Ask travel dates if missing.
-- Mention mandatory 2026 insurance ONCE early (min 30000 GEL ≈ $11000). Don\'t repeat.
+- Mention mandatory 2026 insurance ONCE early (min 30000 GEL ≈ $11000). Don't repeat.
 - NEVER invent phone numbers or addresses.
-- NEVER discuss politics/conflicts — deflect: "Я простой гид 🍶 давай подберём поездку".
+- NEVER discuss politics/conflicts — deflect politely.
 - REFUSE off-topic politely.
 
 INSURANCE: ONLY Aldagi: https://travelgeorgia.aldagi.ge/ for mandatory entry. EKTA optional only.
@@ -1782,7 +1861,6 @@ window.__nativeLangs=__nativeLangs;
 
 async function translateBatch(texts,targetLang){
   if(!texts||!texts.length)return texts;
-  // Only skip if SAME as page language (Russian source)
   if(targetLang==='ru')return texts;
   var cKey='sak_tr2_'+targetLang;
   var cache={};
@@ -1795,7 +1873,9 @@ async function translateBatch(texts,targetLang){
     needT.push(t);indices.push(i);
   });
   if(!needT.length)return result;
-  // Anthropic API напрямую — translate.js и MyMemory убраны навсегда
+
+  // Уровень 1 — Claude API (основной)
+  var claudeOk=false;
   try{
     var batchText=needT.map(function(t,i){return i+'|||'+t;}).join('\n');
     var r3=await fetch('/.netlify/functions/claude',{
@@ -1808,15 +1888,42 @@ async function translateBatch(texts,targetLang){
         messages:[{role:'user',content:batchText}]
       })
     });
-    var d3=await r3.json();
-    var t3=d3&&d3.content&&d3.content[0]&&d3.content[0].text||'';
-    t3.split('\n').forEach(function(line){
-      var sep=line.indexOf('|||');if(sep<0)return;
-      var idx=parseInt(line.slice(0,sep).trim());
-      var val=line.slice(sep+3).trim();
-      if(!isNaN(idx)&&val&&indices[idx]!==undefined){result[indices[idx]]=val;cache[needT[idx]]=val;}
-    });
+    if(r3.ok){
+      var d3=await r3.json();
+      var t3=d3&&d3.content&&d3.content[0]&&d3.content[0].text||'';
+      var parsed=0;
+      t3.split('\n').forEach(function(line){
+        var sep=line.indexOf('|||');if(sep<0)return;
+        var idx=parseInt(line.slice(0,sep).trim());
+        var val=line.slice(sep+3).trim();
+        if(!isNaN(idx)&&val&&indices[idx]!==undefined){result[indices[idx]]=val;cache[needT[idx]]=val;parsed++;}
+      });
+      if(parsed>0)claudeOk=true;
+    }
   }catch(e3){}
+
+  // Уровень 2 — Google Translate (страховка только для наших языков)
+  var ourLangs=['tr','hy','he','az','de','fr','uk','be','kk','uz','tk','tg','ky','md','pl','es','zh-CN','ja','ko','it','pt','nl','hi','ro','lv','lt','et','fa','ar','ka'];
+  if(!claudeOk && ourLangs.indexOf(targetLang)>=0){
+    try{
+      // Google Translate через бесплатный endpoint (без ключа, через web API)
+      var googleLang=targetLang==='zh-CN'?'zh':targetLang==='md'?'ro':targetLang;
+      for(var gi=0;gi<needT.length;gi++){
+        var encText=encodeURIComponent(needT[gi]);
+        var gUrl='https://translate.googleapis.com/translate_a/single?client=gtx&sl=ru&tl='+googleLang+'&dt=t&q='+encText;
+        try{
+          var gr=await fetch(gUrl);
+          var gd=await gr.json();
+          var gTranslated='';
+          if(gd&&gd[0]){gd[0].forEach(function(part){if(part&&part[0])gTranslated+=part[0];});}
+          if(gTranslated){result[indices[gi]]=gTranslated;cache[needT[gi]]=gTranslated;}
+        }catch(ge){}
+        // небольшая пауза чтобы не заблокировали
+        if(gi<needT.length-1)await new Promise(function(r){setTimeout(r,50);});
+      }
+    }catch(ge2){}
+  }
+
   try{sessionStorage.setItem(cKey,JSON.stringify(cache));}catch(e){}
   return result;
 }
@@ -2118,16 +2225,16 @@ var TOOL_TEXTS_I18N={
     // translator
     translator_hint:'Говори или пиши на своём языке — переведём на грузинский и озвучим. Грузин ответит голосом или текстом — переведём обратно. Бесплатно, для простого общения.',
     translator_me:'🙋 Ты → грузину',
-    translator_me_ph:'Скажи 🎤 или впиши текст здесь...',
-    translator_speak_me:'🎤 Сказать',
+    translator_me_ph:'Впиши текст на своём языке...',
+    translator_speak_me:'Сказать',
     translator_go_me:'🔁 Перевести на грузинский',
     translator_geo:'🇬🇪 Грузин → тебе',
-    translator_geo_ph:'Грузин говорит 🎤 или пишет на грузинской клавиатуре ниже ⌨️',
-    translator_speak_geo:'🎤 Грузин говорит',
+    translator_geo_ph:'Грузин пишет здесь...',
+    translator_speak_geo:'Грузин говорит',
     translator_go_geo:'🔁 Перевести мне',
     translator_kb:'⌨️ Грузинская клавиатура',
     translator_tip:'💡 Нет грузинской клавиатуры в телефоне? Дай телефон грузину — пусть нажмёт «⌨️ Грузинская клавиатура» и напишет ответ. Потом «Перевести мне» — и ты поймёшь его.',
-    translator_empty:'Сначала скажи или впиши текст 🙂',
+    translator_empty:'Сначала впиши текст 🙂',
     translator_err:'⚠️ Перевод временно недоступен, попробуй ещё раз.',
     translator_listening:'🎙️ Слушаю...',
     translator_no_voice:'Голосовой ввод недоступен в этом браузере — впиши текст вручную 🙂',
@@ -2271,16 +2378,16 @@ var TOOL_TEXTS_I18N={
     metro_result_stops:'Stops:',metro_result_min:'min',
     metro_result_transfer:'🔄 Transfer at <b>Sadguris Moedani (Station Square)</b>.',metro_result_total:'Total stops:',metro_transfer_free:'(transfer is free)',
     translator_hint_text:'Type in your language → see Georgian translation. Georgian types below → see translation back. Free.',
-    translator_geo_ph_text:'Georgian types here... ⌨️',
+    translator_geo_ph_text:'Georgian types here...',
     translator_tip_text:'💡 No Georgian keyboard? Tap «Georgian keyboard» button — Georgian can type on the screen.',
     translator_hint:'Speak or type in your language — we\'ll translate to Georgian and say it aloud. The Georgian can reply by voice or text — we\'ll translate back. Free, for simple conversations.',
     translator_me:'🙋 You → to Georgian',
-    translator_me_ph:'Say 🎤 or type here...',
-    translator_speak_me:'🎤 Speak',
+    translator_me_ph:'Type your text here...',
+    translator_speak_me:'Speak',
     translator_go_me:'🔁 Translate to Georgian',
     translator_geo:'🇬🇪 Georgian → you',
-    translator_geo_ph:'Georgian speaks 🎤 or types on the Georgian keyboard below ⌨️',
-    translator_speak_geo:'🎤 Georgian speaks',
+    translator_geo_ph:'Georgian types here...',
+    translator_speak_geo:'Georgian speaks',
     translator_go_geo:'🔁 Translate to me',
     translator_kb:'⌨️ Georgian keyboard',
     translator_tip:'💡 No Georgian keyboard on your phone? Hand your phone to the Georgian — ask them to tap «⌨️ Georgian keyboard» and type their answer. Then «Translate to me» — and you\'ll understand them.',
@@ -2452,7 +2559,6 @@ var tools={};
 
 
 tools.translator=function(){openModal(TT('translator_title'));
-  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   var myLang=(window.__userLang||'ru').slice(0,2);
   var _hint=TTX('translator_hint_text')||'Type in your language → get Georgian translation on screen. Georgian types below → get translation back.';
   mBody.innerHTML=
@@ -2469,55 +2575,32 @@ tools.translator=function(){openModal(TT('translator_title'));
       '<b>'+TTX('translator_geo')+'</b>'+
       '<textarea class="field" id="geText" rows="3" placeholder="'+TTX('translator_geo_ph_text')+'" style="resize:vertical"></textarea>'+
       '<button class="btn" id="goGe" style="width:100%;margin-top:8px">'+TTX('translator_go_geo')+'</button>'+
-      '<button class="btn sec" id="kbToggle" style="margin-top:8px;width:100%">'+TTX('translator_kb')+'</button>'+
-      '<div id="geKb" style="display:none;margin-top:10px"></div>'+
+      '<button class="btn sec" id="kbToggle" style="margin-top:8px;width:100%">⌨️ '+TTX('translator_kb')+'</button>'+
+      '<div id="geKb" style="display:none;margin-top:10px;padding:10px;background:var(--card-2);border-radius:12px"></div>'+
       '<div id="geOut" style="display:none;margin-top:10px"></div>'+
-    '</div>'+
-    '<p class="hint" style="margin-top:12px">'+TTX('translator_tip_text')+'</p>';
+    '</div>';
 
-  function translate(text,from,to,outEl,speakLng){
-    if(!text||!text.trim()){outEl.style.display='block';outEl.innerHTML='<span class="hint" style="margin:0">'+TTX('translator_empty')+'</span>';return}
+  function translate(text,from,to,outEl){
+    if(!text||!text.trim()){outEl.style.display='block';outEl.innerHTML='<span class="hint" style="margin:0">'+TTX('translator_empty')+'</span>';return;}
     outEl.style.display='block';outEl.innerHTML='<span class="spin"></span>';
     fetch('/.netlify/functions/claude',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:400,
-        system:'Translate from language "'+ from +' " to language "'+to+'". Return ONLY the translation, no explanations.',
+        system:'Translate from language "'+from+'" to language "'+to+'". Return ONLY the translation, no explanations.',
         messages:[{role:'user',content:text.trim()}]})
     }).then(function(r){return r.json();}).then(function(d){
       var tr=d&&d.content&&d.content[0]&&d.content[0].text||'';
-      if(!tr||/MYMEMORY|YOU USED ALL/i.test(tr))throw 0;
+      if(!tr)throw 0;
       outEl.innerHTML='<div style="font-size:1.4rem;font-weight:700;line-height:1.3;color:var(--gold);padding:12px;background:var(--card-2);border-radius:12px">'+tr+'</div>';
-    }).catch(function(){outEl.innerHTML='<span class="hint" style="margin:0">'+TTX('translator_err')+'</span>'});
+    }).catch(function(){outEl.innerHTML='<span class="hint" style="margin:0">'+TTX('translator_err')+'</span>';});
   }
-  function listen(srcLang,targetTextarea,onDone){
-    if(!SR){alert(TTX('translator_no_voice'));return}
-    var r=new SR();r.lang=srcLang;r.interimResults=false;r.maxAlternatives=1;
-    var ta=document.getElementById(targetTextarea);
-    ta.value=TTX('translator_listening');
-    var got=false;
-    r.onresult=function(e){got=true;ta.value=e.results[0][0].transcript;if(onDone)onDone()};
-    r.onerror=function(ev){if(!got)ta.value='';
-      if(ev&&(ev.error==='language-not-supported'||ev.error==='no-speech')&&srcLang==='ka-GE'){
-        alert(TTX('translator_ka_no_voice'));
-      }
-    };
-    r.onend=function(){if(!got&&ta.value===TTX('translator_listening'))ta.value=''};
-    try{r.start()}catch(e){ta.value=''}
-  }
-  // Я → грузину
-  document.getElementById('spkMe').onclick=function(){listen(navigator.language||'ru-RU','meText',function(){
-    translate(document.getElementById('meText').value,myLang,'ka',document.getElementById('meOut'),'ka-GE');
-  })};
   document.getElementById('goMe').onclick=function(){
-    translate(document.getElementById('meText').value,myLang,'ka',document.getElementById('meOut'),'ka-GE');
+    translate(document.getElementById('meText').value,myLang,'ka',document.getElementById('meOut'));
   };
-  // Грузин → мне — после распознавания сразу переводим и показываем крупно
-  document.getElementById('spkGe').onclick=function(){listen('ka-GE','geText',function(){
-    translate(document.getElementById('geText').value,'ka',myLang,document.getElementById('geOut'),myLang+'-'+myLang.toUpperCase());
-  })};
   document.getElementById('goGe').onclick=function(){
-    translate(document.getElementById('geText').value,'ka',myLang,document.getElementById('geOut'),myLang+'-'+myLang.toUpperCase());
+    translate(document.getElementById('geText').value,'ka',myLang,document.getElementById('geOut'));
   };
-  // Грузинская экранная клавиатура (для грузина, у которого её нет в телефоне клиента)
+
+  // Грузинская экранная клавиатура
   var kbRows=[
     ['ქ','წ','ე','რ','ტ','ყ','უ','ი','ო','პ'],
     ['ა','ს','დ','ფ','გ','ჰ','ჯ','კ','ლ'],
@@ -2525,29 +2608,53 @@ tools.translator=function(){openModal(TT('translator_title'));
     ['შ','ჩ','ღ','თ','ძ','ჭ','ჟ']
   ];
   var kbOpen=false;
-  document.getElementById('kbToggle').onclick=function(){
-    var kb=document.getElementById('geKb');
-    kbOpen=!kbOpen;
-    if(!kbOpen){kb.style.display='none';return}
-    kb.style.display='block';
-    if(kb.dataset.built)return;
-    kb.dataset.built='1';
-    var ta=document.getElementById('geText');
-    var html=kbRows.map(function(row){
-      return '<div style="display:flex;gap:4px;justify-content:center;margin-bottom:4px">'+
-        row.map(function(ch){return '<button type="button" class="gk" data-ch="'+ch+'" style="flex:1;min-width:0;padding:11px 0;font-size:1.15rem;background:var(--card-2);border:1px solid var(--line);border-radius:7px;color:var(--ink);cursor:pointer">'+ch+'</button>'}).join('')+
-      '</div>';
-    }).join('')+
-    '<div style="display:flex;gap:4px;justify-content:center">'+
-      '<button type="button" class="gk" data-ch=" " style="flex:3;padding:11px 0;background:var(--card-2);border:1px solid var(--line);border-radius:7px;color:var(--ink);cursor:pointer">␣ пробел</button>'+
-      '<button type="button" id="gkDel" style="flex:1;padding:11px 0;background:var(--card-2);border:1px solid var(--line);border-radius:7px;color:var(--ink);cursor:pointer">⌫</button>'+
-    '</div>';
-    kb.innerHTML=html;
-    kb.querySelectorAll('.gk').forEach(function(b){
-      b.onclick=function(){ta.value+=b.getAttribute('data-ch');ta.focus()};
-    });
-    kb.querySelector('#gkDel').onclick=function(){ta.value=ta.value.slice(0,-1);ta.focus()};
-  };
+  var kbToggle=document.getElementById('kbToggle');
+  if(kbToggle){
+    kbToggle.onclick=function(){
+      var kb=document.getElementById('geKb');
+      kbOpen=!kbOpen;
+      if(!kbOpen){kb.style.display='none';return;}
+      kb.style.display='block';
+      if(kb.dataset.built)return;
+      kb.dataset.built='1';
+      var ta=document.getElementById('geText');
+      var wrap=document.createElement('div');
+      wrap.style.cssText='display:flex;flex-direction:column;gap:4px';
+      kbRows.forEach(function(row){
+        var rowEl=document.createElement('div');
+        rowEl.style.cssText='display:flex;justify-content:center;gap:4px;flex-wrap:wrap';
+        row.forEach(function(ch){
+          var btn=document.createElement('button');
+          btn.textContent=ch;
+          btn.style.cssText='padding:8px 10px;font-size:1.2rem;background:var(--card-2);border:1px solid var(--line);border-radius:8px;cursor:pointer;color:var(--ink);min-width:36px;touch-action:manipulation';
+          btn.onclick=function(){ta.value+=ch;ta.focus();};
+          rowEl.appendChild(btn);
+        });
+        // Backspace
+        var bs=document.createElement('button');
+        bs.textContent='⌫';
+        bs.style.cssText='padding:8px 10px;font-size:1rem;background:var(--card-2);border:1px solid var(--line);border-radius:8px;cursor:pointer;color:var(--muted);touch-action:manipulation';
+        bs.onclick=function(){ta.value=ta.value.slice(0,-1);ta.focus();};
+        rowEl.appendChild(bs);
+        wrap.appendChild(rowEl);
+      });
+      // Space + Clear
+      var bottomRow=document.createElement('div');
+      bottomRow.style.cssText='display:flex;gap:4px;justify-content:center;margin-top:4px';
+      var spaceBtn=document.createElement('button');
+      spaceBtn.textContent='⎵ Space';
+      spaceBtn.style.cssText='flex:2;padding:10px;font-size:.9rem;background:var(--card-2);border:1px solid var(--line);border-radius:8px;cursor:pointer;color:var(--ink);touch-action:manipulation';
+      spaceBtn.onclick=function(){ta.value+=' ';ta.focus();};
+      var clearBtn=document.createElement('button');
+      clearBtn.textContent='✕ Clear';
+      clearBtn.style.cssText='flex:1;padding:10px;font-size:.9rem;background:var(--card-2);border:1px solid var(--line);border-radius:8px;cursor:pointer;color:var(--muted);touch-action:manipulation';
+      clearBtn.onclick=function(){ta.value='';ta.focus();};
+      bottomRow.appendChild(spaceBtn);
+      bottomRow.appendChild(clearBtn);
+      wrap.appendChild(bottomRow);
+      kb.appendChild(wrap);
+    };
+  }
 };
 
 tools.metro=function(){openModal(TT('metro_title'));
@@ -2578,8 +2685,7 @@ tools.metro=function(){openModal(TT('metro_title'));
 
 tools.phrases=function(){openModal(TT('phrases_title'));
   mBody.innerHTML='<p class="hint">'+TTX('phrases_hint')+'</p>'+
-    phrases.map(function(p){return'<div class="phrase"><div><div>'+p[0]+'</div><div class="geo">'+p[1]+'</div><div class="hint" style="margin:0">'+p[2]+'</div></div><button data-say="'+p[1]+'">🔊</button></div>'}).join('');
-  mBody.querySelectorAll('[data-say]').forEach(function(b){b.onclick=function(){speakFromButton(b)}});
+    phrases.map(function(p){return'<div class="phrase"><div><div>'+p[0]+'</div><div class="geo">'+p[1]+'</div><div class="hint" style="margin:0">'+p[2]+'</div></div></div>'}).join('');
 };
 
 tools.currency=function(){openModal(TT('currency_title'));
@@ -2723,10 +2829,9 @@ tools.emergency=function(){openModal(TT('emergency_title'));
     '<a class="list-item" style="display:block;text-decoration:none;color:inherit" href="tel:112"><b>🚨 112</b> — единый экстренный (полиция, скорая, пожарные)</a>'+
     '<a class="list-item" style="display:block;text-decoration:none;color:inherit" href="tel:1441"><b>📞 1441</b> — туристическая горячая линия Грузии (помощь и информация туристам)</a>'+
     '<div class="list-item">'+TTX('emergency_note')+'</div>'+
-    '<div class="phrase"><div><div>'+TTX('emergency_help')+'</div><div class="geo">დამეხმარეთ!</div></div><button data-say="დამეხმარეთ!">🔊</button></div>'+
-    '<div class="phrase"><div><div>'+TTX('emergency_ambulance')+'</div><div class="geo">სასწრაფო დახმარება!</div></div><button data-say="სასწრაფო დახმარება!">🔊</button></div>'+
+    '<div class="phrase"><div><div>'+TTX('emergency_help')+'</div><div class="geo">დამეხმარეთ!</div></div></div>'+
+    '<div class="phrase"><div><div>'+TTX('emergency_ambulance')+'</div><div class="geo">სასწრაფო დახმარება!</div></div></div>'+
     '<p class="hint" style="margin-top:14px">'+TTX('emergency_tip')+'</p>';
-  mBody.querySelectorAll('[data-say]').forEach(function(b){b.onclick=function(){speakFromButton(b)}});
 };
 
 tools.tips=function(){openModal(TT('tips_title'));
@@ -4040,6 +4145,26 @@ var GUIDE_ARTICLES=window.GUIDE_ARTICLES={
     });
   }
 
+  // Добавляем ?lang= ко всем ссылкам /geo/ при загрузке
+  (function(){
+    function addLangToGeoLinks(){
+      var lang=null;
+      try{lang=localStorage.getItem('sak_lang');}catch(e){}
+      if(!lang)return;
+      document.querySelectorAll('a[href^="/geo/"]').forEach(function(a){
+        var href=a.getAttribute('href');
+        if(href&&href.indexOf('?')<0){
+          a.setAttribute('href', href+'?lang='+encodeURIComponent(lang));
+        }
+      });
+    }
+    if(document.readyState==='loading'){
+      document.addEventListener('DOMContentLoaded', addLangToGeoLinks);
+    } else {
+      addLangToGeoLinks();
+    }
+  })();
+
   // __openSlug уже зарегистрирован глобально в начале скрипта
   // Здесь только обновляем его финальной версией с openArticle
   window.__openSlug=function(slug){
@@ -5048,9 +5173,17 @@ if(__pendingTool){var _p=__pendingTool;__pendingTool=null;route(_p);}
   }
   if(!page)return;
 
-  // Определяем язык пользователя
+  // Определяем язык пользователя — сначала из URL ?lang=, потом localStorage
   var lang='ru';
-  try{lang=localStorage.getItem('sak_lang')||navigator.language.slice(0,2)||'ru';}catch(e){}
+  try{
+    var urlLang=new URLSearchParams(window.location.search).get('lang');
+    if(urlLang){
+      lang=urlLang;
+      try{localStorage.setItem('sak_lang',lang);}catch(e){} // сохраняем
+    } else {
+      lang=localStorage.getItem('sak_lang')||navigator.language.slice(0,2)||'ru';
+    }
+  }catch(e){}
   var isRuLike=lang==='ru'||lang==='be'||lang==='uk';
   var langKey=isRuLike?'ru':lang;
 
@@ -5107,6 +5240,31 @@ if(__pendingTool){var _p=__pendingTool;__pendingTool=null;route(_p);}
   });
   document.head.appendChild(ld);
 
+  var ourLangs=['ru','tr','hy','he','az','de','fr','uk','be','kk','uz','tk','tg','ky','md','pl','es','zh-CN','ja','ko','it','pt','nl','hi','ro','lv','lt','et','fa','ar','ka'];
+  var hasNativeTranslation=(langKey==='en'||(ga_page&&ga_page['body_'+langKey]));
+
+  // Если нет нативного перевода — используем Google Translate как страховку
+  if(!hasNativeTranslation && ourLangs.indexOf(lang)>=0 && lang!=='en'){
+    var googleLang=lang==='zh-CN'?'zh':lang==='md'?'ro':lang;
+    var textsToTranslate=[page.title, page.body];
+    Promise.all(textsToTranslate.map(function(text){
+      var url='https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl='+googleLang+'&dt=t&q='+encodeURIComponent(text);
+      return fetch(url).then(function(r){return r.json();}).then(function(d){
+        var out='';
+        if(d&&d[0])d[0].forEach(function(p){if(p&&p[0])out+=p[0];});
+        return out||text;
+      }).catch(function(){return text;});
+    })).then(function(results){
+      displayTitle=results[0]||displayTitle;
+      displayBody=results[1]||displayBody;
+      renderSeoPage();
+    });
+    return; // рендер будет после Google ответит
+  }
+
+  renderSeoPage();
+
+  function renderSeoPage(){
   // Render page in user's language
   document.body.innerHTML=''+
     '<style>'+
@@ -5119,21 +5277,22 @@ if(__pendingTool){var _p=__pendingTool;__pendingTool=null;route(_p);}
     '.related h3{font-size:1rem;color:#666;margin-bottom:12px}'+
     '.tag{display:inline-block;background:#f5f5f5;border-radius:20px;padding:4px 12px;margin:4px;font-size:.85rem;color:#333;text-decoration:none}'+
     '</style>'+
-    '<a href="https://sakartvelo.ai" class="back">🍶 '+displayBack+'</a>'+
+    '<a href="https://sakartvelo.ai/?lang='+encodeURIComponent(lang)+'" class="back">🍶 '+displayBack+'</a>'+
     '<h1>'+displayTitle+'</h1>'+
     '<div class="meta">🇬🇪 sakartvelo.ai</div>'+
     '<p>'+displayBody.replace(/\. /g,'.</p><p>')+'</p>'+
     '<div class="related">'+
       '<h3>'+displayExplore+'</h3>'+
-      '<a href="/geo/tbilisi/" class="tag">🏙️ Tbilisi</a>'+
-      '<a href="/geo/kazbegi/" class="tag">🏔️ Kazbegi</a>'+
-      '<a href="/geo/svaneti/" class="tag">🗻 Svaneti</a>'+
-      '<a href="/geo/batumi/" class="tag">🌊 Batumi</a>'+
-      '<a href="/geo/kakheti/" class="tag">🍷 Kakheti</a>'+
-      '<a href="/geo/qvevri-wine/" class="tag">🫙 Wine</a>'+
-      '<a href="/geo/georgian-cuisine/" class="tag">🍽️ Food</a>'+
-      '<a href="https://sakartvelo.ai" class="tag">🤖 Ask Chacha AI</a>'+
+      '<a href="/geo/tbilisi/?lang='+encodeURIComponent(lang)+'" class="tag">🏙️ Tbilisi</a>'+
+      '<a href="/geo/kazbegi/?lang='+encodeURIComponent(lang)+'" class="tag">🏔️ Kazbegi</a>'+
+      '<a href="/geo/svaneti/?lang='+encodeURIComponent(lang)+'" class="tag">🗻 Svaneti</a>'+
+      '<a href="/geo/batumi/?lang='+encodeURIComponent(lang)+'" class="tag">🌊 Batumi</a>'+
+      '<a href="/geo/kakheti/?lang='+encodeURIComponent(lang)+'" class="tag">🍷 Kakheti</a>'+
+      '<a href="/geo/qvevri-wine/?lang='+encodeURIComponent(lang)+'" class="tag">🫙 Wine</a>'+
+      '<a href="/geo/georgian-cuisine/?lang='+encodeURIComponent(lang)+'" class="tag">🍽️ Food</a>'+
+      '<a href="https://sakartvelo.ai/?lang='+encodeURIComponent(lang)+'" class="tag">🤖 Ask Chacha AI</a>'+
     '</div>';
+  } // end renderSeoPage
   }
   // Запускаем после загрузки DOM — GUIDE_ARTICLES уже доступен
   if(document.readyState==='loading'){
