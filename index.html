@@ -510,27 +510,23 @@ header.top{display:flex;align-items:center;justify-content:space-between;padding
   </div>
 </header>
 
-<!-- Language sheet — iOS drum picker -->
-<div id="langSheet" style="position:fixed;inset:0;z-index:9999;display:none;background:rgba(0,0,0,.7);backdrop-filter:blur(6px)" role="dialog" aria-modal="true">
-  <div style="position:absolute;bottom:0;left:0;right:0;background:var(--card);border-radius:28px 28px 0 0;padding-bottom:calc(20px + env(safe-area-inset-bottom))">
-    <!-- Header -->
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 20px 12px">
-      <button id="langClose" style="background:none;border:none;color:var(--muted);font-size:.95rem;cursor:pointer;padding:4px 8px;touch-action:manipulation">✕</button>
-      <div style="font-family:var(--font-display);font-size:1.05rem;font-weight:800;color:var(--ink)">🌐 Language</div>
-      <button id="langConfirm" style="background:none;border:none;color:var(--gold);font-size:.95rem;font-weight:700;cursor:pointer;padding:4px 8px;touch-action:manipulation">Done</button>
+<!-- Language picker — modern full-screen grid 2026 -->
+<div id="langSheet" style="position:fixed;inset:0;z-index:9999;display:none;flex-direction:column;background:var(--bg);overflow:hidden" role="dialog" aria-modal="true">
+  <!-- Header -->
+  <div style="padding:16px 20px 0;background:var(--bg)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <button id="langClose" style="background:none;border:none;color:var(--muted);font-size:1.5rem;cursor:pointer;padding:4px;touch-action:manipulation;line-height:1">✕</button>
+      <div style="font-family:var(--font-display);font-size:1.1rem;font-weight:800;color:var(--ink)">🌐 Language</div>
+      <div style="width:32px"></div>
     </div>
-    <!-- Drum picker container -->
-    <div style="position:relative;height:216px;overflow:hidden">
-      <!-- Selection highlight -->
-      <div style="position:absolute;top:50%;left:0;right:0;height:44px;transform:translateY(-50%);background:var(--card-2);border-top:1px solid var(--gold);border-bottom:1px solid var(--gold);pointer-events:none;z-index:2"></div>
-      <!-- Fade top -->
-      <div style="position:absolute;top:0;left:0;right:0;height:80px;background:linear-gradient(to bottom,var(--card),transparent);pointer-events:none;z-index:3"></div>
-      <!-- Fade bottom -->
-      <div style="position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to top,var(--card),transparent);pointer-events:none;z-index:3"></div>
-      <!-- Scrollable list -->
-      <div id="langList" style="height:100%;overflow-y:scroll;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:86px 0"></div>
+    <!-- Search -->
+    <div style="position:relative;margin-bottom:14px">
+      <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:1rem">🔍</span>
+      <input id="langSearch" type="text" placeholder="Search..." style="width:100%;padding:10px 12px 10px 36px;background:var(--card-2);border:1px solid var(--line);border-radius:12px;color:var(--ink);font-size:.95rem;outline:none;box-sizing:border-box">
     </div>
   </div>
+  <!-- Grid -->
+  <div id="langList" style="flex:1;overflow-y:auto;padding:0 16px 32px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;align-content:start;-webkit-overflow-scrolling:touch"></div>
 </div>
 
 <main class="wrap">
@@ -761,48 +757,47 @@ gEl.style.transition='opacity .25s';
   var listEl=document.getElementById('langList');
   var btn=document.getElementById('langBtn');
   var closeBtn=document.getElementById('langClose');
-  var confirmBtn=document.getElementById('langConfirm');
+  var searchEl=document.getElementById('langSearch');
   if(!sheet||!listEl||!btn)return;
   var curLang=saved||(navigator.language||'en').slice(0,2).toLowerCase();
 
-  // Build drum picker items
-  var ITEM_H=44;
-  listEl.innerHTML=LANGS.map(function(l){
-    return '<div data-l="'+l[0]+'" style="height:'+ITEM_H+'px;display:flex;align-items:center;justify-content:center;gap:10px;scroll-snap-align:center;cursor:pointer;font-size:1rem;color:var(--ink);font-family:var(--font-body);flex-shrink:0">'+
-      '<span style="font-size:1.4rem">'+l[1]+'</span>'+
-      '<span style="font-size:1rem;font-weight:500">'+l[2]+'</span>'+
-    '</div>';
-  }).join('');
-
-  // Scroll to current language
-  function scrollToLang(code, smooth){
-    var idx=LANGS.findIndex(function(l){return l[0]===code||l[0].slice(0,2)===code;});
-    if(idx<0)idx=0;
-    listEl.scrollTo({top:idx*ITEM_H, behavior:smooth?'smooth':'auto'});
-  }
-
-  // Get currently centered language
-  function getSelectedLang(){
-    var idx=Math.round(listEl.scrollTop/ITEM_H);
-    idx=Math.max(0,Math.min(idx,LANGS.length-1));
-    return LANGS[idx][0];
-  }
-
-  // Highlight center item on scroll
-  listEl.addEventListener('scroll',function(){
-    var idx=Math.round(listEl.scrollTop/ITEM_H);
-    listEl.querySelectorAll('[data-l]').forEach(function(el,i){
-      el.style.opacity=Math.abs(i-idx)===0?'1':Math.abs(i-idx)===1?'0.5':'0.25';
-      el.style.transform='scale('+(Math.abs(i-idx)===0?'1.05':'1')+')';
-      el.style.transition='opacity .15s,transform .15s';
+  function buildGrid(filter){
+    var filtered=filter?LANGS.filter(function(l){
+      return l[2].toLowerCase().indexOf(filter.toLowerCase())>=0;
+    }):LANGS;
+    listEl.innerHTML=filtered.map(function(l){
+      var active=l[0]===curLang||l[0].slice(0,2)===curLang;
+      return '<button data-l="'+l[0]+'" style="'+
+        'display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;'+
+        'padding:12px 6px;border-radius:16px;cursor:pointer;touch-action:manipulation;'+
+        'border:2px solid '+(active?'var(--gold)':'var(--line)')+';'+
+        'background:'+(active?'rgba(212,175,55,.15)':'var(--card)')+';'+
+        'transition:all .15s;min-height:76px;width:100%">'+
+        '<span style="font-size:2rem;line-height:1">'+l[1]+'</span>'+
+        '<span style="font-size:.7rem;font-weight:'+(active?'700':'500')+';text-align:center;'+
+        'line-height:1.2;color:'+(active?'var(--gold)':'var(--ink)')+';word-break:break-word">'+l[2]+'</span>'+
+      '</button>';
+    }).join('');
+    listEl.querySelectorAll('[data-l]').forEach(function(el){
+      el.onclick=function(){
+        var lang=el.getAttribute('data-l');
+        try{localStorage.setItem('sak_lang',lang);}catch(e){}
+        closeSheet();
+        location.reload();
+      };
     });
-  });
+  }
 
   function openSheet(){
-    sheet.style.display='block';
+    sheet.style.display='flex';
+    sheet.style.flexDirection='column';
     document.body.style.overflow='hidden';
-    scrollToLang(curLang, false);
-    setTimeout(function(){listEl.dispatchEvent(new Event('scroll'));},50);
+    if(searchEl)searchEl.value='';
+    buildGrid('');
+    setTimeout(function(){
+      var active=listEl.querySelector('[data-l="'+curLang+'"]');
+      if(active)active.scrollIntoView({block:'center',behavior:'smooth'});
+    },80);
   }
 
   function closeSheet(){
@@ -810,22 +805,14 @@ gEl.style.transition='opacity .25s';
     document.body.style.overflow='';
   }
 
-  function applyLang(){
-    var lang=getSelectedLang();
-    try{localStorage.setItem('sak_lang',lang);}catch(e){}
-    closeSheet();
-    location.reload();
+  if(searchEl){
+    searchEl.addEventListener('input',function(){
+      buildGrid(searchEl.value.trim());
+    });
   }
 
   btn.onclick=openSheet;
   if(closeBtn)closeBtn.onclick=closeSheet;
-  if(confirmBtn)confirmBtn.onclick=applyLang;
-  sheet.onclick=function(e){if(e.target===sheet)closeSheet();};
-
-  // Tap on item scrolls to it
-  listEl.querySelectorAll('[data-l]').forEach(function(el,i){
-    el.onclick=function(){listEl.scrollTo({top:i*ITEM_H,behavior:'smooth'});};
-  });
 })();
 
 var userLang=window.__forcedLang||(function(){
@@ -2516,40 +2503,54 @@ function TTX(k){
 async function autoTranslateToolTexts(targetLang){
   if(TOOL_TEXTS_I18N[targetLang])return;
   var cacheKey='sak_ttx_'+targetLang;
-  try{var raw=sessionStorage.getItem(cacheKey);if(raw&&JSON.parse(raw)){window.__ttxCache=JSON.parse(raw);return;}}catch(e){}
+  try{var raw=sessionStorage.getItem(cacheKey);if(raw){var parsed=JSON.parse(raw);if(parsed&&Object.keys(parsed).length>5){window.__ttxCache=parsed;return;}}}catch(e){}
   var enTexts=TOOL_TEXTS_I18N['en'];
   var keys=Object.keys(enTexts);
   var translated={};
-  // Фильтруем HTML-ключи — переводим только чистый текст
   var toTranslate=keys.filter(function(k){return!/<[a-z]/i.test(enTexts[k]);});
   var htmlKeys=keys.filter(function(k){return/<[a-z]/i.test(enTexts[k]);});
   htmlKeys.forEach(function(k){translated[k]=enTexts[k];});
 
-  try{
-    // Один запрос к Anthropic — переводим всё батчем
-    var pairs=toTranslate.map(function(k){return k+'|||'+enTexts[k];}).join('\n');
-    var res=await fetch('/.netlify/functions/claude',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-haiku-4-5',
-        max_tokens:4000,
-        system:'You are a translator. Translate the values in key|||value pairs from English to language code: '+targetLang+'. Keep keys unchanged. Return ONLY key|||translated_value pairs, one per line. No explanations.',
-        messages:[{role:'user',content:pairs}]
-      })
-    });
-    var data=await res.json();
-    var text=data&&data.content&&data.content[0]&&data.content[0].text||'';
-    text.split('\n').forEach(function(line){
-      var sep=line.indexOf('|||');
-      if(sep<0)return;
-      var k=line.slice(0,sep).trim();
-      var v=line.slice(sep+3).trim();
-      if(k&&v&&enTexts[k]!==undefined)translated[k]=v;
-    });
-  }catch(e){
-    // Fallback: используем EN
-    toTranslate.forEach(function(k){translated[k]=enTexts[k];});
+  // Translate in 2 batches to avoid token limit
+  var BATCH=60;
+  for(var bi=0;bi<toTranslate.length;bi+=BATCH){
+    var batch=toTranslate.slice(bi,bi+BATCH);
+    try{
+      var pairs=batch.map(function(k){return k+'|||'+enTexts[k];}).join('\n');
+      var res=await fetch('/.netlify/functions/claude',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          model:'claude-haiku-4-5',
+          max_tokens:6000,
+          system:'Translate values from English to language code: '+targetLang+'. Keep keys unchanged. Return ONLY key|||translated_value pairs, one per line.',
+          messages:[{role:'user',content:pairs}]
+        })
+      });
+      var data=await res.json();
+      var text=data&&data.content&&data.content[0]&&data.content[0].text||'';
+      text.split('\n').forEach(function(line){
+        var sep=line.indexOf('|||');
+        if(sep<0)return;
+        var k=line.slice(0,sep).trim();
+        var v=line.slice(sep+3).trim();
+        if(k&&v&&enTexts[k]!==undefined)translated[k]=v;
+      });
+    }catch(e){
+      // Страховка — Google Translate для каждого текста
+      var googleLang=targetLang==='zh-CN'?'zh':targetLang==='md'?'ro':targetLang;
+      for(var gi=0;gi<batch.length;gi++){
+        var gKey=batch[gi];
+        try{
+          var gUrl='https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl='+googleLang+'&dt=t&q='+encodeURIComponent(enTexts[gKey]);
+          var gr=await fetch(gUrl);
+          var gd=await gr.json();
+          var gtr='';
+          if(gd&&gd[0])gd[0].forEach(function(p){if(p&&p[0])gtr+=p[0];});
+          translated[gKey]=gtr||enTexts[gKey];
+        }catch(ge){translated[gKey]=enTexts[gKey];}
+      }
+    }
   }
   window.__ttxCache=translated;
   try{sessionStorage.setItem(cacheKey,JSON.stringify(translated));}catch(e){}
@@ -4627,15 +4628,30 @@ tools.about=function(){openModal('🍶 О нас');
 /* ============ РОУТЕР ============ */
 var __toolTextsPreloaded=false;
 function route(name){
-  // Preload tool texts translation on first tool click
+  var ul=window.__userLang||'ru';
+  // Если перевод уже есть — открываем сразу
+  if(TOOL_TEXTS_I18N[ul]||ul==='en'||ul==='ru'||ul==='hy'){
+    if(tools[name])tools[name]();
+    return;
+  }
+  // Проверяем кеш в sessionStorage
+  try{
+    var raw=sessionStorage.getItem('sak_ttx_'+ul);
+    if(raw){window.__ttxCache=JSON.parse(raw);if(tools[name])tools[name]();return;}
+  }catch(e){}
+  // Переводим первый раз — показываем спиннер и ждём
   if(!__toolTextsPreloaded){
     __toolTextsPreloaded=true;
-    var ul=window.__userLang||'ru';
-    if(!TOOL_TEXTS_I18N[ul]&&ul!=='en'){
-      autoTranslateToolTexts(ul).catch(function(){});
-    }
+    openModal('🌐');
+    if(mBody)mBody.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted)"><span class="spin"></span><br><br>Translating...</div>';
+    autoTranslateToolTexts(ul).then(function(){
+      if(tools[name])tools[name]();
+    }).catch(function(){
+      if(tools[name])tools[name]();
+    });
+  } else {
+    if(tools[name])tools[name]();
   }
-  if(tools[name])tools[name]();
 }
 window.__route=route;
 document.getElementById('bento').addEventListener('click',function(e){
