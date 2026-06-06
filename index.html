@@ -2658,7 +2658,9 @@ tools.translator=function(){openModal(TT('translator_title'));
   }
 };
 
-tools.metro=function(){openModal(TT('metro_title'));
+tools.metro=async function(){openModal(TT('metro_title'));
+  var ul=window.__userLang||'ru';
+  if(!TOOL_TEXTS_I18N[ul])await autoTranslateToolTexts(ul);
   var opts=function(arr,line){return arr.map(function(s,i){return'<option value="'+line+':'+i+'">'+s+'</option>'}).join('')};
   mBody.innerHTML=
     '<p class="hint">'+TTX('metro_hint')+'</p>'+
