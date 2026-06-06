@@ -47,8 +47,6 @@
   "areaServed": { "@type": "Country", "name": "Georgia" },
   "priceRange": "Free"
 }
-
-})();
 </script>
 
 <style>
@@ -534,7 +532,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;padding
 <main class="wrap">
 
   <section class="hero">
-    <div class="trust" data-i18n-html="trust">🆓 Бесплатно навсегда · оплата через <b>проверенных гигантов</b></div>
+    <div class="trust" data-i18n="trust">🆓 Бесплатно навсегда · оплата через <b>проверенных гигантов</b></div>
     <h1 data-i18n-html="h1" elementtiming="lcp-h1">Твой друг <span class="em">Чача</span><br>в Грузии 🇬🇪</h1>
     <p class="greet" id="greet">გამარჯობა!</p>
     <p class="sub" data-i18n="sub">Не просто планировщик — заботливый спутник на всю поездку. Спроси что угодно про Грузию.</p>
@@ -710,513 +708,6 @@ header.top{display:flex;align-items:center;justify-content:space-between;padding
 
 
 <link rel="manifest" href="/manifest.json">
-
-
-<style>
-/* ===== ДИЗАЙН-ТОКЕНЫ ===== */
-:root{
-  --wine:#7a1220; --wine-deep:#5a0c18; --wine-bright:#c8334a;
-  --gold:#e3b35e; --gold-soft:#f0d39a;
-  --cream:#fbf6ee; --ink:#f4e9dc; --muted:#b09a8c;
-  --bg:#120a0c; --card:#1d1113; --card-2:#26171a;
-  --line:rgba(227,179,94,.22);
-  --ok:#3f9d6a; --radius:20px;
-  --shadow:0 18px 50px -18px rgba(0,0,0,.7);
-  --font-display:'Fraunces',Georgia,serif;font-display:swap;
-  --font-body:'Manrope',-apple-system,system-ui,sans-serif;
-}
-[data-theme="light"]{
-  --wine:#da291c; --wine-bright:#e8112d; --gold:#c8911f; --gold-soft:#e0b450;
-  --cream:#fff6f4; --bg:#fff6f4; --card:#ffffff; --card-2:#fff0ee;
-  --ink:#1f1413; --muted:#8a7068; --line:rgba(218,41,28,.16);
-  --shadow:0 18px 50px -22px rgba(218,41,28,.30);
-}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-a,button,[onclick]{touch-action:manipulation;}
-html{scroll-behavior:smooth}
-/* Плавные переходы между состояниями (2026, прогрессивно) */
-@view-transition{navigation:auto}
-@media(prefers-reduced-motion:no-preference){
-  .modal,.chat-shell.full{view-transition-name:none}
-}
-.hero h1,.section-title,.law h3{text-wrap:balance}
-body{
-  font-family:var(--font-body);background:var(--bg);color:var(--ink);
-  line-height:1.5;overflow-x:hidden;
-  min-height:100vh;min-height:100dvh;
-  padding-bottom:env(safe-area-inset-bottom);
-}
-/* Атмосфера: мягкий градиент-меш, чистый CSS, вес ноль */
-body::before{
-  content:"";position:fixed;inset:0;z-index:-2;
-  background:
-    radial-gradient(55% 40% at 88% 8%,rgba(168,36,58,.22),transparent 60%),
-    radial-gradient(45% 35% at 6% 30%,rgba(216,164,74,.12),transparent 55%),
-    radial-gradient(70% 60% at 50% 112%,rgba(90,12,24,.55),transparent 60%);
-}
-[data-theme="light"] body::before{
-  background:
-    radial-gradient(75% 48% at 82% -6%,rgba(232,17,45,.20),transparent 60%),
-    radial-gradient(60% 45% at 12% 4%,rgba(218,41,28,.14),transparent 58%),
-    radial-gradient(70% 50% at 50% 106%,rgba(200,145,31,.12),transparent 60%);
-}
-/* Тонкое зерно — тактильность 2026, чистый SVG, вес ~0, не мешает кликам */
-body::after{
-  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.05;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-[data-theme="light"] body::after{opacity:.04}
-.wrap{max-width:760px;margin:0 auto;padding:0 18px}
-
-/* ===== ШАПКА ===== */
-header.top{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:16px 18px;max-width:760px;margin:0 auto;
-}
-.logo{display:flex;align-items:center;gap:9px;font-family:var(--font-display);
-  font-weight:900;font-size:1.28rem;letter-spacing:-.5px}
-.logo .mark{font-size:1.5rem}
-.logo b{color:var(--gold)}
-.theme-btn{
-  background:var(--card);border:1px solid var(--line);color:var(--ink);
-  width:42px;height:42px;border-radius:50%;font-size:1.1rem;cursor:pointer;
-  display:grid;place-items:center;transition:transform .2s
-}
-.theme-btn:active{transform:scale(.9)}
-
-/* ===== ГЕРОЙ ===== */
-.hero{text-align:center;padding:18px 0 8px;position:relative}
-/* Тёмная подложка-сияние позади заголовка — гарантирует читаемость на любом фоне */
-.hero::before{
-  content:"";position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);
-  width:120%;height:150%;z-index:-1;pointer-events:none;
-  background:radial-gradient(closest-side,rgba(18,10,12,.85),rgba(18,10,12,.45) 55%,transparent 80%);
-}
-[data-theme="light"] .hero::before{
-  background:radial-gradient(closest-side,rgba(253,242,230,.85),rgba(253,242,230,.4) 55%,transparent 80%);
-}
-.hero h1{
-  font-family:var(--font-display);font-weight:900;
-  font-size:clamp(2.1rem,8vw,3.3rem);line-height:1.04;
-  letter-spacing:-1.5px;margin-bottom:14px;
-  color:var(--ink);
-  text-shadow:0 2px 4px rgba(0,0,0,.55),0 1px 22px rgba(0,0,0,.4);
-}
-[data-theme="light"] .hero h1{
-  color:var(--wine);
-  text-shadow:0 1px 2px rgba(255,255,255,.7);
-}
-.hero h1 .em{color:var(--gold);font-style:italic}
-.hero .greet{
-  min-height:1.6em;font-size:1.05rem;color:var(--gold-soft);
-  font-weight:600;margin-bottom:6px;
-  transition:opacity .25s ease;
-}
-[data-theme="light"] .hero .greet{color:var(--wine-bright)}
-.hero .sub{color:var(--muted);font-size:1rem;max-width:430px;margin:0 auto 20px}
-
-/* Бейдж доверия */
-.trust{
-  display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;
-  background:var(--card);border:1px solid var(--line);
-  padding:9px 15px;border-radius:100px;font-size:.82rem;color:var(--muted);
-  margin-bottom:8px
-}
-.trust b{color:var(--gold)}
-
-/* ===== ЧАТ ===== */
-.chat-shell{
-  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
-  box-shadow:var(--shadow);overflow:hidden;margin:18px 0;
-  transition:all .35s cubic-bezier(.4,0,.2,1)
-}
-.chat-shell.full{
-  position:fixed;inset:0;z-index:90;margin:0;border-radius:0;border:none;
-  display:flex;flex-direction:column
-}
-.chat-head{
-  display:none;align-items:center;gap:12px;padding:14px 16px;
-  border-bottom:1px solid var(--line);background:var(--card-2);
-  padding-top:calc(14px + env(safe-area-inset-top))
-}
-.chat-shell.full .chat-head{display:flex}
-.back-btn{background:none;border:none;color:var(--gold);font-size:.95rem;
-  font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px}
-.chat-head .who{display:flex;align-items:center;gap:9px;font-weight:700}
-.chat-head .ava{width:34px;height:34px;border-radius:50%;
-  background:linear-gradient(135deg,var(--wine-bright),var(--gold));
-  display:grid;place-items:center;font-size:1.1rem}
-
-.messages{padding:18px 16px;display:flex;flex-direction:column;gap:14px;
-  max-height:50vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.chat-shell.full .messages{max-height:none;flex:1}
-.msg{max-width:86%;padding:12px 15px;border-radius:16px;font-size:.96rem;
-  animation:pop .3s ease;white-space:pre-wrap;word-wrap:break-word}
-@keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.msg.bot{background:var(--card-2);border:1px solid var(--line);color:var(--ink);
-  border-bottom-left-radius:5px;align-self:flex-start}
-.msg.me{background:linear-gradient(135deg,var(--wine-bright),var(--wine));
-  color:#fff;border-bottom-right-radius:5px;align-self:flex-end}
-.msg.bot a.book{
-  display:block;margin-top:9px;padding:11px 14px;border-radius:12px;
-  background:linear-gradient(135deg,var(--gold),var(--gold-soft));
-  color:#3a2410;font-weight:700;text-decoration:none;font-size:.9rem;
-  text-align:center;transition:transform .15s
-}
-.msg.bot a.book:active{transform:scale(.97)}
-.ai-note{margin-top:8px;font-size:.72rem;line-height:1.3;color:#a89a8e;font-style:italic}
-.typing{display:flex;gap:4px;padding:4px 0}
-.typing span{width:7px;height:7px;border-radius:50%;background:var(--gold);
-  animation:blink 1.2s infinite}
-.typing span:nth-child(2){animation-delay:.2s}
-.typing span:nth-child(3){animation-delay:.4s}
-@keyframes blink{0%,60%,100%{opacity:.25}30%{opacity:1}}
-
-/* Поле ввода */
-.input-row{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line);
-  background:var(--card);padding-bottom:calc(12px + env(safe-area-inset-bottom))}
-.input-row input{
-  flex:1;background:var(--card-2);border:1px solid var(--line);
-  border-radius:13px;padding:13px 15px;color:var(--ink);font-size:16px;
-  font-family:var(--font-body);outline:none
-}
-.input-row input:focus{border-color:var(--gold)}
-.icon-btn{border:none;border-radius:13px;width:50px;cursor:pointer;
-  font-size:1.2rem;display:grid;place-items:center;flex-shrink:0;transition:transform .15s}
-.icon-btn:active{transform:scale(.92)}
-.mic{background:var(--card-2);border:1px solid var(--line)}
-.mic.on{background:var(--wine-bright);animation:pulse 1s infinite}
-@keyframes pulse{50%{box-shadow:0 0 0 8px rgba(168,36,58,.25)}}
-.send{background:linear-gradient(135deg,var(--gold),var(--gold-soft));color:#3a2410}
-
-/* Быстрые кнопки */
-.quick{display:flex;gap:8px;flex-wrap:wrap;padding:0 12px 14px}
-.quick button{
-  background:var(--card-2);border:1px solid var(--line);color:var(--ink);
-  padding:8px 13px;border-radius:100px;font-size:.84rem;cursor:pointer;
-  font-family:var(--font-body);transition:all .15s
-}
-.quick button:active{transform:scale(.95);border-color:var(--gold)}
-
-/* ===== СТРАХОВКА-БАННЕР ===== */
-.law{
-  background:linear-gradient(135deg,var(--card-2),var(--card));
-  border:1px solid var(--gold);border-radius:var(--radius);
-  padding:16px 18px;margin:18px 0;display:flex;gap:13px;align-items:flex-start
-}
-.law .ic{font-size:1.6rem;flex-shrink:0}
-.law h3,.law h2,.law .law-heading{font-family:var(--font-display);font-size:1.05rem;margin-bottom:4px}
-.law p{font-size:.88rem;color:var(--muted);margin-bottom:9px}
-.law a{display:inline-block;background:var(--gold);color:#3a2410;font-weight:700;
-  padding:9px 16px;border-radius:11px;text-decoration:none;font-size:.86rem}
-
-/* ===== БЕНТО-СЕТКА ИНСТРУМЕНТОВ ===== */
-.section-title{font-family:var(--font-display);font-weight:900;font-size:1.5rem;
-  margin:30px 0 4px;letter-spacing:-.5px}
-.section-sub{color:var(--muted);font-size:.92rem;margin-bottom:16px}
-.bento{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-bottom:22px}
-.tile{
-  background:var(--card);border:1px solid var(--line);border-radius:16px;
-  padding:15px;cursor:pointer;
-  transition:transform .18s,border-color .18s,box-shadow .18s;
-  display:flex;flex-direction:column;gap:5px;min-height:96px;text-align:left;
-  font-family:var(--font-body);color:var(--ink);
-  box-shadow:0 1px 2px rgba(0,0,0,.06),0 8px 22px -16px rgba(0,0,0,.35);
-}
-[data-theme="light"] .tile{box-shadow:0 1px 2px rgba(122,18,32,.05),0 10px 26px -18px rgba(122,18,32,.30)}
-/* Squircle-углы (Apple-стиль) — только где поддерживается, иначе обычное скругление */
-@supports (corner-shape:squircle){
-  .tile,.trust,.law,.chat-shell,.share button,.field,.btn{corner-shape:squircle;border-radius:22px}
-}
-.tile:active{transform:scale(.97);border-color:var(--gold)}
-.tile.big{grid-column:span 2}
-.tile .ti{font-size:1.6rem}
-.tile h3,.tile h4{font-size:.98rem;font-weight:700;text-wrap:balance}
-.tile p{font-size:.78rem;color:var(--muted);line-height:1.35}
-
-/* ===== МОДАЛКА ИНСТРУМЕНТА ===== */
-.modal{position:fixed;inset:0;will-change:transform;contain:layout style;z-index:100;display:none;flex-direction:column;
-  background:var(--bg)}
-.modal.open{display:flex}
-.modal-head{display:flex;align-items:center;gap:12px;padding:16px;
-  padding-top:calc(16px + env(safe-area-inset-top));
-  border-bottom:1px solid var(--line);background:var(--card)}
-.modal-head h3{font-family:var(--font-display);font-size:1.2rem;flex:1}
-.modal-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:18px 16px;
-  padding-bottom:calc(30px + env(safe-area-inset-bottom))}
-
-/* Утилитарные элементы инструментов */
-.field{width:100%;background:var(--card-2);border:1px solid var(--line);
-  border-radius:12px;padding:13px 15px;color:var(--ink);font-size:16px;
-  font-family:var(--font-body);outline:none;margin-bottom:10px}
-.field:focus{border-color:var(--gold)}
-.btn{background:linear-gradient(135deg,var(--gold),var(--gold-soft));color:#3a2410;
-  border:none;border-radius:12px;padding:13px;font-weight:700;font-size:.95rem;
-  cursor:pointer;width:100%;font-family:var(--font-body)}
-.btn:active{transform:scale(.98)}
-.btn.sec{background:var(--card-2);border:1px solid var(--line);color:var(--ink)}
-.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--muted)}
-.consent-row{display:flex;gap:9px}
-.consent-row .btn{flex:1}
-.result{background:var(--card);border:1px solid var(--line);border-radius:12px;
-  padding:14px;margin-top:12px;font-size:.95rem}
-.big-num{font-family:var(--font-display);font-size:2rem;font-weight:900;color:var(--gold)}
-.row2{display:flex;gap:9px}
-.row2>*{flex:1}
-.phrase{display:flex;justify-content:space-between;align-items:center;gap:10px;
-  padding:12px 14px;background:var(--card);border:1px solid var(--line);
-  border-radius:12px;margin-bottom:8px}
-.phrase .geo{font-family:var(--font-display);font-weight:600;color:var(--gold)}
-.phrase button{background:var(--card-2);border:1px solid var(--line);
-  border-radius:9px;padding:7px 10px;cursor:pointer;font-size:1rem;flex-shrink:0;color:var(--ink)}
-.mini-say{background:var(--card-2);border:1px solid var(--line);border-radius:8px;
-  padding:4px 9px;cursor:pointer;font-size:1rem;margin-left:6px;color:var(--ink)}
-.mini-say:active{transform:scale(.9)}
-.list-item{padding:12px 14px;background:var(--card);border:1px solid var(--line);
-  border-radius:12px;margin-bottom:8px;cursor:pointer}
-.list-item:active{border-color:var(--gold)}
-.hint{font-size:.82rem;color:var(--muted);margin:8px 0 14px;line-height:1.5}
-.chk{display:flex;align-items:center;gap:11px;padding:12px 14px;background:var(--card);
-  border:1px solid var(--line);border-radius:12px;margin-bottom:8px;cursor:pointer}
-.chk.done{opacity:.5}
-.chk .box{width:24px;height:24px;border-radius:7px;border:2px solid var(--gold);
-  flex-shrink:0;display:grid;place-items:center;font-size:.9rem}
-.chk.done .box{background:var(--gold);color:#3a2410}
-.chk.done span{text-decoration:line-through}
-
-/* ===== SHARE ===== */
-.share{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:8px 0 26px}
-.share button{width:52px;height:52px;border-radius:50%;border:1px solid var(--line);
-  background:var(--card);cursor:pointer;transition:transform .15s,box-shadow .15s;color:var(--ink);
-  display:grid;place-items:center;padding:0}
-.share button svg{width:24px;height:24px;display:block}
-.share button:active{transform:scale(.88)}
-.share button:hover{box-shadow:0 6px 18px -6px rgba(0,0,0,.4)}
-.share .wa svg{fill:#25D366}
-.share .tg svg{fill:#26A5E4}
-.share .fb svg{fill:#1877F2}
-.share .tt svg{fill:#ffffff}
-[data-theme="light"] .share .tt svg{fill:#010101}
-.share .copy svg{fill:var(--gold)}
-.share .copy.done svg{fill:var(--ok)}
-
-/* ===== FOOTER / ЮР ===== */
-footer{border-top:1px solid var(--line);padding:24px 0 36px;margin-top:20px;
-  text-align:center;color:var(--muted);font-size:.82rem}
-footer a{color:var(--gold);cursor:pointer;text-decoration:none}
-footer .links{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
-
-/* ===== COOKIE / СОГЛАСИЕ ===== */
-.consent{position:fixed;left:12px;right:12px;bottom:12px;z-index:120;
-  background:var(--card);border:1px solid var(--gold);border-radius:16px;
-  padding:15px 17px;box-shadow:var(--shadow);display:none;
-  max-width:600px;margin:0 auto}
-.consent.show{display:block}
-.consent p{font-size:.84rem;color:var(--muted);margin-bottom:11px}
-.consent a{color:var(--gold);cursor:pointer}
-
-/* Матовое стекло — только где поддерживается, иначе обычный фон (защита) */
-@supports ((-webkit-backdrop-filter:blur(2px)) or (backdrop-filter:blur(2px))){
-  .chat-head,.modal-head,.consent,.trust{
-    -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)
-  }
-  .chat-shell.full .chat-head{background:rgba(38,23,26,.72)}
-  [data-theme="light"] .chat-shell.full .chat-head{background:rgba(255,248,238,.72)}
-}
-.spin{display:inline-block;width:18px;height:18px;border:2px solid var(--line);
-  border-top-color:var(--gold);border-radius:50%;animation:sp .7s linear infinite}
-@keyframes sp{to{transform:rotate(360deg)}}
-
-/* ===== LANGUAGE PICKER ===== */
-#langPicker{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;overflow-y:auto}
-#langPicker.hidden{display:none}
-.lp-title{font-family:var(--font-display);font-size:1.8rem;font-weight:900;color:var(--ink);margin-bottom:6px;text-align:center}
-.lp-sub{color:var(--muted);font-size:.95rem;margin-bottom:24px;text-align:center}
-.lp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;width:100%;max-width:400px}
-.lp-btn{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 12px;cursor:pointer;font-family:var(--font-body);font-size:.95rem;color:var(--ink);display:flex;align-items:center;gap:10px;transition:all .18s;text-align:left}
-.lp-btn:active{transform:scale(.97);border-color:var(--gold)}
-.lp-btn .lp-flag{font-size:1.5rem;flex-shrink:0}
-.lp-btn .lp-name{font-weight:600;font-size:.9rem}
-.lp-btn .lp-native{font-size:.75rem;color:var(--muted)}
-.lp-other{margin-top:12px;width:100%;max-width:400px;background:var(--card-2);border:1px solid var(--line);border-radius:16px;padding:14px 16px;cursor:pointer;font-family:var(--font-body);font-size:.9rem;color:var(--muted);text-align:center}
-.lp-logo{font-family:var(--font-display);font-size:1.1rem;font-weight:900;margin-bottom:28px;color:var(--gold)}
-
-
-
-
-
-
-/* Скрываем верхний бар */
-
-body{top:0!important;}
-
-.goog-logo-link{display:none!important;}
-/* ===== GT DROPDOWN — компактный на телефоне ===== */
-
-
-
-/* Одна колонка вместо таблицы */
-
-
-/* ===== GEORGIA GUIDE SECTION ===== */
-.guide-section{margin-bottom:28px}
-.guide-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.guide-card{
-  background:var(--card);border:1px solid var(--line);border-radius:18px;
-  padding:16px 14px;text-align:left;text-decoration:none;
-  transition:transform .12s,border-color .12s;
-  display:flex;flex-direction:column;gap:4px;
-  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
-  cursor:pointer;
-}
-.guide-card:hover{transform:scale(.98);border-color:var(--gold)}
-.guide-card:active{transform:scale(.97);border-color:var(--gold)}
-.guide-card .gc-title,.gc-title{font-family:var(--font-display);font-weight:900;font-size:.95rem;color:var(--ink);line-height:1.2}
-.guide-card .gc-sub,.gc-sub{font-size:.78rem;color:var(--muted);line-height:1.3}
-.guide-card.big{grid-column:span 2;flex-direction:row;align-items:center;gap:14px;padding:14px 16px}
-.guide-card.big .gc-emoji{font-size:2.2rem;margin:0;flex-shrink:0}
-/* Guide article modal */
-.geo-article{padding:4px 0}
-.geo-article h2{font-family:var(--font-display);font-size:1.3rem;font-weight:900;color:var(--ink);margin-bottom:8px}
-.geo-article p{font-size:.95rem;line-height:1.6;color:var(--ink);margin-bottom:12px}
-.geo-article .geo-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
-.geo-article .geo-tag{background:var(--card-2);border:1px solid var(--line);border-radius:20px;padding:5px 12px;font-size:.8rem;color:var(--muted);cursor:pointer}
-.geo-article .geo-tag:active{border-color:var(--gold);color:var(--gold)}
-
-/* View Transitions API 2026 */
-@view-transition { navigation: auto; }
-::view-transition-old(root){ animation: 150ms ease-out fade-out; }
-::view-transition-new(root){ animation: 150ms ease-in fade-in; }
-@keyframes fade-out { from { opacity:1; } to { opacity:0; } }
-@keyframes fade-in { from { opacity:0; } to { opacity:1; } }
-/* Modal view transition */
-.modal{ view-transition-name: modal; }
-
-/* Performance 2026 */
-.bento { content-visibility: auto; contain-intrinsic-size: 0 800px; }
-img { decoding: async; }
-.tile:hover, .tile:active { will-change: transform; }
-* { -webkit-tap-highlight-color: transparent; }
-</style>
-<!-- Security -->
-<meta name="google-site-verification" content="tjOmIJpY7WpgZvvS_tf0iWos6iBUgKsqN20orTZOzDY" />
-<meta http-equiv="X-Content-Type-Options" content="nosniff">
-<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-<!-- Performance: preconnect -->
-
-<script type="speculationrules">
-{
-  "prerender": [
-    {
-      "source": "list",
-      "urls": ["/geo/tbilisi/","/geo/kazbegi/","/geo/batumi/","/geo/svaneti/","/geo/kakheti/"]
-    }
-  ],
-  "prefetch": [
-    {
-      "source": "document",
-      "eagerness": "moderate"
-    }
-  ]
-}
-</script>
-<meta name="theme-color" content="#1a0d10">
-<style>
-/* Critical above-fold CSS — inline, zero network cost, eliminates LCP render delay */
-body{background:#120a0c;color:#f4e9dc;font-family:'Manrope',-apple-system,system-ui,sans-serif;margin:0;overflow-x:hidden}
-h1{font-family:'Fraunces',Georgia,serif;font-size:clamp(2rem,8vw,3rem);font-weight:900;line-height:1.1;text-wrap:balance;color:var(--ink,#f4e9dc)}
-.hero{text-align:center;padding:20px 16px 0}
-.trust{background:var(--card,#1d1113);border:1px solid rgba(227,179,94,.22);border-radius:50px;padding:10px 18px;display:inline-flex;align-items:center;gap:8px;font-size:.82rem;margin-bottom:16px;color:var(--ink,#f4e9dc)}
-header.top{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;max-width:760px;margin:0 auto}
-.logo{display:flex;align-items:center;gap:9px;font-family:'Fraunces',Georgia,serif;font-weight:900;font-size:1.28rem;letter-spacing:-.5px;color:var(--ink,#f4e9dc)}
-.logo b{color:var(--gold,#e3b35e)}
-.theme-btn{background:var(--card,#1d1113);border:1px solid rgba(227,179,94,.22);color:var(--ink,#f4e9dc);width:42px;height:42px;border-radius:50%;font-size:1.1rem;cursor:pointer;display:grid;place-items:center}
-.hero .em{color:var(--gold,#e3b35e);font-style:italic}
-[data-theme="light"]{background:#fff6f4}
-[data-theme="light"] h1{color:#da291c}
-[data-theme="light"] .trust{background:#fff;border-color:rgba(218,41,28,.16);color:#1f1413}
-[data-theme="light"] .theme-btn{background:#fff;border-color:rgba(218,41,28,.16);color:#1f1413}
-[data-theme="light"] .logo{color:#1f1413}
-</style>
-</head>
-<body data-theme="dark">
-<!-- ===== LANGUAGE PICKER ONBOARDING ===== -->
-<div id="langPicker" class="hidden">
-  <div class="lp-logo">🍶 sakartvelo.ai</div>
-  <div class="lp-title">Choose your language</div>
-  <div class="lp-sub">Выберите язык · زبان خود را انتخاب کنید</div>
-  <div class="lp-grid">
-    <button class="lp-btn" data-lang="en"><span class="lp-flag">🇬🇧</span><div><div class="lp-name">English</div><div class="lp-native">English</div></div></button>
-    <button class="lp-btn" data-lang="ru"><span class="lp-flag">🇷🇺</span><div><div class="lp-name">Русский</div><div class="lp-native">Russian</div></div></button>
-    <button class="lp-btn" data-lang="de"><span class="lp-flag">🇩🇪</span><div><div class="lp-name">Deutsch</div><div class="lp-native">German</div></div></button>
-    <button class="lp-btn" data-lang="fr"><span class="lp-flag">🇫🇷</span><div><div class="lp-name">Français</div><div class="lp-native">French</div></div></button>
-    <button class="lp-btn" data-lang="tr"><span class="lp-flag">🇹🇷</span><div><div class="lp-name">Türkçe</div><div class="lp-native">Turkish</div></div></button>
-    <button class="lp-btn" data-lang="ar"><span class="lp-flag">🇸🇦</span><div><div class="lp-name">العربية</div><div class="lp-native">Arabic</div></div></button>
-    <button class="lp-btn" data-lang="he"><span class="lp-flag">🇮🇱</span><div><div class="lp-name">עברית</div><div class="lp-native">Hebrew</div></div></button>
-    <button class="lp-btn" data-lang="fa"><span class="lp-flag">🇮🇷</span><div><div class="lp-name">فارسی</div><div class="lp-native">Persian</div></div></button>
-    <button class="lp-btn" data-lang="es"><span class="lp-flag">🇪🇸</span><div><div class="lp-name">Español</div><div class="lp-native">Spanish</div></div></button>
-    <button class="lp-btn" data-lang="uk"><span class="lp-flag">🇺🇦</span><div><div class="lp-name">Українська</div><div class="lp-native">Ukrainian</div></div></button>
-    <button class="lp-btn" data-lang="be"><span class="lp-flag">🇧🇾</span><div><div class="lp-name">Беларуская</div><div class="lp-native">Belarusian</div></div></button>
-    <button class="lp-btn" data-lang="ka"><span class="lp-flag">🇬🇪</span><div><div class="lp-name">ქართული</div><div class="lp-native">Georgian</div></div></button>
-  </div>
-  <button class="lp-other" id="lpOther">🌐 Other language (auto-translate)</button>
-</div>
-
-
-
-<header class="top">
-  <div class="logo"><span class="mark">🍶</span> sakartvelo<b>.ai</b></div>
-  <div style="display:flex;gap:8px;align-items:center">
-    <button class="theme-btn" id="installBtn" aria-label="Install app" title="Add to home screen" style="display:none">📲</button>
-    <button class="theme-btn" id="langBtn" aria-label="Language" title="Choose language">🌐</button>
-    <button class="theme-btn" id="themeBtn" aria-label="Тема">🌙</button>
-  </div>
-</header>
-
-<!-- Language picker — modern full-screen grid 2026 -->
-<div id="langSheet" style="position:fixed;inset:0;z-index:9999;display:none;flex-direction:column;background:var(--bg);overflow:hidden" role="dialog" aria-modal="true">
-  <!-- Header -->
-  <div style="padding:16px 20px 0;background:var(--bg)">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-      <button id="langClose" style="background:none;border:none;color:var(--muted);font-size:1.5rem;cursor:pointer;padding:4px;touch-action:manipulation;line-height:1">✕</button>
-      <div style="font-family:var(--font-display);font-size:1.1rem;font-weight:800;color:var(--ink)">🌐 Language</div>
-      <div style="width:32px"></div>
-    </div>
-    <!-- Search -->
-    <div style="position:relative;margin-bottom:14px">
-      <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:1rem">🔍</span>
-      <input id="langSearch" type="text" placeholder="Search..." style="width:100%;padding:10px 12px 10px 36px;background:var(--card-2);border:1px solid var(--line);border-radius:12px;color:var(--ink);font-size:.95rem;outline:none;box-sizing:border-box">
-    </div>
-  </div>
-  <!-- Grid -->
-  <div id="langList" style="flex:1;overflow-y:auto;padding:0 16px 32px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;align-content:start;-webkit-overflow-scrolling:touch"></div>
-</div>
-
-
-
-
-
-<!-- УНИВЕРСАЛЬНАЯ МОДАЛКА -->
-<div class="modal" id="modal">
-  <div class="modal-head">
-    <button class="back-btn" id="modalBack">← Назад</button>
-    <h3 id="modalTitle"></h3>
-    <button class="theme-btn" id="modalLangBtn" aria-label="Language" style="font-size:1.1rem">🌐</button>
-  </div>
-  <div class="modal-body" id="modalBody"></div>
-</div>
-
-<!-- СОГЛАСИЕ -->
-<div class="consent" id="consent">
-  <p data-i18n="consent_text">Мы используем только необходимые cookie для работы сайта (тема, чек-лист, согласие) — они хранятся в вашем телефоне, не на сервере. Подробнее в <a data-tool="privacy">Политике</a> и <a data-tool="terms">Условиях</a>.</p>
-  <div class="consent-row">
-    <button class="btn ghost" id="consentNo" data-i18n="consent_no">Отклонить</button>
-    <button class="btn" id="consentOk" data-i18n="consent">Принимаю 🍶</button>
-  </div>
-</div>
-
-
-<link rel="manifest" href="/manifest.json">
 <script>
 /* ===================== SAKARTVELO.AI — ядро ===================== */
 // Глобальные заглушки — регистрируются СРАЗУ, до всех IIFE
@@ -1291,7 +782,6 @@ gEl.style.transition='opacity .25s';
       el.onclick=function(){
         var lang=el.getAttribute('data-l');
         try{localStorage.setItem('sak_lang',lang);}catch(e){}
-        window.__ttxCache=null; // сбрасываем кеш при смене языка
         closeSheet();
         location.reload();
       };
@@ -1751,47 +1241,7 @@ var I18N={
     f_note:'Chаchа anвizar otakareе։ Мenk miвnavor enk. 🇬🇪',
     consent:'Hamajoghvum em 🍶',consent_no:'Мerzhel',
     disclaimer:'Chаchа AI е ev karoh е skhales։ Khndrem stugel 🍶',
-    hello:'Gamarjoba! 🍶 Ես Chacha-ն եմկ؊ դզեր ՎրասՏանի ընկերն։ օգնում եմ ամրագրել հյուրանոցներ, շրջագայություններ, Տրանսֆեր և 2026-ի աՊահովագրություն։ Ուր ևնք գնում?',
-    q_svaneti:'🏔️ Սվանեթի',
-    q_batumi:'🏨 Բաթումի',
-    q_kakheti:'🍷 Կախեթի',
-    q_transfer:'✈️ Տրանսֆեր',
-    q_tbilisi:'🏙️ Թբիլիսի',
-    q_kazbegi:'⛰️ Կազբեգի',
-    q_kutaisi:'🦅 ԿուՏաիսի',
-    q_bakuriani:'⛷️ Բակուռիանի',
-    q_gudauri:'🪂 Գուդաուրի',
-    q_borjomi:'💧 Բորջոմի',
-    q_vardzia:'🏛️ Վարդզիա',
-    q_ureki:'🏖️ Ուռեկի',
-    q_david:'🕌 Դավիթ Գառեջա',
-    q_mtskheta:'⛪ Մցխեթա',
-    q_sighnaghi:'🌹 Սիգնագի',
-    dq_svaneti:'ՎրասՏանի Սվանեթի 3-օրյա շրջագայություն',
-    dq_batumi:'հյուրանոց Բաթումիում ցովի եզրին',
-    dq_kakheti:'գինիի շրջագայություն Կախեթիում',
-    dq_transfer:'Տրանսֆեր Թբիլիսիի օդանաՊորդից',
-    dq_tbilisi:'Թբիլիսիում ինչ տեսալ',
-    dq_kazbegi:'Կազբեգի գերգեթի եկեղեցի trekking',
-    dq_kutaisi:'կուՏաիսի Prometheus կագհչավ Martvili',
-    dq_bakuriani:'լևռնադահուկ Բակուռիանիում',
-    dq_gudauri:'Գուդաուրի trekking paraplan',
-    dq_borjomi:'Բորջոմի հանքային ջուր',
-    dq_vardzia:'Վարդզիա խխորագային վանկ',
-    dq_ureki:'Ուռեկի սևռ ավազան',
-    dq_david:'Դավիթ Գառեջա վանկ',
-    dq_mtskheta:'Մցխեթա հին մայրակաղակ',
-    dq_sighnaghi:'Սիգնագի սիրո կաղաք',
-    link_book:'ամրագրել հյուրանոց',
-    link_rent:'վարդզել մեքենա',
-    link_find:'գտնել շրջագայություն',
-    link_book2:'ամրագրել Տրանսֆեր',
-    link_find2:'գտնել չվերթներ',
-    link_buy:'գնել eSIM',
-    link_lugg:'բեռնակ Պահոց',
-    link_insu:'ՃամՓորդական աՊահովագրություն',
-    link_extr:'ավելացության աՊահովագրություն',
-        ph:'Ուhargel haghordahum Chachayеn...',back:'← Verapo',
+    ph:'Ուhargel haghordahum Chachayеn...',back:'← Verapo'
   },
   az:{
     trust:'🆓 Həmişə pulsuz · ödəniş <b>etibarlı platformlar</b> vasitəsilə',
@@ -1853,47 +1303,7 @@ var I18N={
     f_note:'恰恰是免费助手。我们是中介：提供建议，预订和付款直接在官方平台完成。🇬🇪',
     consent:'我同意 🍶',consent_no:'拒绝',
     disclaimer:'恰恰是AI，可能出错。请核实回答 🍶',
-    ph:'向恰恰发送消息...',back:'← 返回',
-    hello:'Gamarjoba, genatsvale! 🍶 我是Chacha——你的格鲁吉亚朋友。我帮助预订酒店、旅游、接送和2026年保险。我们要去哪里？',
-    q_svaneti:'🏔️ 斯瓦涅提',
-    q_batumi:'🏨 巴统',
-    q_kakheti:'🍷 卡赫季',
-    q_transfer:'✈️ 接送',
-    q_tbilisi:'🏙️ 第比利斯',
-    q_kazbegi:'⛰️ 卡兹别吉',
-    q_kutaisi:'🦅 库塔伊西',
-    q_bakuriani:'⛷️ 巴库里亚尼',
-    q_gudauri:'🪂 古道里',
-    q_borjomi:'💧 波尔若米',
-    q_vardzia:'🏛️ 瓦尔齐亚',
-    q_ureki:'🏖️ 乌雷基',
-    q_david:'🕌 大卫格雷加',
-    q_mtskheta:'⛪ 穆兹赫塔',
-    q_sighnaghi:'🌹 锡格纳吉',
-    dq_svaneti:'我想要一个3天的斯瓦涅提之旅',
-    dq_batumi:'巴统海边的酒店',
-    dq_kakheti:'卡赫季葡萄酒之旅',
-    dq_transfer:'从第比利斯机场接送',
-    dq_tbilisi:'第比利斯有什么值得参观的',
-    dq_kazbegi:'卡兹别吉格尔盖提教堂徒步吉普车',
-    dq_kutaisi:'库塔伊西普罗米修斯洞穴马尔特维利峡谷',
-    dq_bakuriani:'在巴库里亚尼滑雪',
-    dq_gudauri:'古道里徒步滑翔伞景色',
-    dq_borjomi:'波尔若米矿泉水度假村',
-    dq_vardzia:'瓦尔齐亚洞窟修道院',
-    dq_ureki:'乌雷基黑沙滩',
-    dq_david:'大卫格雷加修道院',
-    dq_mtskheta:'穆兹赫塔古都有什么值得参观的',
-    dq_sighnaghi:'锡格纳吉爱情之城葡萄酒',
-    link_book:'预订酒店',
-    link_rent:'租车',
-    link_find:'寻找旅游',
-    link_book2:'预订接送',
-    link_find2:'查找航班',
-    link_buy:'购买eSIM',
-    link_lugg:'行李寄存',
-    link_insu:'旅行保险',
-    link_extr:'额外保险'
+    ph:'向恰恰发送消息...',back:'← 返回'
   },
   pl:{
     trust:'🆓 Bezpłatnie na zawsze · płatność przez <b>zaufane platformy</b>',
@@ -2068,7 +1478,6 @@ function getSystem(){
   // Всегда берём актуальный язык — из localStorage (после смены через барабан)
   var lang='en';
   try{lang=localStorage.getItem('sak_lang')||window.__userLang||userLang||'en';}catch(e){lang=window.__userLang||userLang||'en';}
-  if(lang==='zh-CN')lang='zh'; // normalize for Chacha
   window.__userLang=lang; // синхронизируем
   // Маппинг языковых кодов в названия для промпта
   var langNames={ru:'Russian',tr:'Turkish',de:'German',fr:'French',ar:'Arabic',
@@ -2136,7 +1545,7 @@ function linkLabel(url){
   var LABELS={
     booking:{ru:'Забронировать отель',en:'Book hotel',de:'Hotel buchen',fr:'Réserver hôtel',
              tr:'Otel rezervasyonu',ar:'حجز فندق',he:'הזמן מלון',fa:'رزرو هتل',
-             es:'Reservar hotel',uk:'Забронювати готель',be:'Забранаваць гатэль',ka:'სასტუმროს ჯავშანი',hy:'Ամրագրել հյուրանոց',zh:'预订酒店'},
+             es:'Reservar hotel',uk:'Забронювати готель',be:'Забранаваць гатэль',ka:'სასტუმროს ჯავშანი',hy:'Ամրագրել հյուրանոց'},
     rental:  {ru:'Арендовать авто',en:'Rent a car',de:'Auto mieten',fr:'Louer une voiture',
              tr:'Araba kirala',ar:'استئجار سيارة',he:'שכור רכב',fa:'اجاره ماشین',
              es:'Alquilar coche',uk:'Орендувати авто',be:'Узяць аўтамабіль',ka:'მანქანის დაქირავება',hy:'Վարձել մեքենա'},
@@ -2145,7 +1554,7 @@ function linkLabel(url){
              es:'Buscar tour',uk:'Знайти тур',be:'Знайсці тур',ka:'ტური',hy:'Գտնել շրջագայություն'},
     transfer:{ru:'Заказать трансфер',en:'Book transfer',de:'Transfer buchen',fr:'Réserver transfert',
              tr:'Transfer rezervasyonu',ar:'حجز نقل',he:'הזמן העברה',fa:'رزرو ترانسفر',
-             es:'Reservar traslado',uk:'Замовити трансфер',be:'Замовіць трансфер',ka:'ტრანსფერი',hy:'Ամրագրել տրանսֆեր',zh:'预订接送'},
+             es:'Reservar traslado',uk:'Замовити трансфер',be:'Замовіць трансфер',ka:'ტრანსფერი',hy:'Ամրագրել տրանսֆեր'},
     flights: {ru:'Найти авиабилеты',en:'Find flights',de:'Flüge suchen',fr:'Trouver des vols',
              tr:'Uçuş bul',ar:'إيجاد رحلات',he:'מצא טיסות',fa:'پیدا کردن پرواز',
              es:'Buscar vuelos',uk:'Знайти авіаквитки',be:'Знайсці авіябілеты',ka:'ფრენები',hy:'Գտնել չվերթներ'},
@@ -2157,10 +1566,10 @@ function linkLabel(url){
              es:'Consigna equipaje',uk:'Камера схову',be:'Камера захоўвання',ka:'ბარგის შენახვა',hy:'Ուղեբեռի պահեստ'},
     insurance:{ru:'Страховка для въезда',en:'Travel insurance',de:'Reiseversicherung',fr:'Assurance voyage',
              tr:'Seyahat sigortası',ar:'تأمين السفر',he:'ביטוח נסיעות',fa:'بیمه سفر',
-             es:'Seguro de viaje',uk:'Страховка(UA)',be:'Страхоўка',ka:'სამოგზაურო დაზღვევა',hy:'Ճամփորդական ապահովագրություն',zh:'旅行保险'},
+             es:'Seguro de viaje',uk:'Страховка(UA)',be:'Страхоўка',ka:'სამოგზაურო დაზღვევა',hy:'Ճամփորդական ապահովագրություն'},
     insExtra:{ru:'Доп. страховка',en:'Extra insurance',de:'Zusatzversicherung',fr:'Assurance extra',
              tr:'Ek sigorta',ar:'تأمين إضافي',he:'ביטוח נוסף',fa:'بیمه اضافی',
-             es:'Seguro extra',uk:'Додаткова страховка',be:'Дад. страхоўка',ka:'დამატებითი',hy:'Լրացուցիչ ապահովագրություն',zh:'额外保险'},
+             es:'Seguro extra',uk:'Додаткова страховка',be:'Дад. страхоўка',ka:'დამატებითი',hy:'Լրացուցիչ ապահովագրություն'},
     open:    {ru:'Открыть',en:'Open',de:'Öffnen',fr:'Ouvrir',tr:'Aç',ar:'فتح',
              he:'פתח',fa:'باز کن',es:'Abrir',uk:'Відкрити',be:'Адкрыць',ka:'გახსნა',hy:'Բացել'}
   };
@@ -5256,85 +4665,658 @@ __toolsReady=true;
 if(__pendingTool){var _p=__pendingTool;__pendingTool=null;route(_p);}
 })();
 
-var CARD_TRANSLATIONS={
-    ru:{
-      guideTitle:'🇬🇪 Путеводитель по Грузии',
-      guideSub:'Проверенные факты — читай перед поездкой',
-      'gc-tbilisi-title':'🏙️ Тбилиси','gc-tbilisi-sub':'Столица · серные бани · Старый город',
-      'gc-kazbegi-title':'🏔️ Казбеги','gc-kazbegi-sub':'Горы · церковь Гергети · 5047м',
-      'gc-batumi-title':'🌊 Батуми','gc-batumi-sub':'Чёрное море · субтропики · ночная жизнь',
-      'gc-kakheti-title':'🍷 Вино Кахетии','gc-kakheti-sub':'8000 лет виноделия · 500 сортов',
-      'gc-svaneti-title':'🗻 Сванетия','gc-svaneti-sub':'Средневековые башни · ЮНЕСКО',
-      'gc-food-title':'🍽️ Грузинская кухня','gc-food-sub':'Хинкали · хачапури · суфра',
-      'gc-mtskheta-title':'🛕 Мцхета','gc-mtskheta-sub':'Древняя столица · ЮНЕСКО · 327 н.э.',
-      'gc-vardzia-title':'🏛️ Вардзия','gc-vardzia-sub':'Пещерный город · царица Тамара',
-      'gc-borjomi-title':'💧 Боржоми','gc-borjomi-sub':'Минеральная вода · национальный парк',
-      'gc-gudauri-title':'⛷️ Гудаури','gc-gudauri-sub':'2990м · пороша · декабрь–апрель',
-      'gc-alphabet-title':'📜 Грузинский алфавит','gc-alphabet-sub':'1600 лет · шедевр ЮНЕСКО',
-      'gc-qvevri-title':'🫙 Вино в квеври','gc-qvevri-sub':'ЮНЕСКО · древний метод в квеври'
-    },
-    tr:{
-      guideTitle:'🇬🇪 Gürcistan Rehberi',guideSub:'Gürcistan hakkında doğrulanmış bilgiler',
-      'gc-tbilisi-title':'🏙️ Tiflis','gc-tbilisi-sub':'Başkent · kükürt hamamları · Eski Şehir',
-      'gc-kazbegi-title':'🏔️ Kazbegi','gc-kazbegi-sub':'Dağlar · Gergeti Kilisesi · 5047m',
-      'gc-batumi-title':'🌊 Batum','gc-batumi-sub':'Karadeniz · subtropik · gece hayatı',
-      'gc-kakheti-title':'🍷 Kahetya Şarabı','gc-kakheti-sub':'8000 yıl · 500 üzüm çeşidi',
-      'gc-svaneti-title':'🗻 Svaneti','gc-svaneti-sub':'Ortaçağ kuleleri · UNESCO · Mestia',
-      'gc-food-title':'🍽️ Gürcü Mutfağı','gc-food-sub':'Hinkali · Hacapuri · Supra',
-      'gc-mtskheta-title':'🛕 Mtskheta','gc-mtskheta-sub':'Antik başkent · UNESCO · MS 327',
-      'gc-vardzia-title':'🏛️ Vardzia','gc-vardzia-sub':'Mağara şehri · Kraliçe Tamar',
-      'gc-borjomi-title':'💧 Borjomi','gc-borjomi-sub':'Maden suyu · milli park',
-      'gc-gudauri-title':'⛷️ Gudauri Kayak','gc-gudauri-sub':'2990m · toz kar · Ara-Nis',
-      'gc-alphabet-title':'📜 Gürcü Alfabesi','gc-alphabet-sub':'1600 yıllık · UNESCO',
-      'gc-qvevri-title':'🫙 Qvevri Şarabı','gc-qvevri-sub':'UNESCO · antik kil küp geleneği'
-    },
-    hy:{
-      'guideTitle':'🇬🇪 ՎրասՏանի ողեցույց',
-      'guideSub':'սՏուգված ՓասՏեր ՎրասՏանի մասին',
-      'gc-tbilisi-title':'🏙️ Թբիլիսի',
-      'gc-tbilisi-sub':'մայրակաղակ · ծկաթաբաղնիքներ · հին կաղաք',
-      'gc-kazbegi-title':'🏔️ Կազբեգի',
-      'gc-kazbegi-sub':'լեռներ · գերգեթի եկեղեցի · 5047մ',
-      'gc-batumi-title':'🌊 Բաթումի',
-      'gc-batumi-sub':'սևռ ցով · մևրջարեկաբարկային · գիշերային կյանք',
-      'gc-kakheti-title':'🍷 Կախեթի գինի',
-      'gc-kakheti-sub':'8000 Տարի · 500 սորՏ',
-      'gc-svaneti-title':'🗻 Սվանեթի',
-      'gc-svaneti-sub':'միջնադարյան աշՏառակներ · Յունեսկօ · մեսթիա',
-      'gc-food-title':'🍽️ ՎրասՏանական խոհանոց',
-      'gc-food-sub':'խինկալի · խաչաՊուռի · սուՓրա',
-      'gc-mtskheta-title':'🛕 Մցխեթա',
-      'gc-mtskheta-sub':'հին մայրակաղակ · Յունեսկօ · 337 թվականիչ',
-      'gc-vardzia-title':'🏛️ Վարդզիա',
-      'gc-vardzia-sub':'խխորագային կաղաք · թամար թագուհի · 12-երկրորդ դար',
-      'gc-borjomi-title':'💧 Բորջոմի',
-      'gc-borjomi-sub':'հանքային ջուր · ազգային Պարկ',
-      'gc-gudauri-title':'⛷️ Գուդաուրի լևռնադահուկ',
-      'gc-gudauri-sub':'2990մ · ՓաՓուկ Ձյուն · դեկեմբեր-աՊրիլ',
-      'gc-alphabet-title':'📜 ՎրասՏանական այբուբեն',
-      'gc-alphabet-sub':'1600 Տարի · Յունեսկօ',
-      'gc-qvevri-title':'🫙 կվևվրի գինի',
-      'gc-qvevri-sub':'Յունեսկօ · հին կավանդութ'
-  },
-};
+</script>
 
-  // Применяем перевод для текущего языка
-  var langKey=isRuLike?'ru':(lang==='zh-CN'?'zh':lang);
-  var T=CARD_TRANSLATIONS[langKey];
-  if(T){
-    Object.keys(T).forEach(function(id){
-      if(id==='guideTitle'){
-        var el=document.getElementById('guideTitle');
-        if(el)el.textContent=T[id];
-      }else if(id==='guideSub'){
-        var el=document.getElementById('guideSubtitle');
-        if(el)el.textContent=T[id];
-      }else{
-        var el=document.querySelector('[data-card="'+id+'"]');
-        if(el)el.textContent=T[id];
-      }
-    });
+
+
+<!-- ===== 100 SEO PAGES ===== -->
+<script type="text/x-seo-data" id="seoData">
+[
+{
+"slug": "tbilisi",
+"title": "Tbilisi — Capital of Georgia",
+"body": "Tbilisi (Georgian: თბილისი) is the capital and largest city of Georgia, with a population of about 1.1 million. Founded in the 5th century AD by King Vakhtang I Gorgasali, the city sits along the Mtkvari (Kura) River. The name derives from the Georgian word 'tbili' (warm), referring to the natural sulfur hot springs. The city covers 726 km² and sits at an elevation of 380–770 metres above sea level. Tbilisi has been the capital of Georgia since 1122 AD when King David the Builder recaptured it from the Seljuk Turks. The Old Town (Abanotubani) is renowned for its carved wooden balconies and domed sulfur baths, which have been operating since the 5th century. Narikala Fortress, overlooking the city, dates back to the 4th century and has been rebuilt by Arabs, Persians and Mongols. The city hosts over 40 theatres and 30 museums.",
+"keywords": "Tbilisi travel guide, Georgia capital, things to do in Tbilisi"
+},
+{
+"slug": "tbilisi-sulfur-baths",
+"title": "Tbilisi Sulfur Baths — Abanotubani",
+"body": "The Abanotubani (Bath District) of Tbilisi has been famous for its natural sulfur springs since the 5th century. The springs emerge at 37–38°C and contain hydrogen sulfide, believed to have therapeutic properties for skin and joints. The domed brick bathhouses — Chreli-Abano, Gulo Abano and others — date from the 17th–18th centuries. Persian traveller Evliya Çelebi described the baths as the finest in the world in 1647. The water flows from underground springs beneath the Mtkvari river and does not need heating. Private rooms cost 20–60 GEL per hour. Public pools are available from 5 GEL. According to legend, King Vakhtang Gorgasali discovered the springs when his pheasant fell into a hot pool while hunting.",
+"keywords": "Tbilisi sulfur baths, Abanotubani, Georgia spa"
+},
+{
+"slug": "narikala-fortress",
+"title": "Narikala Fortress Tbilisi — History and Views",
+"body": "Narikala is an ancient fortress overlooking Tbilisi, first mentioned in the 4th century as a Sassanid Persian fortification. The name means 'little fortress' in Turkic. The fortress was expanded by the Umayyad Arabs in the 7th–8th centuries, then further by the Mongols in the 13th century. A massive earthquake in 1827 destroyed much of the structure. Today the ruins cover an area of about 4,000 m². The fortress can be reached by cable car from Rike Park or by a 20-minute walk from the Old Town. Inside the walls stands the reconstructed Church of St Nicholas (12th century, rebuilt 1996). The fortress offers panoramic views of the Old Town, Mtkvari River and the giant Mother of Georgia statue (20 metres tall, erected 1958).",
+"keywords": "Narikala fortress Tbilisi, Old Town, Georgia history"
+},
+{
+"slug": "peace-bridge-tbilisi",
+"title": "Peace Bridge Tbilisi — Architecture and Facts",
+"body": "The Peace Bridge (Georgian: მშვიდობის ხიდი) in Tbilisi was designed by Italian architect Michele De Lucchi and opened on 24 May 2010. It spans the Mtkvari River connecting Rike Park with the Old Town. The bridge is 156 metres long and 22 metres wide. Its steel and glass canopy is supported by a single arch and contains 1,539 LED elements that illuminate at night. The bridge was constructed in just 13 months at a cost of approximately 20 million GEL. It is now one of the most photographed landmarks in Tbilisi. The LED lighting system creates different colour patterns and is visible from several kilometres away.",
+"keywords": "Peace Bridge Tbilisi, modern architecture Georgia, Mtkvari bridge"
+},
+{
+"slug": "kazbegi",
+"title": "Kazbegi — Gateway to the High Caucasus",
+"body": "Kazbegi (officially Stepantsminda) is a small town in northeastern Georgia at an elevation of 1,740 metres, located 157 km from Tbilisi along the Georgian Military Highway. The town sits at the foot of Mount Kazbek (Georgian: მყინვარწვერი, Mkinvartsveri), which rises to 5,047 metres — the third highest peak in Georgia and one of the major summits of the Caucasus. The Gergeti Trinity Church (Tsminda Sameba), perched at 2,170 metres on a hill above the town, was built in the 14th century. The church served as a refuge for Georgian national treasures during Persian and Mongol invasions. The drive from Tbilisi via the Georgian Military Highway passes through the Jvari Pass at 2,395 metres.",
+"keywords": "Kazbegi Georgia, Stepantsminda, Gergeti Trinity Church, Mount Kazbek"
+},
+{
+"slug": "gergeti-church",
+"title": "Gergeti Trinity Church — Sacred Site at 2170m",
+"body": "Gergeti Trinity Church (Georgian: გერგეტის სამება) stands at 2,170 metres above sea level on a rocky hill above the village of Gergeti in the Kazbegi district. The church was built in the 14th century and belongs to the Georgian Orthodox Church. It is dedicated to the Holy Trinity. The church consists of a main hall, a bell tower and a small chapel. During the Persian invasion of the 16th–18th centuries, Georgia's most sacred objects — including the cross of St Nino — were stored here for safekeeping. The hike from Stepantsminda takes about 1.5–2 hours on foot or 20–30 minutes by 4WD vehicle. The church is active and services are held regularly. Photography inside requires permission.",
+"keywords": "Gergeti Trinity Church, Kazbegi, Georgia mountains, Tsminda Sameba"
+},
+{
+"slug": "svaneti",
+"title": "Svaneti — Medieval Towers and Mountain Wilderness",
+"body": "Svaneti (Georgian: სვანეთი) is a historic region in northwestern Georgia, situated in the Greater Caucasus at elevations between 1,000 and 2,500 metres. The region is famous for its medieval defensive towers — over 175 still standing — built between the 9th and 12th centuries. The towers served as family fortresses and watchtowers. The regional capital Mestia sits at 1,500 metres. Svaneti has been a UNESCO World Heritage Site since 1996. The Svan people speak Svan, a South Caucasian language unrelated to Georgian, spoken by approximately 30,000 people. The region produces honey and is known for its traditional cuisine including kubdari (meat pie). Mount Shkhara (5,193 m) — the highest peak in Georgia — is located in Svaneti.",
+"keywords": "Svaneti Georgia, medieval towers, UNESCO, Mestia, Svan people"
+},
+{
+"slug": "mestia",
+"title": "Mestia — Capital of Svaneti",
+"body": "Mestia (Georgian: მესტია) is the administrative centre of Svaneti, situated at 1,500 metres above sea level in the Enguri River valley. The population is approximately 2,500. The town has a small airport (Queen Tamar Airport) opened in 2010 with flights from Tbilisi. Mestia features approximately 30 medieval Svan towers and the Svaneti History and Ethnography Museum, which holds medieval icons, manuscripts and goldwork rescued from remote mountain churches. The museum collection includes items dating from the 8th to 18th centuries. The Hatsvali ski resort (1,920–2,350 m) operates 4 km from Mestia with 9 km of ski runs. The town is the starting point for treks to Ushba (4,710 m) and the Koruldi Lakes.",
+"keywords": "Mestia Svaneti, Georgia mountain town, Svan towers, ski resort"
+},
+{
+"slug": "ushba",
+"title": "Ushba — The Terror of the Caucasus",
+"body": "Ushba (Georgian: უშბა) is a twin-peaked mountain in Svaneti, rising to 4,710 metres. It is considered one of the most technically challenging peaks in the Caucasus and has been called 'the terror of the Caucasus' by mountaineers due to its near-vertical faces and unpredictable weather. The two summits — North Peak (4,694 m) and South Peak (4,710 m) — are connected by a narrow ridge. The first ascent of the South Peak was made in 1887 by an Anglo-Georgian expedition. The mountain receives heavy snowfall and creates its own micro-climate. From Mestia, Ushba is visible dominating the skyline to the south.",
+"keywords": "Ushba mountain Svaneti, Caucasus climbing, Georgia mountaineering"
+},
+{
+"slug": "batumi",
+"title": "Batumi — Black Sea Capital of Adjara",
+"body": "Batumi (Georgian: ბათუმი) is the capital of the Autonomous Republic of Adjara and Georgia's main Black Sea port, with a population of approximately 170,000. The city sits at sea level on the eastern coast of the Black Sea, just 12 km from the Turkish border. The climate is humid subtropical — palm trees, bamboo and tea grow alongside citrus fruits. Batumi Botanical Garden, founded in 1912, covers 113 hectares and contains over 2,000 plant species from five continents. The city was rebuilt extensively between 2004–2012, resulting in a distinctive skyline mixing Georgian medieval towers with futurist skyscrapers and Art Nouveau facades. The average annual temperature is 14°C. The city receives approximately 2,500 mm of rainfall per year — one of the wettest cities in the former Soviet Union.",
+"keywords": "Batumi Georgia, Black Sea, Adjara, subtropical climate"
+},
+{
+"slug": "batumi-botanical-garden",
+"title": "Batumi Botanical Garden — 113 Hectares of Biodiversity",
+"body": "The Batumi Botanical Garden was founded in 1912 by Russian botanist Andrei Krasnov on the slopes of the Mtirala (Crying) Mountain, 9 km north of Batumi city centre. It covers 113 hectares at elevations of 0–200 metres above sea level. The garden holds over 2,000 species of plants from five continents, including Colchic flora, bamboo groves, Japanese garden section, New Zealand section and a 300-year-old Judas tree. The Colchic (Caucasian) forest section preserves tree species unchanged since the Tertiary period. Admission costs 15 GEL for adults. A cable car connects the lower and upper sections. The garden is open year-round. It is one of the oldest botanical gardens in the Caucasus.",
+"keywords": "Batumi Botanical Garden, Georgia, subtropical plants, Adjara"
+},
+{
+"slug": "ali-nino-batumi",
+"title": "Ali and Nino Monument — Batumi's Moving Sculpture",
+"body": "The Ali and Nino kinetic sculpture in Batumi was created by Georgian sculptor Tamar Kvesitadze and unveiled in 2010. The two 8-metre steel figures — representing the eponymous characters from the 1937 novel 'Ali and Nino' — move slowly toward each other, merge into one form, and then pass through each other. The cycle takes 10 minutes. The sculpture stands on Batumi Boulevard near the Miracle Park. It has become one of the most photographed landmarks in Georgia. The novel 'Ali and Nino', attributed to Kurban Said, tells the story of an Azerbaijani Muslim man and a Georgian Christian woman in early 20th-century Baku. The sculpture weighs approximately 27 tonnes and runs on an electric motor.",
+"keywords": "Ali Nino sculpture Batumi, kinetic art Georgia, Batumi Boulevard"
+},
+{
+"slug": "kakheti",
+"title": "Kakheti — Heart of Georgian Wine Country",
+"body": "Kakheti (Georgian: კახეთი) is the easternmost region of Georgia, producing over 70% of the country's wine. The region lies in the Alazani River valley, sheltered by the Greater Caucasus to the north and the Tsiv-Gombori Range to the south. Wine cultivation in Kakheti dates back at least 8,000 years, supported by archaeological evidence of grape seeds and clay vessel fragments. The region contains approximately 35,000 hectares of vineyards. The main wine-producing districts are Telavi, Gurjaani, Kvareli, Sighnaghi and Dedoplistskaro. Kakheti is home to over 400 indigenous grape varieties. The most celebrated are Rkatsiteli (white) and Saperavi (red). The Alazani valley averages 300 sunny days per year.",
+"keywords": "Kakheti wine region, Georgia wine, Alazani valley, Saperavi"
+},
+{
+"slug": "qvevri-wine",
+"title": "Qvevri Wine — 8000 Years of Georgian Tradition",
+"body": "The Georgian method of fermenting and ageing wine in qvevri (Georgian: ქვევრი) — large clay vessels buried underground — was added to the UNESCO List of Intangible Cultural Heritage of Humanity in 2013. Qvevri range in size from 20 litres to 3,000 litres and are lined with beeswax. Wine ferments in qvevri for 6 months in contact with grape skins, seeds and stems — producing amber-coloured wines with high tannins. This skin-contact method predates all known European wine styles by thousands of years. The oldest evidence of qvevri winemaking dates to 6,000 BC. Qvevri are hand-crafted by specialist potters, primarily in the village of Vardisubani, Kakheti. A large qvevri takes 3–4 months to produce.",
+"keywords": "Qvevri wine Georgia, UNESCO, amber wine, natural wine, Kakheti"
+},
+{
+"slug": "sighnaghi",
+"title": "Sighnaghi — City of Love in Kakheti",
+"body": "Sighnaghi (Georgian: სიღნაღი) is a small hilltop town in Kakheti, perched at 800 metres above sea level with panoramic views of the Alazani valley and the Greater Caucasus. Population approximately 2,000. The town is encircled by a 4.5 km fortress wall with 23 towers, built in the 18th century by King Erekle II. Sighnaghi is nicknamed the 'City of Love' because its civil registry office operates 24 hours a day, 7 days a week — the only such office in Georgia. The town was extensively restored in 2007 and features colourful facades, cobblestone streets and wooden balconies. The Bodbe Convent, 2 km from Sighnaghi, holds the tomb of St Nino, who brought Christianity to Georgia in 327 AD.",
+"keywords": "Sighnaghi Georgia, City of Love, Kakheti fortress, St Nino Bodbe"
+},
+{
+"slug": "alaverdi-cathedral",
+"title": "Alaverdi Cathedral — Kakheti's Sacred Giant",
+"body": "Alaverdi Cathedral (Georgian: ალავერდის ტაძარი) in Kakheti was built in the early 11th century by the Kakhetian King Kvirike III and stands 55 metres tall — making it one of the tallest medieval structures in Georgia. The cathedral is dedicated to St George and belongs to the Georgian Orthodox Church. It was built on the site of a 6th-century basilica constructed by the Assyrian monk Joseph Alaverdeli. The cathedral complex includes the main church, fortress walls, wine cellars and a bishop's palace. During Soviet rule the cathedral was closed and used as a museum. It was returned to the Georgian Orthodox Church in 1991. The complex sits in the Alazani floodplain 18 km northwest of Telavi.",
+"keywords": "Alaverdi Cathedral Kakheti, Georgia medieval architecture, St George church"
+},
+{
+"slug": "georgian-alphabet",
+"title": "Georgian Alphabet — One of 14 UNESCO Masterpieces",
+"body": "The Georgian alphabet (Georgian: ქართული დამწერლობა) is one of the world's oldest alphabets, with a history of approximately 1,600 years. Three scripts exist: Asomtavruli (ecclesiastical, 5th century), Nuskhuri (ecclesiastical, 9th century) and Mkhedruli (modern, 11th century). Mkhedruli contains 33 letters — 5 vowels and 28 consonants. The Georgian script was added to UNESCO's Representative List of Intangible Cultural Heritage in 2016. The oldest known example of Georgian writing is an inscription at the Bir el Qutt monastery in Bethlehem, dated to 430 AD. The alphabet was reportedly created in the 5th century by Mesrop Mashtots (who also created the Armenian alphabet) or by King Vakhtang Gorgasali. The script reads left to right.",
+"keywords": "Georgian alphabet, Mkhedruli, UNESCO, oldest writing systems"
+},
+{
+"slug": "queen-tamar",
+"title": "Queen Tamar — Georgia's Golden Age Ruler",
+"body": "Queen Tamar (Georgian: თამარ მეფე, 1160–1213) was the first female ruler of Georgia to hold the title of 'King' (Mepe) in her own right. Her reign (1184–1213) is considered Georgia's Golden Age — the country reached its greatest territorial extent, encompassing present-day Georgia, Armenia, Azerbaijan and parts of Turkey and Iran. Under Tamar, the poet Shota Rustaveli wrote 'The Knight in the Panther's Skin' (Vepkhistkaosani), the Georgian national epic. The Georgian army won major victories at Shamkor (1195) and Basiani (1203). Tamar was canonised by the Georgian Orthodox Church as the Holy Righteous King Tamar. Her burial place remains unknown. Georgia's largest airport, Queen Tamar Airport in Mestia, is named after her.",
+"keywords": "Queen Tamar Georgia, Golden Age, Georgian history, medieval Georgia"
+},
+{
+"slug": "david-builder",
+"title": "David the Builder — King Who United Georgia",
+"body": "David IV, known as David the Builder (Georgian: დავით აღმაშენებელი, 1073–1125), was King of Georgia from 1089 and is considered the greatest ruler in Georgian history. He came to the throne at age 16 and spent his reign reuniting and expanding Georgia after a period of Seljuk Turkish domination. His greatest achievement was the Battle of Didgori (1121) where the Georgian army defeated a much larger Seljuk force. He recaptured Tbilisi in 1122, making it Georgia's capital, and founded the Gelati Monastery complex near Kutaisi. David established the Gelati Academy, described by contemporaries as a 'second Jerusalem'. He was canonised by the Georgian Orthodox Church and his feast day is celebrated on 26 January. Kutaisi International Airport is named after him.",
+"keywords": "David the Builder, Georgian history, King David IV, Didgori battle"
+},
+{
+"slug": "georgian-polyphony",
+"title": "Georgian Polyphonic Singing — UNESCO Heritage",
+"body": "Georgian polyphonic singing was inscribed on UNESCO's Representative List of Intangible Cultural Heritage of Humanity in 2001. Georgian polyphony typically uses three vocal parts and is based on a drone (bani), a middle voice (mravali) and a leading voice. The harmonic system differs fundamentally from Western music — it uses parallel thirds, fourths and seconds simultaneously, creating dissonances considered aesthetically pleasing. The tradition includes different regional styles: Kartli-Kakheti (eastern), Gurian (western, featuring complex yodelling), Svan and Mingrelian. The oldest written mention of Georgian polyphony dates to the 12th century. The ensemble Rustavi Choir, founded in 1968, is credited with reviving and popularising the tradition internationally.",
+"keywords": "Georgian polyphony, UNESCO, music Georgia, folk singing, Rustavi Choir"
+},
+{
+"slug": "st-nino-georgia",
+"title": "Saint Nino — Who Brought Christianity to Georgia",
+"body": "Saint Nino (Georgian: წმინდა ნინო) was a Cappadocian woman who is credited with converting Georgia (Kartli) to Christianity around 327 AD, during the reign of King Mirian III. According to tradition, she was a slave or a relative of Patriarch of Jerusalem. She healed Queen Nana of an illness through prayer and later converted King Mirian after he was miraculously guided out of a forest in complete darkness. Christianity became the official state religion of Kartli in 327 AD — making Georgia one of the earliest officially Christian nations in the world, two years before Armenia (301 AD according to some sources). St Nino's cross, made of vine wood bound with her own hair, is kept in Mtskheta. Her tomb is at Bodbe Convent in Kakheti.",
+"keywords": "Saint Nino, Christianity Georgia, Georgian Orthodox Church, 327 AD"
+},
+{
+"slug": "mtskheta",
+"title": "Mtskheta — Ancient Capital and UNESCO Site",
+"body": "Mtskheta (Georgian: მცხეთა) was the capital of the Kingdom of Iberia (eastern Georgia) from the 3rd century BC to the 5th century AD. The city sits at the confluence of the Mtkvari and Aragvi rivers, 20 km north of Tbilisi. The population is approximately 7,400. UNESCO declared the Historic Churches of Mtskheta a World Heritage Site in 1994. Key monuments include Svetitskhoveli Cathedral (11th century, 49 metres tall), Jvari Monastery (6th–7th century, visible from the highway) and Samtavro Church (11th century). Svetitskhoveli Cathedral is believed to contain the robe of Jesus Christ beneath its foundation. The name Mtskheta derives from Mtskhetos, the legendary son of Kartlos, the ancestor of the Kartvelian peoples.",
+"keywords": "Mtskheta Georgia, UNESCO World Heritage, Svetitskhoveli, ancient capital"
+},
+{
+"slug": "vardzia",
+"title": "Vardzia — Cave City of Queen Tamar",
+"body": "Vardzia (Georgian: ვარძია) is a cave monastery complex carved into the Erusheti Mountain in southern Georgia, built in the 12th century during the reign of Queen Tamar. The complex originally contained over 3,000 rooms on 13 levels, including a church, throne hall, pharmacy, bakeries and wine cellars. An earthquake in 1283 destroyed the outer cliff face, exposing the interior rooms. Today approximately 400 rooms remain accessible. The Church of the Dormition (1185) contains original frescoes including a portrait of Queen Tamar and King Giorgi III. Vardzia sits at 1,300 metres above sea level, 70 km southwest of Akhaltsikhe. A spring inside the complex produces water year-round. The monastery is still active, maintained by a small community of monks.",
+"keywords": "Vardzia cave city, Queen Tamar, Georgia cave monastery, Erusheti Mountain"
+},
+{
+"slug": "borjomi",
+"title": "Borjomi — Famous Mineral Water and National Park",
+"body": "Borjomi (Georgian: ბორჯომი) is a resort town in southern Georgia known worldwide for its naturally carbonated mineral water. The springs were discovered in the 1820s by Russian soldiers and the water began commercial bottling in the 1890s. Tsar Alexander III made Borjomi his summer residence in 1892. The mineral water contains sodium bicarbonate, carbon dioxide and various minerals and emerges naturally at 38°C. Borjomi-Kharagauli National Park, established in 1995, covers 85,110 hectares — one of the largest national parks in Europe — encompassing forests, alpine meadows and glaciers. The town sits at 800 metres in the Borjomi Gorge. The narrow-gauge Borjomi-Bakuriani railway (nicknamed 'Kukushka') opened in 1902 and travels 37 km through beech forests.",
+"keywords": "Borjomi mineral water Georgia, Borjomi-Kharagauli National Park, Caucasus resort"
+},
+{
+"slug": "colchic-forests",
+"title": "Colchic Rainforests — UNESCO World Heritage 2021",
+"body": "The Colchic Rainforests and Wetlands of western Georgia were inscribed as a UNESCO World Heritage Site in 2021. The site covers 186,741 hectares including Mtirala National Park, Kintrishi Protected Area and parts of the Colchic lowlands. Colchic forests are a biodiversity hotspot containing tree species that survived the last Ice Age in this refugium — including Colchic box (Buxus colchica), wingnut (Pterocarya fraxinifolia), Caucasian persimmon and wild varieties of grape, apple and pear. The region receives 3,000–4,600 mm of annual rainfall — among the highest in Europe. The forests harbour 73 endemic plant species. The Caucasian leopard, brown bear, grey wolf and West Caucasian tur inhabit these forests.",
+"keywords": "Colchic rainforests Georgia, UNESCO 2021, biodiversity Caucasus, Mtirala"
+},
+{
+"slug": "prometheus-cave",
+"title": "Prometheus Cave — 22 km Underground Wonder",
+"body": "Prometheus Cave (Georgian: პრომეთეს მღვიმე) near Kutaisi is one of the largest cave systems in Georgia, with a total length of 22 km. Tourists can explore 1.4 km of the cave via a lit walkway. The cave contains six halls with stalactites, stalagmites, underground rivers and waterfalls. Some stalactites are over 10 metres long and have been forming for millions of years. The cave temperature remains constant at 14°C year-round. A boat ride on the underground river is available. The cave was discovered in 1983 and opened to tourists in 2011. It is located in the Imereti region, 20 km from Kutaisi near the village of Kumistavi. The cave holds one of Georgia's most spectacular underground lakes.",
+"keywords": "Prometheus Cave Georgia, Kutaisi cave, Imereti underground"
+},
+{
+"slug": "mtirala-park",
+"title": "Mtirala National Park — Wettest Place in Georgia",
+"body": "Mtirala National Park (Georgian: მტირალა, meaning 'crying' or 'weeping') is located in the Adjara region of southwestern Georgia, covering 15,844 hectares. The park receives 4,600 mm of annual rainfall — the highest of any point in Georgia — earning it the nickname 'crying mountain'. The vegetation transitions from lowland Colchic rainforest to alpine meadows. The park is home to brown bears, wolves, lynx and the endangered Caucasian salamander. Unique endemic plants include Colchic rhododendron (Rhododendron ungernii) and Caucasian bilberry. The park borders Turkey and is contiguous with Turkish protected areas. A 9 km trail from the village of Chakvistavi leads to the park's interior. The park was established in 2006.",
+"keywords": "Mtirala National Park, Adjara Georgia, rainforest, Colchic biodiversity"
+},
+{
+"slug": "lagodekhi",
+"title": "Lagodekhi Nature Reserve — Oldest Protected Area",
+"body": "Lagodekhi Nature Reserve (Georgian: ლაგოდეხის ნაკრძალი) in eastern Georgia is the oldest protected natural area in the Caucasus, established in 1912. The reserve covers 24,390 hectares on the southern slopes of the Greater Caucasus, rising from 400 to 3,500 metres. The reserve contains five distinct vegetation zones: broadleaf forest, mixed forest, subalpine shrubs, alpine meadows and permanent snow. The Lagodekhi River flows through the reserve and forms several waterfalls, including the 4-metre Black Rock Waterfall and the 18-metre Ninoskhevi Waterfall. The reserve is home to brown bears, red deer, roe deer, chamois and over 130 bird species. The village of Lagodekhi (population 7,000) serves as the gateway.",
+"keywords": "Lagodekhi Nature Reserve, Georgia wildlife, Caucasus protected areas"
+},
+{
+"slug": "uplistsikhe",
+"title": "Uplistsikhe — Rock-Hewn City 3000 Years Old",
+"body": "Uplistsikhe (Georgian: უფლისციხე, 'God's Fortress') is an ancient rock-cut town in eastern Georgia, carved into volcanic rock (rhyolite) in the Mtkvari River gorge. The settlement dates from the Early Iron Age (ca. 1000 BC) and was one of the earliest urban centres in the Caucasus. At its peak (2nd–3rd centuries AD) Uplistsikhe held a population estimated at 20,000. The complex covers 8 hectares and contains over 700 carved rooms, including wine cellars, a theatre (one of the oldest in the Caucasus), a pharmacy with grinding stones, a bakery and a royal hall with coffered ceiling. A Christian basilica (10th century) was later built inside the complex. The site is located 10 km east of Gori.",
+"keywords": "Uplistsikhe cave city, Georgia archaeology, rock-cut settlement, ancient Caucasus"
+},
+{
+"slug": "kutaisi",
+"title": "Kutaisi — Second City and Ancient Capital",
+"body": "Kutaisi (Georgian: ქუთაისი) is Georgia's second largest city with a population of approximately 145,000, situated in the Rioni River valley in western Georgia. The city is one of the oldest continuously inhabited cities in the world, first mentioned in ancient Greek sources as Aia or Kutaia. According to Greek mythology, Kutaisi (ancient Colchis) is where the Golden Fleece was kept. King David the Builder (11th–12th century) made Kutaisi the capital of the unified Georgian kingdom. The city is home to Bagrati Cathedral (UNESCO, 11th century) and Gelati Monastery (UNESCO, 12th century). Kutaisi International Airport (KUT), named after David the Builder, operates flights to over 30 European cities via Ryanair and Wizz Air.",
+"keywords": "Kutaisi Georgia, ancient city, Rioni valley, airport Ryanair"
+},
+{
+"slug": "gelati-monastery",
+"title": "Gelati Monastery — Academy of the Caucasus",
+"body": "Gelati Monastery (Georgian: გელათის მონასტერი) near Kutaisi was founded by King David the Builder in 1106 and served as the intellectual and cultural centre of medieval Georgia. The complex includes three churches — the Cathedral of the Virgin (12th century), St George (13th century) and St Nicholas (13th century) — and a medieval academy. David the Builder is buried beneath the south gate of the complex, reportedly so that all who enter must step over his grave as a mark of humility. The academy attracted scholars from across the Christian world. Gelati was designated a UNESCO World Heritage Site in 1994. The monastery is still active and belongs to the Georgian Orthodox Church.",
+"keywords": "Gelati Monastery, Kutaisi, David the Builder, UNESCO, medieval Georgia"
+},
+{
+"slug": "martvili-canyon",
+"title": "Martvili Canyon — Turquoise Waters of Samegrelo",
+"body": "Martvili Canyon (Georgian: მარტვილის კანიონი) is located in the Samegrelo region of western Georgia, 4 km from the village of Martvili. The canyon was carved by the Abasha River through limestone and reaches a depth of up to 40 metres. The water is turquoise due to dissolved minerals. The canyon stretches approximately 2.4 km. Boat trips along the canyon are available (12 GEL per person). The canyon can also be explored on foot along wooden walkways. The surrounding forest is part of the Colchic ecosystem. The site became popular with tourists after 2015. Nearby Balda Canyon and the village of Okatse with its glass walkway are within 10 km.",
+"keywords": "Martvili Canyon, Georgia, turquoise water, Samegrelo, boat trip"
+},
+{
+"slug": "georgian-cuisine",
+"title": "Georgian Cuisine — Ancient Flavours of the Caucasus",
+"body": "Georgian cuisine is one of the world's most distinctive culinary traditions, shaped by the country's position on the Silk Road and its diverse geography. Key dishes include khinkali (meat or cheese dumplings, eaten by hand), khachapuri (cheese-filled bread in multiple regional varieties), mtsvadi (shashlik grilled on grapevine wood), pkhali (vegetable pâté with walnut), lobiani (bean bread) and churchkhela (nuts on a grape-juice thread). The walnut is fundamental to Georgian cooking — used in sauces (bazhe), salads and sweets. Georgia produces over 500 grape varieties. The supra (feast) tradition involves a tamada (toastmaster) who leads the table in toasts. The meal sequence traditionally begins with cold dishes and progresses to hot.",
+"keywords": "Georgian cuisine, khinkali, khachapuri, traditional food Georgia, supra"
+},
+{
+"slug": "khinkali",
+"title": "Khinkali — Georgia's Famous Dumplings",
+"body": "Khinkali (Georgian: ხინკალი) are large twisted dumplings, one of the most iconic dishes in Georgian cuisine. Each dumpling is made from unleavened dough filled with spiced minced meat (beef and pork), mushrooms, cheese or potatoes, and contains hot broth inside. They are traditionally eaten by hand — holding the twisted knob (kudi), biting a small hole and drinking the broth before eating the rest. The knob is left on the plate and counting how many were eaten is considered good manners. Khinkali originated in the mountainous regions of Georgia (Pshav-Khevsureti, Mtiuleti). The standard order is 5–10 per person. A restaurant specialising in khinkali is called a 'khinkalnaya'. In Tbilisi, Pasanauri restaurant is historically famous for them.",
+"keywords": "Khinkali dumplings Georgia, Georgian food, how to eat khinkali"
+},
+{
+"slug": "khachapuri",
+"title": "Khachapuri — Georgia's National Bread",
+"body": "Khachapuri (Georgian: ხაჭაპური) is a cheese-filled bread that is considered Georgia's national dish. The word combines 'khacho' (cottage cheese) and 'puri' (bread). There are six main regional varieties: Adjaruli (Adjara) — boat-shaped, topped with egg and butter; Imeruli (Imereti) — round, cheese inside; Megruli (Samegrelo) — round, cheese inside and on top; Gurian — crescent-shaped with boiled egg inside; Achma — layered; Penovani — puff pastry. The Economist has used the price of Adjaruli khachapuri as an informal cost-of-living index (the 'Big Mac index' equivalent for Georgia). Khachapuri accounts for approximately 25% of Georgians' daily caloric intake according to some estimates.",
+"keywords": "Khachapuri Georgia, Georgian cheese bread, Adjaruli, national dish"
+},
+{
+"slug": "chacha",
+"title": "Chacha — Georgian Grape Vodka",
+"body": "Chacha (Georgian: ჭაჭა) is a traditional Georgian spirit distilled from grape pomace (the skins, seeds and stems left after wine pressing). It is essentially a Georgian grappa. Alcohol content ranges from 40% to 70%. Chacha is produced throughout Georgia but the Adjara and Racha regions are particularly known for their varieties. Every Georgian family with a vineyard traditionally produces chacha for home consumption. The name derives from the Georgian word for grape pomace. Chacha is typically served at room temperature in small glasses and offered to guests as a sign of hospitality. It is also used medicinally — applied topically for joint pain and used as a preservative for fruit. Commercial brands include Sarajishvili and Kakhuri chacha.",
+"keywords": "Chacha Georgian vodka, grape pomace spirit, Georgian drink, grappa"
+},
+{
+"slug": "supra",
+"title": "Supra — Georgian Feast Tradition",
+"body": "The Georgian supra (Georgian: სუფრა, meaning 'tablecloth') is a traditional feast central to Georgian hospitality and social life. A supra is led by a tamada (toastmaster), who must be eloquent, witty and moderate in drinking. The tamada proposes toasts in a prescribed order: first to peace, then to the hosts, the guests, parents, children, the deceased, Georgia, and finally to God. Each toast can last several minutes and includes poetry, proverbs and personal reflections. Guests respond 'Gaumarjos!' (Victory! / Cheers!). The table is laden with dozens of cold dishes (pkhali, lobiani, cheese, vegetables) before the hot main courses appear. A supra can last 4–6 hours. The tradition is on Georgia's national list of intangible cultural heritage.",
+"keywords": "Georgian supra feast, tamada toastmaster, Georgian hospitality, Gaumarjos"
+},
+{
+"slug": "tbilisi-metro",
+"title": "Tbilisi Metro — Getting Around the Capital",
+"body": "The Tbilisi Metro (Georgian: თბილისის მეტრო) opened in 1966, making it one of the oldest metro systems in the former Soviet Union. It consists of two lines: Line 1 (Akhmeteli-Varketili, 13 stations) and Line 2 (Saburtalo line, 6 stations). The system operates from approximately 06:00 to midnight. A single journey costs 1 GEL using a MetroMoney rechargeable card (2 GEL for the card itself). Foreign contactless bank cards can be used at 1.5 GEL per trip. Free transfers are allowed within 90 minutes when using MetroMoney. The busiest station is Rustaveli, near the national parliament. Trains run every 2–5 minutes at peak times. The metro is not air-conditioned on older rolling stock but newer trains (2020+) have AC.",
+"keywords": "Tbilisi metro, public transport Georgia, MetroMoney card, metro lines"
+},
+{
+"slug": "georgia-visa",
+"title": "Georgia Visa-Free Travel — 98 Countries",
+"body": "Georgia offers visa-free entry to citizens of 98 countries for stays of up to 365 days (one year). Citizens of the EU, USA, UK, Canada, Australia, Japan and most other developed nations can enter without a visa and stay for one year. Since January 1, 2026, all tourists entering Georgia must hold medical travel insurance with a minimum coverage of 30,000 GEL (approximately $11,000). Insurance can be purchased at the border but is more expensive there. The insurance requirement was introduced by Georgian law. Citizens of certain countries can obtain a visa on arrival or must apply in advance. Georgia does not have a tourist tax. There are no currency exchange limits. Foreign nationals can open bank accounts in Georgia.",
+"keywords": "Georgia visa free, travel to Georgia, Georgia visa requirements 2026, insurance"
+},
+{
+"slug": "georgia-currency",
+"title": "Georgian Lari — Currency and Exchange",
+"body": "The Georgian lari (GEL, ₾) has been the official currency of Georgia since September 25, 1995, replacing the coupon at a rate of 1 lari = 1,000,000 coupons. The word 'lari' means 'hoard' or 'treasure' in old Georgian. One lari equals 100 tetri. Banknotes are in denominations of 1, 2, 5, 10, 20, 50, 100 and 200 GEL. The exchange rate as of 2026 is approximately 2.7 GEL per US dollar and 2.9 GEL per euro. Currency exchange offices (obmenniki) are widespread in cities. The best rates are typically found in the Samgori and central Tbilisi exchange markets. Visa and Mastercard are widely accepted in cities. Rural areas, markets and village guesthouses often operate cash-only. ATMs are available throughout Tbilisi and major cities.",
+"keywords": "Georgian lari, GEL currency, exchange rate Georgia, money in Georgia"
+},
+{
+"slug": "georgia-insurance-2026",
+"title": "Georgia Travel Insurance Law 2026",
+"body": "Since January 1, 2026, Georgia requires all foreign tourists to have valid travel medical insurance upon entry. The minimum coverage requirement is 30,000 GEL (approximately $11,000). The law applies to all foreigners entering Georgia regardless of nationality. Insurance purchased at the border or airport typically costs more than policies bought in advance. Recommended providers include Aldagi (Georgian insurer), as well as international travel insurance companies. The insurance must cover medical treatment and hospitalisation in Georgia. Police at border crossings are authorised to check insurance documents. Tourists without valid insurance may be denied entry. Policies can be purchased online before travel for as little as $10–15 for a two-week trip.",
+"keywords": "Georgia insurance 2026, tourist insurance Georgia, travel insurance requirement"
+},
+{
+"slug": "adjara",
+"title": "Adjara — Subtropical Region with Mountain Soul",
+"body": "Adjara (Georgian: აჭარა) is an Autonomous Republic in southwestern Georgia, bordering Turkey to the south and the Black Sea to the west. Population approximately 340,000, capital Batumi. The region has a unique subtropical climate due to the Black Sea influence — Georgia's only tea and citrus plantations are here. The cuisine is the spiciest in Georgia, featuring adjika (red chilli paste). The Mtirala ('Crying') and Machakhela national parks protect Colchic rainforest habitats. The Arsiani mountain range peaks at 2,985 metres. The Khulo region offers ancient wooden mosques and Orthodox churches in close proximity. A road from Batumi crosses into Turkey at the Sarpi border crossing, one of the busiest in the Caucasus.",
+"keywords": "Adjara Georgia, subtropical region, Batumi, Adjarian cuisine, tea plantations"
+},
+{
+"slug": "racha",
+"title": "Racha — Georgia's Hidden Alpine Gem",
+"body": "Racha (Georgian: რაჭა) is a mountainous region in northwestern Georgia, known for its pristine nature, unique wines and ancient traditions. Population approximately 30,000 — one of the least populated regions of Georgia. The region produces Khvanchkara wine — a naturally semi-sweet red wine made from Alexandrouli and Mujuretuli grapes, Stalin's favourite wine according to historical accounts. The Shaori Reservoir (1,100 metres) is the largest reservoir in the Caucasus. The Udziro Lake system offers trekking at 2,500+ metres. The region was isolated for centuries due to its mountainous terrain, preserving unique architectural styles including chimneyless towers. Racha honey is considered some of the finest in Georgia.",
+"keywords": "Racha Georgia, Khvanchkara wine, alpine region, hidden Georgia"
+},
+{
+"slug": "samtskhe-javakheti",
+"title": "Samtskhe-Javakheti — Caves and Highland Lakes",
+"body": "Samtskhe-Javakheti is a region in southern Georgia bordering Turkey and Armenia. It contains the cave city of Vardzia, the fortress of Akhaltsikhe (Rabati Castle), the Javakheti Plateau (2,000 metres) with its volcanic lakes and wetlands, and the Borjomi-Kharagauli National Park. The Javakheti Plateau holds Georgia's highest-altitude wetlands, important for migratory birds — including pelicans, flamingos and storks during migration season. The regional capital Akhaltsikhe (population 18,000) contains Rabati Castle, a medieval fortress complex housing a mosque, church, synagogue and palace. Lake Paravani (2,073 m) is the largest lake in Georgia at 37 km². The region is home to a significant Armenian minority.",
+"keywords": "Samtskhe-Javakheti, Akhaltsikhe, Vardzia, Javakheti lakes, Georgia south"
+},
+{
+"slug": "tusheti",
+"title": "Tusheti — Georgia's Most Remote Region",
+"body": "Tusheti (Georgian: თუშეთი) is one of the most remote and scenic regions of Georgia, located in the northeastern Greater Caucasus at elevations of 1,000–4,000 metres. The region is accessible only from June to October via the Abano Pass (2,926 m) — one of the most dangerous roads in the Caucasus, with 70+ hairpin bends. In Soviet times the road was listed among the world's most dangerous. The Tush people maintained their own unique traditions including the Lashari festival and a distinct architectural style of round defensive towers. The village of Shenako is one of the best-preserved medieval villages in the Caucasus. Population approximately 2,000 (permanent), increasing to 10,000 in summer. Wolf hunting by traditional methods was practiced here until the 20th century.",
+"keywords": "Tusheti Georgia, Abano Pass, remote mountains, Tush culture"
+},
+{
+"slug": "khevsureti",
+"title": "Khevsureti — Land of Medieval Chainmail",
+"body": "Khevsureti (Georgian: ხევსურეთი) is a mountainous region in northeastern Georgia, known for one of the most extraordinary cultural phenomena in the Caucasus — the Khevsurs were still wearing medieval chainmail and carrying swords into the early 20th century. Alexander Dumas described meeting chainmail-clad Khevsur warriors in 1858. The region's isolation in the Caucasus mountains preserved pre-Christian customs alongside Christianity. Shatili village is a UNESCO-listed historic settlement of interconnected towers dating from the 8th–12th centuries. The Roshka Lakes and Abudelauri (Blue, Green and White) Lakes are accessible by a 20 km trek. The region was largely depopulated in the Soviet era when residents were forcibly moved to lowland cities.",
+"keywords": "Khevsureti Georgia, chainmail tradition, Shatili village, mountain culture"
+},
+{
+"slug": "gudauri",
+"title": "Gudauri — Georgia's Top Ski Resort",
+"body": "Gudauri ski resort (Georgian: გუდაური) is located in the Greater Caucasus at elevations of 1,990–3,279 metres, 120 km from Tbilisi on the Georgian Military Highway. The ski season runs from December to April, sometimes extending to May. Gudauri has 57 km of ski runs and 13 lifts including gondola cabins. Annual snowfall averages 7 metres. The resort is known for its powder snow and freeride terrain. Helicopter skiing (heli-ski) is available to access off-piste areas. Paragliding and speed riding are popular activities. The resort received a major infrastructure upgrade in 2018–2019. Accommodation ranges from budget guesthouses to 5-star hotels. The resort is popular with Israeli, Russian, European and Gulf state tourists. Night skiing is available on some runs.",
+"keywords": "Gudauri ski resort Georgia, Caucasus skiing, freeride Georgia"
+},
+{
+"slug": "bakuriani",
+"title": "Bakuriani — Family Ski Resort in Borjomi Gorge",
+"body": "Bakuriani (Georgian: ბაკურიანი) is a ski resort in the Borjomi-Kharagauli National Park, situated at 1,700 metres in the Borjomi-Bakuriani valley. It is reached by road (30 km from Borjomi) or by the narrow-gauge Kukushka railway. The resort has 23 km of runs across two main sectors: Kokhta and Didveli (the newer, better-equipped sector). Runs are generally gentle to intermediate — making Bakuriani ideal for families and beginners. Annual snowfall is lower than Gudauri (approximately 1.5–2 metres). Bakuriani hosted cross-country skiing and biathlon events in the 1991 Goodwill Games. The resort is 175 km from Tbilisi. In summer the area is popular for hiking, mountain biking and horse riding.",
+"keywords": "Bakuriani ski resort Georgia, family skiing, Borjomi winter"
+},
+{
+"slug": "david-gareja",
+"title": "David Gareja — Desert Monastery Complex",
+"body": "David Gareja (Georgian: დავით გარეჯა) is a rock-hewn Georgian Orthodox monastery complex in the semi-desert region of Kakheti, built into the slopes of the Gareja Ridge on the Georgian-Azerbaijani border. The complex was founded in the 6th century by the Assyrian monk David Garejeli, one of the Thirteen Assyrian Fathers who brought monasticism to Georgia. The complex includes Lavra (the main monastery), Udabno (with remarkable 8th–13th century frescoes) and over 5,000 carved cells, churches and halls spread across 25 km of ridge. The frescoes at Udabno are considered among the finest examples of medieval Georgian sacred art. The semi-desert ecosystem is home to unique reptiles and steppe birds. The site is 60 km from Tbilisi.",
+"keywords": "David Gareja monastery, Georgia, cave churches, Kakheti desert, frescoes"
+},
+{
+"slug": "pshavi-khevsureti-trek",
+"title": "Pshav-Khevsureti Trek — Medieval Villages and Alpine Lakes",
+"body": "The Pshav-Khevsureti trek in northeastern Georgia is one of the Caucasus's finest multi-day hiking routes. The classic route connects the Pshavi and Khevsureti regions via high passes. Key highlights include the Abudelauri Lakes — three lakes coloured blue, green and white by different mineral compositions at 2,600 metres. The medieval village of Roshka (1,900 m) serves as a starting point. The Khevsuretian Cross Pass (3,200 m) offers views of the Main Caucasian Ridge. The trek typically takes 3–5 days and requires camping. The route passes stone watchtowers, ancient churches and shepherd settlements unchanged since medieval times. Best season is June–September.",
+"keywords": "Pshav-Khevsureti trek, Georgia hiking, Abudelauri Lakes, alpine Georgia"
+},
+{
+"slug": "truso-valley",
+"title": "Truso Valley — Mineral Springs and Ghost Villages",
+"body": "The Truso Valley (Georgian: ტრუსოს ხეობა) in the Kazbegi district is one of Georgia's most spectacular natural areas, located along the Terek River at 1,800–2,500 metres. The valley contains mineral springs rich in iron oxide, which have created orange and red travertine deposits resembling Martian landscapes. Abandoned villages — vacated during the Soviet period — dot the valley, with medieval towers still standing. The Zakagori fortress overlooks the valley entrance. The valley borders North Ossetia (Russia). Hike distance from Kazbegi town is approximately 22 km return. The walk passes Ketrisi lake and a 19th-century church. The iron-rich springs create stained riverbanks visible from a distance.",
+"keywords": "Truso Valley Kazbegi, mineral springs Georgia, abandoned villages Caucasus"
+},
+{
+"slug": "caucasus-leopard",
+"title": "Caucasian Leopard — Georgia's Rarest Predator",
+"body": "The Caucasian leopard (Panthera pardus tulliana) is the rarest subspecies of leopard in the world, with an estimated wild population of fewer than 100 individuals in the Greater Caucasus. In Georgia, a breeding population was confirmed in the Tusheti Protected Areas and Vashlovani in 2021 by WWF camera traps. The Caucasian leopard was considered extinct in Georgia until the 2010s. Males can weigh up to 70 kg and maintain territories of 100–300 km². The species is a strict meat eater, preying primarily on roe deer, red deer and wild boar. Georgia's protected areas network — including Tusheti, Lagodekhi and Vashlovani — are key habitats. International conservation efforts involve WWF Georgia and Frankfurt Zoological Society.",
+"keywords": "Caucasian leopard Georgia, endangered species Caucasus, WWF Georgia"
+},
+{
+"slug": "tur-caucasus",
+"title": "West Caucasian Tur — Mountain Goat of Georgia",
+"body": "The West Caucasian tur (Capra caucasica) is an endemic wild goat found only in the western Greater Caucasus, including Georgia's high mountain regions. Males have massive curved horns reaching 70–80 cm and weigh up to 100 kg. They are classified as Endangered on the IUCN Red List with a population of approximately 6,000 individuals. Tur inhabit rocky terrain at 800–4,000 metres, descending in winter. In Georgia they are found in Racha, Svaneti and the Kazbegi area. Males form bachelor herds outside the breeding season. Their main natural predator is the Caucasian leopard. The species has faced pressure from hunting and competition with domestic livestock. Georgia prohibits hunting of tur.",
+"keywords": "West Caucasian tur, Georgia wildlife, mountain goat Caucasus, endangered"
+},
+{
+"slug": "colchis-gold",
+"title": "Colchian Gold — Origin of the Golden Fleece",
+"body": "Ancient Colchis, corresponding to modern western Georgia, was renowned in the ancient world for its gold. The Greek myth of Jason and the Argonauts and the Golden Fleece is believed to reflect the historical reality of Colchian gold-working. Ancient Colchians used sheepskins to filter gold particles from mountain rivers — the fleece would trap gold dust, explaining the myth. The Tbilisi National Museum's Treasury holds one of the world's finest collections of ancient Colchian gold, dating from the 8th to 4th centuries BC. Items include torques, bracelets, pendants and ritual objects of extraordinary craftsmanship. Georgia has been producing gold jewellery for at least 5,000 years. Cloisonné enamel (minankari) is a distinctive Georgian goldworking technique.",
+"keywords": "Colchian gold, Golden Fleece myth, ancient Georgia, Colchis goldwork"
+},
+{
+"slug": "silk-road-georgia",
+"title": "Georgia on the Silk Road — Crossroads of Civilisations",
+"body": "Georgia occupied a strategic position on the ancient Silk Road connecting China, Central Asia and the Mediterranean. Tbilisi, as the largest city of the Caucasus in the medieval period, was a major trading hub. The city's caravanserais hosted merchants from China, India, Persia, Arabia, Byzantium and Western Europe. The city controlled the Surami Pass — the lowest point in the Caucasus range — making it the natural passage between the Black Sea and Caspian Sea. Silk, spices, precious stones, gold and slaves passed through Georgia. The influence of the Silk Road is visible in Georgian cuisine (saffron, coriander, fenugreek), architecture (Persian and Byzantine elements) and language (numerous Persian and Arabic loanwords). By the 15th century, trade shifted to sea routes and Georgian prosperity declined.",
+"keywords": "Silk Road Georgia, Tbilisi medieval trade, Caucasus trade routes, caravanserai"
+},
+{
+"slug": "sakartvelo-name",
+"title": "Why Georgia is Called Sakartvelo",
+"body": "Georgia is called Sakartvelo (საქართველო) in the Georgian language. The name derives from Kartli, the central historical region of eastern Georgia, home to the Kartvelian people. The prefix 'sa-' and suffix '-o' in Georgian indicate 'the land of' — so Sakartvelo means 'the land of the Kartvelians'. The English name 'Georgia' likely derives from the Persian/Arabic 'Gurj' or 'Gurjistan' (land of the wolves) or possibly from St George, the patron saint of Georgia. In Turkish the country is called 'Gürcistan', in Russian 'Gruziya', in Arabic 'Jurjiya'. The name 'Kartli' itself derives from 'Kartlos', the legendary progenitor of the Kartvelian peoples in Georgian mythology. Georgia has been a unified country since the 11th century.",
+"keywords": "Sakartvelo Georgia name meaning, Kartvelian people, Georgian history etymology"
+},
+{
+"slug": "nino-gaprindashvili",
+"title": "Nona Gaprindashvili — First Female World Chess Champion",
+"body": "Nona Gaprindashvili (Georgian: ნონა გაფრინდაშვილი, born 1941) is a Georgian chess grandmaster and the first woman to be awarded the title of Grandmaster by FIDE (1978). She held the Women's World Chess Championship from 1962 to 1978 — 16 years. She was born in Zugdidi, western Georgia. Gaprindashvili won the Women's World Chess Championship five times. In 2021 Netflix paid a settlement to Gaprindashvili after she sued over a claim in 'The Queen's Gambit' that she had 'never faced men' — she had in fact played against over 59 male grandmasters. Georgia produces an extraordinary number of chess grandmasters relative to its population. Chess is taught in Georgian schools as part of the curriculum.",
+"keywords": "Nona Gaprindashvili, Georgia chess, first female grandmaster, Women's World Chess"
+},
+{
+"slug": "rustaveli",
+"title": "Shota Rustaveli — National Poet of Georgia",
+"body": "Shota Rustaveli (Georgian: შოთა რუსთაველი) was a Georgian medieval poet who lived in the 12th century during the reign of Queen Tamar. He is the author of 'The Knight in the Panther's Skin' (Georgian: ვეფხისტყაოსანი, Vepkhistkaosani), the Georgian national epic, written around 1200 AD. The poem consists of 1,668 stanzas of 16-syllable lines. It tells the story of three knights — Tariel, Avtandil and Pridon — and their search for the knight's beloved Nestan-Darejan. The poem extols friendship, chivalry and love. It is customary in Georgia to give a copy of the poem as a wedding gift. Rustaveli Avenue in Tbilisi is named after him. Little is known about his personal life; he may have been Queen Tamar's court poet.",
+"keywords": "Shota Rustaveli, Georgian poetry, Knight in Panther Skin, Georgian literature"
+},
+{
+"slug": "bolnisi-cross",
+"title": "Bolnisi Cross — Symbol of Georgia",
+"body": "The Bolnisi cross (Georgian: ბოლნისის ჯვარი) is the oldest example of the Georgian cross, first appearing as a carved inscription on the Bolnisi Sioni basilica (built 493 AD) in southern Georgia. The symbol features a plain Greek cross with small arms extending from the tips of each main arm. Five Bolnisi crosses appear on the Georgian national flag — representing Christ and the four evangelists, or Georgia and its four surrounding Christian kingdoms. The flag (five-cross flag) was historically used by the medieval Kingdom of Georgia and was readopted as the national flag in 2004. The cross design is considered the quintessential symbol of Georgian Christianity and national identity.",
+"keywords": "Bolnisi cross, Georgian flag symbol, Georgia Christianity, national symbols"
+},
+{
+"slug": "tbilisi-night-life",
+"title": "Tbilisi Nightlife — Techno Capital of the World",
+"body": "Tbilisi has gained international recognition as one of the world's top nightlife destinations. The club Bassiani, located in the basement of the Dinamo stadium, has been ranked among the top 10 clubs in the world by DJ Mag and Resident Advisor. The city's techno and electronic music scene emerged in the early 2010s and reflects Georgia's tradition of polyphonic music — an appreciation for complex, layered sound. Clubs typically open at midnight and run until Monday afternoon. The bar district Fabrika (a converted Soviet sewing factory) offers a more eclectic mix of bars and restaurants. Entry to top clubs may require passing a face-control (door selection). The scene is known for its inclusive, anti-discriminatory policies. Khidi and Left Bank are other notable venues.",
+"keywords": "Tbilisi nightlife, Bassiani club, Georgia techno, best clubs world"
+},
+{
+"slug": "georgian-wine-varieties",
+"title": "Georgian Wine — 500 Indigenous Grape Varieties",
+"body": "Georgia is home to over 500 indigenous grape varieties — more than any other country in the world. Of these, approximately 38 are commercially cultivated. The most important white varieties include: Rkatsiteli (most widely planted, crisp and aromatic), Mtsvane (floral, fresh), Kisi (rich, full-bodied) and Chinuri. The most important red varieties include: Saperavi (deeply coloured, tannic, the only vinifera grape with red flesh), Shavkapito, Tavkveri and Alexandrouli. Georgia is also the origin of many European varieties — DNA analysis suggests that Pinot Noir, Chardonnay and other classics trace ancestry to Caucasian wild grapes. The National Wine Agency of Georgia promotes export. In 2022 Georgia exported wine to 56 countries, with China, Ukraine, Russia, Poland and USA as top markets.",
+"keywords": "Georgian wine varieties, Saperavi, Rkatsiteli, 500 grape varieties, indigenous wine"
+},
+{
+"slug": "javakheti-lakes",
+"title": "Javakheti Lakes — Bird Paradise in Southern Georgia",
+"body": "The Javakheti Plateau in southern Georgia (2,000–2,500 metres) contains Georgia's largest and most important wetland ecosystem, recognised as a Ramsar Wetland of International Importance. Lake Paravani (37 km²) is the largest lake in Georgia. Other significant lakes include Kartsakhi (shared with Turkey), Madatapa and Khanchali — the last being the most important nesting site for greylag geese in the Caucasus. During spring and autumn migration, tens of thousands of birds pass through the region including common cranes, white pelicans, greater flamingos and various duck species. The plateau was formed by volcanic activity and the youngest volcanic cones are only a few thousand years old. The area is also home to wolves, red fox and the rare Kazbegi toad.",
+"keywords": "Javakheti lakes, bird watching Georgia, Paravani Lake, wetlands Caucasus"
+},
+{
+"slug": "ananuri-fortress",
+"title": "Ananuri Fortress — Sentinel on the Military Highway",
+"body": "Ananuri (Georgian: ანანური) is a fortress complex on the Georgian Military Highway, 72 km north of Tbilisi, above the Zhinvali Reservoir. The fortress was the seat of the Aragvi eristavis (dukes) from the 13th to 18th centuries. The complex contains two churches — the Assumption Church (17th century, richly decorated with grapevine carvings and the Dormition scene) and a smaller 16th-century church — surrounded by high walls with round towers. The reservoir below the fortress was created in 1985 and submerged several medieval villages. The location was used as a filming location for several Soviet and Georgian films. The fortress is visible from the main highway and easily visited on the way to Kazbegi.",
+"keywords": "Ananuri Fortress, Georgian Military Highway, Zhinvali Reservoir, Aragvi"
+},
+{
+"slug": "tbilisi-old-town",
+"title": "Tbilisi Old Town — UNESCO Tentative List",
+"body": "Tbilisi Old Town (Georgian: ძველი თბილისი) encompasses the historic districts of Abanotubani (Bath District), Kala, Avlabari and Metekhi. The area is characterised by 19th-century carved wooden balconies (karaghi), domed sulfur bathhouses, narrow cobblestone streets and ancient churches. The district contains monuments from the 4th to 19th centuries coexisting in a unique urban landscape. Metekhi Church (13th century) stands on a cliff above the Mtkvari River — on the spot where King Vakhtang Gorgasali is said to have founded Tbilisi. Anchiskhati Basilica (6th century) is the oldest surviving church in Tbilisi. The Old Town is on Georgia's tentative list for UNESCO World Heritage status. The district is walkable and encompasses approximately 3 km².",
+"keywords": "Tbilisi Old Town, Abanotubani, Georgian architecture, historic district"
+},
+{
+"slug": "rtveli-harvest",
+"title": "Rtveli — Georgia's Sacred Grape Harvest",
+"body": "Rtveli (Georgian: რთველი) is the traditional Georgian grape harvest festival, celebrated primarily in Kakheti in October. The name means 'grape harvest' in Georgian. The tradition involves entire communities gathering to pick grapes by hand and transport them in traditional conical baskets (satsnakheli) to the wine press. The harvest is accompanied by singing, dancing and feasting. Many families maintain small vineyards and make wine in qvevri for their own consumption. During rtveli, strangers are invited to help and are rewarded with food and wine. The celebration has been maintained continuously for thousands of years. In recent decades, wine tourism during rtveli has grown significantly, with international visitors participating in harvests at family estates and large wineries alike.",
+"keywords": "Rtveli grape harvest, Kakheti wine festival, Georgian harvest tradition"
+},
+{
+"slug": "tbilisi-botanic-garden",
+"title": "Tbilisi Botanical Garden — 161 Hectares in the City",
+"body": "Tbilisi Botanical Garden was established in 1845, making it one of the oldest in the Caucasus. It covers 161 hectares in the Mtkvari River gorge, stretching from the Old Town to the Narikala Fortress. The garden contains over 4,500 plant species from around the world. The site includes a Japanese garden, a rose garden, a tropical greenhouse and sections for Caucasian, Central Asian, European and American flora. A waterfall cascades 20 metres into the lower gorge within the garden. The garden is a popular retreat for Tbilisi residents and is accessible from the Old Town by a path below Narikala Fortress. Admission is 2 GEL. The garden played a key role in botanical research on Caucasian endemic species.",
+"keywords": "Tbilisi Botanical Garden, Old Town, Georgia plants, Caucasian flora"
+},
+{
+"slug": "black-sea-georgia",
+"title": "Georgia Black Sea Coast — Subtropical Paradise",
+"body": "The Georgian Black Sea coast stretches approximately 310 km from the Abkhazian administrative boundary in the north to the Turkish border in the south. The coastline includes the subtropical Adjara region with Batumi as the main city, the Guria and Samegrelo coastal zones, and the spa town of Kobuleti. The sea temperature reaches 24–26°C in August. Ureki beach, 30 km north of Batumi, has black magnetic sand (magnetite) that is said to have therapeutic effects on the cardiovascular system. Shekvetili has Georgia's first safari park. The Colchic lowlands behind the coast were one of the world's earliest centres of agriculture. Ancient Greek colonies existed on this coast from the 7th century BC.",
+"keywords": "Georgia Black Sea coast, Batumi beach, Ureki magnetic sand, subtropical"
+},
+{
+"slug": "tbilisi-food-markets",
+"title": "Tbilisi Food Markets — Taste of Georgia",
+"body": "The Dezerter Bazaar (Georgian: დეზერტირთა ბაზარი) is the main food market of Tbilisi, located near the main railway station. It has operated continuously since the late 19th century. The market sells fresh produce, spices, dried fruits, nuts, churchkhela, cheese, wine and chacha. The adjacent Bazroba (general market) sells clothes, household goods and Soviet-era antiques. The Dry Bridge Flea Market on the Mtkvari embankment operates daily and offers Soviet memorabilia, paintings, coins, jewellery and curiosities. Carrefour, Goodwill and Europroduct supermarket chains operate throughout Tbilisi. The Galleria Tbilisi mall contains a high-end food hall. Farmers' markets (bazar) in residential districts sell seasonal produce directly from growers.",
+"keywords": "Tbilisi markets, Dezerter Bazaar, Georgian food shopping, Dry Bridge market"
+},
+{
+"slug": "georgian-art",
+"title": "Georgian Art — Icons and Contemporary Scene",
+"body": "Georgian religious art is one of the richest traditions in the Orthodox Christian world. Georgia has produced unique icon-painting styles, cloisonné enamelwork, stone-carving and manuscript illumination since the 5th century. The Khakhuli Triptych (12th century), now partially in the Georgian National Museum, is considered the masterpiece of medieval Georgian enamel art. The Tbilisi State Academy of Arts was founded in 1922. The contemporary Georgian art scene is internationally recognised — Tbilisi Art Fair (established 2018) attracts collectors from Europe and the USA. The Fabrika complex and multiple galleries in Tbilisi's Vera and Vake districts showcase emerging artists. The Sandro Akhmeteli Theatre Museum is dedicated to the pioneering Soviet-era director.",
+"keywords": "Georgian art, icon painting, Georgian enamel, Tbilisi contemporary art"
+},
+{
+"slug": "narimanidze",
+"title": "Georgian Chess Heritage — World Champions",
+"body": "Georgia has produced an extraordinary number of chess grandmasters relative to its population of 3.7 million. Female world champions from Georgia include: Nona Gaprindashvili (1962–1978), Maia Chiburdanidze (1978–1991) and both members of the 'Polgar-rival' generation. The Georgian Women's national team won the Chess Olympiad in 1992, 1994, 1996, 2006 and 2012. Male grandmasters include Zurab Azmaiparashvili, Giorgi Kacheishvili and many others. Chess has been part of the Georgian school curriculum since 2012, making Georgia one of a handful of countries to mandate chess education. The Tbilisi International Chess Tournament has been held since 1941.",
+"keywords": "Georgia chess grandmasters, Chess Olympiad, Georgian chess education"
+},
+{
+"slug": "chateau-mukhrani",
+"title": "Chateau Mukhrani — Royal Wine Estate",
+"body": "Chateau Mukhrani is one of Georgia's most historic wine estates, established in 1878 by Prince Ivane Mukhranbatoni in the Kartli region, 30 km west of Tbilisi. The prince studied winemaking in France and brought European wine technology to Georgia. The estate produces wine in both qvevri (traditional Georgian method) and European steel tanks. The historic palace and wine cellars date from the late 19th century. Wines produced include Rkatsiteli, Mtsvane, Chinuri, Goruli Mtsvane and Tavkveri. The estate was nationalised during the Soviet era and returned to private ownership in 2002. The winery offers tastings and tours. Chateau Mukhrani exports to over 30 countries.",
+"keywords": "Chateau Mukhrani wine, Kartli winery, Georgian wine tourism, royal estate"
+},
+{
+"slug": "vashlovani",
+"title": "Vashlovani — Semi-Desert Protected Area",
+"body": "Vashlovani Protected Areas in eastern Georgia (Kakheti region) encompass 35,053 hectares of semi-desert, steppe and riverine forest along the Alazani River near the Azerbaijan border. The landscape is unique in Georgia — featuring badlands (clay erosion gullies), pistachio and juniper forests and steppe grasslands. The area is home to the endangered Caucasian leopard (confirmed by camera traps in 2021), striped hyena, Caucasian agama lizard and over 200 bird species. The Doesi and Alazani rivers support tugai forest ecosystems. The name 'Vashlovani' means 'place of apple trees' in Georgian. No public roads cross the reserve interior; guided hiking is the primary access method. Temperatures reach 40°C in summer.",
+"keywords": "Vashlovani Georgia, semi-desert, Caucasian leopard, Kakheti wildlife"
+},
+{
+"slug": "Bakuriani-biathlon",
+"title": "Georgian Winter Sports History",
+"body": "Georgia competed in the Winter Olympics for the first time as an independent nation in 1994. The country has a strong tradition in alpine skiing, cross-country skiing and biathlon. Bakuriani hosted international biathlon competitions and cross-country skiing events in the 1991 Goodwill Games. Georgian alpine skier Elene Gelashvili competed at the 2006 and 2010 Winter Olympics. The Gudauri resort has produced national ski team members. Biathlon is popular in Georgia due to the Soviet-era sporting infrastructure. The Georgian Ski Federation was established in 1992. Winter tourism generates significant revenue — Gudauri alone receives over 500,000 visitors per season.",
+"keywords": "Georgian winter sports, ski Georgia, Bakuriani biathlon, Gudauri Olympics"
+},
+{
+"slug": "golden-fleece-myth",
+"title": "Golden Fleece — The Myth Behind Georgian Gold",
+"body": "The myth of the Golden Fleece and the Argonauts is set in ancient Colchis — the region corresponding to modern western Georgia. According to the myth, Jason and the Argonauts sailed from Greece to Colchis to retrieve a golden fleece hanging in a sacred grove guarded by a dragon. Modern scholars believe the myth reflects actual Greek expeditions to the Caucasus in search of gold — Colchian rivers were rich in alluvial gold collected using sheepskins as filters. The goddess Medea, who helped Jason in the myth, was a Colchian princess. The myth was codified by Apollonius of Rhodes around 250 BC. Traces of ancient Greek settlements have been found on the Georgian Black Sea coast at Phasis (modern Poti) and Dioscurias (modern Sokhumi).",
+"keywords": "Golden Fleece, Colchis Georgia, Jason Argonauts, ancient Greece Georgia"
+},
+{
+"slug": "gelati-academy",
+"title": "Gelati Academy — Light of Georgia",
+"body": "The Gelati Academy, founded alongside Gelati Monastery by King David the Builder in 1106, was the most important intellectual centre in the medieval Caucasus. Its scholars studied philosophy, theology, mathematics, astronomy and the natural sciences. The Academy was described by contemporaries as a 'second Jerusalem' and 'new Athens'. Key scholars include the philosopher Ioanne Petritsi, who translated Neoplatonist texts into Georgian. The Academy library held thousands of manuscripts. Gelati attracted scholars from Byzantium and the Christian East. It produced translations of Greek philosophical and scientific texts — some of which survive only in Georgian. The Academy operated continuously until the 17th century.",
+"keywords": "Gelati Academy, medieval Georgia intellectual history, David the Builder scholarship"
+},
+{
+"slug": "abkhazia-conflict",
+"title": "Georgian-Abkhazian Conflict — Background",
+"body": "Abkhazia is a territory in northwestern Georgia that declared independence in 1992–1993 after a war in which approximately 250,000 ethnic Georgians (Kartvelians) were expelled. The conflict arose from long-standing ethnic tensions during the Soviet period. Following a 2008 war between Georgia and Russia, Russia recognised Abkhazia's independence — a recognition shared by only a handful of UN member states. The UN and the vast majority of the world's countries recognise Abkhazia as Georgian territory. The Georgian government administers only the Kodori Gorge area. The conflict has created one of the largest internally displaced populations in the former Soviet Union. Tourism to Abkhazia from Georgia is not possible; Russian citizens can visit via Russia.",
+"keywords": "Abkhazia conflict, Georgia territory, internally displaced, South Caucasus"
+},
+{
+"slug": "wine-route-kakheti",
+"title": "Kakheti Wine Route — Touring Georgia's Vineyards",
+"body": "The Kakheti Wine Route connects the major wine-producing towns and estates of eastern Georgia. The route passes through Telavi (regional capital), Sighnaghi, Gurjaani, Kvareli and Tsinandali. Key stops include Tsinandali Estate (historic winery founded by Prince Chavchavadze in 1833), Khareba Winery (tunnels carved into Alazani valley limestone), Chateau Mere and dozens of family-run 'wine houses' (Marani). The route covers approximately 150 km. Wine tastings typically cost 15–40 GEL and include 3–5 wines with cheese and churchkhela. Many estates offer overnight accommodation. The harvest festival Rtveli (October) is the best time to visit. The route is accessible by rental car, organised tour or marshrutka (shared minibus).",
+"keywords": "Kakheti wine route, Georgia wine tourism, Tsinandali, vineyard tour"
+},
+{
+"slug": "georgian-dance",
+"title": "Georgian National Dance — Kartuli and Khorumi",
+"body": "Georgian traditional dance is one of the most technically demanding folk dance forms in the world. The Kartuli (court dance) — performed by men and women — is characterised by the man moving rapidly around the woman on the tips of his toes while the woman glides serenely, never touching. The Khorumi is a warrior dance from Adjara, performed exclusively by men in formations of 4–200+ dancers, mimicking battle movements. The Lezginka, common across the Caucasus, has a Georgian variant. The Sukhishvili Georgian National Ballet, founded in 1945, brought Georgian dance to international audiences and is considered one of the world's finest folk dance companies. Georgian dance requires extensive training from childhood.",
+"keywords": "Georgian dance, Kartuli, Khorumi, Sukhishvili ballet, Georgian folk dance"
+},
+{
+"slug": "jvari-monastery",
+"title": "Jvari Monastery — Where Georgia Became Christian",
+"body": "Jvari Monastery (Georgian: ჯვარი, meaning 'cross') stands on a rocky peak above the confluence of the Mtkvari and Aragvi rivers near Mtskheta. The monastery was built in the late 6th–early 7th century (approximately 590–605 AD) on the spot where St Nino erected a wooden cross after converting Georgia to Christianity in 327 AD. The church is a masterpiece of early Georgian architecture — its square plan with semicircular apses influenced church design across the Caucasus. Jvari was the first Georgian monument listed as a UNESCO World Heritage Site in 1994. The Russian poet Mikhail Lermontov described Jvari in his poem 'Mtsyri' (1839). The church is visible from the highway between Tbilisi and Mtskheta.",
+"keywords": "Jvari Monastery, UNESCO Georgia, Mtskheta, Georgian architecture, St Nino cross"
+},
+{
+"slug": "svetitskhoveli",
+"title": "Svetitskhoveli Cathedral — Heart of Georgian Orthodoxy",
+"body": "Svetitskhoveli Cathedral (Georgian: სვეტიცხოვლის საკათედრო ტაძარი) in Mtskheta was built between 1010–1029 by the master architect Arsakidze and stands 49 metres tall. The name means 'life-giving pillar' and refers to a legendary cedar pillar that exuded miraculous healing resin. According to tradition, the robe of Jesus Christ is buried beneath the cathedral foundation — brought to Georgia by a Jewish scholar from Jerusalem in the 1st century. The cathedral has been the main Georgian Orthodox cathedral throughout history and the burial place of Georgian kings. It was looted and damaged by Persian, Arab and Mongolian invaders but rebuilt after each attack. UNESCO listed it in 1994. The current building is the fourth on the same site.",
+"keywords": "Svetitskhoveli Cathedral, Mtskheta UNESCO, Georgian Orthodox, Christ robe Georgia"
+},
+{
+"slug": "narikala-cable-car",
+"title": "Narikala Cable Car — Tbilisi from Above",
+"body": "The Narikala cable car in Tbilisi was opened in 2012 and connects Rike Park (on the left bank of the Mtkvari River) to the Narikala Fortress on the hill above the Old Town. The ride takes approximately 3 minutes and covers 500 metres horizontally while rising 180 metres. The cable cars are glass-enclosed gondolas offering panoramic views of the Old Town, Peace Bridge and Mtkvari River. Tickets cost 5 GEL one way. The lower station is in Rike Park, near the flower-shaped concert halls. The upper station is adjacent to Narikala Fortress and the Church of St Nicholas. The cable car operates from approximately 10:00–23:00. From the upper station, the Botanic Garden and the giant Mother Georgia statue are a short walk.",
+"keywords": "Narikala cable car Tbilisi, Rike Park, Old Town views, Georgia"
+},
+{
+"slug": "ajika",
+"title": "Adjika — Georgian Spice Paste",
+"body": "Adjika (Georgian: აჯიკა) is a spicy aromatic paste originating in the Adjara and Samegrelo regions of western Georgia. The name derives from the Abkhazian word 'adjika' meaning salt. Traditional adjika is made by grinding red hot chillies, garlic, herbs (coriander, blue fenugreek, dill) and salt on a flat stone. The result is a dense paste that can be red (hot) or green (using unripe chillies). Adjika has no tomatoes — the tomato version is a Russian adaptation. Samegrelo adjika uses more garlic and Imeretian saffron. Adjika is used as a condiment, marinade and cooking ingredient throughout western Georgia. It has a shelf life of months when properly salted. Adjika was registered as a Georgian Geographical Indication product in 2011.",
+"keywords": "Adjika Georgian spice, Adjara condiment, Georgian chilli paste recipe"
+}
+]
+</script>
+
+<script>
+/* ===== SEO PAGES ===== */
+// Ждём загрузки всего скрипта чтобы GUIDE_ARTICLES был доступен
+(function(){
+  function initSeoPage(){
+  var seoEl=document.getElementById('seoData');
+  if(!seoEl)return;
+  var pages;
+  try{pages=JSON.parse(seoEl.textContent);}catch(e){return;}
+  
+  // Check if URL has /geo/ path (SEO page request)
+  var path=window.location.pathname;
+  var match=path.match(/^\/geo\/([\w-]+)\/?$/);
+  if(!match)return;
+  
+  var slug=match[1];
+  var page=null;
+  for(var i=0;i<pages.length;i++){
+    if(pages[i].slug===slug){page=pages[i];break;}
   }
+  if(!page)return;
+
+  // Определяем язык пользователя — сначала из URL ?lang=, потом localStorage
+  var lang='ru';
+  try{
+    var urlLang=new URLSearchParams(window.location.search).get('lang');
+    if(urlLang){
+      lang=urlLang;
+      try{localStorage.setItem('sak_lang',lang);}catch(e){} // сохраняем
+    } else {
+      lang=localStorage.getItem('sak_lang')||navigator.language.slice(0,2)||'ru';
+    }
+  }catch(e){}
+  var isRuLike=lang==='ru'||lang==='be'||lang==='uk';
+  var langKey=isRuLike?'ru':lang;
+
+  // Берём перевод из GUIDE_ARTICLES если есть — иначе из seoData (EN)
+  var ga=typeof GUIDE_ARTICLES!=='undefined'?GUIDE_ARTICLES:{};
+  var ga_page=ga[slug];
+  var displayTitle=page.title;
+  var displayBody=page.body;
+  var displayBack='← Back to sakartvelo.ai';
+  var displayExplore='Explore Georgia:';
+
+  if(ga_page){
+    if(langKey!=='en'&&ga_page['title_'+langKey])displayTitle=ga_page['title_'+langKey];
+    if(langKey!=='en'&&ga_page['body_'+langKey])displayBody=ga_page['body_'+langKey];
+  }
+
+  // Локализуем кнопки
+  var backLabels={ru:'← Назад на sakartvelo.ai',tr:'← sakartvelo.ai\'ye dön',
+    hy:'← Վернуться к sakartvelo.ai',he:'← חזרה ל-sakartvelo.ai',
+    az:'← sakartvelo.ai-a qayıt',de:'← Zurück zu sakartvelo.ai',
+    fr:'← Retour à sakartvelo.ai',es:'← Volver a sakartvelo.ai',
+    uk:'← Назад на sakartvelo.ai',zh:'← 返回 sakartvelo.ai',pl:'← Powrót do sakartvelo.ai'};
+  var exploreLabels={ru:'Исследуй Грузию:',tr:'Gürcistan\'ı keşfet:',
+    hy:'Ուսումնասիրեք Վրաստանը:',he:'גלה את גיאורגיה:',
+    az:'Gürcüstanı kəşf et:',de:'Entdecke Georgien:',
+    fr:'Explorez la Géorgie:',es:'Explora Georgia:',
+    uk:'Досліджуй Грузію:',zh:'探索格鲁吉亚:',pl:'Odkryj Gruzję:'};
+  if(backLabels[lang])displayBack=backLabels[lang];
+  if(exploreLabels[lang])displayExplore=exploreLabels[lang];
+
+  // Update meta tags
+  document.title=displayTitle+' | sakartvelo.ai';
+  var desc=document.querySelector('meta[name="description"]');
+  if(desc)desc.setAttribute('content',displayBody.slice(0,155)+'...');
+  var kw=document.querySelector('meta[name="keywords"]');
+  if(kw)kw.setAttribute('content',page.keywords);
+
+  // Add canonical
+  var canon=document.querySelector('link[rel="canonical"]');
+  if(canon)canon.setAttribute('href','https://sakartvelo.ai/geo/'+slug+'/');
+
+  // Add structured data
+  var ld=document.createElement('script');
+  ld.type='application/ld+json';
+  ld.textContent=JSON.stringify({
+    "@context":"https://schema.org",
+    "@type":"Article",
+    "headline":displayTitle,
+    "description":displayBody.slice(0,200),
+    "url":"https://sakartvelo.ai/geo/"+slug+"/",
+    "publisher":{"@type":"Organization","name":"sakartvelo.ai","url":"https://sakartvelo.ai"},
+    "about":{"@type":"Place","name":"Georgia","description":"Country in the Caucasus"},
+    "keywords":page.keywords
+  });
+  document.head.appendChild(ld);
+
+  var ourLangs=['ru','tr','hy','he','az','de','fr','uk','be','kk','uz','tk','tg','ky','md','pl','es','zh-CN','ja','ko','it','pt','nl','hi','ro','lv','lt','et','fa','ar','ka'];
+  var hasNativeTranslation=(langKey==='en'||(ga_page&&ga_page['body_'+langKey]));
+
+  // Если нет нативного перевода — используем Google Translate как страховку
+  if(!hasNativeTranslation && ourLangs.indexOf(lang)>=0 && lang!=='en'){
+    var googleLang=lang==='zh-CN'?'zh':lang==='md'?'ro':lang;
+    var textsToTranslate=[page.title, page.body];
+    Promise.all(textsToTranslate.map(function(text){
+      var url='https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl='+googleLang+'&dt=t&q='+encodeURIComponent(text);
+      return fetch(url).then(function(r){return r.json();}).then(function(d){
+        var out='';
+        if(d&&d[0])d[0].forEach(function(p){if(p&&p[0])out+=p[0];});
+        return out||text;
+      }).catch(function(){return text;});
+    })).then(function(results){
+      displayTitle=results[0]||displayTitle;
+      displayBody=results[1]||displayBody;
+      renderSeoPage();
+    });
+    return; // рендер будет после Google ответит
+  }
+
+  renderSeoPage();
+
+  function renderSeoPage(){
+  // Render page in user's language
+  document.body.innerHTML=''+
+    '<style>'+
+    'body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;max-width:800px;margin:0 auto;padding:20px;line-height:1.7;color:#1a1a1a;background:#fff}'+
+    'h1{font-size:1.8rem;font-weight:900;color:#8b1a1a;margin-bottom:8px}'+
+    '.meta{color:#666;font-size:.9rem;margin-bottom:24px}'+
+    'p{margin-bottom:16px;font-size:1.05rem}'+
+    '.back{display:inline-block;background:#8b1a1a;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;margin:20px 0;font-weight:700}'+
+    '.related{border-top:1px solid #eee;margin-top:32px;padding-top:16px}'+
+    '.related h3{font-size:1rem;color:#666;margin-bottom:12px}'+
+    '.tag{display:inline-block;background:#f5f5f5;border-radius:20px;padding:4px 12px;margin:4px;font-size:.85rem;color:#333;text-decoration:none}'+
+    '</style>'+
+    '<a href="https://sakartvelo.ai/?lang='+encodeURIComponent(lang)+'" class="back">🍶 '+displayBack+'</a>'+
+    '<h1>'+displayTitle+'</h1>'+
+    '<div class="meta">🇬🇪 sakartvelo.ai</div>'+
+    '<p>'+displayBody.replace(/\. /g,'.</p><p>')+'</p>'+
+    '<div class="related">'+
+      '<h3>'+displayExplore+'</h3>'+
+      '<a href="/geo/tbilisi/?lang='+encodeURIComponent(lang)+'" class="tag">🏙️ Tbilisi</a>'+
+      '<a href="/geo/kazbegi/?lang='+encodeURIComponent(lang)+'" class="tag">🏔️ Kazbegi</a>'+
+      '<a href="/geo/svaneti/?lang='+encodeURIComponent(lang)+'" class="tag">🗻 Svaneti</a>'+
+      '<a href="/geo/batumi/?lang='+encodeURIComponent(lang)+'" class="tag">🌊 Batumi</a>'+
+      '<a href="/geo/kakheti/?lang='+encodeURIComponent(lang)+'" class="tag">🍷 Kakheti</a>'+
+      '<a href="/geo/qvevri-wine/?lang='+encodeURIComponent(lang)+'" class="tag">🫙 Wine</a>'+
+      '<a href="/geo/georgian-cuisine/?lang='+encodeURIComponent(lang)+'" class="tag">🍽️ Food</a>'+
+      '<a href="https://sakartvelo.ai/?lang='+encodeURIComponent(lang)+'" class="tag">🤖 Ask Chacha AI</a>'+
+    '</div>';
+  } // end renderSeoPage
+  }
+  // Запускаем после загрузки DOM — GUIDE_ARTICLES уже доступен
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',initSeoPage);
+  }else{
+    initSeoPage();
+  }
+})();
 </script>
 </body>
 </html>
