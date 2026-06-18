@@ -1,25 +1,24 @@
 [build]
   publish = "."
 
-[[plugins]]
-  package = "@netlify/plugin-functions-install-core"
-
-[functions]
-  directory = "netlify/functions"
-
-# Redirect /geo/* to index.html for SEO pages (SPA routing)
-[[redirects]]
-  from = "/geo/*"
-  to = "/index.html"
-  status = 200
-
 [[headers]]
   for = "/*"
   [headers.values]
-    X-Frame-Options = "SAMEORIGIN"
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Cache-Control = "public, max-age=3600"
 
 [[headers]]
-  for = "/sitemap.xml"
+  for = "/geo/*"
   [headers.values]
-    Content-Type = "application/xml"
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+# Language-based redirects removed — each page handles its own content
+# No wildcard /geo/* → index.html redirect (Задача 3)
