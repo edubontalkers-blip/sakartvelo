@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title id="meta-title">Tbilisi – sakartvelo.ai</title>
+<meta name="description" id="meta-desc" content="Tbilisi travel guide">
+<link rel="canonical" id="meta-canonical" href="https://sakartvelo.ai/geo/tbilisi/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --gold:#c8911f;--gold-soft:#e0b450;
+  --cream:#fff6f4;--bg:#fff6f4;--card:#ffffff;--card-2:#fff0ee;
+  --ink:#1f1413;--muted:#8a7068;--line:rgba(218,41,28,.16);
+  --wine:#da291c;--wine-bright:#e8112d;
+  --radius:16px;--shadow:0 2px 16px rgba(218,41,28,.08);
+  --font-display:'Fraunces',Georgia,serif;
+  --font-body:'Inter',system-ui,sans-serif;
+}
+[data-theme=dark]{
+  --bg:#120a0c;--card:#1d1113;--card-2:#26171a;
+  --ink:#f4e9dc;--muted:#b09a8c;--line:rgba(227,179,94,.12);
+  --gold:#e3b35e;--gold-soft:#f0d39a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-body);background:var(--bg);color:var(--ink);min-height:100vh}
+a{color:inherit;text-decoration:none}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;gap:8px;font-family:var(--font-display);font-weight:900;font-size:1.1rem}
+.logo b{color:var(--gold)}
+.nav-right{display:flex;align-items:center;gap:8px}
+.lang-btn{background:var(--card-2);border:1px solid var(--line);border-radius:100px;padding:5px 10px;font-size:.8rem;cursor:pointer;color:var(--ink)}
+.theme-btn{background:none;border:none;font-size:1.2rem;cursor:pointer;padding:4px}
+
+/* LANG PICKER */
+.lang-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:flex-end}
+.lang-overlay.open{display:flex}
+.lang-sheet{background:var(--card);border-radius:20px 20px 0 0;padding:20px 16px;width:100%;max-height:70vh;overflow-y:auto}
+.lang-sheet h3{font-family:var(--font-display);font-size:1.1rem;margin-bottom:14px;color:var(--ink)}
+.lang-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.lp-btn{display:flex;align-items:center;gap:10px;background:var(--card-2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;text-align:left}
+.lp-btn.active{border-color:var(--gold);background:rgba(200,145,31,.1)}
+.lp-flag{font-size:1.4rem}
+.lp-name{font-size:.85rem;font-weight:600;color:var(--ink)}
+.lp-native{font-size:.72rem;color:var(--muted)}
+
+/* HERO */
+.hero{padding:24px 16px 16px;text-align:center}
+.hero-emoji{font-size:3rem;margin-bottom:8px}
+.hero h1{font-family:var(--font-display);font-size:1.9rem;font-weight:900;line-height:1.2;margin-bottom:8px}
+.hero h1 .em{color:var(--gold);font-style:italic}
+.hero .sub{color:var(--muted);font-size:.95rem;max-width:400px;margin:0 auto 16px}
+
+/* BACK */
+.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--gold);font-size:.85rem;margin:0 16px 8px;padding:6px 12px;background:var(--card-2);border-radius:100px;border:1px solid var(--line)}
+
+/* CARDS */
+.content{padding:0 16px 32px;max-width:600px;margin:0 auto}
+.section{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:14px;box-shadow:var(--shadow)}
+.section-title{font-family:var(--font-display);font-weight:900;font-size:1rem;color:var(--gold);margin-bottom:10px}
+.fact-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+.fact-list li{display:flex;gap:10px;font-size:.88rem;line-height:1.5;color:var(--ink)}
+.fact-list li .icon{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+
+/* CTA */
+.cta{background:linear-gradient(135deg,var(--wine-bright),var(--gold));border-radius:var(--radius);padding:18px 16px;text-align:center;margin-bottom:14px}
+.cta p{color:#fff;font-size:.9rem;margin-bottom:10px;opacity:.9}
+.cta a{display:inline-block;background:#fff;color:var(--wine);font-weight:700;font-size:.9rem;padding:10px 24px;border-radius:100px}
+
+/* OTHER PLACES */
+.places-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.place-card{background:var(--card-2);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:4px}
+.place-card .p-title{font-weight:700;font-size:.85rem}
+.place-card .p-sub{font-size:.75rem;color:var(--muted)}
+
+/* FOOTER */
+footer{text-align:center;padding:20px 16px;color:var(--muted);font-size:.75rem;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">🍶 <b>sakartvelo</b>.ai</a>
+  <div class="nav-right">
+    <button class="lang-btn" id="langBtn">🌐 <span id="langLabel">EN</span></button>
+    <button class="theme-btn" id="themeBtn">🌙</button>
+  </div>
+</nav>
+
+<!-- LANG PICKER -->
+<div class="lang-overlay" id="langOverlay">
+  <div class="lang-sheet">
+    <h3 data-i18n="pick_lang">Choose language</h3>
+    <div class="lang-grid">
+      <button class="lp-btn" data-lang="en"><span class="lp-flag">🇬🇧</span><div><div class="lp-name">English</div><div class="lp-native">English</div></div></button>
+      <button class="lp-btn" data-lang="ru"><span class="lp-flag">🇷🇺</span><div><div class="lp-name">Русский</div><div class="lp-native">Russian</div></div></button>
+      <button class="lp-btn" data-lang="de"><span class="lp-flag">🇩🇪</span><div><div class="lp-name">Deutsch</div><div class="lp-native">German</div></div></button>
+      <button class="lp-btn" data-lang="fr"><span class="lp-flag">🇫🇷</span><div><div class="lp-name">Français</div><div class="lp-native">French</div></div></button>
+      <button class="lp-btn" data-lang="tr"><span class="lp-flag">🇹🇷</span><div><div class="lp-name">Türkçe</div><div class="lp-native">Turkish</div></div></button>
+      <button class="lp-btn" data-lang="ar"><span class="lp-flag">🇸🇦</span><div><div class="lp-name">العربية</div><div class="lp-native">Arabic</div></div></button>
+      <button class="lp-btn" data-lang="he"><span class="lp-flag">🇮🇱</span><div><div class="lp-name">עברית</div><div class="lp-native">Hebrew</div></div></button>
+      <button class="lp-btn" data-lang="it"><span class="lp-flag">🇮🇹</span><div><div class="lp-name">Italiano</div><div class="lp-native">Italian</div></div></button>
+      <button class="lp-btn" data-lang="es"><span class="lp-flag">🇪🇸</span><div><div class="lp-name">Español</div><div class="lp-native">Spanish</div></div></button>
+    </div>
+  </div>
+</div>
+
+<a href="/" class="back-link" data-i18n="back">← sakartvelo.ai</a>
+
+<div class="hero">
+  <div class="hero-emoji" id="hero-emoji">🏙️</div>
+  <h1><span class="em" id="hero-title">Tbilisi</span></h1>
+  <p class="sub" id="hero-sub">Capital of Georgia · sulfur baths · Old Town · 1.5M people</p>
+</div>
+
+<div class="content">
+
+  <div class="section">
+    <div class="section-title" data-i18n="must_see">📍 Must See</div>
+    <ul class="fact-list" id="must-see-list"></ul>
+  </div>
+
+  <div class="section">
+    <div class="section-title" data-i18n="practical">🎒 Practical Info</div>
+    <ul class="fact-list" id="practical-list"></ul>
+  </div>
+
+  <div class="cta">
+    <p data-i18n="cta_text">Ask Chacha anything about this place</p>
+    <a href="/" data-i18n="cta_btn">🍶 Ask Chacha</a>
+  </div>
+
+  <div class="section">
+    <div class="section-title" data-i18n="other_places">🗺️ Other Places</div>
+    <div class="places-grid" id="other-places"></div>
+  </div>
+
+</div>
+
+<footer>🇬🇪 sakartvelo.ai · <span data-i18n="footer_text">Free AI guide to Georgia</span></footer>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────
+const PAGE = {
+  slug: 'tbilisi',
+  emoji: '🏙️',
+  data: {
+    en: {
+      title: 'Tbilisi',
+      sub: 'Capital of Georgia · sulfur baths · Old Town · 1.5M people',
+      must: [
+        {icon:'🕌', text:'Old Town (Abanotubani) — sulfur bath district, carved wooden balconies'},
+        {icon:'⛪', text:'Narikala Fortress — overlooks the whole city, free entry'},
+        {icon:'🚡', text:'Cable car to Narikala — best city views, ₾3'},
+        {icon:'🌉', text:'Peace Bridge — modern glass bridge over the Mtkvari river'},
+        {icon:'🍷', text:'Rustaveli Avenue — main boulevard, galleries, theatres'},
+        {icon:'🏛️', text:'National Museum — Georgian history from ancient times'},
+      ],
+      practical: [
+        {icon:'💱', text:'Currency: Georgian Lari (GEL). 1 USD ≈ 2.7 GEL'},
+        {icon:'🚇', text:'Metro: 2 lines, ₾1 per ride. Buy Metromoney card'},
+        {icon:'🚕', text:'Bolt taxi cheaper than Yandex. Average ride ₾5–10'},
+        {icon:'🌡️', text:'Best time: April–June and September–October'},
+        {icon:'📶', text:'SIM: Magti or Silknet. ₾15 for 20GB tourist SIM'},
+        {icon:'🏨', text:'Stay in Old Town or Vera district for best experience'},
+      ]
+    },
+    ru: {
+      title: 'Тбилиси',
+      sub: 'Столица Грузии · серные бани · Старый город · 1.5М жителей',
+      must: [
+        {icon:'🕌', text:'Старый город (Абанотубани) — район серных бань, резные балконы'},
+        {icon:'⛪', text:'Крепость Нарикала — вид на весь город, вход бесплатный'},
+        {icon:'🚡', text:'Канатная дорога к Нарикале — лучший вид, ₾3'},
+        {icon:'🌉', text:'Мост Мира — стеклянный мост над рекой Мтквари'},
+        {icon:'🍷', text:'Проспект Руставели — главный бульвар, галереи, театры'},
+        {icon:'🏛️', text:'Национальный музей — история Грузии с древнейших времён'},
+      ],
+      practical: [
+        {icon:'💱', text:'Валюта: Грузинский Лари (GEL). 1 USD ≈ 2.7 GEL'},
+        {icon:'🚇', text:'Метро: 2 линии, ₾1 за поездку. Купи карту Metromoney'},
+        {icon:'🚕', text:'Bolt дешевле Яндекс.Такси. Средняя поездка ₾5–10'},
+        {icon:'🌡️', text:'Лучшее время: апрель–июнь и сентябрь–октябрь'},
+        {icon:'📶', text:'SIM: Magti или Silknet. ₾15 за туристический пакет 20GB'},
+        {icon:'🏨', text:'Лучше жить в Старом городе или районе Вера'},
+      ]
+    },
+    de: {
+      title: 'Tiflis',
+      sub: 'Hauptstadt Georgiens · Schwefelbäder · Altstadt · 1,5M Einwohner',
+      must: [
+        {icon:'🕌', text:'Altstadt (Abanotubani) — Schwefelbad-Viertel, geschnitzte Holzbalkone'},
+        {icon:'⛪', text:'Narikala-Festung — Blick über die ganze Stadt, kostenloser Eintritt'},
+        {icon:'🚡', text:'Seilbahn zur Narikala — beste Stadtansichten, ₾3'},
+        {icon:'🌉', text:'Friedensbrücke — moderne Glasbrücke über den Fluss Mtkvari'},
+        {icon:'🍷', text:'Rustaweli-Allee — Hauptboulevard, Galerien, Theater'},
+        {icon:'🏛️', text:'Nationalmuseum — georgische Geschichte aus der Antike'},
+      ],
+      practical: [
+        {icon:'💱', text:'Währung: Georgischer Lari (GEL). 1 EUR ≈ 2.9 GEL'},
+        {icon:'🚇', text:'Metro: 2 Linien, ₾1 pro Fahrt. Metromoney-Karte kaufen'},
+        {icon:'🚕', text:'Bolt günstiger als andere Taxis. Durchschnittlich ₾5–10'},
+        {icon:'🌡️', text:'Beste Reisezeit: April–Juni und September–Oktober'},
+        {icon:'📶', text:'SIM: Magti oder Silknet. ₾15 für 20GB Touristen-SIM'},
+        {icon:'🏨', text:'Altstadt oder Vera-Viertel empfohlen'},
+      ]
+    },
+    fr: {
+      title: 'Tbilissi',
+      sub: 'Capitale de la Géorgie · bains soufrés · Vieille Ville · 1,5M habitants',
+      must: [
+        {icon:'🕌', text:'Vieille Ville (Abanotubani) — quartier des bains soufrés, balcons en bois sculptés'},
+        {icon:'⛪', text:'Forteresse Narikala — vue sur toute la ville, entrée gratuite'},
+        {icon:'🚡', text:'Téléphérique vers Narikala — meilleures vues, ₾3'},
+        {icon:'🌉', text:'Pont de la Paix — pont en verre sur la rivière Mtkvari'},
+        {icon:'🍷', text:'Avenue Roustaveli — boulevard principal, galeries, théâtres'},
+        {icon:'🏛️', text:'Musée National — histoire géorgienne depuis l\'Antiquité'},
+      ],
+      practical: [
+        {icon:'💱', text:'Monnaie: Lari géorgien (GEL). 1 EUR ≈ 2.9 GEL'},
+        {icon:'🚇', text:'Métro: 2 lignes, ₾1 par trajet. Carte Metromoney'},
+        {icon:'🚕', text:'Bolt moins cher. Trajet moyen ₾5–10'},
+        {icon:'🌡️', text:'Meilleure période: avril–juin et septembre–octobre'},
+        {icon:'📶', text:'SIM: Magti ou Silknet. ₾15 pour 20Go touristique'},
+        {icon:'🏨', text:'Logez en Vieille Ville ou quartier Vera'},
+      ]
+    },
+    tr: {
+      title: 'Tiflis',
+      sub: 'Gürcistan\'ın başkenti · kükürt hamamları · Eski Şehir · 1,5M nüfus',
+      must: [
+        {icon:'🕌', text:'Eski Şehir (Abanotubani) — kükürt hamamı bölgesi, oymalı ahşap balkonlar'},
+        {icon:'⛪', text:'Narikala Kalesi — tüm şehre hakim, ücretsiz giriş'},
+        {icon:'🚡', text:'Narikala\'ya teleferik — en iyi şehir manzarası, ₾3'},
+        {icon:'🌉', text:'Barış Köprüsü — Mtkvari nehri üzerinde modern cam köprü'},
+        {icon:'🍷', text:'Rustaveli Caddesi — ana bulvar, galeriler, tiyatrolar'},
+        {icon:'🏛️', text:'Ulusal Müze — antik çağdan Gürcistan tarihi'},
+      ],
+      practical: [
+        {icon:'💱', text:'Para birimi: Gürcü Larisi (GEL). 1 USD ≈ 2.7 GEL'},
+        {icon:'🚇', text:'Metro: 2 hat, ₾1 per sefer. Metromoney kartı al'},
+        {icon:'🚕', text:'Bolt daha ucuz. Ortalama sefer ₾5–10'},
+        {icon:'🌡️', text:'En iyi zaman: Nisan–Haziran ve Eylül–Ekim'},
+        {icon:'📶', text:'SIM: Magti veya Silknet. ₾15 turistik 20GB SIM'},
+        {icon:'🏨', text:'Eski Şehir veya Vera semtinde kalın'},
+      ]
+    },
+    ar: {
+      title: 'تبليسي',
+      sub: 'عاصمة جورجيا · الحمامات الكبريتية · المدينة القديمة · 1.5 مليون نسمة',
+      must: [
+        {icon:'🕌', text:'المدينة القديمة (أبانوتوباني) — حي الحمامات الكبريتية، شرفات خشبية منحوتة'},
+        {icon:'⛪', text:'قلعة ناريكالا — إطلالة على المدينة بأكملها، دخول مجاني'},
+        {icon:'🚡', text:'التلفريك إلى ناريكالا — أفضل مناظر المدينة، ₾3'},
+        {icon:'🌉', text:'جسر السلام — جسر زجاجي حديث فوق نهر متكفاري'},
+        {icon:'🍷', text:'شارع روستافيلي — الشارع الرئيسي، المعارض، المسارح'},
+        {icon:'🏛️', text:'المتحف الوطني — تاريخ جورجيا منذ العصور القديمة'},
+      ],
+      practical: [
+        {icon:'💱', text:'العملة: الليري الجورجي. 1 دولار ≈ 2.7 ليري'},
+        {icon:'🚇', text:'المترو: خطان، ₾1 للرحلة. اشتر بطاقة Metromoney'},
+        {icon:'🚕', text:'Bolt أرخص. متوسط الرحلة ₾5–10'},
+        {icon:'🌡️', text:'أفضل وقت: أبريل–يونيو وسبتمبر–أكتوبر'},
+        {icon:'📶', text:'شريحة SIM: Magti أو Silknet. ₾15 لشريحة سياحية 20GB'},
+        {icon:'🏨', text:'أقم في المدينة القديمة أو حي فيرا'},
+      ]
+    },
+    he: {
+      title: 'טביליסי',
+      sub: 'בירת גאורגיה · מרחצאות גופרית · העיר העתיקה · 1.5 מיליון תושבים',
+      must: [
+        {icon:'🕌', text:'העיר העתיקה (אבנוטובני) — רובע מרחצאות הגופרית, מרפסות עץ מגולפות'},
+        {icon:'⛪', text:'מצודת נריקלה — נוף על כל העיר, כניסה חינם'},
+        {icon:'🚡', text:'רכבל לנריקלה — נופי העיר הטובים ביותר, ₾3'},
+        {icon:'🌉', text:'גשר השלום — גשר זכוכית מודרני מעל נהר מטקווארי'},
+        {icon:'🍷', text:'שדרות רוסטבלי — הבוולוואר הראשי, גלריות, תיאטראות'},
+        {icon:'🏛️', text:'המוזיאון הלאומי — ההיסטוריה הגאורגית מימי קדם'},
+      ],
+      practical: [
+        {icon:'💱', text:'מטבע: לארי גאורגי (GEL). 1 דולר ≈ 2.7 לארי'},
+        {icon:'🚇', text:'מטרו: 2 קווים, ₾1 לנסיעה. קנה כרטיס Metromoney'},
+        {icon:'🚕', text:'Bolt זול יותר. נסיעה ממוצעת ₾5–10'},
+        {icon:'🌡️', text:'זמן הטוב ביותר: אפריל–יוני וספטמבר–אוקטובר'},
+        {icon:'📶', text:'סים: Magti או Silknet. ₾15 לסים תיירותי 20GB'},
+        {icon:'🏨', text:'הישארו בעיר העתיקה או שכונת ורה'},
+      ]
+    },
+    it: {
+      title: 'Tbilisi',
+      sub: 'Capitale della Georgia · terme sulfuree · Città Vecchia · 1,5M abitanti',
+      must: [
+        {icon:'🕌', text:'Città Vecchia (Abanotubani) — quartiere dei bagni sulfurei, balconi in legno intagliato'},
+        {icon:'⛪', text:'Fortezza di Narikala — vista su tutta la città, ingresso gratuito'},
+        {icon:'🚡', text:'Funivia per Narikala — migliori viste sulla città, ₾3'},
+        {icon:'🌉', text:'Ponte della Pace — ponte in vetro moderno sul fiume Mtkvari'},
+        {icon:'🍷', text:'Viale Rustaveli — boulevard principale, gallerie, teatri'},
+        {icon:'🏛️', text:'Museo Nazionale — storia georgiana dall\'antichità'},
+      ],
+      practical: [
+        {icon:'💱', text:'Valuta: Lari georgiano (GEL). 1 EUR ≈ 2.9 GEL'},
+        {icon:'🚇', text:'Metro: 2 linee, ₾1 a viaggio. Acquista tessera Metromoney'},
+        {icon:'🚕', text:'Bolt più economico. Corsa media ₾5–10'},
+        {icon:'🌡️', text:'Periodo migliore: aprile–giugno e settembre–ottobre'},
+        {icon:'📶', text:'SIM: Magti o Silknet. ₾15 per SIM turistica 20GB'},
+        {icon:'🏨', text:'Soggiornate in Città Vecchia o nel quartiere Vera'},
+      ]
+    },
+    es: {
+      title: 'Tiflis',
+      sub: 'Capital de Georgia · baños de azufre · Ciudad Vieja · 1,5M habitantes',
+      must: [
+        {icon:'🕌', text:'Ciudad Vieja (Abanotubani) — barrio de baños de azufre, balcones de madera tallada'},
+        {icon:'⛪', text:'Fortaleza Narikala — vista de toda la ciudad, entrada gratuita'},
+        {icon:'🚡', text:'Teleférico a Narikala — mejores vistas, ₾3'},
+        {icon:'🌉', text:'Puente de la Paz — puente de cristal moderno sobre el río Mtkvari'},
+        {icon:'🍷', text:'Avenida Rustaveli — bulevar principal, galerías, teatros'},
+        {icon:'🏛️', text:'Museo Nacional — historia georgiana desde la antigüedad'},
+      ],
+      practical: [
+        {icon:'💱', text:'Moneda: Lari georgiano (GEL). 1 EUR ≈ 2.9 GEL'},
+        {icon:'🚇', text:'Metro: 2 líneas, ₾1 por viaje. Compra tarjeta Metromoney'},
+        {icon:'🚕', text:'Bolt más barato. Viaje promedio ₾5–10'},
+        {icon:'🌡️', text:'Mejor época: abril–junio y septiembre–octubre'},
+        {icon:'📶', text:'SIM: Magti o Silknet. ₾15 SIM turística 20GB'},
+        {icon:'🏨', text:'Alójate en la Ciudad Vieja o barrio Vera'},
+      ]
+    },
+  }
+};
+
+const UI = {
+  en:{pick_lang:'Choose language',must_see:'📍 Must See',practical:'🎒 Practical Info',cta_text:'Ask Chacha anything about Tbilisi',cta_btn:'🍶 Ask Chacha',other_places:'🗺️ Other Places in Georgia',back:'← sakartvelo.ai',footer_text:'Free AI guide to Georgia'},
+  ru:{pick_lang:'Выберите язык',must_see:'📍 Обязательно посмотреть',practical:'🎒 Практическая информация',cta_text:'Спроси Чачу всё про Тбилиси',cta_btn:'🍶 Спросить Чачу',other_places:'🗺️ Другие места Грузии',back:'← sakartvelo.ai',footer_text:'Бесплатный AI-гид по Грузии'},
+  de:{pick_lang:'Sprache wählen',must_see:'📍 Sehenswürdigkeiten',practical:'🎒 Praktische Infos',cta_text:'Frag Chacha alles über Tiflis',cta_btn:'🍶 Chacha fragen',other_places:'🗺️ Andere Orte in Georgien',back:'← sakartvelo.ai',footer_text:'Kostenloser KI-Reiseführer für Georgien'},
+  fr:{pick_lang:'Choisir la langue',must_see:'📍 À ne pas manquer',practical:'🎒 Infos pratiques',cta_text:'Demandez à Chacha tout sur Tbilissi',cta_btn:'🍶 Demander à Chacha',other_places:'🗺️ Autres lieux en Géorgie',back:'← sakartvelo.ai',footer_text:'Guide IA gratuit pour la Géorgie'},
+  tr:{pick_lang:'Dil seçin',must_see:'📍 Mutlaka Görülmeli',practical:'🎒 Pratik Bilgiler',cta_text:'Chacha\'ya Tiflis hakkında her şeyi sor',cta_btn:'🍶 Chacha\'ya Sor',other_places:'🗺️ Gürcistan\'daki Diğer Yerler',back:'← sakartvelo.ai',footer_text:'Gürcistan için ücretsiz AI rehberi'},
+  ar:{pick_lang:'اختر اللغة',must_see:'📍 يجب المشاهدة',practical:'🎒 معلومات عملية',cta_text:'اسأل تشاتشا عن كل شيء في تبليسي',cta_btn:'🍶 اسأل تشاتشا',other_places:'🗺️ أماكن أخرى في جورجيا',back:'← sakartvelo.ai',footer_text:'دليل AI مجاني لجورجيا'},
+  he:{pick_lang:'בחר שפה',must_see:'📍 חובה לראות',practical:'🎒 מידע מעשי',cta_text:'שאל את צ\'אצ\'ה הכל על טביליסי',cta_btn:'🍶 שאל את צ\'אצ\'ה',other_places:'🗺️ מקומות אחרים בגאורגיה',back:'← sakartvelo.ai',footer_text:'מדריך AI חינמי לגאורגיה'},
+  it:{pick_lang:'Scegli la lingua',must_see:'📍 Da non perdere',practical:'🎒 Informazioni pratiche',cta_text:'Chiedi a Chacha tutto su Tbilisi',cta_btn:'🍶 Chiedi a Chacha',other_places:'🗺️ Altri luoghi in Georgia',back:'← sakartvelo.ai',footer_text:'Guida AI gratuita per la Georgia'},
+  es:{pick_lang:'Elegir idioma',must_see:'📍 Imprescindible',practical:'🎒 Información práctica',cta_text:'Pregúntale a Chacha todo sobre Tiflis',cta_btn:'🍶 Preguntar a Chacha',other_places:'🗺️ Otros lugares en Georgia',back:'← sakartvelo.ai',footer_text:'Guía AI gratuita para Georgia'},
+};
+
+const OTHER = [
+  {slug:'kazbegi',emoji:'🏔️',en:'Kazbegi',ru:'Казбеги',de:'Kazbegi',fr:'Kazbegi',tr:'Kazbegi',ar:'كازبيغي',he:'קאזבגי',it:'Kazbegi',es:'Kazbegi',sub_en:'Mountains · Gergeti Church',sub_ru:'Горы · церковь Гергети'},
+  {slug:'batumi',emoji:'🌊',en:'Batumi',ru:'Батуми',de:'Batumi',fr:'Batoumi',tr:'Batum',ar:'باتومي',he:'בטומי',it:'Batumi',es:'Batumi',sub_en:'Black Sea · nightlife',sub_ru:'Чёрное море · ночная жизнь'},
+  {slug:'svaneti',emoji:'🗻',en:'Svaneti',ru:'Сванетия',de:'Swanetien',fr:'Svanétie',tr:'Svaneti',ar:'سفانيتي',he:'סוונטי',it:'Svaneti',es:'Suanetia',sub_en:'Medieval towers · UNESCO',sub_ru:'Башни · ЮНЕСКО'},
+  {slug:'kakheti',emoji:'🍷',en:'Kakheti Wine',ru:'Кахетия',de:'Kachetien',fr:'Kakhétie',tr:'Kahetya',ar:'كاخيتي',he:'קחטי',it:'Kakheti',es:'Kajetia',sub_en:'8000 years of wine',sub_ru:'8000 лет виноделия'},
+  {slug:'mtskheta',emoji:'🛕',en:'Mtskheta',ru:'Мцхета',de:'Mzcheta',fr:'Mtskheta',tr:'Mtskheta',ar:'متسخيتا',he:'מצחטה',it:'Mtskheta',es:'Mtskheta',sub_en:'Ancient capital · UNESCO',sub_ru:'Древняя столица · ЮНЕСКО'},
+  {slug:'borjomi',emoji:'💧',en:'Borjomi',ru:'Боржоми',de:'Borjomi',fr:'Borjomi',tr:'Borjomi',ar:'بورجومي',he:'בורגומי',it:'Borjomi',es:'Borjomi',sub_en:'Mineral water · nature',sub_ru:'Минеральная вода'},
+];
+
+// ── LOGIC ──────────────────────────────────────────────────
+let lang = localStorage.getItem('lang') || navigator.language.slice(0,2);
+if(!PAGE.data[lang]) lang = 'en';
+
+function render(){
+  const d = PAGE.data[lang] || PAGE.data.en;
+  const u = UI[lang] || UI.en;
+  const rtl = ['ar','he'].includes(lang);
+  document.documentElement.lang = lang;
+  document.documentElement.dir = rtl ? 'rtl' : 'ltr';
+
+  // meta
+  document.getElementById('meta-title').textContent = d.title + ' – sakartvelo.ai';
+  document.getElementById('meta-desc').content = d.sub;
+  document.getElementById('hero-emoji').textContent = PAGE.emoji;
+  document.getElementById('hero-title').textContent = d.title;
+  document.getElementById('hero-sub').textContent = d.sub;
+  document.getElementById('langLabel').textContent = lang.toUpperCase();
+
+  // i18n
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k = el.dataset.i18n;
+    if(u[k]) el.textContent = u[k];
+  });
+
+  // must see
+  document.getElementById('must-see-list').innerHTML = d.must.map(f=>
+    `<li><span class="icon">${f.icon}</span><span>${f.text}</span></li>`).join('');
+
+  // practical
+  document.getElementById('practical-list').innerHTML = d.practical.map(f=>
+    `<li><span class="icon">${f.icon}</span><span>${f.text}</span></li>`).join('');
+
+  // other places
+  const others = OTHER.filter(p=>p.slug !== PAGE.slug).slice(0,6);
+  document.getElementById('other-places').innerHTML = others.map(p=>
+    `<a href="/geo/${p.slug}/" class="place-card">
+      <div class="p-title">${p.emoji} ${p[lang]||p.en}</div>
+      <div class="p-sub">${lang==='ru'?p.sub_ru:p.sub_en}</div>
+    </a>`).join('');
+
+  // active lang btn
+  document.querySelectorAll('.lp-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.lang===lang);
+  });
+}
+
+// lang picker
+document.getElementById('langBtn').onclick = ()=>{
+  document.getElementById('langOverlay').classList.add('open');
+};
+document.getElementById('langOverlay').onclick = (e)=>{
+  if(e.target===e.currentTarget) e.currentTarget.classList.remove('open');
+};
+document.querySelectorAll('.lp-btn').forEach(b=>{
+  b.onclick = ()=>{
+    lang = b.dataset.lang;
+    localStorage.setItem('lang',lang);
+    document.getElementById('langOverlay').classList.remove('open');
+    render();
+  };
+});
+
+// theme
+const theme = ()=> document.documentElement.dataset.theme || 'light';
+document.getElementById('themeBtn').onclick = ()=>{
+  const t = theme()==='dark'?'light':'dark';
+  document.documentElement.dataset.theme = t;
+  localStorage.setItem('theme',t);
+  document.getElementById('themeBtn').textContent = t==='dark'?'☀️':'🌙';
+};
+if(localStorage.getItem('theme')==='dark'){
+  document.documentElement.dataset.theme='dark';
+  document.getElementById('themeBtn').textContent='☀️';
+}
+
+render();
+</script>
+</body>
+</html>
