@@ -318,7 +318,16 @@ function sendChat(text){
               try{
                 var p=JSON.parse(data);
                 var delta=(p.delta&&p.delta.text)||'';
-                if(delta){full+=delta;bd.textContent=full;g('cfM').scrollTop=99999;}
+                if(delta){full+=delta;
+                var html2=full;
+                html2=html2.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,function(m,label,url){return'<a class="cba act" href="'+url+'" target="_blank" rel="noopener">'+getLinkLabel(url)+'</a> ';});
+                html2=html2.replace(/(https?:\/\/[^\s)<"]+)/g,function(url){return'<a class="cba act" href="'+url+'" target="_blank" rel="noopener">'+getLinkLabel(url)+'</a>';});
+                html2=html2.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+                html2=html2.replace(/^##\s*/gm,'');
+                html2=html2.replace(/^-\s/gm,'• ');
+                html2=html2.replace(/---/g,'');
+                html2=html2.replace(/\n/g,'<br>');
+                bd.innerHTML=html2;g('cfM').scrollTop=99999;}
               }catch(e){}
             }
           });rd();
