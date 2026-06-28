@@ -20,5 +20,12 @@
   [headers.values]
     Cache-Control = "public, max-age=3600"
 
-# Language-based redirects removed — each page handles its own content
-# No wildcard /geo/* → index.html redirect (Задача 3)
+[[redirects]]
+  from = "/geo/:city/"
+  to = "/geo/:city/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/geo/:city"
+  to = "/geo/:city/index.html"
+  status = 200
