@@ -258,14 +258,23 @@ function getLinkLabel(url){
 function addBot(text){
   var d=document.createElement('div');d.className='cm bot';
   var urlRe=/(https?:\/\/[^\s)<]+)/g;
-  // Сначала конвертируем markdown ссылки [текст](url) в кнопки
-  text=text.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,function(m,label,url){
+  // Конвертируем markdown в HTML
+  var html=text;
+  // [текст](url) -> кнопка
+  html=html.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,function(m,label,url){
+    return'<a class="cba act" href="'+url+'" target="_blank" rel="noopener">'+getLinkLabel(url)+'</a> ';
+  });
+  // Обычные URL -> кнопка
+  html=html.replace(/(https?:\/\/[^\s)<"]+)/g,function(url){
     return'<a class="cba act" href="'+url+'" target="_blank" rel="noopener">'+getLinkLabel(url)+'</a>';
   });
-  // Потом обычные URL
-  d.innerHTML=text.replace(urlRe,function(url){
-    return'<a class="cba act" href="'+url+'" target="_blank" rel="noopener">'+getLinkLabel(url)+'</a>';
-  }).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/^##\s+/gm,'').replace(/^-\s+/gm,'• ').replace(/---/g,'');
+  // Форматирование
+  html=html.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+  html=html.replace(/^##\s*/gm,'');
+  html=html.replace(/^-\s/gm,'• ');
+  html=html.replace(/---/g,'<hr style="border:none;border-top:1px solid var(--ln);margin:8px 0">');
+  html=html.replace(/\n/g,'<br>');
+  d.innerHTML=html;
   var note=document.createElement('div');note.className='cm-note';
   note.textContent=t().disclaimer||'AI may make mistakes.';
   d.appendChild(note);
