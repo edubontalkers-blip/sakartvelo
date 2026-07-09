@@ -2306,8 +2306,7 @@ function speakFromButton(btn){
 try{if('speechSynthesis' in window){speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=function(){speechSynthesis.getVoices()};}}catch(e){}
 
 // Метро Тбилиси — сверено с офиц. схемой Tbilisi Transport Company
-var redLine=['Akhmetelis Teatri (Ахметели)','Sarajishvili (Сараджишвили)','Guramishvili (Гурамишвили)','Grmagele (Грмагеле)','Didube (Дидубе) 🚐 автовокзал','Gotsiridze (Гоциридзе)','Nadzaladevi (Надзаладеви)','Sadguris Moedani 1 (Вокзальная) 🔄🚂','Marjanishvili (Марджанишвили) 🏭','Rustaveli (Руставели)','Liberty Square (Свободы) 🏛️🚠','Avlabari (Авлабари) ⛪','300 Aragveli (300 Арагвели)','Isani (Исани)','Samgori (Самгори)','Varketili (Варкетили)'];
-var greenLine=['Sadguris Moedani 2 (Вокзальная) 🔄','Tsereteli (Церетели)','Teknikuri Universiteti (Политех)','Samedicino Universiteti (Мед.унив)','Delisi (Делиси)','Vazha-Pshavela (Важа-Пшавела)','Sakartvelos Universiteti (Госунив)*'];
+
 
 // Разговорник
 var PHRASES_I18N={
@@ -2910,9 +2909,44 @@ tools.translator=function(){openModal(TT('translator_title'));
   }
 };
 
+// Станции метро: латинское название + опциональный тег (переводится под язык).
+// Для русского сохраняем оригинальный вид с кириллицей в скобках — так уже привыкли пользователи.
+var METRO_RED_RU=['Akhmetelis Teatri (Ахметели)','Sarajishvili (Сараджишвили)','Guramishvili (Гурамишвили)','Grmagele (Грмагеле)','Didube (Дидубе) 🚐 автовокзал','Gotsiridze (Гоциридзе)','Nadzaladevi (Надзаладеви)','Sadguris Moedani 1 (Вокзальная) 🔄🚂','Marjanishvili (Марджанишвили) 🏭','Rustaveli (Руставели)','Liberty Square (Свободы) 🏛️🚠','Avlabari (Авлабари) ⛪','300 Aragveli (300 Арагвели)','Isani (Исани)','Samgori (Самгори)','Varketili (Варкетили)'];
+var METRO_GREEN_RU=['Sadguris Moedani 2 (Вокзальная) 🔄','Tsereteli (Церетели)','Teknikuri Universiteti (Политех)','Samedicino Universiteti (Мед.унив)','Delisi (Делиси)','Vazha-Pshavela (Важа-Пшавела)','Sakartvelos Universiteti (Госунив)*'];
+var METRO_RED_BASE=[
+  {n:'Akhmetelis Teatri'},{n:'Sarajishvili'},{n:'Guramishvili'},{n:'Grmagele'},
+  {n:'Didube',t:'bus'},{n:'Gotsiridze'},{n:'Nadzaladevi'},{n:'Station Square',t:'transferTrain'},
+  {n:'Marjanishvili'},{n:'Rustaveli'},{n:'Liberty Square',t:'monument'},{n:'Avlabari',t:'church'},
+  {n:'300 Aragveli'},{n:'Isani'},{n:'Samgori'},{n:'Varketili'}
+];
+var METRO_GREEN_BASE=[
+  {n:'Station Square',t:'transfer'},{n:'Tsereteli'},{n:'Technical University'},{n:'Medical University'},
+  {n:'Delisi'},{n:'Vazha-Pshavela'},{n:'State University'}
+];
+var METRO_TAGS={
+  en:{bus:'🚐 bus station',transferTrain:'🔄🚂 transfer + train',monument:'🏛️🚠 monument + cable car',church:'⛪ church',transfer:'🔄 transfer'},
+  de:{bus:'🚐 Busbahnhof',transferTrain:'🔄🚂 Umstieg + Zug',monument:'🏛️🚠 Denkmal + Seilbahn',church:'⛪ Kirche',transfer:'🔄 Umstieg'},
+  fr:{bus:'🚐 gare routière',transferTrain:'🔄🚂 correspondance + train',monument:'🏛️🚠 monument + téléphérique',church:'⛪ église',transfer:'🔄 correspondance'},
+  tr:{bus:'🚐 otobüs terminali',transferTrain:'🔄🚂 aktarma + tren',monument:'🏛️🚠 anıt + teleferik',church:'⛪ kilise',transfer:'🔄 aktarma'},
+  ar:{bus:'🚐 محطة حافلات',transferTrain:'🔄🚂 تبديل + قطار',monument:'🏛️🚠 نصب تذكاري + تلفريك',church:'⛪ كنيسة',transfer:'🔄 تبديل'},
+  he:{bus:'🚐 תחנה מרכזית',transferTrain:'🔄🚂 החלפה + רכבת',monument:'🏛️🚠 אנדרטה + רכבל',church:'⛪ כנסייה',transfer:'🔄 החלפה'},
+  it:{bus:'🚐 stazione bus',transferTrain:'🔄🚂 coincidenza + treno',monument:'🏛️🚠 monumento + funivia',church:'⛪ chiesa',transfer:'🔄 coincidenza'},
+  es:{bus:'🚐 estación de autobuses',transferTrain:'🔄🚂 transbordo + tren',monument:'🏛️🚠 monumento + teleférico',church:'⛪ iglesia',transfer:'🔄 transbordo'},
+};
+function buildMetroLine(base,lang){
+  var tags=METRO_TAGS[lang]||METRO_TAGS.en;
+  return base.map(function(s){return s.n+(s.t?' '+tags[s.t]:'');});
+}
+function getMetroLines(lang){
+  if(lang==='ru')return{red:METRO_RED_RU,green:METRO_GREEN_RU};
+  return{red:buildMetroLine(METRO_RED_BASE,lang),green:buildMetroLine(METRO_GREEN_BASE,lang)};
+}
+
 tools.metro=async function(){openModal(TT('metro_title'));
   var ul=window.__userLang||'ru';
   if(!TOOL_TEXTS_I18N[ul])await autoTranslateToolTexts(ul);
+  var __ml=getMetroLines(ul);
+  var redLine=__ml.red, greenLine=__ml.green;
   var opts=function(arr,line){return arr.map(function(s,i){return'<option value="'+line+':'+i+'">'+s+'</option>'}).join('')};
   mBody.innerHTML=
     '<p class="hint">'+TTX('metro_hint')+'</p>'+
