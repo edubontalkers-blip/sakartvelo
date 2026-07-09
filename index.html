@@ -650,14 +650,13 @@ header.top{display:flex;align-items:center;justify-content:space-between;padding
   <h2 class="section-title" data-i18n="tools_h">🧰 Полезное в Грузии</h2>
   <p class="section-sub" data-i18n="tools_sub">Всё что нужно на месте — работает каждый день поездки</p>
   <div class="bento" id="bento">
-    <button class="tile big" data-tool="translator"><span class="ti">🗣️</span><h3 data-i18n="t_translator_h">Переводчик турист - грузин</h3><p data-i18n="t_translator_p">Говори на своём — Чача переведёт на грузинский голосом. Бесплатно.</p></button>
+    <button class="tile big" data-tool="weather"><span class="ti">🌤️</span><h3 data-i18n="t_weather_h">Погода в Грузии</h3><p data-i18n="t_weather_p">7 дней · 11 городов · обновляется каждый час</p></button>
     <button class="tile" data-tool="metro"><span class="ti">🚇</span><h3 data-i18n="t_metro_h">Метро Тбилиси</h3><p data-i18n="t_metro_p">Маршрут, цена, пересадка. Офлайн.</p></button>
     <button class="tile" data-tool="phrases"><span class="ti">📖</span><h3 data-i18n="t_phrases_h">Разговорник</h3><p data-i18n="t_phrases_p">Грузинские фразы + произношение</p></button>
     <button class="tile" data-tool="currency"><span class="ti">💱</span><h3 data-i18n="t_currency_h">Курс лари</h3><p data-i18n="t_currency_p">GEL в твою валюту</p></button>
     <button class="tile" data-tool="radio"><span class="ti">📻</span><h3 data-i18n="t_radio_h">Радио разных стран</h3><p data-i18n="t_radio_p">Твоя страна + Грузия</p></button>
     <button class="tile" data-tool="emergency"><span class="ti">🆘</span><h3 data-i18n="t_emergency_h">Экстренное</h3><p data-i18n="t_emergency_p">112, посольство, помощь</p></button>
     <button class="tile" data-tool="tips"><span class="ti">🧮</span><h3 data-i18n="t_tips_h">Чаевые</h3><p data-i18n="t_tips_p">Делёж счёта супры</p></button>
-    <button class="tile" data-tool="checklist"><span class="ti">✅</span><h3 data-i18n="t_checklist_h">Чек-лист сборов</h3><p data-i18n="t_checklist_p">Со страховкой 2026</p></button>
     <button class="tile" data-tool="food"><span class="ti">🍷</span><h3 data-i18n="t_food_h">Что заказать</h3><p data-i18n="t_food_p">Блюда и вино Грузии</p></button>
     <button class="tile" data-tool="visa"><span class="ti">🛂</span><h3 data-i18n="t_visa_h">Дни визы</h3><p data-i18n="t_visa_p">Виза-фри год — счётчик</p></button>
     <button class="tile" data-tool="alarm"><span class="ti">⏰</span><h3 data-i18n="t_alarm_h">Будильник</h3><p data-i18n="t_alarm_p">Не проспи экскурсию</p></button>
@@ -844,6 +843,7 @@ var I18N={
     t_phrases_h:'Разговорник',t_phrases_p:'Грузинские фразы + озвучка',
     t_currency_h:'Курс лари',t_currency_p:'GEL в твою валюту',
     t_radio_h:'Радио разных стран',t_radio_p:'Твоя страна + Грузия',
+    t_weather_h:'Погода в Грузии',t_weather_p:'7 дней · 11 городов · каждый час',
     t_emergency_h:'Экстренное',t_emergency_p:'112, посольство, помощь',
     t_tips_h:'Чаевые',t_tips_p:'Делёж счёта супры',
     t_checklist_h:'Чек-лист сборов',t_checklist_p:'Со страховкой 2026',
@@ -876,6 +876,7 @@ var I18N={
     t_phrases_h:'Phrasebook',t_phrases_p:'Georgian phrases + pronunciation',
     t_currency_h:'Lari rate',t_currency_p:'GEL to your currency',
     t_radio_h:'Radio from around the world',t_radio_p:'Your country + Georgia',
+    t_weather_h:'Georgia Weather',t_weather_p:'7-day forecast · 11 cities · updated hourly',
     t_emergency_h:'Emergency',t_emergency_p:'112, embassy, help',
     t_tips_h:'Tips',t_tips_p:'Split the supra bill',
     t_checklist_h:'Packing checklist',t_checklist_p:'With 2026 insurance',
@@ -943,7 +944,24 @@ var I18N={
     t_phrases_h:'Konuşma kılavuzu',t_phrases_p:'Gürcüce ifadeler + ses',
     t_currency_h:'Lari kuru',t_currency_p:'GEL kendi paranda',
     t_radio_h:'Farklı ülkelerden radyo',t_radio_p:'Ülken + Gürcistan',
+    t_weather_h:'Gürcistan Hava Durumu',t_weather_p:'7 gün · 11 şehir · saatte bir güncellenir',
     t_emergency_h:'Acil',t_emergency_p:'112, elçilik, yardım',
+    emergency_numbers:'Gürcistan Acil Numaraları',
+    emergency_112:'birleşik acil (polis, ambulans, itfaiye)',
+    emergency_1441:'Gürcistan turist yardım hattı',
+    emergency_118:'ambulans / tıbbi acil',
+    emergency_122:'itfaiye',
+    emergency_phrases_title:'🗣️ Bunu bir Gürcüye gösterin',
+    emergency_help:'Yardım edin!',
+    emergency_ambulance:'Ambulans çağırın!',
+    emergency_police:'Polis!',
+    emergency_doctor:'Doktor!',
+    emergency_fire:'Yangın!',
+    emergency_robbed:'Soyuldum!',
+    emergency_lost:'Kayboldum!',
+    emergency_hospital:'Hastane nerede?',
+    emergency_insurance_title:'2026 Sigortası — zorunlu!',
+    emergency_insurance_text:'1 Ocak 2026 dan Gürcistan a girişte sigorta zorunludur. Aldagi resmi ortaktir.',
     t_tips_h:'Bahşiş',t_tips_p:'Supra hesabını böl',
     t_checklist_h:'Hazırlık listesi',t_checklist_p:'2026 sigortasıyla',
     t_food_h:'Ne sipariş etmeli',t_food_p:'Gürcü yemekleri ve şarabı',
@@ -975,7 +993,24 @@ var I18N={
     t_phrases_h:'كتاب العبارات',t_phrases_p:'عبارات جورجية + صوت',
     t_currency_h:'سعر اللاري',t_currency_p:'GEL بعملتك',
     t_radio_h:'راديو من دول مختلفة',t_radio_p:'بلدك + جورجيا',
+    t_weather_h:'طقس جورجيا',t_weather_p:'7 أيام · 11 مدينة · يُحدَّث كل ساعة',
     t_emergency_h:'الطوارئ',t_emergency_p:'112، السفارة، المساعدة',
+    emergency_numbers:'أرقام الطوارئ في جورجيا',
+    emergency_112:'الطوارئ الموحدة (شرطة، إسعاف، إطفاء)',
+    emergency_1441:'خط مساعدة السياح',
+    emergency_118:'الإسعاف / طوارئ طبية',
+    emergency_122:'الإطفاء',
+    emergency_phrases_title:'🗣️ أرِ هذا لجورجي — سيفهم',
+    emergency_help:'ساعدني!',
+    emergency_ambulance:'اتصل بالإسعاف!',
+    emergency_police:'الشرطة!',
+    emergency_doctor:'طبيب!',
+    emergency_fire:'حريق!',
+    emergency_robbed:'تعرضت للسرقة!',
+    emergency_lost:'ضللت الطريق!',
+    emergency_hospital:'أين المستشفى؟',
+    emergency_insurance_title:'التأمين 2026 — إلزامي!',
+    emergency_insurance_text:'منذ 1 يناير 2026 التأمين السياحي إلزامي لدخول جورجيا. Aldagi الشريك الرسمي.',
     t_tips_h:'البقشيش',t_tips_p:'تقسيم فاتورة السفرة',
     t_checklist_h:'قائمة التجهيز',t_checklist_p:'مع تأمين 2026',
     t_food_h:'ماذا تطلب',t_food_p:'أطباق وخمور جورجيا',
@@ -1071,7 +1106,24 @@ var I18N={
     t_phrases_h:'ספר שיחות',t_phrases_p:'ביטויים גאורגיים + אודיו',
     t_currency_h:'שער הלארי',t_currency_p:'GEL למטבע שלך',
     t_radio_h:'רדיו ממדינות שונות',t_radio_p:'המדינה שלך + גאורגיה',
+    t_weather_h:'מזג אוויר בגאורגיה',t_weather_p:'7 ימים · 11 ערים · מתעדכן כל שעה',
     t_emergency_h:'חירום',t_emergency_p:'112, שגרירות, עזרה',
+    emergency_numbers:'מספרי חירום בגאורגיה',
+    emergency_112:'חירום מאוחד (משטרה, אמבולנס, כיבוי)',
+    emergency_1441:'קו חם תיירים בגאורגיה',
+    emergency_118:'אמבולנס / חירום רפואי',
+    emergency_122:'כיבוי אש',
+    emergency_phrases_title:'🗣️ הראה זאת לגאורגי — יבין',
+    emergency_help:'עזרו לי!',
+    emergency_ambulance:'קראו אמבולנס!',
+    emergency_police:'משטרה!',
+    emergency_doctor:'רופא!',
+    emergency_fire:'אש!',
+    emergency_robbed:'שדדו אותי!',
+    emergency_lost:'אבדתי!',
+    emergency_hospital:'איפה בית החולים?',
+    emergency_insurance_title:'ביטוח 2026 — חובה!',
+    emergency_insurance_text:'מה-1.1.2026 ביטוח נסיעות חובה לגאורגיה. Aldagi השותף הרשמי.',
     t_tips_h:'טיפים',t_tips_p:'חלוקת חשבון הסופרה',
     t_checklist_h:'רשימת אריזה',t_checklist_p:'עם ביטוח 2026',
     t_food_h:'מה להזמין',t_food_p:'מאכלים ויין גאורגיים',
@@ -1103,7 +1155,24 @@ var I18N={
     t_phrases_h:'Guide de conversation',t_phrases_p:'Phrases géorgiennes + audio',
     t_currency_h:'Taux du lari',t_currency_p:'GEL dans ta devise',
     t_radio_h:'Radio de différents pays',t_radio_p:'Ton pays + Géorgie',
+    t_weather_h:'Météo Géorgie',t_weather_p:'7 jours · 11 villes · mis à jour chaque heure',
     t_emergency_h:'Urgence',t_emergency_p:'112, ambassade, aide',
+    emergency_numbers:'Numeros durgence Georgie',
+    emergency_112:'urgences unifiées (police, ambulance, pompiers)',
+    emergency_1441:'ligne dassistance touristique',
+    emergency_118:'ambulance / urgence médicale',
+    emergency_122:'pompiers',
+    emergency_phrases_title:'🗣️ Montrez ceci à un Géorgien',
+    emergency_help:'Aidez-moi!',
+    emergency_ambulance:'Appelez une ambulance!',
+    emergency_police:'Police!',
+    emergency_doctor:'Médecin!',
+    emergency_fire:'Feu!',
+    emergency_robbed:'Jai ete vole!',
+    emergency_lost:'Je me suis perdu!',
+    emergency_hospital:'Ou est lhopital?',
+    emergency_insurance_title:'Assurance 2026 — obligatoire!',
+    emergency_insurance_text:'Depuis le 1er janvier 2026 assurance obligatoire pour entrer en Georgie. Aldagi est le partenaire officiel.',
     t_tips_h:'Pourboires',t_tips_p:'Partager l\'addition du supra',
     t_checklist_h:'Liste de voyage',t_checklist_p:'Avec assurance 2026',
     t_food_h:'Quoi commander',t_food_p:'Plats et vins géorgiens',
@@ -1135,7 +1204,24 @@ var I18N={
     t_phrases_h:'Guía de conversación',t_phrases_p:'Frases georgianas + audio',
     t_currency_h:'Tipo de cambio lari',t_currency_p:'GEL a tu moneda',
     t_radio_h:'Radio de distintos países',t_radio_p:'Tu país + Georgia',
+    t_weather_h:'Clima Georgia',t_weather_p:'7 días · 11 ciudades · actualizado cada hora',
     t_emergency_h:'Emergencia',t_emergency_p:'112, embajada, ayuda',
+    emergency_numbers:'Números de emergencia Georgia',
+    emergency_112:'emergencia unificada (policía, ambulancia, bomberos)',
+    emergency_1441:'línea de ayuda turista Georgia',
+    emergency_118:'ambulancia / emergencia médica',
+    emergency_122:'bomberos',
+    emergency_phrases_title:'🗣️ Muestra esto a un georgiano',
+    emergency_help:'¡Ayúdenme!',
+    emergency_ambulance:'¡Llamen una ambulancia!',
+    emergency_police:'¡Policía!',
+    emergency_doctor:'¡Doctor!',
+    emergency_fire:'¡Fuego!',
+    emergency_robbed:'¡Me robaron!',
+    emergency_lost:'¡Estoy perdido!',
+    emergency_hospital:'¿Dónde está el hospital?',
+    emergency_insurance_title:'¡Seguro 2026 — obligatorio!',
+    emergency_insurance_text:'Desde el 1 de enero de 2026 seguro obligatorio para Georgia. Aldagi es el socio oficial.',
     t_tips_h:'Propinas',t_tips_p:'Dividir la cuenta del supra',
     t_checklist_h:'Lista de equipaje',t_checklist_p:'Con seguro 2026',
     t_food_h:'Qué pedir',t_food_p:'Platos y vinos georgianos',
@@ -1167,7 +1253,24 @@ var I18N={
     t_phrases_h:'Sprachführer',t_phrases_p:'Georgische Phrasen + Audio',
     t_currency_h:'Lari-Kurs',t_currency_p:'GEL in deine Währung',
     t_radio_h:'Radio aus verschiedenen Ländern',t_radio_p:'Dein Land + Georgien',
+    t_weather_h:'Wetter in Georgien',t_weather_p:'7 Tage · 11 Städte · stündlich aktualisiert',
     t_emergency_h:'Notfall',t_emergency_p:'112, Botschaft, Hilfe',
+    emergency_numbers:'Notfallnummern Georgien',
+    emergency_112:'einheitlicher Notruf (Polizei, Rettung, Feuerwehr)',
+    emergency_1441:'Touristen-Hotline Georgien',
+    emergency_118:'Krankenwagen / medizinischer Notfall',
+    emergency_122:'Feuerwehr',
+    emergency_phrases_title:'🗣️ Zeigen Sie dies einem Georgier',
+    emergency_help:'Helfen Sie mir!',
+    emergency_ambulance:'Rufen Sie einen Krankenwagen!',
+    emergency_police:'Polizei!',
+    emergency_doctor:'Arzt!',
+    emergency_fire:'Feuer!',
+    emergency_robbed:'Ich wurde beraubt!',
+    emergency_lost:'Ich habe mich verirrt!',
+    emergency_hospital:'Wo ist das Krankenhaus?',
+    emergency_insurance_title:'Versicherung 2026 — Pflicht!',
+    emergency_insurance_text:'Seit dem 1. Januar 2026 ist eine Reiseversicherung für die Einreise nach Georgien Pflicht. Aldagi ist der offizielle Partner.',
     t_tips_h:'Trinkgeld',t_tips_p:'Supra-Rechnung aufteilen',
     t_checklist_h:'Packliste',t_checklist_p:'Mit Versicherung 2026',
     t_food_h:'Was bestellen',t_food_p:'Georgische Gerichte & Wein',
@@ -1344,7 +1447,24 @@ var I18N={
   ky:{trust:'🆓 Түбөлүк акысыз · <b>ишенимдүү бренддер</b>',sub:'Бүтүндөй сапарыңызда жанашкан жолдош.',law_h:'2026-жылдын жаңы мыйзамы — камсыздандыруу милдеттүү',law_p:'2026-жылдын 1-январынан баштап ар бир турист медициналык камсыздандырууга ээ болуусу керек.',law_a:'Камсыздандыруу алуу →',tools_h:'🧰 Грузияда пайдалуу',tools_sub:'Жерде керек болгон баары',t_translator_h:'Котормочу',t_translator_p:'Өз тилиңизде жазыңыз',t_metro_h:'Тбилиси метросу',t_metro_p:'Маршрут, баа. Офлайн.',t_phrases_h:'Сүйлөшүү',t_phrases_p:'Грузин сөздөрү',t_currency_h:'Лари курсу',t_currency_p:'GEL сиздин валютаңызга',t_emergency_h:'Тез жардам',t_emergency_p:'112, элчилик',t_tips_h:'Чай акча',t_tips_p:'Эсепти бөлүшүү',t_checklist_h:'Жыйноо тизмеси',t_checklist_p:'2026 камсыздандыруу менен',t_food_h:'Эмне заказ берүү',t_food_p:'Грузин тамактары',t_visa_h:'Виза күндөрү',t_visa_p:'Визасыз жыл',t_alarm_h:'Ойготкуч',t_alarm_p:'Экскурсияны өткөрүп жибербе',t_torch_h:'Чырак',t_torch_p:'Каранкыда жарык',t_luggage_h:'Жүк сактоо',t_luggage_p:'Чемоданды коюп кет',t_prices_h:'Адилеттүү баалар 2026',t_prices_p:'Эмне канча турат',t_games_h:'Оюндар',t_games_p:'Шахмат, жылан, 2048. Акысыз.',t_airports_h:'Грузия аэропорттору',t_airports_p:'Тбилиси, Батуми, Кутаиси',t_trains_h:'Грузия поезддери',t_trains_p:'Тбилиси\u2194Батуми',t_flights_h:'Түз рейстер',t_flights_p:'Тбилиси, Батуми',share_h:'Бөлүшүү 🍶',share_sub:'Грузияга баратын досторуңа айт',f_terms:'Шарттар',f_privacy:'Купуялык',f_about:'Биз жөнүндө',f_note:'Чача акысыз AI жардамчы. 🇬🇪',consent:'Макулмун 🍶',consent_no:'Баш тартуу',disclaimer:'Чача AI, жаңылышы мүмкүн 🍶',ph:'Чачага кабар жибер...',back:'← Артка'},
   ja:{trust:'🆓 永久無料 · <b>信頼できるブランド</b>での支払い',sub:'旅全体の心強いパートナー。ジョージアについて何でも聞いてください。',law_h:'2026年新法律 — 保険が必須',law_p:'2026年1月1日から、すべての観光客は医療保険が必要です（最低30,000₾）。',law_a:'保険を申し込む →',tools_h:'🧰 ジョージアで役立つ',tools_sub:'現地で必要なすべて',t_translator_h:'翻訳',t_translator_p:'あなたの言語で入力 — グルジア語訳を確認',t_metro_h:'トビリシ地下鉄',t_metro_p:'ルート、料金、乗り換え。オフライン。',t_phrases_h:'会話ガイド',t_phrases_p:'グルジア語フレーズ＋発音',t_currency_h:'ラリ為替レート',t_currency_p:'GELをあなたの通貨に',t_emergency_h:'緊急援助',t_emergency_p:'112、大使館',t_tips_h:'チップ',t_tips_p:'スプラの会計を分割',t_checklist_h:'荷造りリスト',t_checklist_p:'2026年保険付き',t_food_h:'何を注文するか',t_food_p:'グルジア料理とワイン',t_visa_h:'ビザ日数',t_visa_p:'ビザなし年間 — カウンター',t_alarm_h:'アラーム',t_alarm_p:'ツアーを見逃さないで',t_torch_h:'懐中電灯',t_torch_p:'暗闇の中の光',t_luggage_h:'荷物預かり',t_luggage_p:'荷物を預けて',t_prices_h:'適正価格 2026',t_prices_p:'料金目安',t_games_h:'ゲーム',t_games_p:'チェス、スネーク、2048。無料。',t_airports_h:'空港案内板',t_airports_p:'トビリシ、バトゥミ、クタイシ',t_trains_h:'ジョージアの列車',t_trains_p:'トビリシ\u2194バトゥミ',t_flights_h:'直行便',t_flights_p:'トビリシ、バトゥミ、クタイシへ',share_h:'シェア 🍶',share_sub:'ジョージアに行く友人に教えよう',f_terms:'利用規約',f_privacy:'プライバシー',f_about:'私たちについて',f_note:'チャチャは無料AIアシスタント。 🇬🇪',consent:'同意します 🍶',consent_no:'拒否',disclaimer:'チャチャはAIです。回答を確認してください 🍶',ph:'チャチャにメッセージを送る...',back:'← 戻る'},
   ko:{trust:'🆓 영원히 무료 · <b>신뢰할 수 있는 브랜드</b>로 결제',sub:'여행 내내 함께하는 든든한 동반자. 조지아에 대해 무엇이든 물어보세요.',law_h:'2026년 새 법률 — 보험 필수',law_p:'2026년 1월 1일부터 모든 관광객은 의료 보험이 필요합니다 (최소 30,000₾).',law_a:'보험 가입하기 →',tools_h:'🧰 조지아에서 유용한 것',tools_sub:'현장에서 필요한 모든 것',t_translator_h:'번역기',t_translator_p:'당신의 언어로 입력 — 조지아어 번역 확인',t_metro_h:'트빌리시 지하철',t_metro_p:'노선, 요금, 환승. 오프라인.',t_phrases_h:'회화 가이드',t_phrases_p:'조지아어 표현 + 발음',t_currency_h:'라리 환율',t_currency_p:'GEL을 당신의 통화로',t_emergency_h:'긴급 도움',t_emergency_p:'112, 대사관',t_tips_h:'팁',t_tips_p:'수프라 계산서 분할',t_checklist_h:'짐 목록',t_checklist_p:'2026 보험 포함',t_food_h:'무엇을 주문할까',t_food_p:'조지아 음식과 와인',t_visa_h:'비자 일수',t_visa_p:'무비자 연간 — 카운터',t_alarm_h:'알람',t_alarm_p:'투어를 놓치지 마세요',t_torch_h:'손전등',t_torch_p:'어둠 속의 빛',t_luggage_h:'수하물 보관',t_luggage_p:'짐을 맡기고',t_prices_h:'적정 가격 2026',t_prices_p:'요금 기준',t_games_h:'게임',t_games_p:'체스, 뱀, 2048. 무료.',t_airports_h:'공항 안내판',t_airports_p:'트빌리시, 바투미, 쿠타이시',t_trains_h:'조지아 기차',t_trains_p:'트빌리시\u2194바투미',t_flights_h:'직항편',t_flights_p:'트빌리시, 바투미, 쿠타이시행',share_h:'공유 🍶',share_sub:'조지아에 가는 친구에게 알려줘',f_terms:'약관',f_privacy:'개인정보',f_about:'우리에 대해',f_note:'차차는 무료 AI 어시스턴트. 🇬🇪',consent:'동의합니다 🍶',consent_no:'거부',disclaimer:'차차는 AI이며 실수할 수 있습니다 🍶',ph:'차차에게 메시지 보내기...',back:'← 뒤로'},
-  it:{trust:'🆓 Gratis per sempre · pagamento tramite <b>marchi affidabili</b>',sub:'Non solo un pianificatore — un compagno premuroso per tutto il viaggio.',law_h:'Nuova legge 2026 — assicurazione obbligatoria',law_p:'Dal 1 gennaio 2026 ogni turista deve avere un assicurazione medica (min. 30.000 ₾).',law_a:'Stipula assicurazione →',tools_h:'🧰 Utile in Georgia',tools_sub:'Tutto ciò di cui hai bisogno sul posto',t_translator_h:'Traduttore',t_translator_p:'Scrivi nella tua lingua — vedi la traduzione',t_metro_h:'Metro di Tbilisi',t_metro_p:'Percorso, prezzo, coincidenze. Offline.',t_phrases_h:'Guida alla conversazione',t_phrases_p:'Frasi georgiane + pronuncia',t_currency_h:'Tasso Lari',t_currency_p:'GEL nella tua valuta',t_emergency_h:'Emergenze',t_emergency_p:'112, ambasciata',t_tips_h:'Mance',t_tips_p:'Dividi il conto della supra',t_checklist_h:'Lista bagagli',t_checklist_p:'Con assicurazione 2026',t_food_h:'Cosa ordinare',t_food_p:'Piatti georgiani e vino',t_visa_h:'Giorni visto',t_visa_p:'Anno senza visto — contatore',t_alarm_h:'Sveglia',t_alarm_p:'Non perdere il tour',t_torch_h:'Torcia',t_torch_p:'Luce nel buio',t_luggage_h:'Deposito bagagli',t_luggage_p:'Lascia i bagagli',t_prices_h:'Prezzi equi 2026',t_prices_p:'Quanto costa cosa',t_games_h:'Giochi',t_games_p:'Scacchi, Campo Minato, Battaglia navale. Gratis.',t_airports_h:'Aeroporti Georgia',t_airports_p:'Tbilisi, Batumi, Kutaisi',t_trains_h:'Treni in Georgia',t_trains_p:'Tbilisi\u2194Batumi',t_flights_h:'Voli diretti',t_flights_p:'Per Tbilisi, Batumi, Kutaisi',share_h:'Condividi 🍶',share_sub:'Dillo agli amici che vanno in Georgia',f_terms:'Termini',f_privacy:'Privacy',f_about:'Chi siamo',f_note:'Chacha è un assistente AI gratuito. 🇬🇪',consent:'Accetto 🍶',consent_no:'Rifiuta',disclaimer:'Chacha è AI e può sbagliare 🍶',ph:'Invia un messaggio a Chacha...',back:'← Indietro'},
+  it:{trust:'🆓 Gratis per sempre · pagamento tramite <b>marchi affidabili</b>',sub:'Non solo un pianificatore — un compagno premuroso per tutto il viaggio.',law_h:'Nuova legge 2026 — assicurazione obbligatoria',law_p:'Dal 1 gennaio 2026 ogni turista deve avere un assicurazione medica (min. 30.000 ₾).',law_a:'Stipula assicurazione →',tools_h:'🧰 Utile in Georgia',tools_sub:'Tutto ciò di cui hai bisogno sul posto',t_translator_h:'Traduttore',t_translator_p:'Scrivi nella tua lingua — vedi la traduzione',t_metro_h:'Metro di Tbilisi',t_metro_p:'Percorso, prezzo, coincidenze. Offline.',t_phrases_h:'Guida alla conversazione',t_phrases_p:'Frasi georgiane + pronuncia',t_currency_h:'Tasso Lari',t_currency_p:'GEL nella tua valuta',t_weather_h:'Meteo Georgia',t_weather_p:'7 giorni · 11 città · aggiornato ogni ora',
+    t_emergency_h:'Emergenze',t_emergency_p:'112, ambasciata',t_tips_h:'Mance',t_tips_p:'Dividi il conto della supra',t_checklist_h:'Lista bagagli',t_checklist_p:'Con assicurazione 2026',t_food_h:'Cosa ordinare',t_food_p:'Piatti georgiani e vino',t_visa_h:'Giorni visto',t_visa_p:'Anno senza visto — contatore',t_alarm_h:'Sveglia',t_alarm_p:'Non perdere il tour',t_torch_h:'Torcia',t_torch_p:'Luce nel buio',t_luggage_h:'Deposito bagagli',t_luggage_p:'Lascia i bagagli',t_prices_h:'Prezzi equi 2026',t_prices_p:'Quanto costa cosa',t_games_h:'Giochi',t_games_p:'Scacchi, Campo Minato, Battaglia navale. Gratis.',t_airports_h:'Aeroporti Georgia',t_airports_p:'Tbilisi, Batumi, Kutaisi',t_trains_h:'Treni in Georgia',t_trains_p:'Tbilisi\u2194Batumi',t_flights_h:'Voli diretti',t_flights_p:'Per Tbilisi, Batumi, Kutaisi',share_h:'Condividi 🍶',share_sub:'Dillo agli amici che vanno in Georgia',f_terms:'Termini',f_privacy:'Privacy',f_about:'Chi siamo',f_note:'Chacha è un assistente AI gratuito. 🇬🇪',consent:'Accetto 🍶',consent_no:'Rifiuta',disclaimer:'Chacha è AI e può sbagliare 🍶',ph:'Invia un messaggio a Chacha...',back:'← Indietro'},
+    emergency_numbers:'Numeri di emergenza Georgia',
+    emergency_112:'emergenza unificata (polizia, ambulanza, pompieri)',
+    emergency_1441:'linea assistenza turisti Georgia',
+    emergency_118:'ambulanza / emergenza medica',
+    emergency_122:'vigili del fuoco',
+    emergency_phrases_title:'🗣️ Mostra questo a un georgiano',
+    emergency_help:'Aiutatemi!',
+    emergency_ambulance:'Chiamate una ambulanza!',
+    emergency_police:'Polizia!',
+    emergency_doctor:'Medico!',
+    emergency_fire:'Fuoco!',
+    emergency_robbed:'Sono stato derubato!',
+    emergency_lost:'Mi sono perso!',
+    emergency_hospital:'Dove e lospedale?',
+    emergency_insurance_title:'Assicurazione 2026 — obbligatoria!',
+    emergency_insurance_text:'Dal 1 gennaio 2026 assicurazione obbligatoria per Georgia. Aldagi e il partner ufficiale.',
   pt:{trust:'🆓 Grátis para sempre · pagamento via <b>marcas confiáveis</b>',sub:'Não é apenas um planejador — é um companheiro atencioso em toda a viagem.',law_h:'Nova lei 2026 — seguro obrigatório',law_p:'A partir de 1 de janeiro de 2026, todo turista deve ter seguro médico (mín. 30.000 ₾).',law_a:'Contratar seguro →',tools_h:'🧰 Útil na Geórgia',tools_sub:'Tudo que você precisa no local',t_translator_h:'Tradutor',t_translator_p:'Escreva no seu idioma — veja a tradução',t_metro_h:'Metro de Tbilisi',t_metro_p:'Rota, preço, baldeação. Offline.',t_phrases_h:'Guia de conversação',t_phrases_p:'Frases georgianas + pronúncia',t_currency_h:'Taxa Lari',t_currency_p:'GEL para sua moeda',t_emergency_h:'Emergências',t_emergency_p:'112, embaixada',t_tips_h:'Gorjetas',t_tips_p:'Dividir a conta da supra',t_checklist_h:'Lista de bagagem',t_checklist_p:'Com seguro 2026',t_food_h:'O que pedir',t_food_p:'Pratos georgianos e vinho',t_visa_h:'Dias de visto',t_visa_p:'Ano sem visto — contador',t_alarm_h:'Despertador',t_alarm_p:'Não perca o tour',t_torch_h:'Lanterna',t_torch_p:'Luz no escuro',t_luggage_h:'Depósito de bagagem',t_luggage_p:'Deixe as malas',t_prices_h:'Preços justos 2026',t_prices_p:'O que custa o quê',t_games_h:'Jogos',t_games_p:'Xadrez, cobra, 2048. Grátis.',t_airports_h:'Aeroportos da Geórgia',t_airports_p:'Tbilisi, Batumi, Kutaisi',t_trains_h:'Comboios na Geórgia',t_trains_p:'Tbilisi\u2194Batumi',t_flights_h:'Voos diretos',t_flights_p:'Para Tbilisi, Batumi, Kutaisi',share_h:'Compartilhar 🍶',share_sub:'Conta para amigos que vão à Geórgia',f_terms:'Termos',f_privacy:'Privacidade',f_about:'Sobre nós',f_note:'Chacha é um assistente AI gratuito. 🇬🇪',consent:'Concordo 🍶',consent_no:'Recusar',disclaimer:'Chacha é IA e pode errar 🍶',ph:'Envie uma mensagem para Chacha...',back:'← Voltar'},
   nl:{trust:'🆓 Altijd gratis · betaling via <b>vertrouwde merken</b>',sub:'Niet alleen een planner — een zorgzame reispartner voor de hele reis.',law_h:'Nieuwe wet 2026 — verzekering verplicht',law_p:'Vanaf 1 januari 2026 moet elke toerist een reisverzekering hebben (min. 30.000 ₾).',law_a:'Verzekering afsluiten →',tools_h:'🧰 Handig in Georgië',tools_sub:'Alles wat je ter plaatse nodig hebt',t_translator_h:'Vertaler',t_translator_p:'Typ in uw taal — zie de Georgische vertaling',t_metro_h:'Metro van Tbilisi',t_metro_p:'Route, prijs, overstap. Offline.',t_phrases_h:'Conversatiegids',t_phrases_p:'Georgische zinnen + uitspraak',t_currency_h:'Lari wisselkoers',t_currency_p:'GEL naar uw valuta',t_emergency_h:'Noodhulp',t_emergency_p:'112, ambassade',t_tips_h:'Fooi',t_tips_p:'Rekening delen bij supra',t_checklist_h:'Paklijst',t_checklist_p:'Met verzekering 2026',t_food_h:'Wat bestellen',t_food_p:'Georgische gerechten en wijn',t_visa_h:'Visadagen',t_visa_p:'Visumvrij jaar — teller',t_alarm_h:'Wekker',t_alarm_p:'Mis uw tour niet',t_torch_h:'Zaklamp',t_torch_p:'Licht in het donker',t_luggage_h:'Bagageopslag',t_luggage_p:'Koffers opslaan',t_prices_h:'Eerlijke prijzen 2026',t_prices_p:'Wat kost wat',t_games_h:'Spellen',t_games_p:'Schaken, slang, 2048. Gratis.',t_airports_h:'Luchthavens Georgië',t_airports_p:'Tbilisi, Batumi, Kutaisi',t_trains_h:'Treinen in Georgië',t_trains_p:'Tbilisi\u2194Batumi',t_flights_h:'Directe vluchten',t_flights_p:'Naar Tbilisi, Batumi, Kutaisi',share_h:'Delen 🍶',share_sub:'Vertel vrienden die naar Georgië gaan',f_terms:'Voorwaarden',f_privacy:'Privacy',f_about:'Over ons',f_note:'Chacha is een gratis AI-assistent. 🇬🇪',consent:'Ik ga akkoord 🍶',consent_no:'Weigeren',disclaimer:'Chacha is AI en kan fouten maken 🍶',ph:'Stuur een bericht naar Chacha...',back:'← Terug'},
   hi:{trust:'🆓 हमेशा के लिए मुफ़्त · <b>विश्वसनीय ब्रांड</b> के माध्यम से भुगतान',sub:'केवल एक प्लानर नहीं — पूरी यात्रा में आपका देखभाल करने वाला साथी।',law_h:'2026 नया कानून — बीमा अनिवार्य',law_p:'1 जनवरी 2026 से, हर पर्यटक के पास चिकित्सा बीमा होना चाहिए (न्यूनतम 30,000 ₾)।',law_a:'बीमा प्राप्त करें →',tools_h:'🧰 जॉर्जिया में उपयोगी',tools_sub:'वहाँ जो कुछ भी चाहिए',t_translator_h:'अनुवादक',t_translator_p:'अपनी भाषा में टाइप करें',t_metro_h:'त्बिलिसी मेट्रो',t_metro_p:'मार्ग, मूल्य, स्थानांतरण। ऑफलाइन।',t_phrases_h:'वार्तालाप गाइड',t_phrases_p:'जॉर्जियाई वाक्यांश + उच्चारण',t_currency_h:'लारी विनिमय दर',t_currency_p:'GEL को अपनी मुद्रा में',t_emergency_h:'आपातकालीन सहायता',t_emergency_p:'112, दूतावास',t_tips_h:'टिप्स',t_tips_p:'सुप्रा बिल बाँटना',t_checklist_h:'पैकिंग सूची',t_checklist_p:'2026 बीमा के साथ',t_food_h:'क्या ऑर्डर करें',t_food_p:'जॉर्जियाई व्यंजन और वाइन',t_visa_h:'वीज़ा दिन',t_visa_p:'वीज़ा-मुक्त वर्ष — काउंटर',t_alarm_h:'अलार्म',t_alarm_p:'अपना टूर मत चूकें',t_torch_h:'टॉर्च',t_torch_p:'अंधेरे में रोशनी',t_luggage_h:'सामान भंडारण',t_luggage_p:'बैग छोड़ें',t_prices_h:'उचित मूल्य 2026',t_prices_p:'क्या कितने का',t_games_h:'गेम',t_games_p:'शतरंज, साँप, 2048। मुफ़्त।',t_airports_h:'जॉर्जिया हवाई अड्डे',t_airports_p:'त्बिलिसी, बटुमी, कुतैसी',t_trains_h:'जॉर्जिया की ट्रेनें',t_trains_p:'त्बिलिसी\u2194बटुमी',t_flights_h:'सीधी उड़ानें',t_flights_p:'त्बिलिसी, बटुमी, कुतैसी के लिए',share_h:'शेयर करें 🍶',share_sub:'जॉर्जिया जाने वाले दोस्तों को बताएँ',f_terms:'नियम',f_privacy:'गोपनीयता',f_about:'हमारे बारे में',f_note:'चाचा एक मुफ़्त AI सहायक है। 🇬🇪',consent:'मैं सहमत हूँ 🍶',consent_no:'अस्वीकार',disclaimer:'चाचा AI है और गलती कर सकता है 🍶',ph:'चाचा को संदेश भेजें...',back:'← वापस'},
@@ -2260,6 +2380,22 @@ var TOOL_TEXTS_I18N={
     emergency_help:'Мне нужна помощь!',
     emergency_ambulance:'Вызовите скорую!',
     emergency_tip:'📍 Посольство своей страны ищи в Тбилиси — сохрани адрес заранее. Страховка 2026 покрывает экстренную помощь (звони на номер из полиса).',
+    emergency_numbers:'Экстренные номера Грузии',
+    emergency_112:'единый экстренный (полиция, скорая, пожарные)',
+    emergency_1441:'туристическая горячая линия Грузии',
+    emergency_118:'скорая медицинская помощь',
+    emergency_122:'пожарная служба',
+    emergency_phrases_title:'🗣️ Скажи это грузину — он поймёт',
+    emergency_help:'Помогите мне!',
+    emergency_ambulance:'Вызовите скорую!',
+    emergency_police:'Полиция!',
+    emergency_doctor:'Врач!',
+    emergency_fire:'Пожар!',
+    emergency_robbed:'Меня ограбили!',
+    emergency_lost:'Я заблудился!',
+    emergency_hospital:'Где больница?',
+    emergency_insurance_title:'Страховка 2026 — обязательна!',
+    emergency_insurance_text:'С 1 января 2026 туристическая страховка обязательна для въезда в Грузию. Aldagi — официальный партнёр. Покрывает медицину, эвакуацию, несчастные случаи.',
     show_georgian:'Покажи грузину экран 👇',
     show_close:'Нажми чтобы закрыть',
     // tips
@@ -2412,6 +2548,22 @@ var TOOL_TEXTS_I18N={
     emergency_help:'I need help!',
     emergency_ambulance:'Call an ambulance!',
     emergency_tip:'📍 Find your country\'s embassy in Tbilisi — save the address in advance. Your 2026 insurance covers emergency care (call the number on your policy).',
+    emergency_numbers:'Georgia Emergency Numbers',
+    emergency_112:'unified emergency (police, ambulance, fire)',
+    emergency_1441:'Georgia tourist hotline',
+    emergency_118:'ambulance / medical emergency',
+    emergency_122:'fire department',
+    emergency_phrases_title:'🗣️ Show this to a Georgian — they will understand',
+    emergency_help:'Help me!',
+    emergency_ambulance:'Call an ambulance!',
+    emergency_police:'Police!',
+    emergency_doctor:'Doctor!',
+    emergency_fire:'Fire!',
+    emergency_robbed:'I was robbed!',
+    emergency_lost:'I am lost!',
+    emergency_hospital:'Where is the hospital?',
+    emergency_insurance_title:'Insurance 2026 — mandatory!',
+    emergency_insurance_text:'Since January 1, 2026, travel insurance is mandatory to enter Georgia. Aldagi is the official partner. Covers medical care, evacuation, accidents.',
     show_georgian:'Show this screen to a Georgian 👇',
     show_close:'Tap to close',
     tips_hint:'Tips in Georgia are ~10%. Split the supra bill between your group.',
@@ -2840,12 +2992,104 @@ tools.radio=function(){openModal('📻 Радио разных стран');
 
 tools.emergency=function(){openModal(TT('emergency_title'));
   mBody.innerHTML=
-    '<a class="list-item" style="display:block;text-decoration:none;color:inherit" href="tel:112"><b>🚨 112</b> — единый экстренный (полиция, скорая, пожарные)</a>'+
-    '<a class="list-item" style="display:block;text-decoration:none;color:inherit" href="tel:1441"><b>📞 1441</b> — туристическая горячая линия Грузии (помощь и информация туристам)</a>'+
-    '<div class="list-item">'+TTX('emergency_note')+'</div>'+
-    '<div class="phrase"><div><div>'+TTX('emergency_help')+'</div><div class="geo">დამეხმარეთ!</div></div></div>'+
-    '<div class="phrase"><div><div>'+TTX('emergency_ambulance')+'</div><div class="geo">სასწრაფო დახმარება!</div></div></div>'+
-    '<p class="hint" style="margin-top:14px">'+TTX('emergency_tip')+'</p>';
+    '<div style="background:rgba(218,41,28,0.1);border:1px solid rgba(218,41,28,0.3);border-radius:14px;padding:14px;margin-bottom:12px">'+
+    '<div style="font-weight:700;font-size:1rem;margin-bottom:10px">📞 '+TTX('emergency_numbers')+'</div>'+
+    '<a class="list-item" style="display:block;text-decoration:none;color:inherit;padding:10px 0;border-bottom:1px solid rgba(218,41,28,0.15)" href="tel:112"><b>🚨 112</b> — '+TTX('emergency_112')+'</a>'+
+    '<a class="list-item" style="display:block;text-decoration:none;color:inherit;padding:10px 0;border-bottom:1px solid rgba(218,41,28,0.15)" href="tel:1441"><b>📞 1441</b> — '+TTX('emergency_1441')+'</a>'+
+    '<a class="list-item" style="display:block;text-decoration:none;color:inherit;padding:10px 0;border-bottom:1px solid rgba(218,41,28,0.15)" href="tel:118"><b>🏥 118</b> — '+TTX('emergency_118')+'</a>'+
+    '<a class="list-item" style="display:block;text-decoration:none;color:inherit;padding:10px 0" href="tel:122"><b>🚒 122</b> — '+TTX('emergency_122')+'</a>'+
+    '</div>'+
+    '<div style="font-weight:700;font-size:1rem;margin:14px 0 10px">'+TTX('emergency_phrases_title')+'</div>'+
+    '<div style="background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden">'+
+    '<div style="padding:12px;border-bottom:1px solid var(--border)"><div style="font-size:.8rem;color:var(--muted);margin-bottom:4px">'+TTX('emergency_help')+'</div><div style="font-size:1.1rem;font-weight:700;color:#e8112d;letter-spacing:.5px">დამეხმარეთ!</div><div style="font-size:.78rem;color:var(--muted);margin-top:2px">da-me-KHMA-ret</div></div>'+
+    '<div style="padding:12px;border-bottom:1px solid var(--border)"><div style="font-size:.8rem;color:var(--muted);margin-bottom:4px">'+TTX('emergency_ambulance')+'</div><div style="font-size:1.1rem;font-weight:700;color:#e8112d;letter-spacing:.5px">სასწრაფო დახმარება!</div><div style="font-size:.78rem;color:var(--muted);margin-top:2px">sas-tsra-fo dakh-MA-re-ba</div></div>'+
+    '<div style="padding:12px;border-bottom:1px solid var(--border)"><div style="font-size:.8rem;color:var(--muted);margin-bottom:4px">'+TTX('emergency_police')+'</div><div style="font-size:1.1rem;font-weight:700;color:#e8112d;letter-spacing:.5px">პოლიცია!</div><div style="font-size:.78rem;color:var(--muted);margin-top:2px">po-LI-tsi-a</div></div>'+
+    '<div style="padding:12px;border-bottom:1px solid var(--border)"><div style="font-size:.8rem;color:var(--muted);margin-bottom:4px">'+TTX('emergency_doctor')+'</div><div style="font-size:1.1rem;font-weight:700;color:#e8112d;letter-spacing:.5px">ექიმი!</div><div style="font-size:.78rem;color:var(--muted);margin-top:2px">e-KHI-mi</div></div>'+
+    '<div style="padding:12px;border-bottom:1px solid var(--border)"><div style="font-size:.8rem;color:var(--muted);margin-bottom:4px">'+TTX('emergency_fire')+'</div><div style="font-size:1.1rem;font-weight:700;color:#e8112d;letter-spacing:.5px">ხანძარი!</div><div style="font-size:.78rem;color:var(--muted);margin-top:2px">khan-DZA-ri</div></div>'+
+    '<div style="padding:12px;border-bottom:1px solid var(--border)"><div style="font-size:.8rem;color:var(--muted);margin-bottom:4px">'+TTX('emergency_robbed')+'</div><div style="font-size:1.1rem;font-weight:700;color:#e8112d;letter-spacing:.5px">მე გამომძარცვეს!</div><div style="font-size:.78rem;color:var(--muted);margin-top:2px">me ga-mom-DZAR-tves</div></div>'+
+    '<div style="padding:12px;border-bottom:1px solid var(--border)"><div style="font-size:.8rem;color:var(--muted);margin-bottom:4px">'+TTX('emergency_lost')+'</div><div style="font-size:1.1rem;font-weight:700;color:#e8112d;letter-spacing:.5px">მე დავიკარგე!</div><div style="font-size:.78rem;color:var(--muted);margin-top:2px">me da-vi-KAR-ge</div></div>'+
+    '<div style="padding:12px"><div style="font-size:.8rem;color:var(--muted);margin-bottom:4px">'+TTX('emergency_hospital')+'</div><div style="font-size:1.1rem;font-weight:700;color:#e8112d;letter-spacing:.5px">სად არის საავადმყოფო?</div><div style="font-size:.78rem;color:var(--muted);margin-top:2px">sad A-ris sa-a-vad-MYO-fo</div></div>'+
+    '</div>'+
+    '<div style="background:rgba(200,145,31,0.1);border:1px solid rgba(200,145,31,0.3);border-radius:14px;padding:14px;margin-top:12px">'+
+    '<div style="font-weight:700;margin-bottom:6px">🛡️ '+TTX('emergency_insurance_title')+'</div>'+
+    '<div style="font-size:.88rem;color:var(--muted)">'+TTX('emergency_insurance_text')+'</div>'+
+    '<a href="https://travelgeorgia.aldagi.ge/" target="_blank" rel="noopener" style="display:inline-block;margin-top:10px;background:linear-gradient(135deg,#e8112d,#c8911f);color:#fff;padding:8px 16px;border-radius:100px;font-size:.85rem;font-weight:700;text-decoration:none">🛡️ Aldagi Insurance →</a>'+
+    '</div>'+
+    '<p class="hint" style="margin-top:12px">'+TTX('emergency_tip')+'</p>';
+};
+
+tools.weather=function(){
+  openModal(TT('weather_title')||'🌤️ Georgia Weather');
+  mBody.innerHTML='<div style="text-align:center;padding:30px;color:var(--muted)"><span class="spin"></span><br><br>Loading weather...</div>';
+  
+  fetch('/.netlify/functions/weather')
+    .then(function(r){return r.json();})
+    .then(function(res){
+      if(!res.data){mBody.innerHTML='<p class="hint">Weather unavailable. Try again later.</p>';return;}
+      
+      var lang=window.__userLang||'ru';
+      var days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      var dayRu=['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
+      var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      
+      // Иконки погоды emoji
+      function getEmoji(icon){
+        var i=icon.replace('n','d');
+        if(i==='01d')return'☀️';
+        if(i==='02d')return'⛅';
+        if(i==='03d'||i==='04d')return'☁️';
+        if(i==='09d'||i==='10d')return'🌧️';
+        if(i==='11d')return'⛈️';
+        if(i==='13d')return'❄️';
+        if(i==='50d')return'🌫️';
+        return'🌤️';
+      }
+      
+      var html2='<div style="margin-bottom:8px;font-size:.8rem;color:var(--muted);text-align:right">';
+      html2+=(res.cached?'📦 Cached':'🔄 Live')+' · '+(res.age||'fresh')+'</div>';
+      
+      res.data.forEach(function(city){
+        html2+='<div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:10px">';
+        
+        // Заголовок города
+        html2+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">';
+        html2+='<span style="font-size:1.3rem">'+city.emoji+'</span>';
+        html2+='<div><div style="font-weight:700;font-size:.95rem">'+city.name+'</div>';
+        html2+='<div style="font-size:.8rem;color:var(--muted)">'+getEmoji(city.current.icon)+' '+city.current.desc+'</div></div>';
+        html2+='<div style="margin-left:auto;font-size:1.8rem;font-weight:900;color:var(--gold)">'+city.current.temp+'°</div>';
+        html2+='</div>';
+        
+        // Прогноз 5 дней
+        html2+='<div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:4px">';
+        city.forecast.forEach(function(day){
+          var d=new Date(day.date+'T12:00:00');
+          var dayName=lang==='ru'?dayRu[d.getDay()]:days[d.getDay()];
+          var date=d.getDate()+' '+months[d.getMonth()];
+          html2+='<div style="flex:1;min-width:52px;text-align:center;background:var(--bg);border-radius:10px;padding:8px 4px">';
+          html2+='<div style="font-size:.72rem;color:var(--muted);font-weight:600">'+dayName+'</div>';
+          html2+='<div style="font-size:.68rem;color:var(--muted)">'+date+'</div>';
+          html2+='<div style="font-size:1.3rem;margin:4px 0">'+getEmoji(day.icon)+'</div>';
+          html2+='<div style="font-size:.85rem;font-weight:700">'+day.temp_max+'°</div>';
+          html2+='<div style="font-size:.75rem;color:var(--muted)">'+day.temp_min+'°</div>';
+          html2+='</div>';
+        });
+        html2+='</div>';
+        
+        // Доп инфо
+        html2+='<div style="display:flex;gap:10px;margin-top:8px;font-size:.75rem;color:var(--muted)">';
+        html2+='<span>💧 '+city.current.humidity+'%</span>';
+        html2+='<span>💨 '+city.current.wind+' m/s</span>';
+        html2+='<span>🌡️ '+(lang==='ru'?'ощущ.':'feels')+' '+city.current.feels+'°</span>';
+        html2+='</div>';
+        
+        html2+='</div>';
+      });
+      
+      mBody.innerHTML=html2;
+    })
+    .catch(function(e){
+      mBody.innerHTML='<p class="hint">⚠️ Weather service unavailable. Check your connection.</p>';
+    });
 };
 
 tools.tips=function(){openModal(TT('tips_title'));
