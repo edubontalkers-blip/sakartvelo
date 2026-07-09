@@ -782,6 +782,10 @@ gEl.style.transition='opacity .25s';
       el.onclick=function(){
         var lang=el.getAttribute('data-l');
         try{localStorage.setItem('sak_lang',lang);}catch(e){}
+        try{
+          if(window.__currentTool){localStorage.setItem('sak_reopen_tool',window.__currentTool);}
+          else{localStorage.removeItem('sak_reopen_tool');}
+        }catch(e){}
         closeSheet();
         location.reload();
       };
@@ -2167,7 +2171,7 @@ window.openModal=window.__openModal=function(title){
   __modal.classList.add('open');
   document.body.style.overflow='hidden';__mBody.scrollTop=0;
 };
-window.__closeModal=function(){__modal.classList.remove('open');document.body.style.overflow='';__mBody.innerHTML='';};
+window.__closeModal=function(){__modal.classList.remove('open');document.body.style.overflow='';__mBody.innerHTML='';window.__currentTool=null;};
 if(__mBack)__mBack.onclick=window.__closeModal;
 
 (function(){
@@ -6147,6 +6151,7 @@ tools.about=function(){openModal('🍶 О нас');
 /* ============ РОУТЕР ============ */
 var __toolTextsPreloaded=false;
 function route(name){
+  window.__currentTool=name; // запоминаем открытый раздел для восстановления после смены языка
   var ul=window.__userLang||'ru';
   // Если перевод уже есть — открываем сразу
   if(TOOL_TEXTS_I18N[ul]||ul==='en'||ul==='ru'||ul==='hy'){
@@ -6182,6 +6187,14 @@ document.getElementById('consent').addEventListener('click',function(e){
 // Mark ready
 __toolsReady=true;
 if(__pendingTool){var _p=__pendingTool;__pendingTool=null;route(_p);}
+// Если страница перезагрузилась из-за смены языка внутри модалки — вернуться в тот же раздел
+try{
+  var __reopenTool=localStorage.getItem('sak_reopen_tool');
+  if(__reopenTool){
+    localStorage.removeItem('sak_reopen_tool');
+    if(tools[__reopenTool]) route(__reopenTool);
+  }
+}catch(e){}
 })();
 
 </script>
