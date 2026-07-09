@@ -12,11 +12,26 @@ const CITIES = [
   { name: 'Akhaltsikhe', lat: 41.6403, lon: 42.9856, emoji: '🏰' },
 ];
 
+// Соответствие языков сайта кодам языков OpenWeather API
+// (OpenWeather поддерживает все эти коды напрямую)
+const SUPPORTED_LANGS = {
+  en: 'en',
+  ru: 'ru',
+  de: 'de',
+  fr: 'fr',
+  tr: 'tr',
+  ar: 'ar',
+  he: 'he',
+  it: 'it',
+  es: 'es',
+};
+const DEFAULT_LANG = 'en';
+
 const API_KEY = process.env.OPENWEATHER_KEY;
 const CACHE_TTL = 3600000; // 1 час
 
-let cache = null;
-let cacheTime = 0;
+// Кэш теперь отдельный для каждого языка: { ru: { data, time }, en: { data, time }, ... }
+let cacheByLang = {};
 
 exports.handler = async function(event, context) {
   const headers = {
@@ -25,18 +40,23 @@ exports.handler = async function(event, context) {
     'Cache-Control': 'public, max-age=3600',
   };
 
-  if (cache && Date.now() - cacheTime < CACHE_TTL) {
+  // Читаем язык из query-параметра ?lang=ru, по умолчанию английский
+  const requestedLang = (event.queryStringParameters && event.queryStringParameters.lang) || DEFAULT_LANG;
+  const lang = SUPPORTED_LANGS[requestedLang] || DEFAULT_LANG;
+
+  const cached = cacheByLang[lang];
+  if (cached && Date.now() - cached.time < CACHE_TTL) {
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ data: cache, cached: true, age: Math.round((Date.now() - cacheTime) / 60000) + 'min' })
+      body: JSON.stringify({ data: cached.data, cached: true, lang: lang, age: Math.round((Date.now() - cached.time) / 60000) + 'min' })
     };
   }
 
   try {
     const results = await Promise.all(
       CITIES.map(async function(city) {
-        const url = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + city.lat + '&lon=' + city.lon + '&appid=' + API_KEY + '&units=metric&cnt=40';
+        const url = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + city.lat + '&lon=' + city.lon + '&appid=' + API_KEY + '&units=metric&lang=' + lang + '&cnt=40';
         const res = await fetch(url);
         const data = await res.json();
 
@@ -81,18 +101,17 @@ exports.handler = async function(event, context) {
       })
     );
 
-    cache = results;
-    cacheTime = Date.now();
+    cacheByLang[lang] = { data: results, time: Date.now() };
 
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ data: results, cached: false, updated: new Date().toISOString() })
+      body: JSON.stringify({ data: results, cached: false, lang: lang, updated: new Date().toISOString() })
     };
 
   } catch (err) {
-    if (cache) {
-      return { statusCode: 200, headers, body: JSON.stringify({ data: cache, cached: true, error: err.message }) };
+    if (cached) {
+      return { statusCode: 200, headers, body: JSON.stringify({ data: cached.data, cached: true, lang: lang, error: err.message }) };
     }
     return { statusCode: 500, headers, body: JSON.stringify({ error: err.message }) };
   }
