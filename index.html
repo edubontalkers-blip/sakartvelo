@@ -3123,9 +3123,30 @@ tools.weather=function(){
       if(!res.data){mBody.innerHTML='<p class="hint">Weather unavailable. Try again later.</p>';return;}
       
       var lang=window.__userLang||'ru';
-      var days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-      var dayRu=['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
-      var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      var DAY_NAMES={
+        en:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+        ru:['Вс','Пн','Вт','Ср','Чт','Пт','Сб'],
+        de:['So','Mo','Di','Mi','Do','Fr','Sa'],
+        fr:['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],
+        tr:['Paz','Pzt','Sal','Çar','Per','Cum','Cmt'],
+        ar:['أحد','اثنين','ثلاثاء','أربعاء','خميس','جمعة','سبت'],
+        he:['א׳','ב׳','ג׳','ד׳','ה׳','ו׳','ש׳'],
+        it:['Dom','Lun','Mar','Mer','Gio','Ven','Sab'],
+        es:['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],
+      };
+      var MONTH_NAMES={
+        en:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+        ru:['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'],
+        de:['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'],
+        fr:['jan','fév','mar','avr','mai','jun','jul','aoû','sep','oct','nov','déc'],
+        tr:['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'],
+        ar:['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'],
+        he:['ינו','פבר','מרץ','אפר','מאי','יונ','יול','אוג','ספט','אוק','נוב','דצמ'],
+        it:['gen','feb','mar','apr','mag','giu','lug','ago','set','ott','nov','dic'],
+        es:['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'],
+      };
+      var days=DAY_NAMES[lang]||DAY_NAMES.en;
+      var months=MONTH_NAMES[lang]||MONTH_NAMES.en;
       
       // Иконки погоды emoji
       function getEmoji(icon){
@@ -3141,7 +3162,19 @@ tools.weather=function(){
       }
       
       var html2='<div style="margin-bottom:8px;font-size:.8rem;color:var(--muted);text-align:right">';
-      html2+=(res.cached?'📦 Cached':'🔄 Live')+' · '+(res.age||'fresh')+'</div>';
+      var STATUS_LABELS={
+        en:{cached:'📦 Cached',live:'🔄 Live',fresh:'fresh'},
+        ru:{cached:'📦 Кэш',live:'🔄 Live',fresh:'свежо'},
+        de:{cached:'📦 Zwischengespeichert',live:'🔄 Live',fresh:'aktuell'},
+        fr:{cached:'📦 En cache',live:'🔄 En direct',fresh:'récent'},
+        tr:{cached:'📦 Önbellek',live:'🔄 Canlı',fresh:'taze'},
+        ar:{cached:'📦 مخزّن',live:'🔄 مباشر',fresh:'حديث'},
+        he:{cached:'📦 שמור',live:'🔄 חי',fresh:'עדכני'},
+        it:{cached:'📦 In cache',live:'🔄 In diretta',fresh:'aggiornato'},
+        es:{cached:'📦 En caché',live:'🔄 En vivo',fresh:'reciente'},
+      };
+      var __stLabels=STATUS_LABELS[lang]||STATUS_LABELS.en;
+      html2+=(res.cached?__stLabels.cached:__stLabels.live)+' · '+(res.age||__stLabels.fresh)+'</div>';
       
       res.data.forEach(function(city){
         html2+='<div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:10px">';
@@ -3158,7 +3191,7 @@ tools.weather=function(){
         html2+='<div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:4px">';
         city.forecast.forEach(function(day){
           var d=new Date(day.date+'T12:00:00');
-          var dayName=lang==='ru'?dayRu[d.getDay()]:days[d.getDay()];
+          var dayName=days[d.getDay()];
           var date=d.getDate()+' '+months[d.getMonth()];
           html2+='<div style="flex:1;min-width:52px;text-align:center;background:var(--bg);border-radius:10px;padding:8px 4px">';
           html2+='<div style="font-size:.72rem;color:var(--muted);font-weight:600">'+dayName+'</div>';
@@ -3174,7 +3207,8 @@ tools.weather=function(){
         html2+='<div style="display:flex;gap:10px;margin-top:8px;font-size:.75rem;color:var(--muted)">';
         html2+='<span>💧 '+city.current.humidity+'%</span>';
         html2+='<span>💨 '+city.current.wind+' m/s</span>';
-        html2+='<span>🌡️ '+(lang==='ru'?'ощущ.':'feels')+' '+city.current.feels+'°</span>';
+        var FEELS_LABEL={en:'feels',ru:'ощущ.',de:'gefühlt',fr:'ressenti',tr:'hissedilen',ar:'يبدو كأنه',he:'מרגיש כמו',it:'percepita',es:'sensación'};
+        html2+='<span>🌡️ '+(FEELS_LABEL[lang]||FEELS_LABEL.en)+' '+city.current.feels+'°</span>';
         html2+='</div>';
         
         html2+='</div>';
