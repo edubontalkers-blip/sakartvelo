@@ -1,15 +1,15 @@
 const CITIES = [
-  { name: 'Tbilisi',     id: 611717, emoji: '🏙️' },
-  { name: 'Batumi',      id: 614540, emoji: '🌊' },
-  { name: 'Kazbegi',     id: 611846, emoji: '🏔️' },
-  { name: 'Telavi',      id: 608372, emoji: '🍷' },
-  { name: 'Borjomi',     id: 616532, emoji: '💧' },
-  { name: 'Kutaisi',     id: 614473, emoji: '🦅' },
-  { name: 'Mestia',      id: 614655, emoji: '🗻' },
-  { name: 'Mtskheta',    id: 614723, emoji: '🛕' },
-  { name: 'Gudauri',     id: 616172, emoji: '⛷️' },
-  { name: 'Sighnaghi',   id: 607838, emoji: '🌹' },
-  { name: 'Akhaltsikhe', id: 616625, emoji: '🏰' },
+  { name: 'Tbilisi',     lat: 41.7151, lon: 44.8271, emoji: '🏙️' },
+  { name: 'Batumi',      lat: 41.6168, lon: 41.6367, emoji: '🌊' },
+  { name: 'Kazbegi',     lat: 42.6567, lon: 44.6428, emoji: '🏔️' },
+  { name: 'Telavi',      lat: 41.9165, lon: 45.4747, emoji: '🍷' },
+  { name: 'Borjomi',     lat: 41.8386, lon: 43.3934, emoji: '💧' },
+  { name: 'Kutaisi',     lat: 42.2679, lon: 42.6946, emoji: '🦅' },
+  { name: 'Mestia',      lat: 43.0466, lon: 42.7278, emoji: '🗻' },
+  { name: 'Mtskheta',    lat: 41.8453, lon: 44.7182, emoji: '🛕' },
+  { name: 'Gudauri',     lat: 42.4738, lon: 44.4776, emoji: '⛷️' },
+  { name: 'Sighnaghi',   lat: 41.6194, lon: 45.9169, emoji: '🌹' },
+  { name: 'Akhaltsikhe', lat: 41.6403, lon: 42.9856, emoji: '🏰' },
 ];
 
 const API_KEY = process.env.OPENWEATHER_KEY;
@@ -36,7 +36,7 @@ exports.handler = async function(event, context) {
   try {
     const results = await Promise.all(
       CITIES.map(async function(city) {
-        const url = 'https://api.openweathermap.org/data/2.5/forecast?id=' + city.id + '&appid=' + API_KEY + '&units=metric&cnt=40';
+        const url = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + city.lat + '&lon=' + city.lon + '&appid=' + API_KEY + '&units=metric&cnt=40';
         const res = await fetch(url);
         const data = await res.json();
 
