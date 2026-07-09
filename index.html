@@ -799,6 +799,7 @@ gEl.style.transition='opacity .25s';
       if(active)active.scrollIntoView({block:'center',behavior:'smooth'});
     },80);
   }
+  window.__openLangSheet=openSheet; // доступно для кнопки внутри модалок
 
   function closeSheet(){
     sheet.style.display='none';
@@ -2181,8 +2182,9 @@ var openModal=window.openModal;
 var modalLangBtn=document.getElementById('modalLangBtn');
 if(modalLangBtn){
   modalLangBtn.onclick=function(){
+    if(window.__openLangSheet){window.__openLangSheet();return;}
     var sheet=document.getElementById('langSheet');
-    if(sheet){sheet.style.display='block';}
+    if(sheet){sheet.style.display='flex';sheet.style.flexDirection='column';}
   };
 }
 
