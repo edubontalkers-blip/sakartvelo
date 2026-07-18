@@ -312,7 +312,13 @@ Return ONLY valid JSON, no markdown, no explanation:
   return new Promise((resolve, reject) => {
     const body = JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
-      max_tokens: Math.min(16000, Math.max(4000, parseInt(data.days || 5) * 350 + 1500)),
+      // Было: Math.max(4000, days*350+1500) — для 7 дней давало ровно 4000,
+      // этого не хватало на подробный JSON-маршрут, особенно переведённый
+      // на языки с менее эффективной токенизацией (русский, арабский, иврит,
+      // фарси используют больше токенов на тот же смысловой объём, чем
+      // английский) — ответ обрывался на середине строки (Unterminated string).
+      // Подняли базовый порог и множитель на день с запасом.
+      max_tokens: Math.min(16000, Math.max(6000, parseInt(data.days || 5) * 700 + 2500)),
       messages: [{ role: 'user', content: prompt }]
     });
 
