@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru" id="htmlRoot">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title id="pageTitle"></title>
+<meta id="metaDesc" name="description" content="">
+<link rel="canonical" href="https://sakartvelo.ai/planner/kazbegi-mountain-trek/">
+<meta property="og:type" content="website">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--wine:#8b1a1a;--gold:#c4960a;--dark:#1a0d10;--card:#fff8f5;--bg:#fff;--ink:#1a0d10;--muted:#888;--line:#e8ddd5;--radius:16px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+header{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);gap:8px}
+.logo{font-weight:900;color:var(--wine);text-decoration:none;font-size:1.1rem}
+.hbtns{display:flex;gap:8px;align-items:center}
+.langBtn{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 10px;cursor:pointer;font-size:1rem}
+main{max-width:640px;margin:0 auto;padding:24px 20px 60px}
+h1{font-size:1.7rem;font-weight:900;color:var(--wine);margin-bottom:12px;line-height:1.25}
+.intro{color:var(--ink);margin-bottom:20px;font-size:1.02rem}
+.highlights{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 24px;margin-bottom:24px}
+.highlights li{margin-bottom:8px}
+.cta{display:block;text-align:center;background:var(--wine);color:#fff;text-decoration:none;font-weight:700;padding:16px;border-radius:var(--radius);font-size:1.05rem;border:none;width:100%;cursor:pointer}
+footer{text-align:center;padding:24px;color:var(--muted);font-size:.8rem}
+footer a{color:var(--wine);text-decoration:none}
+#langOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100}
+#langSheet{position:absolute;bottom:0;left:0;right:0;background:#fff;border-radius:20px 20px 0 0;padding:20px;max-height:70vh;overflow-y:auto}
+.langGrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
+.langItem{border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center;cursor:pointer;font-size:.85rem}
+.langItem.sel{border-color:var(--gold);background:#fff8ee}
+</style>
+</head>
+<body>
+<header>
+  <a href="https://sakartvelo.ai" class="logo">🍶 sakartvelo.ai</a>
+  <div class="hbtns">
+    <button class="langBtn" id="langBtn" onclick="openLangSheet()">🌐</button>
+    <a href="https://sakartvelo.ai" style="color:var(--gold);font-size:.9rem;text-decoration:none" id="backLink"></a>
+  </div>
+</header>
+
+<div id="langOverlay" onclick="if(event.target===this)closeLangSheet()">
+  <div id="langSheet">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <h2 id="langSheetTitle" style="font-size:1.1rem;color:var(--wine)"></h2>
+      <button onclick="closeLangSheet()" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--muted)">✕</button>
+    </div>
+    <div class="langGrid" id="langGrid"></div>
+  </div>
+</div>
+
+<main>
+  <h1 id="h1"></h1>
+  <p class="intro" id="intro"></p>
+  <div class="highlights">
+    <ul style="padding-left:20px" id="highlightsList"></ul>
+  </div>
+  <button class="cta" id="ctaBtn" onclick="goToPlanner()"></button>
+</main>
+<footer>
+  <a href="https://sakartvelo.ai">sakartvelo.ai</a> — <span id="footer"></span>
+</footer>
+
+<script>
+const PAGE_I18N = {"ru": {"title": "Треккинг в Казбеги — планировщик маршрута по Грузии", "metaDesc": "Спланируйте поход в Казбеги: церковь Гергети, Степанцминда, Военно-Грузинская дорога. Получите бесплатный персональный PDF-гид.", "h1": "🏔️ Треккинг в Казбеги", "intro": "Казбеги (Степанцминда) — самое культовое горное направление Грузии, дом церкви Святой Троицы на высоте 2170м на фоне горы Казбек. Добраться можно по живописной Военно-Грузинской дороге из Тбилиси — маршрут создан для тех, кто хочет настоящие горы, а не просто фото на память.", "highlights": ["Церковь Гергети Самеба — подъём пешком 1.5ч или на внедорожнике", "Военно-Грузинская дорога — один из самых красивых маршрутов на Кавказе", "Ущелье Трусо и Дарьяльское ущелье — дополнительные вылазки", "Лучший сезон: май–октябрь (перевалы могут закрываться зимой)"], "cta": "📥 Построить мой персональный маршрут на 5 дней →", "back": "← Назад", "footer": "AI-гид по Грузии 🇬🇪", "langTitle": "Язык"}, "en": {"title": "Kazbegi Mountain Trek — Georgia Route Planner", "metaDesc": "Plan a Kazbegi mountain trek in Georgia: Gergeti Trinity Church, Stepantsminda, Georgian Military Highway. Get a free personal PDF guide.", "h1": "🏔️ Kazbegi Mountain Trek", "intro": "Kazbegi (Stepantsminda) is Georgia's most iconic mountain destination — home to the Gergeti Trinity Church perched at 2,170m against the backdrop of Mount Kazbek. Reachable via the dramatic Georgian Military Highway from Tbilisi, this route is built for travelers who want real mountains, not just photo stops.", "highlights": ["Gergeti Trinity Church — hike 1.5h or take a 4WD", "Georgian Military Highway — one of the most scenic drives in the Caucasus", "Truso Valley and Dariali Gorge side trips", "Best season: May–October (mountain passes can close in winter)"], "cta": "📥 Build my personal 5-day guide →", "back": "← Back", "footer": "AI Travel Guide to Georgia 🇬🇪", "langTitle": "Language"}, "tr": {"title": "Kazbegi Dağ Yürüyüşü — Gürcistan Rota Planlayıcı", "metaDesc": "Gürcistan'da Kazbegi dağ yürüyüşü planlayın: Gergeti Teslis Kilisesi, Stepantsminda, Gürcü Askeri Yolu. Ücretsiz kişisel PDF rehberi alın.", "h1": "🏔️ Kazbegi Dağ Yürüyüşü", "intro": "Kazbegi (Stepantsminda), Gürcistan'ın en ikonik dağ destinasyonu — Kazbek Dağı manzarasına karşı 2.170m yükseklikte duran Gergeti Teslis Kilisesi'ne ev sahipliği yapıyor. Tiflis'ten etkileyici Gürcü Askeri Yolu ile ulaşılır, bu rota sadece fotoğraf durakları değil gerçek dağlar isteyen gezginler için tasarlandı.", "highlights": ["Gergeti Teslis Kilisesi — 1.5 saat yürüyüş veya 4x4 ile", "Gürcü Askeri Yolu — Kafkasya'daki en manzaralı yollardan biri", "Truso Vadisi ve Darial Geçidi gezileri", "En iyi mevsim: Mayıs–Ekim (dağ geçitleri kışın kapanabilir)"], "cta": "📥 Kişisel 5 günlük rehberimi oluştur →", "back": "← Geri", "footer": "Gürcistan için AI Seyahat Rehberi 🇬🇪", "langTitle": "Dil"}, "de": {"title": "Kasbegi Bergwanderung — Georgien Routenplaner", "metaDesc": "Planen Sie eine Bergwanderung in Kasbegi, Georgien: Gergeti-Dreifaltigkeitskirche, Stepanzminda, Georgische Heerstraße. Kostenloser persönlicher PDF-Guide.", "h1": "🏔️ Kasbegi Bergwanderung", "intro": "Kasbegi (Stepanzminda) ist Georgiens ikonischstes Bergziel — Heimat der Gergeti-Dreifaltigkeitskirche auf 2.170m vor der Kulisse des Kasbek. Erreichbar über die dramatische Georgische Heerstraße von Tiflis aus, ist diese Route für Reisende gemacht, die echte Berge wollen, nicht nur Fotostopps.", "highlights": ["Gergeti-Dreifaltigkeitskirche — 1,5h Wanderung oder mit Allradfahrzeug", "Georgische Heerstraße — eine der landschaftlich schönsten Strecken im Kaukasus", "Ausflüge ins Truso-Tal und die Darial-Schlucht", "Beste Saison: Mai–Oktober (Bergpässe können im Winter geschlossen sein)"], "cta": "📥 Meinen persönlichen 5-Tage-Guide erstellen →", "back": "← Zurück", "footer": "KI-Reiseführer für Georgien 🇬🇪", "langTitle": "Sprache"}, "it": {"title": "Trekking a Kazbegi — Pianificatore di Percorsi Georgia", "metaDesc": "Pianifica un trekking a Kazbegi in Georgia: Chiesa della Trinità di Gergeti, Stepantsminda, Strada Militare Georgiana. Guida PDF personale gratuita.", "h1": "🏔️ Trekking a Kazbegi", "intro": "Kazbegi (Stepantsminda) è la destinazione montana più iconica della Georgia — sede della Chiesa della Trinità di Gergeti a 2.170m sullo sfondo del Monte Kazbek. Raggiungibile tramite la spettacolare Strada Militare Georgiana da Tbilisi, questo percorso è pensato per chi vuole montagne vere, non solo foto.", "highlights": ["Chiesa della Trinità di Gergeti — 1,5h a piedi o in fuoristrada", "Strada Militare Georgiana — uno dei percorsi più panoramici del Caucaso", "Escursioni alla Valle di Truso e alla Gola di Darial", "Stagione migliore: maggio–ottobre (i passi di montagna possono chiudere in inverno)"], "cta": "📥 Crea la mia guida personale di 5 giorni →", "back": "← Indietro", "footer": "Guida di viaggio AI per la Georgia 🇬🇪", "langTitle": "Lingua"}, "es": {"title": "Trekking en Kazbegi — Planificador de Rutas de Georgia", "metaDesc": "Planifica un trekking en Kazbegi, Georgia: Iglesia de la Trinidad de Gergeti, Stepantsminda, Carretera Militar Georgiana. Guía PDF personal gratuita.", "h1": "🏔️ Trekking en Kazbegi", "intro": "Kazbegi (Stepantsminda) es el destino de montaña más icónico de Georgia — hogar de la Iglesia de la Trinidad de Gergeti a 2.170m con el Monte Kazbek de fondo. Se llega por la espectacular Carretera Militar Georgiana desde Tiflis, esta ruta está hecha para viajeros que quieren montañas de verdad, no solo fotos.", "highlights": ["Iglesia de la Trinidad de Gergeti — 1.5h a pie o en todoterreno", "Carretera Militar Georgiana — una de las rutas más escénicas del Cáucaso", "Excursiones al Valle de Truso y al Desfiladero de Darial", "Mejor temporada: mayo–octubre (los pasos de montaña pueden cerrar en invierno)"], "cta": "📥 Crear mi guía personal de 5 días →", "back": "← Atrás", "footer": "Guía de viaje con IA para Georgia 🇬🇪", "langTitle": "Idioma"}, "ar": {"title": "رحلة تسلق كازبيغي — مخطط مسارات جورجيا", "metaDesc": "خطط لرحلة تسلق في كازبيغي بجورجيا: كنيسة غيرغيتي، ستيبانتسميندا، الطريق العسكري الجورجي. دليل PDF شخصي مجاني.", "h1": "🏔️ رحلة تسلق كازبيغي", "intro": "كازبيغي (ستيبانتسميندا) هي أشهر وجهة جبلية في جورجيا — موطن كنيسة غيرغيتي على ارتفاع 2170م أمام جبل قزبيك. يمكن الوصول إليها عبر الطريق العسكري الجورجي المذهل من تبليسي، وهذا المسار مصمم للمسافرين الذين يريدون جبالًا حقيقية وليس مجرد صور.", "highlights": ["كنيسة غيرغيتي — مشي 1.5 ساعة أو بسيارة دفع رباعي", "الطريق العسكري الجورجي — من أجمل الطرق في القوقاز", "رحلات جانبية إلى وادي تروسو ومضيق داريالي", "أفضل موسم: مايو–أكتوبر (قد تُغلق الممرات الجبلية شتاءً)"], "cta": "📥 إنشاء دليلي الشخصي لـ 5 أيام ←", "back": "← رجوع", "footer": "دليل سفر بالذكاء الاصطناعي لجورجيا 🇬🇪", "langTitle": "اللغة"}, "he": {"title": "טרק קזבגי — מתכנן מסלולים לג'ורג'יה", "metaDesc": "תכננו טרק הרים בקזבגי, ג'ורג'יה: כנסיית גרגטי, סטפנצמינדה, כביש הצבא הג'ורג'י. מדריך PDF אישי בחינם.", "h1": "🏔️ טרק קזבגי", "intro": "קזבגי (סטפנצמינדה) הוא היעד ההררי המזוהה ביותר עם ג'ורג'יה — ביתה של כנסיית השילוש גרגטי בגובה 2,170 מ' מול הר קזבק. ניתן להגיע דרך כביש הצבא הג'ורג'י המרהיב מטביליסי, מסלול זה בנוי למטיילים שרוצים הרים אמיתיים, לא רק תחנות צילום.", "highlights": ["כנסיית השילוש גרגטי — טיפוס של 1.5 שעות או ברכב שטח", "כביש הצבא הג'ורג'י — אחד הכבישים הנופיים ביותר בקווקז", "טיולי צד לעמק טרוסו ולערוץ דריאל", "העונה הטובה ביותר: מאי–אוקטובר (מעברי ההרים עלולים להיסגר בחורף)"], "cta": "📥 בניית המדריך האישי שלי ל-5 ימים ←", "back": "← חזרה", "footer": "מדריך טיולים מבוסס AI לג'ורג'יה 🇬🇪", "langTitle": "שפה"}, "fa": {"title": "کوهنوردی قزبگی — برنامه‌ریز مسیر گرجستان", "metaDesc": "یک کوهنوردی در قزبگی گرجستان برنامه‌ریزی کنید: کلیسای گرگتی، استپانتسمیندا، جاده نظامی گرجستان. راهنمای PDF شخصی رایگان.", "h1": "🏔️ کوهنوردی قزبگی", "intro": "قزبگی (استپانتسمیندا) نمادین‌ترین مقصد کوهستانی گرجستان است — خانه کلیسای تثلیث گرگتی در ارتفاع ۲۱۷۰ متری در برابر کوه قزبک. با جاده نظامی گرجستان از تفلیس قابل دسترسی است، این مسیر برای مسافرانی ساخته شده که کوهستان واقعی می‌خواهند، نه فقط عکس.", "highlights": ["کلیسای تثلیث گرگتی — پیاده‌روی ۱.۵ ساعته یا با خودروی ۴×۴", "جاده نظامی گرجستان — یکی از زیباترین جاده‌های قفقاز", "سفرهای جانبی به دره تروسو و تنگه داریال", "بهترین فصل: مه تا اکتبر (گذرگاه‌های کوهستانی ممکن است زمستان بسته شوند)"], "cta": "📥 ساخت راهنمای شخصی ۵ روزه من ←", "back": "← بازگشت", "footer": "راهنمای سفر هوش‌مصنوعی گرجستان 🇬🇪", "langTitle": "زبان"}};
+const LANGUAGES = [{"code": "ru", "flag": "🇷🇺", "name": "Русский"}, {"code": "en", "flag": "🇬🇧", "name": "English"}, {"code": "tr", "flag": "🇹🇷", "name": "Türkçe"}, {"code": "ar", "flag": "🇸🇦", "name": "العربية"}, {"code": "he", "flag": "🇮🇱", "name": "עברית"}, {"code": "fa", "flag": "🇮🇷", "name": "فارسی"}, {"code": "de", "flag": "🇩🇪", "name": "Deutsch"}, {"code": "it", "flag": "🇮🇹", "name": "Italiano"}, {"code": "es", "flag": "🇪🇸", "name": "Español"}];
+const CATEGORY = "mountains";
+const DAYS = "5";
+
+function detectLang(){
+  const validCodes = LANGUAGES.map(l => l.code);
+  let saved = null;
+  try { saved = localStorage.getItem('sak_lang'); } catch(e) {}
+  if (saved && validCodes.indexOf(saved) !== -1) return saved;
+  const nav = (navigator.language || 'en').slice(0,2).toLowerCase();
+  if (validCodes.indexOf(nav) !== -1) return nav;
+  return 'en';
+}
+let curLang = detectLang();
+
+function render(){
+  const t = PAGE_I18N[curLang] || PAGE_I18N.en;
+  const isRTL = (curLang === 'ar' || curLang === 'he' || curLang === 'fa');
+  document.getElementById('htmlRoot').setAttribute('lang', curLang);
+  document.getElementById('htmlRoot').setAttribute('dir', isRTL ? 'rtl' : 'ltr');
+  document.getElementById('pageTitle').textContent = t.title;
+  document.getElementById('metaDesc').setAttribute('content', t.metaDesc);
+  document.getElementById('h1').textContent = t.h1;
+  document.getElementById('intro').textContent = t.intro;
+  document.getElementById('highlightsList').innerHTML = t.highlights.map(h => '<li>' + h + '</li>').join('');
+  document.getElementById('ctaBtn').textContent = t.cta;
+  document.getElementById('backLink').textContent = t.back;
+  document.getElementById('footer').textContent = t.footer;
+}
+
+function goToPlanner(){
+  window.location.href = '/planner/?category=' + CATEGORY + '&days=' + DAYS;
+}
+
+function openLangSheet(){
+  const t = PAGE_I18N[curLang] || PAGE_I18N.en;
+  document.getElementById('langSheetTitle').textContent = t.langTitle;
+  document.getElementById('langGrid').innerHTML = LANGUAGES.map(l =>
+    '<div class="langItem' + (l.code===curLang?' sel':'') + '" onclick="switchLang(\'' + l.code + '\')">' +
+    '<div style="font-size:1.3rem">' + l.flag + '</div><div>' + l.name + '</div></div>'
+  ).join('');
+  document.getElementById('langOverlay').style.display = 'block';
+}
+function closeLangSheet(){ document.getElementById('langOverlay').style.display = 'none'; }
+function switchLang(code){
+  curLang = code;
+  try { localStorage.setItem('sak_lang', code); } catch(e) {}
+  render();
+  closeLangSheet();
+}
+
+render();
+</script>
+</body>
+</html>
