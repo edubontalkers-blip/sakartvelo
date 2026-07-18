@@ -29,3 +29,9 @@
   from = "/geo/:city"
   to = "/geo/:city/index.html"
   status = 200
+
+[functions."planner"]
+  timeout = 26
+
+[functions."generate-pdf"]
+  timeout = 26
