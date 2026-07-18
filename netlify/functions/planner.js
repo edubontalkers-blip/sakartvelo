@@ -4,15 +4,17 @@ const path = require('path');
 const { getStore } = require('@netlify/blobs');
 
 // ══════════════════════════════════════
-// СЕЗОННЫЕ ПРЕДУПРЕЖДЕНИЯ ИЗ warnings.json
+// ⚠️ ВРЕМЕННАЯ ТЕСТОВАЯ ВЕРСИЯ ⚠️
+// Цель: проверить гипотезу, что демо-заглушка показывается из-за
+// таймаута Netlify (10 сек по умолчанию), а не из-за другой ошибки.
+// Здесь урезан max_tokens и упрощён промпт, чтобы Claude отвечал
+// быстрее (в идеале — за 3-7 секунд вместо 30-35).
+// ПОСЛЕ ТЕСТА ВЕРНУТЬ ОБЫЧНУЮ ВЕРСИЮ planner.js — это НЕ финальный код.
 // ══════════════════════════════════════
-// Файл лежит в planner/warnings.json и обновляется раз в день через
-// update-planner.yml + update_planner.py. Раньше этот файл существовал,
-// но никто его не читал — Claude каждый раз придумывал предупреждения
-// заново. Теперь берём готовые данные: дешевле и предсказуемее.
+
 let _warningsCache = null;
 let _warningsCacheTime = 0;
-const WARNINGS_TTL_MS = 5 * 60 * 1000; // перечитывать файл не чаще раза в 5 минут
+const WARNINGS_TTL_MS = 5 * 60 * 1000;
 
 function loadWarnings() {
   const now = Date.now();
@@ -27,18 +29,13 @@ function loadWarnings() {
     return _warningsCache;
   } catch (e) {
     console.warn('Не удалось прочитать warnings.json:', e.message);
-    return null; // работаем без него — не критично, Claude всё равно сгенерирует предупреждения сам
+    return null;
   }
 }
 
-// ══════════════════════════════════════
-// RATE LIMITING (простая защита от злоупотребления)
-// ══════════════════════════════════════
-// В памяти функции — сбрасывается при cold start, но это нормально:
-// цель не идеальный лимит, а защита от резких всплесков/ботов в рамках "тёплой" функции.
 const requestLog = {};
-const RATE_LIMIT = 10;           // максимум запросов
-const RATE_WINDOW_MS = 60 * 1000; // за 60 секунд
+const RATE_LIMIT = 10;
+const RATE_WINDOW_MS = 60 * 1000;
 
 function isRateLimited(ip) {
   const now = Date.now();
@@ -48,7 +45,6 @@ function isRateLimited(ip) {
     return false;
   }
   if (now - entry.windowStart > RATE_WINDOW_MS) {
-    // окно истекло — сбрасываем счётчик
     requestLog[ip] = { count: 1, windowStart: now };
     return false;
   }
@@ -56,7 +52,6 @@ function isRateLimited(ip) {
   return entry.count > RATE_LIMIT;
 }
 
-// Периодическая уборка старых записей, чтобы объект не рос бесконечно
 function cleanupRequestLog() {
   const now = Date.now();
   for (const ip in requestLog) {
@@ -66,13 +61,6 @@ function cleanupRequestLog() {
   }
 }
 
-// ══════════════════════════════════════
-// ПЕРСИСТЕНТНЫЙ КЭШ (Netlify Blobs)
-// ══════════════════════════════════════
-// В отличие от прошлой версии (sessionCache в памяти, которая обнулялась
-// при каждом cold start), Netlify Blobs хранит данные между вызовами
-// функции постоянно — это и даёт реальную экономию токенов, а не только
-// "пока функция тёплая".
 async function getCachedRoute(cacheKey) {
   try {
     const store = getStore('planner-routes-cache');
@@ -80,7 +68,7 @@ async function getCachedRoute(cacheKey) {
     return cached || null;
   } catch (e) {
     console.error('Cache read error:', e.message);
-    return null; // при сбое кэша — просто генерируем заново, не роняем весь запрос
+    return null;
   }
 }
 
@@ -90,19 +78,14 @@ async function saveCachedRoute(cacheKey, route) {
     await store.setJSON(cacheKey, route);
   } catch (e) {
     console.error('Cache write error:', e.message);
-    // не критично — маршрут всё равно уйдёт пользователю, просто не закэшируется
   }
 }
 
-// ══════════════════════════════════════
-// HANDLER
-// ══════════════════════════════════════
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method not allowed' };
   }
 
-  // Определяем IP клиента (Netlify передаёт его в заголовках)
   const ip = event.headers['x-nf-client-connection-ip']
     || event.headers['client-ip']
     || event.headers['x-forwarded-for']
@@ -119,10 +102,11 @@ exports.handler = async (event) => {
     };
   }
 
+  const startedAt = Date.now(); // ⚠️ ТЕСТ: засекаем время для диагностики
+
   try {
     const data = JSON.parse(event.body);
 
-    // Базовая валидация — чтобы явный мусор/абьюз не долетал до Claude API
     if (!data || typeof data !== 'object' || !data.category || !data.days) {
       return {
         statusCode: 400,
@@ -131,33 +115,33 @@ exports.handler = async (event) => {
       };
     }
 
-    // Build cache key from all answers + язык (иначе кэш попутает маршруты на разных языках)
     const season = getSeasonFromDate(data.arrivalDate);
     const lang = (data.lang || 'en').toLowerCase();
-    const cacheKey = [
+    const cacheKey = 'TEST_' + [
       data.category, data.days, data.group,
       data.fitness, data.vibe, data.accommodation,
       data.food_pref, data.budget, data.startCity, season, lang
     ].join('_').replace(/[^a-zA-Z0-9_]/g, '').toLowerCase();
 
-    // Проверяем персистентный кэш
-    const cached = await getCachedRoute(cacheKey);
-    if (cached) {
-      console.log('Cache hit:', cacheKey);
-      return {
-        statusCode: 200,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(personalize(cached, data))
-      };
-    }
+    // ⚠️ ТЕСТ: кэш временно ОТКЛЮЧЕН (закомментирован), чтобы гарантированно
+    // проверять именно скорость генерации, а не попадание в кэш
+    // const cached = await getCachedRoute(cacheKey);
+    // if (cached) {
+    //   console.log('Cache hit:', cacheKey);
+    //   return {
+    //     statusCode: 200,
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify(personalize(cached, data))
+    //   };
+    // }
 
-    // Нет в кэше — генерируем через Claude (передаём и данные из warnings.json,
-    // чтобы Claude перевёл их на нужный язык вместе с остальным текстом)
-    console.log('Cache miss, generating:', cacheKey);
+    console.log('TEST: Cache miss (disabled), generating:', cacheKey);
     const fileWarnings = getRelevantFileWarnings(data);
     const route = await generateRoute(data, season, lang, fileWarnings);
 
-    // Сохраняем в персистентный кэш (не блокируя ответ пользователю)
+    const elapsedMs = Date.now() - startedAt;
+    console.log(`TEST: Generation took ${elapsedMs}ms`); // ⚠️ ТЕСТ: главная метрика
+
     await saveCachedRoute(cacheKey, route);
 
     return {
@@ -167,7 +151,8 @@ exports.handler = async (event) => {
     };
 
   } catch (e) {
-    console.error('Planner error:', e);
+    const elapsedMs = Date.now() - startedAt;
+    console.error(`Planner error after ${elapsedMs}ms:`, e);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: 'Failed to generate route', message: e.message })
@@ -187,22 +172,18 @@ function getSeasonFromDate(dateStr) {
 function getRelevantFileWarnings(data) {
   const w = loadWarnings();
   if (!w) return [];
-
   const texts = [];
   (w.general || []).forEach(item => texts.push(item.text));
-
   const cat = (data.category || '').toLowerCase();
   const isMountainTrip = cat.includes('mountain') || cat.includes('nature') || cat.includes('all');
   if (isMountainTrip) {
     (w.road_warnings || []).forEach(item => texts.push(item.text));
   }
-
   return texts;
 }
 
 function personalize(route, data) {
-  // Add personal details without regenerating
-  const personalized = JSON.parse(JSON.stringify(route)); // не мутируем закэшированный объект
+  const personalized = JSON.parse(JSON.stringify(route));
   personalized._personalName = data.name || 'Traveler';
   personalized._personalDate = data.arrivalDate || '';
   return personalized;
@@ -219,106 +200,59 @@ async function generateRoute(data, season, lang, fileWarnings) {
   const langName = LANG_NAMES[lang] || 'English';
 
   const fileWarningsBlock = (fileWarnings && fileWarnings.length)
-    ? `\n\nThese standard warnings are always true for Georgia right now — translate them into ${langName} exactly as facts (don't alter the meaning) and put them FIRST in the "warnings" array, before any route-specific ones:\n${fileWarnings.map(w => `- ${w}`).join('\n')}`
+    ? `\n\nTranslate these standard warnings into ${langName} and put them FIRST in "warnings":\n${fileWarnings.map(w => `- ${w}`).join('\n')}`
     : '';
 
-  const yogaBlock = (data.category === 'yoga') ? `
-
-CATEGORY-SPECIFIC GUIDANCE FOR "yoga":
-This traveler wants a yoga-focused trip, not a generic sightseeing trip.
-Build a route that actually CONNECTS different cities/regions known for yoga
-and wellness in Georgia, one leg per multi-day stop rather than a single city:
-- Tbilisi: yoga studios in Vake/Vera neighborhoods, morning classes, city-based retreats.
-- Batumi / Black Sea coast: beachfront yoga, sunrise sessions by the sea, subtropical botanical garden walks.
-- Kazbegi or Svaneti mountains: mountain yoga retreats, quiet nature-based practice, hiking combined with yoga.
-- Borjomi: yoga combined with mineral spring relaxation and forest air.
-Each day's schedule should include an actual yoga/meditation session as a
-schedule item (morning or evening), not just generic sightseeing. Mention
-specific neighborhood or area names for studios/retreats where relevant,
-and connect the legs with realistic travel times between them.` : '';
-
-  const schedulingFacts = `
-SCHEDULING CONSTRAINTS — use these real, stable facts to build a realistic
-time-of-day schedule (don't schedule things outside these windows):
-- Tbilisi Metro: operates 6:00–24:00 daily.
-- Museums (National Museum, most others): typically 10:00–18:00, many closed on Mondays.
-- Churches and monasteries (Gergeti Trinity, Jvari, Alaverdi, Bodbe, Svetitskhoveli): generally open dawn to dusk, roughly 9:00–19:00, but may close briefly during services.
-- Sulfur baths (Abanotubani, Tbilisi): most private rooms bookable 9:00–23:00.
-- Intercity trains (Tbilisi↔Batumi, Tbilisi↔Zugdidi/Svaneti, Tbilisi↔Kutaisi): only 1-3 departures per day, mostly morning or overnight — do not assume trains run every hour; pick one realistic departure time and build the day around it.
-- Intercity marshrutkas (shared minivans): more frequent than trains, roughly every 1-2 hours during daytime (approx. 7:00–19:00), but stop running after dark on most rural routes.
-- Cable cars (Narikala, Gudauri, Chiatura, Rike Park): typically operate 10:00–22:00 (Tbilisi ones), mountain resort ones daylight hours only.
-- Wine cellars / qvevri tastings in Kakheti: typically need advance booking, usually run 11:00–17:00.
-- Restaurants: lunch service ~13:00–16:00, dinner ~19:00–23:00; small-town restaurants may close earlier.
-- Mountain driving (Georgian Military Highway, Svaneti roads): strongly avoid scheduling after dark — plan arrivals in mountain regions before ~18:00.
-When you assign a "time" in the schedule, make sure it is consistent with these
-realistic windows and with travel time between locations (don't put someone in
-two towns 3 hours apart within the same hour).${yogaBlock}`;
-
-  const prompt = `You are an expert Georgia (country in Caucasus) travel guide.
-Create a detailed travel route based on:
+  // ⚠️ ТЕСТ: сильно упрощённый промпт — без блока schedulingFacts (список
+  // подробных правил про расписание), без yoga-блока, с явной просьбой
+  // писать КОРОТКО, чтобы Claude сгенерировал ответ за секунды, а не за 30+.
+  const prompt = `You are a Georgia (Caucasus) travel guide.
+Create a BRIEF travel route based on:
 - Category: ${data.category}
 - Days: ${data.days}
 - Group: ${data.group}
-- Fitness: ${data.fitness}
-- Vibe: ${data.vibe}
-- Accommodation: ${data.accommodation}
-- Food preference: ${data.food_pref}
 - Budget per day: ${data.budget}
 - Start city: ${data.startCity}
 - Season: ${season}
 
-IMPORTANT: Write ALL text content (title, tagline, day themes, tips, warnings —
-everything except place names, which should stay in their common form) in
-${langName}. The person using this guide reads ${langName}, not English.${fileWarningsBlock}
-${schedulingFacts}
+IMPORTANT: Write ALL text (title, tagline, tips, warnings) in ${langName}.
+Keep every tip and warning to 5-8 words maximum. Keep it SHORT overall — this is a quick draft, not a full detailed guide.${fileWarningsBlock}
 
-Return ONLY valid JSON, no markdown, no explanation:
+Return ONLY valid JSON, no markdown:
 {
   "title": "route title",
-  "tagline": "inspiring one-liner",
+  "tagline": "short one-liner",
   "days": [
     {
       "day": 1,
       "location": "city name",
       "title": "day theme",
-      "drive_from_prev": "drive time (or empty for day 1)",
+      "drive_from_prev": "",
       "schedule": [
-        {
-          "time": "10:00",
-          "place": "place name",
-          "duration": "2 hours",
-          "tip": "practical tip",
-          "price_mid": "$25"
-        }
+        {"time": "10:00", "place": "place name", "duration": "2 hours", "tip": "short tip", "price_mid": "$25"}
       ],
       "food": {"breakfast": "where", "lunch": "where", "dinner": "where"},
       "hotel": {"budget": "name $price", "mid": "name $price", "luxury": "name $price"},
-      "shops": ["shop name and note"],
-      "shop_warning": "warning if no shops ahead"
+      "shops": ["shop name"],
+      "shop_warning": ""
     }
   ],
   "packing_list": {
-    "documents": ["item"],
-    "clothes": ["item"],
-    "tech": ["item"],
-    "medicine": ["item"],
-    "food_water": ["item"]
+    "documents": ["item"], "clothes": ["item"], "tech": ["item"],
+    "medicine": ["item"], "food_water": ["item"]
   },
   "budget_total": {"budget": "$XXX", "mid": "$XXX", "luxury": "$XXX"},
-  "warnings": ["route-specific warning only — e.g. tied to this exact itinerary or these exact locations. Do NOT include generic Georgia-wide advice like insurance requirements, ATM availability, or phone signal — that is handled separately."],
+  "warnings": ["short route-specific warning"],
   "google_maps_url": "https://www.google.com/maps/dir/Point1/Point2/"
 }`;
 
   return new Promise((resolve, reject) => {
     const body = JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
-      // Было: Math.max(4000, days*350+1500) — для 7 дней давало ровно 4000,
-      // этого не хватало на подробный JSON-маршрут, особенно переведённый
-      // на языки с менее эффективной токенизацией (русский, арабский, иврит,
-      // фарси используют больше токенов на тот же смысловой объём, чем
-      // английский) — ответ обрывался на середине строки (Unterminated string).
-      // Подняли базовый порог и множитель на день с запасом.
-      max_tokens: Math.min(16000, Math.max(6000, parseInt(data.days || 5) * 700 + 2500)),
+      // ⚠️ ТЕСТ: сильно урезанный max_tokens, чтобы ответ был короче и быстрее.
+      // Для реального использования это НЕДОСТАТОЧНО — вернуть обычную формулу
+      // после теста!
+      max_tokens: Math.min(3000, Math.max(1500, parseInt(data.days || 3) * 300)),
       messages: [{ role: 'user', content: prompt }]
     });
 
