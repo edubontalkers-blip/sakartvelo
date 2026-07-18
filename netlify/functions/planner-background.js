@@ -120,6 +120,42 @@ async function setJobStatus(jobId, statusObj) {
 }
 
 // ══════════════════════════════════════
+// ДНЕВНОЙ ЛИМИТ: 1 бесплатный маршрут в день на IP-адрес
+// ══════════════════════════════════════
+// Настоящая (серверная) защита от злоупотребления — в отличие от проверки
+// в localStorage на клиенте, эту нельзя обойти, просто очистив данные
+// браузера. Ключ хранилища — IP + сегодняшняя дата, значение — просто
+// факт использования. Ограничение по IP означает, что несколько человек
+// в одной сети (например, семья или офис) могут иногда столкнуться с
+// ограничением раньше, чем хотелось бы — это сознательный компромисс
+// простоты реализации, приемлемый для бесплатного продукта.
+function todayDateStr() {
+  return new Date().toISOString().slice(0, 10); // YYYY-MM-DD (UTC)
+}
+
+async function hasUsedDailyLimit(ip) {
+  try {
+    const store = getStoreExplicit('planner-daily-limit');
+    const key = ip + '_' + todayDateStr();
+    const existing = await store.get(key, { type: 'json' });
+    return !!existing;
+  } catch (e) {
+    console.error('Daily limit check error:', e.message);
+    return false; // при сбое хранилища — не блокируем пользователя
+  }
+}
+
+async function markDailyLimitUsed(ip) {
+  try {
+    const store = getStoreExplicit('planner-daily-limit');
+    const key = ip + '_' + todayDateStr();
+    await store.setJSON(key, { usedAt: new Date().toISOString() });
+  } catch (e) {
+    console.error('Daily limit write error:', e.message);
+  }
+}
+
+// ══════════════════════════════════════
 // HANDLER (фоновый — Netlify не ждёт return, но мы всё равно
 // его делаем для чистоты и для логов)
 // ══════════════════════════════════════
@@ -160,6 +196,20 @@ exports.handler = async (event) => {
     return { statusCode: 200 };
   }
 
+  // Проверка дневного лимита: 1 бесплатный маршрут в день на IP.
+  // Проверяем ДО кэша намеренно — лимит про "одна попытка в день", а не
+  // про экономию токенов, так что даже попадание в кэш должно засчитываться.
+  // Исключение: если передан правильный секретный ADMIN_BYPASS_CODE
+  // (владелец сайта тестирует изменения) — лимит пропускается.
+  const isAdminBypass = !!process.env.ADMIN_BYPASS_CODE
+    && data.bypassCode === process.env.ADMIN_BYPASS_CODE;
+
+  if (!isAdminBypass && await hasUsedDailyLimit(ip)) {
+    console.warn('Daily limit reached for IP:', ip);
+    await setJobStatus(jobId, { status: 'limited', message: 'Daily free route limit reached' });
+    return { statusCode: 200 };
+  }
+
   // Сразу помечаем задачу как "в процессе" — на случай если клиент
   // начнёт спрашивать статус раньше, чем мы дойдём до конца.
   await setJobStatus(jobId, { status: 'pending' });
@@ -176,6 +226,7 @@ exports.handler = async (event) => {
     const cached = await getCachedRoute(cacheKey);
     if (cached) {
       console.log('Cache hit:', cacheKey);
+      if (!isAdminBypass) await markDailyLimitUsed(ip);
       await setJobStatus(jobId, { status: 'done', route: personalize(cached, data) });
       return { statusCode: 200 };
     }
@@ -187,6 +238,7 @@ exports.handler = async (event) => {
     console.log(`Generation finished in ${Date.now() - startedAt}ms for jobId ${jobId}`);
 
     await saveCachedRoute(cacheKey, route);
+    if (!isAdminBypass) await markDailyLimitUsed(ip);
     await setJobStatus(jobId, { status: 'done', route: personalize(route, data) });
 
     return { statusCode: 200 };
@@ -331,12 +383,19 @@ Return ONLY valid JSON, no markdown, no explanation:
   "google_maps_url": "https://www.google.com/maps/dir/Point1/Point2/"
 }`;
 
-  // ⚠️ Фоновая функция может работать до 15 минут — поэтому здесь можно
-  // использовать полный, не урезанный max_tokens, без риска обрыва по времени.
+  // ⚠️ Фоновая функция может работать до 15 минут — риска таймаута больше нет.
+  // Модель claude-haiku-4-5 поддерживает вывод до 64000 токенов (подтверждённый
+  // официальный лимит), а старый потолок 16000 был занижен и вызывал обрыв JSON
+  // на маршрутах с более "многословными" требованиями (например, категория yoga,
+  // где на каждый день нужно больше деталей — конкретные районы, отдельные сессии).
+  const isComplexCategory = (data.category === 'yoga');
+  const categoryBuffer = isComplexCategory ? 3000 : 0;
+  const computedMaxTokens = Math.max(6000, parseInt(data.days || 5) * 900 + 3000 + categoryBuffer);
+
   return new Promise((resolve, reject) => {
     const body = JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
-      max_tokens: Math.min(16000, Math.max(6000, parseInt(data.days || 5) * 700 + 2500)),
+      max_tokens: Math.min(64000, computedMaxTokens),
       messages: [{ role: 'user', content: prompt }]
     });
 
