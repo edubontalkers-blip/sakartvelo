@@ -275,8 +275,36 @@ function getRelevantFileWarnings(data) {
   return texts;
 }
 
+// ══════════════════════════════════════
+// ОЧИСТКА ТЕКСТА ОТ ПРОБЛЕМНЫХ СИМВОЛОВ
+// ══════════════════════════════════════
+// Иногда модель (или сбой кодировки при передаче) вставляет символы,
+// которые шрифт в PDF не может отобразить — это выглядит как "??" в
+// середине слова. Здесь убираем самые частые причины: символ замены
+// Unicode (�), мягкий/неразрывный дефис, невидимые zero-width символы.
+// Это не чинит саму причину (если модель реально "придумала" странный
+// символ), но не даёт этому долетать до пользователя в виде "??".
+function sanitizeText(str) {
+  if (typeof str !== 'string') return str;
+  return str
+    .replace(/\uFFFD/g, '')           // символ замены (обычно источник "?")
+    .replace(/[\u00AD\u2011]/g, '-')  // мягкий и неразрывный дефис → обычный
+    .replace(/[\u200B\u200C\u200D\uFEFF]/g, ''); // невидимые zero-width символы
+}
+
+function sanitizeDeep(value) {
+  if (typeof value === 'string') return sanitizeText(value);
+  if (Array.isArray(value)) return value.map(sanitizeDeep);
+  if (value && typeof value === 'object') {
+    const out = {};
+    for (const key in value) out[key] = sanitizeDeep(value[key]);
+    return out;
+  }
+  return value;
+}
+
 function personalize(route, data) {
-  const personalized = JSON.parse(JSON.stringify(route));
+  const personalized = sanitizeDeep(JSON.parse(JSON.stringify(route)));
   personalized._personalName = data.name || 'Traveler';
   personalized._personalDate = data.arrivalDate || '';
   return personalized;
