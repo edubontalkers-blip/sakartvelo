@@ -231,15 +231,15 @@ const EMERGENCY = {
 };
 
 const EMBASSIES = [
-  {country:'Russia / Россия', phone:'+995 32 298 09 09'},
+  {country:'Russia (Interests Section, via Swiss Embassy) / Россия', phone:'+995 32 291 24 53'},
   {country:'United Kingdom', phone:'+995 32 227 47 47'},
-  {country:'Germany / Deutschland', phone:'+995 32 243 93 00'},
-  {country:'Israel / ישראל', phone:'+995 32 296 53 31'},
-  {country:'Iran / ایران', phone:'+995 32 299 77 11'},
+  {country:'Germany / Deutschland', phone:'+995 32 244 73 00'},
+  {country:'Israel / ישראל', phone:'+995 32 255 65 00'},
+  {country:'Iran / ایران', phone:'+995 32 291 36 57'},
   {country:'Turkey / Türkiye', phone:'+995 32 225 20 72'},
-  {country:'Italy / Italia', phone:'+995 32 236 50 90'},
-  {country:'Spain / España', phone:'+995 32 292 20 47'},
-  {country:'Saudi Arabia', phone:'+995 32 220 80 00'},
+  {country:'Italy / Italia', phone:'+995 32 299 64 18'},
+  {country:'Spain / España', phone:'+995 32 220 00 63'},
+  {country:'Saudi Arabia', phone:'+995 32 200 95 04'},
 ];
 
 // ══════════════════════════════════════
@@ -306,8 +306,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function applyUrlPrefill() {
-  // Позволяет SEO-страницам вида /planner/kazbegi-mountain-trek/ вести сюда
-  // с уже выбранной категорией — meньше трения для пользователя.
   try {
     const params = new URLSearchParams(window.location.search);
     const cat = params.get('category');
@@ -367,9 +365,6 @@ function selectLang(code, el) {
   selectedLang = code;
 }
 
-// ══════════════════════════════════════
-// ПЕРЕКЛЮЧАТЕЛЬ ЯЗЫКА ИНТЕРФЕЙСА (кнопка 🌐 в шапке)
-// ══════════════════════════════════════
 function openLangSheet() {
   const tr = t();
   document.getElementById('langSheetTitle').textContent = tr.choosePdfLang.replace(/PDF/i,'').trim() || 'Language';
@@ -393,16 +388,12 @@ function switchUiLang(code) {
   applyStaticTexts();
   renderCategories();
   renderLangs();
-  // Если пользователь уже в квизе — перерисовать текущий вопрос на новом языке
   if (document.getElementById('screen2').classList.contains('active')) {
     renderQuestion();
   }
   closeLangSheet();
 }
 
-// ══════════════════════════════════════
-// NAVIGATION
-// ══════════════════════════════════════
 function showScreen(n) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen'+n).classList.add('active');
@@ -478,9 +469,6 @@ function showLangPicker() { showScreen(5); }
 
 function askChacha() { window.location.href = 'https://sakartvelo.ai'; }
 
-// ══════════════════════════════════════
-// ROUTE GENERATION
-// ══════════════════════════════════════
 async function generateRoute() {
   showScreen(3);
   document.getElementById('progressFill').style.width = '100%';
@@ -495,7 +483,6 @@ async function generateRoute() {
     generatedRoute = data;
     showRoutePreview(data);
   } catch(e) {
-    // Fallback demo route
     generatedRoute = buildDemoRoute();
     showRoutePreview(generatedRoute);
   }
@@ -508,7 +495,6 @@ function buildDemoRoute() {
     {day:1,location:'Tbilisi',title:'Arrival & Old Town',schedule:[{time:'14:00',place:'Abanotubani Sulfur Baths',duration:'2 hours',tip:'Book private room in advance',price_mid:'$30'},{time:'17:00',place:'Narikala Fortress',duration:'1.5 hours',tip:'Take cable car from Rike Park',price_mid:'Free'},{time:'20:00',place:'Dinner in Old Town',duration:'2 hours',tip:'Try Shavi Lomi restaurant',price_mid:'$25'}],food:{breakfast:'Skip or hotel',lunch:'Café Pupur',dinner:'Shavi Lomi'},hotel:{budget:'Fabrika Hostel $25',mid:'Hotel Rooms $90',luxury:'Stamba Hotel $200'},shops:['Carrefour — Rustaveli Ave (24/7)','Goodwill — city center'],shop_warning:''},
     {day:2,location:'Mtskheta & Kazbegi',title:'Ancient Capital to the Mountains',schedule:[{time:'07:00',place:'Depart Tbilisi',duration:'30 min',tip:'Buy food and water here before leaving',price_mid:''},{ time:'08:30',place:'Jvari Monastery',duration:'45 min',tip:'First Christian church in Georgia',price_mid:'Free'},{time:'11:00',place:'Arrive Stepantsminda',duration:'2.5 hrs drive',tip:'Scenic Georgian Military Highway',price_mid:''},{time:'13:00',place:'Gergeti Trinity Church',duration:'3 hours',tip:'Hike 1.5h or take 4WD $15',price_mid:'$15'}],food:{breakfast:'Tbilisi hotel',lunch:'Pack food from Tbilisi',dinner:'Local guesthouse'},hotel:{budget:'Guesthouse $20',mid:'Rooms Hotel Kazbegi $80',luxury:'Rooms Hotel Kazbegi $200'},shops:['Small shops in Stepantsminda (unpredictable hours)'],shop_warning:'WARNING: Above Stepantsminda NO shops. Buy water and food in Tbilisi!'},
   ];
-  // Fill remaining days — раньше обрывалось на 7-м дне даже если просили больше
   const locationThemes = [
     ['Kakheti Wine Region','Vineyards & Qvevri Tastings'],
     ['Batumi Black Sea','Seaside & Botanical Garden'],
@@ -526,7 +512,7 @@ function buildDemoRoute() {
     ['Lagodekhi Reserve','Untouched Forest Trails'],
   ];
   for (let i = 2; i < days; i++) {
-    const cycle = Math.floor((i - 2) / locationThemes.length); // 0 первый круг, 1 второй и т.д.
+    const cycle = Math.floor((i - 2) / locationThemes.length);
     const [loc, theme] = locationThemes[(i - 2) % locationThemes.length];
     const dayTitle = cycle === 0 ? theme : `${theme} (Return Visit)`;
     daysList.push({day:i+1,location:loc,title:dayTitle,schedule:[{time:'09:00',place:'Morning exploration',duration:'4 hours',tip:'Check local conditions',price_mid:'Varies'}],food:{breakfast:'Local guesthouse',lunch:'Local cafe',dinner:'Restaurant'},hotel:{budget:'Guesthouse $25',mid:'Hotel $70',luxury:'Hotel $150'},shops:['Check local market'],shop_warning:''});
@@ -585,7 +571,6 @@ function showRoutePreview(route) {
   showScreen(4);
 }
 
-// Настоящие партнёрские ссылки — те же, что уже используются на главной странице sakartvelo.ai
 const AFFILIATE_LINKS = {
   hotel: 'https://www.booking.com/searchresults.html?aid=7916610',
   transfer: 'https://kiwitaxi.com/?marker=732753',
@@ -595,11 +580,8 @@ const AFFILIATE_LINKS = {
   flights: 'https://aviasales.tpm.lv/3v2DPRiC'
 };
 
-// ══════════════════════════════════════
-// PDF GENERATION
-// ══════════════════════════════════════
 async function loadDejaVuFont() {
-  if (window.__DEJAVU_FONT_B64) return; // уже загружен
+  if (window.__DEJAVU_FONT_B64) return;
   await new Promise((resolve, reject) => {
     const s = document.createElement('script');
     s.src = '/planner/dejavu-font.js';
@@ -616,11 +598,9 @@ async function generatePDF() {
 
   const tr = t();
   const em = EMERGENCY[selectedLang] || EMERGENCY.en;
-  const pt = tr.pdf;
+  const pt = (PLANNER_I18N[selectedLang] || PLANNER_I18N.en).pdf;
   const name = answers.name || 'Traveler';
 
-  // Пытаемся сгенерировать PDF на сервере через Puppeteer — там правильно
-  // "сшиваются" арабские/персидские буквы, чего клиентский jsPDF не умеет.
   try {
     const res = await fetch('/.netlify/functions/generate-pdf', {
       method: 'POST',
@@ -646,8 +626,6 @@ async function generatePDF() {
 
   } catch (e) {
     console.warn('Серверная генерация PDF недоступна, откат на клиентскую:', e.message);
-    // Тихо переключаемся на запасной вариант ниже — пользователь не должен
-    // заметить разницу, кроме как в качестве арабского/фарси текста.
     return generatePDF_client();
   }
 }
@@ -658,8 +636,6 @@ async function generatePDF_client() {
   document.getElementById('pdfLoading').style.display = 'block';
 
   try {
-    // Шрифт со всеми алфавитами грузим только сейчас, по клику — чтобы не раздувать
-    // вес страницы для тех, кто квиз не проходит до конца
     await loadDejaVuFont();
 
     const route = generatedRoute;
@@ -672,8 +648,17 @@ async function generatePDF_client() {
     const doc = new jsPDF('p','mm','a4');
     registerDejaVuFont(doc);
     const BASE_FONT = 'DejaVuSans';
-    if (selectedLang === 'ar' || selectedLang === 'he' || selectedLang === 'fa') {
+    const isRTLDoc = (selectedLang === 'ar' || selectedLang === 'he' || selectedLang === 'fa');
+    if (isRTLDoc) {
       doc.setR2L(true);
+    }
+    // Хелпер: печать чисто числовых/латинских строк (телефоны, коды и т.п.)
+    // всегда в LTR-порядке, даже если весь документ в R2L — иначе jsPDF
+    // визуально переворачивает порядок пробел-разделённых групп (баг с номерами).
+    function textLTR(str, x, y, opts) {
+      if (isRTLDoc) doc.setR2L(false);
+      doc.text(str, x, y, opts);
+      if (isRTLDoc) doc.setR2L(true);
     }
     const W = 210, H = 297;
     const M = 18; // margin
@@ -815,7 +800,7 @@ async function generatePDF_client() {
         doc.setTextColor(...gold);
         doc.setFontSize(9);
         doc.setFont(BASE_FONT,'bold');
-        doc.text(s.time, M+4, y+7);
+        textLTR(s.time, M+4, y+7);
         doc.setTextColor(...dark);
         doc.setFont(BASE_FONT,'bold');
         doc.text(s.place, M+20, y+7);
@@ -831,7 +816,7 @@ async function generatePDF_client() {
         if (s.price_mid && s.price_mid !== '') {
           doc.setFontSize(8);
           doc.setTextColor(...wine);
-          doc.text(s.price_mid, M+CW-4, y+(s.tip?19:13), {align:'right'});
+          textLTR(s.price_mid, M+CW-4, y+(s.tip?19:13), {align:'right'});
         }
         y += s.tip ? 25 : 19;
       });
@@ -966,7 +951,7 @@ async function generatePDF_client() {
     doc.setTextColor(...dark);
     doc.setFontSize(28);
     doc.setFont(BASE_FONT,'bold');
-    doc.text('112', W/2, 36, {align:'center'});
+    textLTR('112', W/2, 36, {align:'center'});
     doc.setFontSize(9);
     doc.setFont(BASE_FONT,'normal');
     doc.text(em.main + ' ' + (em.note||''), W/2, 40, {align:'center'});
@@ -986,7 +971,7 @@ async function generatePDF_client() {
       doc.text(label + ':', M, y);
       doc.setTextColor(...white);
       doc.setFont(BASE_FONT,'bold');
-      doc.text(num, W-M, y, {align:'right'});
+      textLTR(num, W-M, y, {align:'right'});
       y += 9;
     });
 
@@ -1006,7 +991,7 @@ async function generatePDF_client() {
       doc.text(e.country + ':', M, y);
       doc.setTextColor(...white);
       doc.setFont(BASE_FONT,'bold');
-      doc.text(e.phone, W-M, y, {align:'right'});
+      textLTR(e.phone, W-M, y, {align:'right'});
       y += 8;
     });
 
@@ -1020,7 +1005,7 @@ async function generatePDF_client() {
     doc.text(em.ins||'Insurance Aldagi', M, y);
     doc.setTextColor(...white);
     doc.setFont(BASE_FONT,'bold');
-    doc.text('+995 32 244 44 00', W-M, y, {align:'right'});
+    textLTR('+995 32 244 44 00', W-M, y, {align:'right'});
 
     doc.setTextColor(...gold);
     doc.setFontSize(10);
