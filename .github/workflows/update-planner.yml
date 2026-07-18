@@ -1,0 +1,30 @@
+name: Update Planner Data
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-planner:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Update planner data
+        run: python scripts/update_planner.py
+
+      - name: Commit updated data
+        run: |
+          git config user.email "bot@sakartvelo.ai"
+          git config user.name "Chacha Bot"
+          git add planner/warnings.json
+          git diff --staged --quiet || git commit -m "Update planner $(date +%Y-%m-%d)"
+          git push
