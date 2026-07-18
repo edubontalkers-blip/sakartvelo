@@ -136,6 +136,7 @@ footer a{color:var(--wine);text-decoration:none}
       <h2 style="margin-top:16px;color:var(--wine)" id="s3Title">Chacha is building your route...</h2>
       <p class="loading-text" id="s3Sub">Personalizing for you — just a moment</p>
     </div>
+    <pre id="debugLog" style="text-align:left;font-size:.7rem;background:#f4f4f4;color:#333;padding:10px;border-radius:8px;max-height:300px;overflow:auto;white-space:pre-wrap;word-break:break-all"></pre>
   </div>
 
   <!-- SCREEN 4: Route preview -->
@@ -503,54 +504,71 @@ function updateLoadingMessage(elapsedMs) {
   }
 }
 
+// ⚠️ ВРЕМЕННАЯ ОТЛАДКА: пишем происходящее прямо на экран, потому что
+// логи Netlify сейчас недоступны (сбой на их стороне). Это безопасно —
+// после диагностики можно убрать этот блок и элемент #debugLog.
+function debugLog(msg) {
+  const el = document.getElementById('debugLog');
+  if (!el) return;
+  const time = new Date().toLocaleTimeString();
+  el.textContent += `[${time}] ${msg}\n`;
+  el.scrollTop = el.scrollHeight;
+}
+
 async function generateRoute() {
   showScreen(3);
   document.getElementById('progressFill').style.width = '100%';
+  const dbg = document.getElementById('debugLog');
+  if (dbg) dbg.textContent = '';
 
   const jobId = makeJobId();
   const startedAt = Date.now();
   updateLoadingMessage(0);
+  debugLog('jobId: ' + jobId);
+  debugLog('Отправляю запрос на planner-background...');
 
   try {
-    // Запускаем фоновую генерацию — Netlify сразу отвечает 202, не дожидаясь результата
-    await fetch('/.netlify/functions/planner-background', {
+    const startRes = await fetch('/.netlify/functions/planner-background', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify(Object.assign({}, answers, { lang: uiLang, jobId }))
     });
+    debugLog('Ответ на старт: HTTP ' + startRes.status);
   } catch (e) {
-    // Даже старт фоновой функции не удался (сеть и т.п.) — сразу демо
+    debugLog('ОШИБКА при старте: ' + e.message);
     generatedRoute = buildDemoRoute();
     showRoutePreview(generatedRoute);
     return;
   }
 
-  // Опрашиваем статус, пока не готово, не ошибка, или не вышло время
+  let pollCount = 0;
   while (Date.now() - startedAt < POLL_MAX_MS) {
     await new Promise(r => setTimeout(r, POLL_INTERVAL_MS));
     updateLoadingMessage(Date.now() - startedAt);
+    pollCount++;
 
     try {
       const res = await fetch('/.netlify/functions/planner-status?jobId=' + encodeURIComponent(jobId));
-      const status = await res.json();
+      const rawText = await res.text();
+      debugLog(`Опрос #${pollCount} (HTTP ${res.status}): ${rawText.slice(0, 200)}`);
+      const status = JSON.parse(rawText);
 
       if (status.status === 'done' && status.route) {
+        debugLog('Готово! Показываю настоящий маршрут.');
         generatedRoute = status.route;
         showRoutePreview(status.route);
         return;
       }
       if (status.status === 'error') {
-        console.error('Planner background error:', status.message);
-        break; // выходим из цикла и показываем демо ниже
+        debugLog('Ошибка от сервера: ' + status.message);
+        break;
       }
-      // status === 'pending' — просто продолжаем ждать
     } catch (e) {
-      // сбой при проверке статуса — не прерываем цикл, попробуем ещё раз
-      console.warn('Status check failed, retrying:', e);
+      debugLog(`Опрос #${pollCount} — сбой запроса: ${e.message}`);
     }
   }
 
-  // Не дождались готового результата за отведённое время — показываем демо
+  debugLog('Время ожидания истекло — показываю демо.');
   generatedRoute = buildDemoRoute();
   showRoutePreview(generatedRoute);
 }
