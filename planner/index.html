@@ -469,23 +469,90 @@ function showLangPicker() { showScreen(5); }
 
 function askChacha() { window.location.href = 'https://sakartvelo.ai'; }
 
+// ══════════════════════════════════════
+// ГЕНЕРАЦИЯ МАРШРУТА ЧЕРЕЗ ФОНОВУЮ ФУНКЦИЮ (polling)
+// ══════════════════════════════════════
+// Раньше сайт ждал прямого ответа от /.netlify/functions/planner, но
+// у обычных функций Netlify жёсткий лимит времени (10-26 сек), и для
+// длинных маршрутов (7+ дней) генерация через Claude не успевала —
+// сайт откатывался на демо-заглушку. Теперь используется фоновая функция
+// (planner-background.js, до 15 минут на выполнение) + отдельная лёгкая
+// функция статуса (planner-status.js), которую сайт опрашивает каждые
+// несколько секунд, пока маршрут не будет готов.
+function makeJobId() {
+  if (window.crypto && window.crypto.randomUUID) return window.crypto.randomUUID();
+  return 'job-' + Date.now() + '-' + Math.random().toString(36).slice(2);
+}
+
+const POLL_INTERVAL_MS = 2500;
+const POLL_MAX_MS = 150000; // 2.5 минуты — с запасом даже для длинных маршрутов
+
+function updateLoadingMessage(elapsedMs) {
+  const el = document.getElementById('s3Sub');
+  if (!el) return;
+  const tr = t();
+  // Первая стадия — используем уже переведённый на 9 языков текст (loadingSub).
+  // Для более долгих стадий (длинные маршруты) показываем доп. текст на английском —
+  // отдельного перевода для этих сообщений пока нет, это безопасный запасной вариант.
+  if (elapsedMs < 12000) {
+    el.textContent = tr.loadingSub;
+  } else if (elapsedMs < 40000) {
+    el.textContent = tr.loadingSub + ' (still working — longer trips take more time)';
+  } else {
+    el.textContent = tr.loadingSub + ' (almost there — building a detailed route)';
+  }
+}
+
 async function generateRoute() {
   showScreen(3);
   document.getElementById('progressFill').style.width = '100%';
 
+  const jobId = makeJobId();
+  const startedAt = Date.now();
+  updateLoadingMessage(0);
+
   try {
-    const res = await fetch('/.netlify/functions/planner', {
+    // Запускаем фоновую генерацию — Netlify сразу отвечает 202, не дожидаясь результата
+    await fetch('/.netlify/functions/planner-background', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify(Object.assign({}, answers, { lang: uiLang }))
+      body: JSON.stringify(Object.assign({}, answers, { lang: uiLang, jobId }))
     });
-    const data = await res.json();
-    generatedRoute = data;
-    showRoutePreview(data);
-  } catch(e) {
+  } catch (e) {
+    // Даже старт фоновой функции не удался (сеть и т.п.) — сразу демо
     generatedRoute = buildDemoRoute();
     showRoutePreview(generatedRoute);
+    return;
   }
+
+  // Опрашиваем статус, пока не готово, не ошибка, или не вышло время
+  while (Date.now() - startedAt < POLL_MAX_MS) {
+    await new Promise(r => setTimeout(r, POLL_INTERVAL_MS));
+    updateLoadingMessage(Date.now() - startedAt);
+
+    try {
+      const res = await fetch('/.netlify/functions/planner-status?jobId=' + encodeURIComponent(jobId));
+      const status = await res.json();
+
+      if (status.status === 'done' && status.route) {
+        generatedRoute = status.route;
+        showRoutePreview(status.route);
+        return;
+      }
+      if (status.status === 'error') {
+        console.error('Planner background error:', status.message);
+        break; // выходим из цикла и показываем демо ниже
+      }
+      // status === 'pending' — просто продолжаем ждать
+    } catch (e) {
+      // сбой при проверке статуса — не прерываем цикл, попробуем ещё раз
+      console.warn('Status check failed, retrying:', e);
+    }
+  }
+
+  // Не дождались готового результата за отведённое время — показываем демо
+  generatedRoute = buildDemoRoute();
+  showRoutePreview(generatedRoute);
 }
 
 function buildDemoRoute() {
