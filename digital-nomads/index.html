@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ru" id="htmlRoot">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title id="pageTitle">Цифровые кочевники в Грузии 2026 | sakartvelo.ai</title>
+<meta id="metaDesc" name="description" content="">
+<link rel="canonical" href="https://sakartvelo.ai/digital-nomads/">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--wine:#8b1a1a;--gold:#c4960a;--ink:#1a0d10;--bg:#fff;--card:#fff8f5;--line:#e8ddd5;--muted:#888}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+header{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);gap:8px}
+.logo{font-weight:900;color:var(--wine);text-decoration:none;font-size:1.1rem}
+.hbtns{display:flex;gap:8px;align-items:center}
+.langBtn{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 10px;cursor:pointer;font-size:1rem}
+main{max-width:680px;margin:0 auto;padding:24px 20px 60px}
+h1{font-size:1.5rem;font-weight:900;color:var(--wine);margin-bottom:8px;line-height:1.3}
+.intro{color:var(--muted);font-size:.95rem;margin-bottom:20px}
+.section-title{font-size:1.15rem;color:var(--wine);margin:28px 0 8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-bottom:14px}
+.timeline{border-left:3px solid var(--gold);padding-left:16px;margin:16px 0}
+.timeline .item{margin-bottom:14px}
+.timeline .date{font-weight:800;color:var(--gold);display:block}
+.warning{background:#ffe6e6;border-radius:12px;padding:14px 18px;margin:16px 0;color:#8b0000;font-weight:600;font-size:.92rem}
+.disclaimer{background:#fff8e6;border:1px solid #e8d9a8;border-radius:12px;padding:14px 18px;margin:24px 0;font-size:.85rem;color:#7a6a3a}
+footer{text-align:center;padding:24px;color:var(--muted);font-size:.8rem}
+footer a{color:var(--wine);text-decoration:none}
+.back{display:inline-block;margin-top:20px;color:var(--wine);text-decoration:none;font-size:.9rem}
+[dir="rtl"] .timeline{border-left:none;border-right:3px solid var(--gold);padding-left:0;padding-right:16px}
+#langOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100}
+#langSheet{position:absolute;bottom:0;left:0;right:0;background:#fff;border-radius:20px 20px 0 0;padding:20px;max-height:70vh;overflow-y:auto}
+.langGrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
+.langItem{border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center;cursor:pointer;font-size:.85rem}
+.langItem.sel{border-color:var(--gold);background:#fff8ee}
+</style>
+</head>
+<body>
+<header>
+  <a href="https://sakartvelo.ai" class="logo">🍶 sakartvelo.ai</a>
+  <div class="hbtns">
+    <button class="langBtn" id="langBtn" onclick="openLangSheet()">🌐</button>
+    <a href="https://sakartvelo.ai" style="color:var(--gold);font-size:.9rem;text-decoration:none" id="backLink">← На сайт</a>
+  </div>
+</header>
+
+<div id="langOverlay" onclick="if(event.target===this)closeLangSheet()">
+  <div id="langSheet">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <h2 id="langSheetTitle" style="font-size:1.1rem;color:var(--wine)">Язык</h2>
+      <button onclick="closeLangSheet()" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--muted)">✕</button>
+    </div>
+    <div class="langGrid" id="langGrid"></div>
+  </div>
+</div>
+
+<main>
+  <h1 id="h1"></h1>
+  <p class="intro" id="intro"></p>
+  <div class="warning" id="warn"></div>
+
+  <h2 class="section-title" id="s1"></h2>
+  <div class="card" id="old"></div>
+
+  <h2 class="section-title" id="s2"></h2>
+  <div class="card" id="new"></div>
+
+  <div class="timeline" id="timeline"></div>
+
+  <h2 class="section-title" id="s3"></h2>
+  <div class="card" id="fines"></div>
+
+  <h2 class="section-title" id="s4"></h2>
+  <div class="card" id="c5"></div>
+
+  <h2 class="section-title" id="s5"></h2>
+  <div class="card" id="practical"></div>
+
+  <div class="disclaimer" id="disclaimer"></div>
+
+  <a class="back" href="https://sakartvelo.ai" id="backLink2"></a>
+</main>
+<footer>
+  <a href="https://sakartvelo.ai">sakartvelo.ai</a> — <span id="footer"></span>
+</footer>
+
+<script>
+const DN_I18N = {"ru": {"title": "Цифровые кочевники в Грузии 2026 — что изменилось", "metaDesc": "С 1 марта 2026 года в Грузии новые правила для удалённых работников. Разбираем, что реально изменилось.", "h1": "💻 Цифровые кочевники в Грузии — что изменилось в 2026", "intro": "Грузия долго была одним из самых простых мест в мире для удалённой работы — виза не нужна, живи и работай хоть год. С 1 марта 2026 года это уже не совсем так.", "warn": "⚠️ Если вы уже живёте в Грузии и работаете удалённо (или планируете) — это касается лично вас.", "s1": "Как было раньше", "old": "Граждане 90+ стран могли въехать без визы и оставаться в Грузии до 365 дней. Работать при этом можно было свободно — многие оформляли статус ИП со ставкой налога 1% с оборота до ~$165 000 в год. Разрешения на работу не требовалось вообще.", "s2": "Что изменилось", "new": "Главное отличие: право находиться в стране и право работать в ней — теперь две разные вещи. Виза-фри въезд на 365 дней остался. Но с 1 марта 2026 года иностранец, ведущий трудовую деятельность в Грузии (включая удалённую работу), формально обязан получить отдельное разрешение.", "timeline": [{"date": "26 июня 2025", "text": "Парламент Грузии принял поправки к Закону о трудовой миграции."}, {"date": "1 марта 2026", "text": "Поправки вступили в силу. Виза сама по себе больше не даёт права работать."}, {"date": "1 мая 2026", "text": "Крайний срок для самозанятых/ИП привести документы в порядок."}, {"date": "1 января 2027", "text": "Крайний срок для работающих по найму у грузинских компаний."}], "s3": "Штрафы за нарушение", "fines": "Размер штрафа — 2000 лари для нарушителей. Применяется как к работникам, так и к нанимающим их компаниям.", "s4": "Новая виза C5", "c5": "Введена виза категории C5 — для удалённых работников, въезжающих как туристы. Даёт право находиться в стране до года, распространяется на супругов и несовершеннолетних детей.", "s5": "Что это значит на практике", "practical": "Если вы просто турист — на вас это не влияет. Если планируете работать удалённо — на середину 2026 некоторые детали ещё уточняются. Лучше свериться напрямую с миграционной службой или иммиграционным юристом.", "disclaimer": "⚠️ Это быстро меняющееся законодательство. Перед решениями проверьте актуальную информацию на evisa.gov.ge.", "back": "← Вернуться на sakartvelo.ai", "footer": "AI-гид по Грузии 🇬🇪", "langTitle": "Язык"}, "en": {"title": "Digital Nomads in Georgia 2026 — What Changed", "metaDesc": "Since March 1, 2026, Georgia has new rules for remote workers. Here's what actually changed.", "h1": "💻 Digital Nomads in Georgia — What Changed in 2026", "intro": "Georgia was long one of the easiest places in the world for remote work — no visa needed, stay and work for a year. Since March 1, 2026, that's no longer entirely true.", "warn": "⚠️ If you already live in Georgia and work remotely (or plan to) — this concerns you personally.", "s1": "How it used to be", "old": "Citizens of 90+ countries could enter visa-free and stay in Georgia for up to 365 days. Work was unrestricted — many registered as Individual Entrepreneurs with a 1% tax rate on turnover up to ~$165,000/year. No work permit was required at all.", "s2": "What changed", "new": "The key difference: the right to be in the country and the right to work there are now two separate things. Visa-free entry for 365 days remains. But since March 1, 2026, a foreigner conducting labor activity in Georgia (including remote work) is formally required to obtain a separate permit.", "timeline": [{"date": "June 26, 2025", "text": "Georgian parliament passed amendments to the Law on Labour Migration."}, {"date": "March 1, 2026", "text": "Amendments took effect. A visa alone no longer grants the right to work."}, {"date": "May 1, 2026", "text": "Deadline for self-employed/IE holders to become compliant."}, {"date": "January 1, 2027", "text": "Deadline for those employed by Georgian companies."}], "s3": "Fines for non-compliance", "fines": "The fine is 2,000 GEL for violators. Applies to both workers and the companies hiring them.", "s4": "New C5 visa", "c5": "A C5 visa category was introduced — for remote workers entering as tourists. Grants up to a year in the country, extends to spouses and minor children.", "s5": "What this means in practice", "practical": "If you're just a tourist — this doesn't affect you. If you plan to work remotely — some details are still being clarified as of mid-2026. Best to check directly with Georgia's migration service or an immigration lawyer.", "disclaimer": "⚠️ This is fast-changing legislation. Before making decisions, check current information at evisa.gov.ge.", "back": "← Back to sakartvelo.ai", "footer": "AI Travel Guide to Georgia 🇬🇪", "langTitle": "Language"}, "tr": {"title": "Gürcistan'da Dijital Göçebeler 2026 — Neler Değişti", "metaDesc": "1 Mart 2026'dan itibaren Gürcistan'da uzaktan çalışanlar için yeni kurallar var. Gerçekte ne değişti bakalım.", "h1": "💻 Gürcistan'da Dijital Göçebeler — 2026'da Neler Değişti", "intro": "Gürcistan uzun süre dünyada uzaktan çalışma için en kolay yerlerden biriydi — vize gerekmiyordu, bir yıl kal ve çalış. 1 Mart 2026'dan itibaren bu tam olarak doğru değil.", "warn": "⚠️ Gürcistan'da zaten yaşıyorsanız ve uzaktan çalışıyorsanız (veya planlıyorsanız) — bu sizi kişisel olarak ilgilendiriyor.", "s1": "Eskiden nasıldı", "old": "90'dan fazla ülke vatandaşı vizesiz girip Gürcistan'da 365 güne kadar kalabiliyordu. Çalışmak serbest ti — birçoğu yıllık ~165.000$'a kadar cirodan %1 vergi oranıyla Bireysel Girişimci statüsü alıyordu. Hiçbir çalışma izni gerekmiyordu.", "s2": "Ne değişti", "new": "Temel fark: ülkede bulunma hakkı ile orada çalışma hakkı artık iki ayrı şey. 365 günlük vizesiz giriş devam ediyor. Ama 1 Mart 2026'dan itibaren Gürcistan'da çalışma faaliyeti yürüten (uzaktan çalışma dahil) bir yabancının resmen ayrı bir izin alması gerekiyor.", "timeline": [{"date": "26 Haziran 2025", "text": "Gürcistan parlamentosu İş Göçü Yasası'nda değişiklik kabul etti."}, {"date": "1 Mart 2026", "text": "Değişiklikler yürürlüğe girdi. Artık sadece vize çalışma hakkı vermiyor."}, {"date": "1 Mayıs 2026", "text": "Serbest meslek sahipleri için uyum son tarihi."}, {"date": "1 Ocak 2027", "text": "Gürcü şirketlerde çalışanlar için son tarih."}], "s3": "İhlal cezaları", "fines": "İhlal edenler için ceza 2.000 lari. Hem çalışanlara hem de onları işe alan şirketlere uygulanıyor.", "s4": "Yeni C5 vizesi", "c5": "Turist olarak giren uzaktan çalışanlar için C5 vize kategorisi getirildi. Ülkede bir yıla kadar kalma hakkı verir, eş ve reşit olmayan çocukları da kapsar.", "s5": "Pratikte bunun anlamı", "practical": "Sadece turistseniz — bu sizi etkilemez. Uzaktan çalışmayı planlıyorsanız — 2026 ortası itibarıyla bazı detaylar hâlâ netleşiyor. Doğrudan Gürcistan göç servisine veya bir göçmenlik avukatına danışmak en iyisi.", "disclaimer": "⚠️ Bu hızla değişen bir mevzuat. Karar vermeden önce evisa.gov.ge adresinden güncel bilgiyi kontrol edin.", "back": "← sakartvelo.ai'ye dön", "footer": "Gürcistan için AI Seyahat Rehberi 🇬🇪", "langTitle": "Dil"}, "de": {"title": "Digitale Nomaden in Georgien 2026 — Was sich geändert hat", "metaDesc": "Seit dem 1. März 2026 gelten in Georgien neue Regeln für Remote-Arbeiter. Was sich wirklich geändert hat.", "h1": "💻 Digitale Nomaden in Georgien — Was sich 2026 geändert hat", "intro": "Georgien war lange einer der einfachsten Orte der Welt für Remote-Arbeit — kein Visum nötig, bleib und arbeite ein Jahr lang. Seit dem 1. März 2026 stimmt das nicht mehr ganz.", "warn": "⚠️ Wenn Sie bereits in Georgien leben und remote arbeiten (oder es planen) — das betrifft Sie persönlich.", "s1": "Wie es früher war", "old": "Bürger aus über 90 Ländern konnten visumfrei einreisen und bis zu 365 Tage bleiben. Arbeiten war uneingeschränkt möglich — viele meldeten sich als Einzelunternehmer mit 1% Steuersatz auf Umsätze bis ~165.000$/Jahr an. Es war überhaupt keine Arbeitserlaubnis erforderlich.", "s2": "Was sich geändert hat", "new": "Der Hauptunterschied: das Recht, sich im Land aufzuhalten, und das Recht, dort zu arbeiten, sind jetzt zwei getrennte Dinge. Die visumfreie Einreise für 365 Tage bleibt bestehen. Aber seit dem 1. März 2026 muss ein Ausländer, der in Georgien einer Erwerbstätigkeit nachgeht (einschließlich Remote-Arbeit), formell eine separate Genehmigung einholen.", "timeline": [{"date": "26. Juni 2025", "text": "Das georgische Parlament verabschiedete Änderungen zum Arbeitsmigrationsgesetz."}, {"date": "1. März 2026", "text": "Die Änderungen traten in Kraft. Ein Visum allein gewährt nicht mehr das Recht zu arbeiten."}, {"date": "1. Mai 2026", "text": "Frist für Selbstständige/Einzelunternehmer zur Anpassung."}, {"date": "1. Januar 2027", "text": "Frist für bei georgischen Firmen Angestellte."}], "s3": "Strafen bei Verstößen", "fines": "Die Strafe beträgt 2.000 GEL für Verstöße. Gilt sowohl für Arbeitnehmer als auch für die sie beschäftigenden Unternehmen.", "s4": "Neues C5-Visum", "c5": "Eine C5-Visumkategorie wurde eingeführt — für Remote-Arbeiter, die als Touristen einreisen. Gewährt bis zu einem Jahr Aufenthalt, gilt auch für Ehepartner und minderjährige Kinder.", "s5": "Was das in der Praxis bedeutet", "practical": "Wenn Sie nur Tourist sind — betrifft Sie das nicht. Wenn Sie remote arbeiten möchten — Stand Mitte 2026 werden noch einige Details geklärt. Am besten direkt bei der georgischen Migrationsbehörde oder einem Einwanderungsanwalt nachfragen.", "disclaimer": "⚠️ Dies ist eine sich schnell ändernde Gesetzgebung. Prüfen Sie vor Entscheidungen aktuelle Informationen auf evisa.gov.ge.", "back": "← Zurück zu sakartvelo.ai", "footer": "KI-Reiseführer für Georgien 🇬🇪", "langTitle": "Sprache"}, "it": {"title": "Nomadi Digitali in Georgia 2026 — Cosa è Cambiato", "metaDesc": "Dal 1° marzo 2026 in Georgia ci sono nuove regole per i lavoratori da remoto. Ecco cosa è cambiato davvero.", "h1": "💻 Nomadi Digitali in Georgia — Cosa è Cambiato nel 2026", "intro": "La Georgia è stata a lungo uno dei posti più semplici al mondo per il lavoro da remoto — nessun visto necessario, resta e lavora per un anno. Dal 1° marzo 2026 questo non è più del tutto vero.", "warn": "⚠️ Se vivi già in Georgia e lavori da remoto (o hai intenzione di farlo) — questo ti riguarda personalmente.", "s1": "Come era prima", "old": "I cittadini di oltre 90 paesi potevano entrare senza visto e restare in Georgia fino a 365 giorni. Lavorare era libero — molti si registravano come Imprenditori Individuali con un'aliquota fiscale dell'1% su un fatturato fino a ~165.000$/anno. Non era richiesto alcun permesso di lavoro.", "s2": "Cosa è cambiato", "new": "La differenza principale: il diritto di stare nel paese e il diritto di lavorarci ora sono due cose separate. L'ingresso senza visto per 365 giorni resta. Ma dal 1° marzo 2026 uno straniero che svolge attività lavorativa in Georgia (incluso il lavoro da remoto) deve formalmente ottenere un permesso separato.", "timeline": [{"date": "26 giugno 2025", "text": "Il parlamento georgiano ha approvato modifiche alla Legge sulla Migrazione Lavorativa."}, {"date": "1 marzo 2026", "text": "Le modifiche sono entrate in vigore. Un visto da solo non garantisce più il diritto di lavorare."}, {"date": "1 maggio 2026", "text": "Scadenza per lavoratori autonomi/Imprenditori Individuali per mettersi in regola."}, {"date": "1 gennaio 2027", "text": "Scadenza per chi è impiegato presso aziende georgiane."}], "s3": "Multe per non conformità", "fines": "La multa è di 2.000 GEL per i trasgressori. Si applica sia ai lavoratori che alle aziende che li assumono.", "s4": "Nuovo visto C5", "c5": "È stata introdotta una categoria di visto C5 — per lavoratori da remoto che entrano come turisti. Concede fino a un anno nel paese, si estende a coniugi e figli minori.", "s5": "Cosa significa in pratica", "practical": "Se sei solo un turista — questo non ti riguarda. Se prevedi di lavorare da remoto — a metà 2026 alcuni dettagli sono ancora in via di chiarimento. Meglio verificare direttamente con il servizio migratorio georgiano o un avvocato per l'immigrazione.", "disclaimer": "⚠️ Questa è una legislazione in rapida evoluzione. Prima di decidere, verifica le informazioni aggiornate su evisa.gov.ge.", "back": "← Torna a sakartvelo.ai", "footer": "Guida di viaggio AI per la Georgia 🇬🇪", "langTitle": "Lingua"}, "es": {"title": "Nómadas Digitales en Georgia 2026 — Qué Cambió", "metaDesc": "Desde el 1 de marzo de 2026, Georgia tiene nuevas reglas para trabajadores remotos. Esto es lo que realmente cambió.", "h1": "💻 Nómadas Digitales en Georgia — Qué Cambió en 2026", "intro": "Georgia fue durante mucho tiempo uno de los lugares más fáciles del mundo para el trabajo remoto — sin visado, quédate y trabaja un año. Desde el 1 de marzo de 2026 esto ya no es del todo cierto.", "warn": "⚠️ Si ya vives en Georgia y trabajas remotamente (o lo planeas) — esto te concierne personalmente.", "s1": "Cómo era antes", "old": "Ciudadanos de más de 90 países podían entrar sin visado y quedarse en Georgia hasta 365 días. Trabajar era libre — muchos se registraban como Empresarios Individuales con una tasa impositiva del 1% sobre ingresos de hasta ~$165,000/año. No se requería ningún permiso de trabajo.", "s2": "Qué cambió", "new": "La diferencia clave: el derecho a estar en el país y el derecho a trabajar allí ahora son dos cosas separadas. La entrada sin visado por 365 días permanece. Pero desde el 1 de marzo de 2026, un extranjero que realiza actividad laboral en Georgia (incluido el trabajo remoto) debe obtener formalmente un permiso separado.", "timeline": [{"date": "26 de junio de 2025", "text": "El parlamento georgiano aprobó enmiendas a la Ley de Migración Laboral."}, {"date": "1 de marzo de 2026", "text": "Las enmiendas entraron en vigor. Un visado por sí solo ya no otorga el derecho a trabajar."}, {"date": "1 de mayo de 2026", "text": "Fecha límite para autónomos/Empresarios Individuales para cumplir."}, {"date": "1 de enero de 2027", "text": "Fecha límite para empleados de empresas georgianas."}], "s3": "Multas por incumplimiento", "fines": "La multa es de 2,000 GEL para infractores. Se aplica tanto a trabajadores como a las empresas que los contratan.", "s4": "Nuevo visado C5", "c5": "Se introdujo una categoría de visado C5 — para trabajadores remotos que entran como turistas. Otorga hasta un año en el país, se extiende a cónyuges e hijos menores.", "s5": "Qué significa esto en la práctica", "practical": "Si eres solo un turista — esto no te afecta. Si planeas trabajar remotamente — a mediados de 2026 algunos detalles aún se están aclarando. Es mejor verificar directamente con el servicio de migración de Georgia o un abogado de inmigración.", "disclaimer": "⚠️ Esta es una legislación que cambia rápidamente. Antes de tomar decisiones, verifica la información actual en evisa.gov.ge.", "back": "← Volver a sakartvelo.ai", "footer": "Guía de viaje con IA para Georgia 🇬🇪", "langTitle": "Idioma"}, "ar": {"title": "الرحّالة الرقميون في جورجيا 2026 — ما الذي تغيّر", "metaDesc": "منذ 1 مارس 2026، أصبحت لجورجيا قواعد جديدة للعاملين عن بُعد. إليك ما تغيّر فعلاً.", "h1": "💻 الرحّالة الرقميون في جورجيا — ما الذي تغيّر في 2026", "intro": "كانت جورجيا لفترة طويلة من أسهل الأماكن في العالم للعمل عن بُعد — بلا تأشيرة، ابقَ واعمل لمدة عام. منذ 1 مارس 2026 لم يعد هذا صحيحًا تمامًا.", "warn": "⚠️ إذا كنت تعيش بالفعل في جورجيا وتعمل عن بُعد (أو تخطط لذلك) — هذا يخصك شخصيًا.", "s1": "كيف كان الوضع سابقًا", "old": "كان بإمكان مواطني أكثر من 90 دولة الدخول دون تأشيرة والبقاء في جورجيا حتى 365 يومًا. كان العمل حرًا — سجّل كثيرون كأصحاب أعمال فردية بضريبة 1% على إيرادات تصل إلى نحو 165,000$ سنويًا. لم يكن مطلوبًا أي تصريح عمل.", "s2": "ما الذي تغيّر", "new": "الفرق الجوهري: حق التواجد في البلد وحق العمل فيها أصبحا الآن أمرين منفصلين. الدخول بلا تأشيرة لمدة 365 يومًا لا يزال قائمًا. لكن منذ 1 مارس 2026، يجب على الأجنبي الذي يمارس نشاطًا عماليًا في جورجيا (بما في ذلك العمل عن بُعد) الحصول رسميًا على تصريح منفصل.", "timeline": [{"date": "26 يونيو 2025", "text": "أقرّ البرلمان الجورجي تعديلات على قانون هجرة العمالة."}, {"date": "1 مارس 2026", "text": "دخلت التعديلات حيز التنفيذ. التأشيرة وحدها لم تعد تمنح حق العمل."}, {"date": "1 مايو 2026", "text": "الموعد النهائي للعاملين لحسابهم الخاص للامتثال."}, {"date": "1 يناير 2027", "text": "الموعد النهائي للعاملين لدى شركات جورجية."}], "s3": "غرامات المخالفة", "fines": "الغرامة 2000 لاري للمخالفين. تُطبّق على العاملين والشركات التي توظفهم.", "s4": "تأشيرة C5 الجديدة", "c5": "تم استحداث فئة تأشيرة C5 — للعاملين عن بُعد الذين يدخلون كسياح. تمنح حق البقاء حتى عام، وتشمل الأزواج والأطفال القاصرين.", "s5": "ماذا يعني هذا عمليًا", "practical": "إذا كنت سائحًا فقط — هذا لا يخصك. إذا كنت تخطط للعمل عن بُعد — حتى منتصف 2026 لا تزال بعض التفاصيل قيد التوضيح. الأفضل التحقق مباشرة مع دائرة الهجرة الجورجية أو محامي هجرة.", "disclaimer": "⚠️ هذا تشريع يتغير بسرعة. قبل اتخاذ القرارات، تحقق من المعلومات الحالية على evisa.gov.ge.", "back": "← العودة إلى sakartvelo.ai", "footer": "دليل سفر بالذكاء الاصطناعي لجورجيا 🇬🇪", "langTitle": "اللغة"}, "he": {"title": "נוודים דיגיטליים בג'ורג'יה 2026 — מה השתנה", "metaDesc": "החל מ-1 במרץ 2026, לג'ורג'יה יש כללים חדשים לעובדים מרחוק. הנה מה שבאמת השתנה.", "h1": "💻 נוודים דיגיטליים בג'ורג'יה — מה השתנה ב-2026", "intro": "ג'ורג'יה הייתה זמן רב אחד המקומות הקלים בעולם לעבודה מרחוק — בלי צורך בוויזה, אפשר להישאר ולעבוד שנה שלמה. החל מ-1 במרץ 2026 זה כבר לא בדיוק נכון.", "warn": "⚠️ אם אתם כבר גרים בג'ורג'יה ועובדים מרחוק (או מתכננים) — זה נוגע אליכם באופן אישי.", "s1": "איך זה היה קודם", "old": "אזרחי יותר מ-90 מדינות יכלו להיכנס ללא ויזה ולהישאר בג'ורג'יה עד 365 יום. עבודה הייתה חופשית — רבים נרשמו כעצמאים עם שיעור מס של 1% על מחזור עד כ-165,000$ בשנה. לא נדרש שום היתר עבודה.", "s2": "מה השתנה", "new": "ההבדל המרכזי: הזכות לשהות במדינה והזכות לעבוד בה הן כעת שני דברים נפרדים. כניסה ללא ויזה ל-365 יום נשארת בעינה. אבל החל מ-1 במרץ 2026, זר המבצע פעילות עבודה בג'ורג'יה (כולל עבודה מרחוק) חייב באופן רשמי לקבל היתר נפרד.", "timeline": [{"date": "26 ביוני 2025", "text": "הפרלמנט הג'ורג'י אישר תיקונים לחוק הגירת העבודה."}, {"date": "1 במרץ 2026", "text": "התיקונים נכנסו לתוקף. ויזה בלבד כבר לא מעניקה זכות לעבוד."}, {"date": "1 במאי 2026", "text": "מועד אחרון לעצמאים להסדיר את מעמדם."}, {"date": "1 בינואר 2027", "text": "מועד אחרון למועסקים בחברות ג'ורג'יות."}], "s3": "קנסות על אי-ציות", "fines": "הקנס הוא 2,000 לארי למפרים. חל הן על העובדים והן על החברות המעסיקות אותם.", "s4": "ויזת C5 חדשה", "c5": "הוצגה קטגוריית ויזה C5 — לעובדים מרחוק הנכנסים כתיירים. מעניקה עד שנה במדינה, חלה גם על בני/בנות זוג וילדים קטינים.", "s5": "מה זה אומר בפועל", "practical": "אם אתם רק תיירים — זה לא נוגע אליכם. אם אתם מתכננים לעבוד מרחוק — נכון לאמצע 2026 חלק מהפרטים עדיין מתבררים. כדאי לבדוק ישירות מול שירות ההגירה הג'ורג'י או עורך דין הגירה.", "disclaimer": "⚠️ זוהי חקיקה משתנה במהירות. לפני קבלת החלטות, בדקו מידע עדכני באתר evisa.gov.ge.", "back": "← חזרה ל-sakartvelo.ai", "footer": "מדריך טיולים מבוסס AI לג'ורג'יה 🇬🇪", "langTitle": "שפה"}, "fa": {"title": "کوچ‌نشینان دیجیتال در گرجستان ۲۰۲۶ — چه چیزی تغییر کرد", "metaDesc": "از ۱ مارس ۲۰۲۶، گرجستان قوانین جدیدی برای کارگران دورکار دارد. این است آنچه واقعاً تغییر کرده.", "h1": "💻 کوچ‌نشینان دیجیتال در گرجستان — چه چیزی در ۲۰۲۶ تغییر کرد", "intro": "گرجستان مدت‌ها یکی از آسان‌ترین مکان‌های جهان برای کار دورکار بود — بدون نیاز به ویزا، بمان و یک سال کار کن. از ۱ مارس ۲۰۲۶ این دیگر کاملاً درست نیست.", "warn": "⚠️ اگر همین حالا در گرجستان زندگی می‌کنید و دورکار هستید (یا برنامه‌ریزی می‌کنید) — این شخصاً به شما مربوط است.", "s1": "قبلاً چگونه بود", "old": "شهروندان بیش از ۹۰ کشور می‌توانستند بدون ویزا وارد شوند و تا ۳۶۵ روز در گرجستان بمانند. کار کردن آزاد بود — بسیاری به‌عنوان کارآفرین فردی با نرخ مالیات ۱٪ روی گردش مالی تا حدود ۱۶۵,۰۰۰ دلار در سال ثبت‌نام می‌کردند. هیچ مجوز کاری لازم نبود.", "s2": "چه چیزی تغییر کرد", "new": "تفاوت اصلی: حق حضور در کشور و حق کار در آن اکنون دو چیز جداگانه هستند. ورود بدون ویزا برای ۳۶۵ روز باقی می‌ماند. اما از ۱ مارس ۲۰۲۶، فرد خارجی که فعالیت شغلی در گرجستان انجام می‌دهد (از جمله دورکاری) باید رسماً مجوز جداگانه‌ای دریافت کند.", "timeline": [{"date": "۲۶ ژوئن ۲۰۲۵", "text": "پارلمان گرجستان اصلاحاتی در قانون مهاجرت کاری تصویب کرد."}, {"date": "۱ مارس ۲۰۲۶", "text": "اصلاحات اجرایی شد. ویزا به‌تنهایی دیگر حق کار نمی‌دهد."}, {"date": "۱ مه ۲۰۲۶", "text": "مهلت برای افراد خوداشتغال جهت رعایت قانون."}, {"date": "۱ ژانویه ۲۰۲۷", "text": "مهلت برای افراد شاغل در شرکت‌های گرجی."}], "s3": "جریمه‌های عدم رعایت", "fines": "جریمه ۲۰۰۰ لاری برای متخلفان است. هم شامل کارگران و هم شرکت‌های استخدام‌کننده می‌شود.", "s4": "ویزای جدید C5", "c5": "دسته ویزای C5 معرفی شد — برای کارگران دورکاری که به‌عنوان گردشگر وارد می‌شوند. تا یک سال اقامت می‌دهد و شامل همسر و فرزندان خردسال هم می‌شود.", "s5": "این در عمل چه معنایی دارد", "practical": "اگر فقط گردشگر هستید — این شما را تحت تأثیر قرار نمی‌دهد. اگر قصد دورکاری دارید — تا اواسط ۲۰۲۶ برخی جزئیات هنوز روشن می‌شود. بهتر است مستقیماً با اداره مهاجرت گرجستان یا وکیل مهاجرت هماهنگ کنید.", "disclaimer": "⚠️ این قانون‌گذاری به‌سرعت در حال تغییر است. پیش از تصمیم‌گیری، اطلاعات به‌روز را در evisa.gov.ge بررسی کنید.", "back": "← بازگشت به sakartvelo.ai", "footer": "راهنمای سفر هوش‌مصنوعی گرجستان 🇬🇪", "langTitle": "زبان"}};
+const LANGUAGES = [
+  {code:'ru', flag:'🇷🇺', name:'Русский'},
+  {code:'en', flag:'🇬🇧', name:'English'},
+  {code:'tr', flag:'🇹🇷', name:'Türkçe'},
+  {code:'ar', flag:'🇸🇦', name:'العربية'},
+  {code:'he', flag:'🇮🇱', name:'עברית'},
+  {code:'fa', flag:'🇮🇷', name:'فارسی'},
+  {code:'de', flag:'🇩🇪', name:'Deutsch'},
+  {code:'it', flag:'🇮🇹', name:'Italiano'},
+  {code:'es', flag:'🇪🇸', name:'Español'},
+];
+
+function detectLang(){
+  const validCodes = LANGUAGES.map(l => l.code);
+  let saved = null;
+  try { saved = localStorage.getItem('sak_lang'); } catch(e) {}
+  if (saved && validCodes.indexOf(saved) !== -1) return saved;
+  const nav = (navigator.language || 'en').slice(0,2).toLowerCase();
+  if (validCodes.indexOf(nav) !== -1) return nav;
+  return 'en';
+}
+
+let curLang = detectLang();
+
+function render(){
+  const t = DN_I18N[curLang] || DN_I18N.en;
+  const isRTL = (curLang === 'ar' || curLang === 'he' || curLang === 'fa');
+  document.getElementById('htmlRoot').setAttribute('lang', curLang);
+  document.getElementById('htmlRoot').setAttribute('dir', isRTL ? 'rtl' : 'ltr');
+  document.getElementById('pageTitle').textContent = t.title + ' | sakartvelo.ai';
+  document.getElementById('metaDesc').setAttribute('content', t.metaDesc);
+  document.getElementById('h1').textContent = t.h1;
+  document.getElementById('intro').textContent = t.intro;
+  document.getElementById('warn').textContent = t.warn;
+  document.getElementById('s1').textContent = t.s1;
+  document.getElementById('old').textContent = t.old;
+  document.getElementById('s2').textContent = t.s2;
+  document.getElementById('new').textContent = t.new;
+  document.getElementById('s3').textContent = t.s3;
+  document.getElementById('fines').textContent = t.fines;
+  document.getElementById('s4').textContent = t.s4;
+  document.getElementById('c5').textContent = t.c5;
+  document.getElementById('s5').textContent = t.s5;
+  document.getElementById('practical').textContent = t.practical;
+  document.getElementById('disclaimer').textContent = t.disclaimer;
+  document.getElementById('backLink').textContent = t.back;
+  document.getElementById('backLink2').textContent = t.back;
+  document.getElementById('footer').textContent = t.footer;
+
+  const tl = document.getElementById('timeline');
+  tl.innerHTML = '';
+  t.timeline.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'item';
+    div.innerHTML = '<span class="date">' + item.date + '</span>' + item.text;
+    tl.appendChild(div);
+  });
+}
+
+function openLangSheet(){
+  const t = DN_I18N[curLang] || DN_I18N.en;
+  document.getElementById('langSheetTitle').textContent = t.langTitle;
+  document.getElementById('langGrid').innerHTML = LANGUAGES.map(l =>
+    '<div class="langItem' + (l.code===curLang?' sel':'') + '" onclick="switchLang(\'' + l.code + '\')">' +
+    '<div style="font-size:1.3rem">' + l.flag + '</div><div>' + l.name + '</div></div>'
+  ).join('');
+  document.getElementById('langOverlay').style.display = 'block';
+}
+function closeLangSheet(){ document.getElementById('langOverlay').style.display = 'none'; }
+function switchLang(code){
+  curLang = code;
+  try { localStorage.setItem('sak_lang', code); } catch(e) {}
+  render();
+  closeLangSheet();
+}
+
+render();
+</script>
+</body>
+</html>
