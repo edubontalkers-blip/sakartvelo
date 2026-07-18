@@ -136,7 +136,9 @@ footer a{color:var(--wine);text-decoration:none}
       <h2 style="margin-top:16px;color:var(--wine)" id="s3Title">Chacha is building your route...</h2>
       <p class="loading-text" id="s3Sub">Personalizing for you — just a moment</p>
     </div>
-    <pre id="debugLog" style="text-align:left;font-size:.7rem;background:#f4f4f4;color:#333;padding:10px;border-radius:8px;max-height:300px;overflow:auto;white-space:pre-wrap;word-break:break-all"></pre>
+    <div id="funFactBox" style="background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-top:20px;text-align:center;min-height:60px;display:flex;align-items:center;justify-content:center">
+      <p id="funFactText" style="font-size:.9rem;color:var(--ink);line-height:1.5;transition:opacity .3s"></p>
+    </div>
   </div>
 
   <!-- SCREEN 4: Route preview -->
@@ -504,71 +506,375 @@ function updateLoadingMessage(elapsedMs) {
   }
 }
 
-// ⚠️ ВРЕМЕННАЯ ОТЛАДКА: пишем происходящее прямо на экран, потому что
-// логи Netlify сейчас недоступны (сбой на их стороне). Это безопасно —
-// после диагностики можно убрать этот блок и элемент #debugLog.
-function debugLog(msg) {
-  const el = document.getElementById('debugLog');
+// ══════════════════════════════════════
+// ИНТЕРЕСНЫЕ ФАКТЫ О ГРУЗИИ (показываются во время ожидания)
+// ══════════════════════════════════════
+const FUN_FACTS = {
+  ru: [
+    'На грузинском застолье не ешьте всё сразу — хачапури, хинкали и шашлык идут по очереди, это марафон.',
+    'Если тамада поднял тост за вас лично — вставать не обязательно, но бокал допить придётся.',
+    'Хлеб (пури) в Грузии святой — никогда не кладите его коркой вниз, бабушки не одобрят.',
+    'Хинкали с бульоном внутри — ловушка для тех, кто ест их вилкой.',
+    'Чеснока в грузинской еде столько, что его запах официально считается частью атмосферы.',
+    'Если хозяин говорит «это последний тост» — статистически неправда в 9 случаях из 10.',
+    'Сациви настолько сытный, что его можно засчитывать за отдельный приём пищи.',
+    'В горах Тушетии сигнал телефона слабее грузинского гостеприимства.',
+    'На супре считается невежливым не доесть — но доесть всё тоже физически невозможно.',
+    'Хачапури по-аджарски с яйцом — это не завтрак, это архитектурное сооружение.',
+    'В маршрутке до Кахетии место у окна не гарантирует вид — гарантирует только вежливость соседа с сумкой вина.',
+    'Если вас назвали «дорогой гость» трижды за один тост — вы уже не гость, вы почти член семьи.',
+    'Чурчхела выглядит как свеча, но по калорийности ближе к десерту недели.',
+    'В грузинских тостах порядок строгий — сначала за мир, потом за родителей, а до вас очередь дойдёт нескоро.',
+    'Хванчкара настолько сладкое вино, что его иногда путают с десертом, а не с алкоголем.',
+    'В горных сёлах связи нет, зато соседи знают о вас больше, чем интернет.',
+    'Пхали из шпината выглядит скромно, но по количеству грецких орехов внутри — почти орешник.',
+    'На рынке в Тбилиси торговаться не грех, но не удивляйтесь, если продавец потом угостит вас чем-то бесплатно.',
+    'Если во время тоста кто-то встал раньше времени — это либо очень уважаемый гость, либо кто-то торопится в туалет.',
+    'Сулугуни настолько популярен, что сыр без него в Грузии — это как чай без чая.',
+    'Дорога через Крестовый перевал прекрасна, но лучше не смотреть вниз, если вы боитесь высоты и грузинских водителей одновременно.',
+    'Оджахури готовят так много, что его хватает не только на ужин, но и на моральную поддержку до утра.',
+    'В сванской кухне порции такие большие, что путешественники подозревают заговор против их талии.',
+    'Тбилисские серные бани лечат всё — кроме привычки переедать на застолье накануне.',
+    'Кинза в грузинской кухне — не специя, а мировоззрение.',
+    'Если вам предложили выпить «за дружбу народов» — это, вероятно, третий тост из примерно пятнадцати.',
+    'В деревне Сигнахи все двери домов расписаны так красиво, что туристы иногда фотографируют не достопримечательности, а сами двери.',
+    'Аджика способна разбудить даже самого сонного путешественника — и его вкусовые рецепторы на неделю вперёд.',
+    'Грузинский тост может длиться дольше, чем сама еда, к которой он произносится.',
+    'Если после застолья вы всё ещё можете стоять — тамада явно недоработал.'
+  ],
+  en: [
+    'At a Georgian feast, don\'t eat everything at once — khachapuri, khinkali and shashlik take turns, it\'s a marathon.',
+    'If the tamada raises a toast to you personally, you don\'t have to stand — but you must finish the glass.',
+    'Bread (puri) is sacred in Georgia — never place it crust-down, grandmothers will not approve.',
+    'Khinkali hide broth inside — a trap for anyone eating them with a fork.',
+    'There\'s so much garlic in Georgian food that its smell is officially part of the atmosphere.',
+    'If the host says "this is the last toast" — statistically false 9 times out of 10.',
+    'Satsivi is so filling it could count as its own meal.',
+    'In the Tusheti mountains, phone signal is weaker than Georgian hospitality.',
+    'At a supra it\'s rude not to finish your plate — but finishing everything is physically impossible.',
+    'Adjarian khachapuri with egg isn\'t breakfast, it\'s an architectural structure.',
+    'On the marshrutka to Kakheti, a window seat doesn\'t guarantee a view — only a polite neighbor with a wine bag guarantees that.',
+    'If you\'re called "dear guest" three times in one toast, you\'re no longer a guest — you\'re basically family.',
+    'Churchkhela looks like a candle, but calorie-wise it\'s closer to dessert of the week.',
+    'Georgian toasts follow a strict order — first to peace, then to parents, your turn comes much later.',
+    'Khvanchkara wine is so sweet it\'s sometimes mistaken for dessert rather than alcohol.',
+    'In mountain villages there\'s no signal, but the neighbors know more about you than the internet does.',
+    'Spinach pkhali looks modest, but with all those walnuts inside it\'s basically a nut grove.',
+    'Haggling at Tbilisi\'s market isn\'t a sin, but don\'t be surprised if the seller gives you something free afterward.',
+    'If someone stands up too early during a toast, they\'re either a very honored guest or in a hurry for the bathroom.',
+    'Sulguni cheese is so popular that cheese without it feels like tea without tea.',
+    'The road over the Cross Pass is beautiful, but don\'t look down if you\'re afraid of heights and Georgian drivers at once.',
+    'Ojakhuri is cooked in such large amounts it covers dinner and moral support until morning.',
+    'Svan cuisine portions are so big travelers suspect a conspiracy against their waistlines.',
+    'Tbilisi\'s sulfur baths cure everything — except the habit of overeating at last night\'s feast.',
+    'Cilantro in Georgian cooking isn\'t a spice, it\'s a worldview.',
+    'If you\'re offered a toast "to the friendship of nations," it\'s probably the third of about fifteen.',
+    'In Sighnaghi village the doors are painted so beautifully tourists sometimes photograph the doors instead of the sights.',
+    'Adjika can wake up even the sleepiest traveler — and their taste buds for a week ahead.',
+    'A Georgian toast can last longer than the meal it\'s toasting.',
+    'If you can still stand after a feast, the tamada clearly didn\'t do their job.'
+  ],
+  tr: [
+    'Gürcü sofrasında her şeyi bir anda yemeyin — hachapuri, hinkali ve şaşlık sırayla gelir, bu bir maraton.',
+    'Tamada size özel kadeh kaldırırsa ayağa kalkmak şart değil ama kadehi bitirmeniz gerekir.',
+    'Gürcistan\'da ekmek (puri) kutsaldır — asla kabuğu aşağı bakacak şekilde koymayın, büyükanneler onaylamaz.',
+    'Hinkali içinde çorba saklar — çatalla yemeye çalışanlar için küçük bir tuzak.',
+    'Gürcü yemeklerinde o kadar çok sarımsak var ki kokusu resmen atmosferin bir parçası sayılır.',
+    'Ev sahibi "bu son kadeh" derse istatistiksel olarak bu 10 seferden 9\'unda yalandır.',
+    'Satsivi o kadar doyurucudur ki resmen ayrı bir öğün sayılabilir.',
+    'Tuşeti dağlarında telefon sinyali Gürcü misafirperverliğinden daha zayıftır.',
+    'Sofrada tabağı bitirmemek kaba sayılır — ama her şeyi bitirmek fiziksel olarak imkânsızdır.',
+    'Yumurtalı Acaralı hachapuri kahvaltı değil, bir mimari eserdir.',
+    'Kaheti\'ye giden dolmuşta pencere kenarı manzara garanti etmez — sadece şarap torbalı kibar bir komşu garanti eder.',
+    'Bir kadehte size üç kez "sevgili misafir" denirse artık misafir değil, neredeyse aile üyesisiniz.',
+    'Churchkhela bir muma benzer ama kalori olarak haftanın tatlısına daha yakındır.',
+    'Gürcü kadehleri katı bir sıraya sahiptir — önce barışa, sonra ebeveynlere, sıra size çok sonra gelir.',
+    'Khvanchkara şarabı o kadar tatlıdır ki bazen alkol yerine tatlı sanılır.',
+    'Dağ köylerinde sinyal yoktur ama komşular sizi internetten daha iyi tanır.',
+    'Ispanaklı pkhali mütevazı görünür ama içindeki cevizlerle neredeyse bir ceviz bahçesidir.',
+    'Tiflis pazarında pazarlık günah değildir ama satıcı sonra size bedava bir şey verirse şaşırmayın.',
+    'Kadeh sırasında biri çok erken ayağa kalkarsa ya çok saygın bir misafirdir ya da tuvalete acele etmektedir.',
+    'Sulguni peyniri o kadar popülerdir ki onsuz peynir, çaysız çay gibi hissettirir.',
+    'Haçlı Geçidi yolu muhteşemdir ama hem yükseklikten hem Gürcü şoförlerden korkuyorsanız aşağı bakmayın.',
+    'Ojahuri o kadar çok pişirilir ki hem akşam yemeğine hem sabaha kadar moral desteğine yeter.',
+    'Svan mutfağının porsiyonları o kadar büyüktür ki gezginler bel çevrelerine karşı bir komplo olduğundan şüphelenir.',
+    'Tiflis\'in kükürtlü hamamları her şeyi iyileştirir — bir önceki gece sofrada aşırı yemek alışkanlığı hariç.',
+    'Gürcü mutfağında kişniş bir baharat değil, bir dünya görüşüdür.',
+    'Size "halkların dostluğuna" bir kadeh sunulursa, muhtemelen on beş kadehlik dizinin üçüncüsüdür.',
+    'Sighnaghi köyünde kapılar o kadar güzel boyanmıştır ki turistler bazen manzaralar yerine kapıları fotoğraflar.',
+    'Acika en uykulu gezgini bile uyandırabilir — ve tat alma duyularını bir hafta boyunca.',
+    'Bir Gürcü kadehi, kaldırıldığı yemekten daha uzun sürebilir.',
+    'Bir ziyafetten sonra hâlâ ayakta durabiliyorsanız, tamada işini açıkça iyi yapmamıştır.'
+  ],
+  ar: [
+    'في المأدبة الجورجية لا تأكل كل شيء دفعة واحدة — الخاتشابوري والخينكالي والشاشليك تأتي بالتناوب، وهذا سباق طويل.',
+    'إذا رفع التامادا نخباً باسمك، لست مضطراً للوقوف، لكن عليك إنهاء الكأس.',
+    'الخبز (بوري) مقدس في جورجيا — لا تضعه أبداً بالقشرة إلى الأسفل، فالجدات لن يوافقن.',
+    'الخينكالي يخفي المرق بداخله — فخ صغير لمن يحاول أكله بالشوكة.',
+    'يوجد من الثوم في الطعام الجورجي الكثير لدرجة أن رائحته تُعد رسمياً جزءاً من الأجواء.',
+    'إذا قال المضيف "هذا آخر نخب" — إحصائياً هذا غير صحيح في 9 من كل 10 مرات.',
+    'الساتسيفي مشبع لدرجة يمكن اعتباره وجبة مستقلة رسمياً.',
+    'في جبال توشيتي، إشارة الهاتف أضعف من كرم الضيافة الجورجي.',
+    'في مأدبة السوپرا من غير المهذب عدم إنهاء طبقك — لكن إنهاء كل شيء مستحيل جسدياً.',
+    'الخاتشابوري الأدجاري بالبيض ليس فطوراً، بل هو عمل معماري.',
+    'في الحافلة الصغيرة إلى كاختي، المقعد بجانب النافذة لا يضمن المنظر — فقط الجار اللطيف الذي يحمل كيس نبيذ يضمن ذلك.',
+    'إذا نوديت "الضيف العزيز" ثلاث مرات في نخب واحد، لم تعد ضيفاً — أنت تقريباً فرد من العائلة.',
+    'تبدو التشورتشخيلا كشمعة، لكنها من حيث السعرات أقرب إلى حلوى الأسبوع.',
+    'تتبع النخبات الجورجية ترتيباً صارماً — أولاً للسلام، ثم للوالدين، ودورك يأتي متأخراً جداً.',
+    'نبيذ خفانتشكارا حلو لدرجة أنه أحياناً يُظن أنه حلوى وليس كحولاً.',
+    'في القرى الجبلية لا توجد إشارة، لكن الجيران يعرفون عنك أكثر مما يعرفه الإنترنت.',
+    'يبدو الپخالي بالسبانخ متواضعاً، لكن بكل هذا الجوز بداخله فهو أقرب لبستان جوز.',
+    'المساومة في سوق تبليسي ليست خطيئة، لكن لا تتفاجأ إذا أهداك البائع شيئاً مجاناً بعدها.',
+    'إذا وقف أحدهم مبكراً جداً أثناء نخب، فهو إما ضيف مُبجَّل جداً أو مستعجل على الحمام.',
+    'جبن السولوغوني شهير جداً لدرجة أن الجبن بدونه يشعرك وكأنه شاي بلا شاي.',
+    'طريق ممر الصليب جميل جداً، لكن لا تنظر للأسفل إذا كنت تخاف المرتفعات والسائقين الجورجيين معاً.',
+    'يُطهى الأوجاخوري بكميات كبيرة لدرجة تكفي للعشاء والدعم المعنوي حتى الصباح.',
+    'حصص المطبخ السفاني كبيرة جداً لدرجة أن المسافرين يشتبهون في مؤامرة ضد خصورهم.',
+    'حمامات تبليسي الكبريتية تعالج كل شيء — ما عدا عادة الإفراط في الأكل في مأدبة الليلة السابقة.',
+    'الكزبرة في المطبخ الجورجي ليست بهاراً، بل هي نظرة للحياة.',
+    'إذا عُرض عليك نخب "لصداقة الشعوب"، فمن المحتمل أنه الثالث من نحو خمسة عشر نخباً.',
+    'في قرية سيغناغي، الأبواب مطلية بجمال لدرجة أن السياح أحياناً يصورون الأبواب بدلاً من المعالم.',
+    'الأجيكا قادرة على إيقاظ حتى أكثر المسافرين نعاساً — وبراعم تذوقه لمدة أسبوع.',
+    'قد يستغرق النخب الجورجي وقتاً أطول من الوجبة التي يُقام من أجلها.',
+    'إذا كنت لا تزال قادراً على الوقوف بعد المأدبة، فمن الواضح أن التامادا لم يقم بعمله جيداً.'
+  ],
+  he: [
+    'בסעודה גאורגית אל תאכלו הכל בבת אחת — חצ\'פורי, חינקאלי ושישליק מגיעים לפי תור, וזה מרתון.',
+    'אם הטמאדה מרים כוסית לכבודכם אישית, לא חובה לקום — אבל חובה לסיים את הכוס.',
+    'הלחם (פורי) קדוש בגאורגיה — לעולם אל תניחו אותו הפוך, סבתות לא יאשרו.',
+    'החינקאלי מסתיר מרק בפנים — מלכודת קטנה למי שמנסה לאכול אותו במזלג.',
+    'יש כל כך הרבה שום באוכל הגאורגי שהריח שלו נחשב רשמית לחלק מהאווירה.',
+    'אם המארח אומר "זה הטוסט האחרון" — סטטיסטית זה שקר ב-9 מתוך 10 מקרים.',
+    'הסאציווי כל כך משביע שאפשר רשמית לספור אותו כארוחה נפרדת.',
+    'בהרי טושתי, קליטת הטלפון חלשה יותר מהכנסת האורחים הגאורגית.',
+    'בסופרה נחשב לא מנומס לא לסיים את הצלחת — אבל לסיים הכל זה בלתי אפשרי פיזית.',
+    'חצ\'פורי אג\'ארי עם ביצה זו לא ארוחת בוקר, זו יצירת אדריכלות.',
+    'במרשרוטקה לקחתי, מושב ליד החלון לא מבטיח נוף — רק שכן אדיב עם שקית יין מבטיח את זה.',
+    'אם קוראים לכם "אורח יקר" שלוש פעמים בטוסט אחד, אתם כבר לא אורחים — אתם כמעט בני משפחה.',
+    'הצ\'ורצ\'חלה נראית כמו נר, אבל מבחינת קלוריות היא קרובה יותר לקינוח השבוע.',
+    'הטוסטים הגאורגיים הולכים לפי סדר קפדני — קודם לשלום, אחר כך להורים, התור שלכם מגיע הרבה יותר מאוחר.',
+    'יין חוונצ\'קרה כל כך מתוק שלפעמים חושבים שהוא קינוח ולא אלכוהול.',
+    'בכפרי ההרים אין קליטה, אבל השכנים יודעים עליכם יותר מהאינטרנט.',
+    'הפחלי מתרד נראה צנוע, אבל עם כל האגוזים בפנים הוא כמעט מטע אגוזים.',
+    'מיקוח בשוק בטביליסי הוא לא חטא, אבל אל תופתעו אם המוכר ייתן לכם משהו בחינם אחר כך.',
+    'אם מישהו קם מוקדם מדי במהלך טוסט, הוא או אורח מכובד מאוד או ממהר לשירותים.',
+    'גבינת סולגוני כל כך פופולרית שגבינה בלעדיה מרגישה כמו תה בלי תה.',
+    'הכביש דרך מעבר הצלב מדהים, אבל אל תסתכלו למטה אם אתם פוחדים מגובה ומנהגים גאורגים בו-זמנית.',
+    'אוג\'חורי מבשלים בכמויות כאלה שהוא מספיק לארוחת הערב וגם לתמיכה מוסרית עד הבוקר.',
+    'המנות במטבח הסוואני כל כך גדולות שהנוסעים חושדים בקנוניה נגד המותניים שלהם.',
+    'המרחצאות הגופריתיות בטביליסי מרפאות הכל — חוץ מההרגל לאכול יותר מדי בסעודה של הערב הקודם.',
+    'הכוסברה במטבח הגאורגי היא לא תבלין, היא השקפת עולם.',
+    'אם מציעים לכם טוסט "לידידות בין העמים" — זה כנראה השלישי מתוך כחמישה עשר.',
+    'בכפר סיגנאגי הדלתות צבועות כל כך יפה שהתיירים לפעמים מצלמים את הדלתות במקום את האתרים.',
+    'האג\'יקה יכולה להעיר אפילו את הנוסע הכי מנומנם — ואת נבטי הטעם שלו לשבוע שלם.',
+    'טוסט גאורגי יכול להימשך יותר זמן מהארוחה שלכבודה הוא נאמר.',
+    'אם אחרי סעודה אתם עדיין יכולים לעמוד, ברור שהטמאדה לא עשה את העבודה כמו שצריך.'
+  ],
+  fa: [
+    'در سفره گرجی همه‌چیز را یکجا نخورید — خاچاپوری، خینکالی و شاشلیک به‌نوبت می‌آیند، این یک ماراتن است.',
+    'اگر تامادا به سلامتی شما جام بلند کند، لازم نیست بایستید، اما باید جام را تمام کنید.',
+    'نان (پوری) در گرجستان مقدس است — هرگز آن را وارونه نگذارید، مادربزرگ‌ها این را نمی‌پسندند.',
+    'خینکالی آب گوشت را در خود پنهان می‌کند — تله‌ای کوچک برای کسانی که با چنگال می‌خورندش.',
+    'در غذای گرجی آنقدر سیر هست که بویش رسماً بخشی از فضا محسوب می‌شود.',
+    'اگر میزبان بگوید «این آخرین نوشیدنی است» — از نظر آماری در ۹ از ۱۰ مورد دروغ است.',
+    'ساتسیوی آنقدر سیرکننده است که رسماً یک وعده غذایی جداگانه به‌حساب می‌آید.',
+    'در کوه‌های توشتی، آنتن تلفن ضعیف‌تر از مهمان‌نوازی گرجی‌هاست.',
+    'در سوپرا تمام‌نکردن بشقاب بی‌ادبی محسوب می‌شود — اما تمام‌کردن همه‌چیز از نظر فیزیکی غیرممکن است.',
+    'خاچاپوری آجاریایی با تخم‌مرغ صبحانه نیست، یک بنای معماری است.',
+    'در ون سواری به سمت کاختی، صندلی کنار پنجره منظره را تضمین نمی‌کند — فقط همسایه‌ای مؤدب با کیسه شراب این را تضمین می‌کند.',
+    'اگر در یک نوشیدنی سه بار شما را «مهمان عزیز» بنامند، دیگر مهمان نیستید — تقریباً عضو خانواده‌اید.',
+    'چورچخلا شبیه یک شمع است، اما از نظر کالری بیشتر شبیه دسر هفته است.',
+    'نوشیدنی‌های گرجی ترتیب سختی دارند — اول به صلح، بعد به والدین، نوبت شما خیلی دیرتر می‌رسد.',
+    'شراب خوانچکارا آنقدر شیرین است که گاهی به‌جای الکل، دسر تصور می‌شود.',
+    'در روستاهای کوهستانی آنتن نیست، اما همسایه‌ها بیشتر از اینترنت درباره شما می‌دانند.',
+    'پخالی اسفناج ساده به‌نظر می‌رسد، اما با این همه گردو در آن، تقریباً یک باغ گردو است.',
+    'چانه‌زدن در بازار تفلیس گناه نیست، اما تعجب نکنید اگر فروشنده بعداً چیزی رایگان به شما بدهد.',
+    'اگر کسی خیلی زود در حین نوشیدنی بایستد، یا مهمانی بسیار محترم است یا برای دستشویی عجله دارد.',
+    'پنیر سولگونی آنقدر محبوب است که پنیر بدون آن مثل چای بدون چای است.',
+    'جاده گذرگاه صلیب زیباست، اما اگر هم از ارتفاع و هم از راننده‌های گرجی می‌ترسید، به پایین نگاه نکنید.',
+    'اوجاخوری به مقدار زیادی پخته می‌شود که هم برای شام کافی است و هم برای حمایت روحی تا صبح.',
+    'اندازه غذاهای آشپزی سوان آنقدر بزرگ است که مسافران به توطئه‌ای علیه دور کمرشان مشکوک می‌شوند.',
+    'حمام‌های گوگردی تفلیس همه‌چیز را درمان می‌کنند — به‌جز عادت پرخوری در سفره شب قبل.',
+    'گشنیز در آشپزی گرجی یک ادویه نیست، یک جهان‌بینی است.',
+    'اگر نوشیدنی «به دوستی ملت‌ها» به شما پیشنهاد شود، احتمالاً سومین مورد از حدود پانزده تاست.',
+    'در روستای سیقناغی درها آنقدر زیبا نقاشی شده‌اند که گردشگران گاهی به‌جای بناها از درها عکس می‌گیرند.',
+    'آجیکا می‌تواند حتی خواب‌آلوده‌ترین مسافر را بیدار کند — و ذائقه‌اش را تا یک هفته.',
+    'یک نوشیدنی گرجی می‌تواند بیشتر از غذایی که به سلامتی‌اش نوشیده می‌شود طول بکشد.',
+    'اگر بعد از یک سفره هنوز می‌توانید بایستید، مشخص است که تامادا کارش را خوب انجام نداده.'
+  ],
+  de: [
+    'Bei einem georgischen Festmahl nicht alles auf einmal essen — Khachapuri, Khinkali und Schaschlik kommen nacheinander, das ist ein Marathon.',
+    'Wenn der Tamada auf Sie persönlich anstößt, müssen Sie nicht aufstehen — aber das Glas müssen Sie leeren.',
+    'Brot (Puri) ist in Georgien heilig — legen Sie es nie mit der Kruste nach unten, Großmütter würden das nicht gutheißen.',
+    'Khinkali verstecken Brühe im Inneren — eine Falle für alle, die sie mit der Gabel essen.',
+    'In georgischem Essen steckt so viel Knoblauch, dass sein Duft offiziell zur Atmosphäre gehört.',
+    'Wenn der Gastgeber sagt "das ist der letzte Trinkspruch" — statistisch stimmt das in 9 von 10 Fällen nicht.',
+    'Satsivi ist so sättigend, dass es offiziell als eigene Mahlzeit zählen könnte.',
+    'In den Bergen Tuschetiens ist das Handysignal schwächer als die georgische Gastfreundschaft.',
+    'Bei einer Supra gilt es als unhöflich, den Teller nicht leer zu essen — alles zu schaffen ist aber physisch unmöglich.',
+    'Adscharisches Chatschapuri mit Ei ist kein Frühstück, sondern ein Bauwerk.',
+    'Im Marshrutka nach Kachetien garantiert ein Fensterplatz keine Aussicht — nur ein höflicher Nachbar mit Weinbeutel garantiert das.',
+    'Wenn man Sie in einem Trinkspruch dreimal "lieber Gast" nennt, sind Sie kein Gast mehr, sondern fast Familie.',
+    'Tschurtschchela sieht aus wie eine Kerze, ist kalorienmäßig aber eher das Dessert der Woche.',
+    'Georgische Trinksprüche folgen strikter Reihenfolge — erst auf den Frieden, dann auf die Eltern, Sie kommen erst viel später dran.',
+    'Chwantschkara ist so süß, dass er manchmal für ein Dessert statt für Alkohol gehalten wird.',
+    'In Bergdörfern gibt es kein Netz, aber die Nachbarn wissen mehr über Sie als das Internet.',
+    'Spinat-Pkhali sieht bescheiden aus, ist aber wegen der vielen Walnüsse fast ein Nussgarten.',
+    'Handeln auf dem Markt in Tiflis ist keine Sünde, aber wundern Sie sich nicht, wenn der Verkäufer Ihnen danach etwas schenkt.',
+    'Steht jemand während eines Trinkspruchs zu früh auf, ist er entweder ein sehr geehrter Gast oder muss dringend zur Toilette.',
+    'Sulguni-Käse ist so beliebt, dass Käse ohne ihn sich anfühlt wie Tee ohne Tee.',
+    'Die Straße über den Kreuzpass ist wunderschön, aber schauen Sie nicht nach unten, wenn Sie Höhenangst und georgische Fahrer gleichzeitig fürchten.',
+    'Odschachuri wird in solchen Mengen gekocht, dass es für das Abendessen und moralische Unterstützung bis zum Morgen reicht.',
+    'Die Portionen der swanischen Küche sind so groß, dass Reisende eine Verschwörung gegen ihre Taille vermuten.',
+    'Tiflis\' Schwefelbäder heilen alles — außer die Angewohnheit, beim Festmahl am Vorabend zu viel zu essen.',
+    'Koriander in der georgischen Küche ist kein Gewürz, sondern eine Weltanschauung.',
+    'Wird Ihnen ein Trinkspruch "auf die Freundschaft der Völker" angeboten, ist es wahrscheinlich der dritte von etwa fünfzehn.',
+    'Im Dorf Sighnaghi sind die Türen so schön bemalt, dass Touristen manchmal die Türen statt die Sehenswürdigkeiten fotografieren.',
+    'Adjika kann selbst den schläfrigsten Reisenden wecken — und seine Geschmacksnerven für eine Woche.',
+    'Ein georgischer Trinkspruch kann länger dauern als das Essen, auf das er angestoßen wird.',
+    'Können Sie nach einem Festmahl noch stehen, hat der Tamada eindeutig schlechte Arbeit geleistet.'
+  ],
+  it: [
+    'A un banchetto georgiano non mangiare tutto insieme — khachapuri, khinkali e shashlik arrivano a turno, è una maratona.',
+    'Se il tamada brinda proprio a te, non devi alzarti — ma il bicchiere va finito.',
+    'Il pane (puri) è sacro in Georgia — non appoggiarlo mai con la crosta verso il basso, le nonne non approverebbero.',
+    'Gli khinkali nascondono il brodo dentro — una trappola per chi li mangia con la forchetta.',
+    'Nel cibo georgiano c\'è così tanto aglio che il suo profumo fa ufficialmente parte dell\'atmosfera.',
+    'Se l\'ospite dice "questo è l\'ultimo brindisi" — statisticamente è falso 9 volte su 10.',
+    'Il satsivi è così saziante che potrebbe contare come un pasto a sé.',
+    'Sui monti della Tusheti il segnale del telefono è più debole dell\'ospitalità georgiana.',
+    'A una supra è scortese non finire il piatto — ma finire tutto è fisicamente impossibile.',
+    'Il khachapuri adjarese con l\'uovo non è colazione, è un\'opera architettonica.',
+    'Sul marshrutka per la Kakheti, il posto vicino al finestrino non garantisce la vista — solo un vicino gentile con una borsa di vino la garantisce.',
+    'Se ti chiamano "caro ospite" tre volte in un brindisi, non sei più un ospite — sei quasi di famiglia.',
+    'La churchkhela sembra una candela, ma per calorie è più simile al dolce della settimana.',
+    'I brindisi georgiani seguono un ordine rigido — prima alla pace, poi ai genitori, il tuo turno arriva molto dopo.',
+    'Lo Khvanchkara è un vino così dolce che a volte viene scambiato per un dessert invece che per alcol.',
+    'Nei villaggi di montagna non c\'è segnale, ma i vicini sanno più cose su di te di internet.',
+    'Il pkhali di spinaci sembra modesto, ma con tutte quelle noci dentro è quasi un noceto.',
+    'Contrattare al mercato di Tbilisi non è peccato, ma non sorprenderti se poi il venditore ti regala qualcosa.',
+    'Se qualcuno si alza troppo presto durante un brindisi, o è un ospite molto onorato oppure ha fretta di andare in bagno.',
+    'Il formaggio sulguni è così popolare che il formaggio senza di esso sembra un tè senza tè.',
+    'La strada del Passo della Croce è bellissima, ma non guardare in basso se temi le altezze e gli autisti georgiani insieme.',
+    'L\'ojakhuri viene cucinato in quantità tali da bastare per la cena e per il sostegno morale fino al mattino.',
+    'Le porzioni della cucina svana sono così grandi che i viaggiatori sospettano un complotto contro il loro girovita.',
+    'I bagni sulfurei di Tbilisi curano tutto — tranne l\'abitudine di esagerare a cena la sera prima.',
+    'Il coriandolo nella cucina georgiana non è una spezia, è una visione del mondo.',
+    'Se ti offrono un brindisi "all\'amicizia tra i popoli" è probabilmente il terzo di una quindicina.',
+    'Nel villaggio di Sighnaghi le porte sono dipinte così bene che i turisti a volte fotografano le porte invece dei monumenti.',
+    'L\'adjika può svegliare anche il viaggiatore più assonnato — e le sue papille gustative per una settimana.',
+    'Un brindisi georgiano può durare più a lungo del pasto a cui è dedicato.',
+    'Se dopo un banchetto riesci ancora a stare in piedi, il tamada ha chiaramente lavorato male.'
+  ],
+  es: [
+    'En un banquete georgiano no comas todo de golpe — el khachapuri, los khinkali y el shashlik llegan por turnos, es una maratón.',
+    'Si el tamada brinda por ti personalmente, no hace falta levantarse, pero sí terminar la copa.',
+    'El pan (puri) es sagrado en Georgia — nunca lo pongas con la corteza hacia abajo, las abuelas no lo aprobarían.',
+    'Los khinkali esconden caldo por dentro — una trampa para quien los come con tenedor.',
+    'En la comida georgiana hay tanto ajo que su olor forma oficialmente parte del ambiente.',
+    'Si el anfitrión dice "este es el último brindis" — estadísticamente es falso 9 de cada 10 veces.',
+    'El satsivi llena tanto que podría contar como una comida aparte.',
+    'En las montañas de Tusheti la señal del teléfono es más débil que la hospitalidad georgiana.',
+    'En una supra es de mala educación no terminar el plato — pero terminarlo todo es físicamente imposible.',
+    'El khachapuri adjaro con huevo no es un desayuno, es una obra arquitectónica.',
+    'En el marshrutka a Kajetia, un asiento junto a la ventana no garantiza vistas — solo un vecino amable con una bolsa de vino lo garantiza.',
+    'Si te llaman "querido invitado" tres veces en un brindis, ya no eres invitado — casi eres de la familia.',
+    'La churchkhela parece una vela, pero en calorías se parece más al postre de la semana.',
+    'Los brindis georgianos siguen un orden estricto — primero por la paz, luego por los padres, tu turno llega mucho después.',
+    'El vino Khvanchkara es tan dulce que a veces se confunde con un postre en lugar de alcohol.',
+    'En los pueblos de montaña no hay señal, pero los vecinos saben más de ti que internet.',
+    'El pkhali de espinacas parece modesto, pero con tantas nueces dentro es casi un nogal.',
+    'Regatear en el mercado de Tiflis no es pecado, pero no te sorprendas si luego el vendedor te regala algo.',
+    'Si alguien se levanta demasiado pronto durante un brindis, o es un invitado muy honrado o tiene prisa por ir al baño.',
+    'El queso sulguni es tan popular que el queso sin él se siente como té sin té.',
+    'La carretera del Paso de la Cruz es preciosa, pero no mires hacia abajo si temes las alturas y a los conductores georgianos a la vez.',
+    'El ojakhuri se cocina en tal cantidad que alcanza para la cena y para el apoyo moral hasta la mañana.',
+    'Las raciones de la cocina svana son tan grandes que los viajeros sospechan una conspiración contra su cintura.',
+    'Los baños de azufre de Tiflis curan todo — excepto el hábito de excederse en el banquete de la noche anterior.',
+    'El cilantro en la cocina georgiana no es una especia, es una forma de ver el mundo.',
+    'Si te ofrecen un brindis "por la amistad entre los pueblos", probablemente sea el tercero de unos quince.',
+    'En el pueblo de Sighnaghi las puertas están pintadas tan bellamente que los turistas a veces fotografían las puertas en vez de los monumentos.',
+    'El adjika puede despertar hasta al viajero más dormido — y sus papilas gustativas durante una semana.',
+    'Un brindis georgiano puede durar más que la comida a la que brinda.',
+    'Si después de un banquete todavía puedes mantenerte en pie, está claro que el tamada no hizo bien su trabajo.'
+  ]
+};
+
+let funFactInterval = null;
+
+function startFunFacts(lang) {
+  const facts = FUN_FACTS[lang] || FUN_FACTS.en;
+  const el = document.getElementById('funFactText');
   if (!el) return;
-  const time = new Date().toLocaleTimeString();
-  el.textContent += `[${time}] ${msg}\n`;
-  el.scrollTop = el.scrollHeight;
+
+  let idx = Math.floor(Math.random() * facts.length);
+  const isRTL = (lang === 'he' || lang === 'ar' || lang === 'fa');
+  el.style.direction = isRTL ? 'rtl' : 'ltr';
+  el.textContent = facts[idx];
+
+  funFactInterval = setInterval(() => {
+    el.style.opacity = '0';
+    setTimeout(() => {
+      idx = (idx + 1) % facts.length;
+      el.textContent = facts[idx];
+      el.style.opacity = '1';
+    }, 300);
+  }, 5000);
+}
+
+function stopFunFacts() {
+  if (funFactInterval) {
+    clearInterval(funFactInterval);
+    funFactInterval = null;
+  }
 }
 
 async function generateRoute() {
   showScreen(3);
   document.getElementById('progressFill').style.width = '100%';
-  const dbg = document.getElementById('debugLog');
-  if (dbg) dbg.textContent = '';
+  startFunFacts(uiLang);
 
   const jobId = makeJobId();
   const startedAt = Date.now();
   updateLoadingMessage(0);
-  debugLog('jobId: ' + jobId);
-  debugLog('Отправляю запрос на planner-background...');
 
   try {
-    const startRes = await fetch('/.netlify/functions/planner-background', {
+    await fetch('/.netlify/functions/planner-background', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify(Object.assign({}, answers, { lang: uiLang, jobId }))
     });
-    debugLog('Ответ на старт: HTTP ' + startRes.status);
   } catch (e) {
-    debugLog('ОШИБКА при старте: ' + e.message);
+    stopFunFacts();
     generatedRoute = buildDemoRoute();
     showRoutePreview(generatedRoute);
     return;
   }
 
-  let pollCount = 0;
   while (Date.now() - startedAt < POLL_MAX_MS) {
     await new Promise(r => setTimeout(r, POLL_INTERVAL_MS));
     updateLoadingMessage(Date.now() - startedAt);
-    pollCount++;
 
     try {
       const res = await fetch('/.netlify/functions/planner-status?jobId=' + encodeURIComponent(jobId));
-      const rawText = await res.text();
-      debugLog(`Опрос #${pollCount} (HTTP ${res.status}): ${rawText.slice(0, 200)}`);
-      const status = JSON.parse(rawText);
+      const status = await res.json();
 
       if (status.status === 'done' && status.route) {
-        debugLog('Готово! Показываю настоящий маршрут.');
+        stopFunFacts();
         generatedRoute = status.route;
         showRoutePreview(status.route);
         return;
       }
       if (status.status === 'error') {
-        debugLog('Ошибка от сервера: ' + status.message);
+        console.error('Planner background error:', status.message);
         break;
       }
     } catch (e) {
-      debugLog(`Опрос #${pollCount} — сбой запроса: ${e.message}`);
+      console.warn('Status check failed, retrying:', e);
     }
   }
 
-  debugLog('Время ожидания истекло — показываю демо.');
+  stopFunFacts();
   generatedRoute = buildDemoRoute();
   showRoutePreview(generatedRoute);
 }
