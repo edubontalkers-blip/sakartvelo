@@ -1,5 +1,14 @@
 const { getStore } = require('@netlify/blobs');
 
+// Тот же обходной путь для MissingBlobsEnvironmentError, что и в planner-background.js
+function getStoreExplicit(name) {
+  return getStore({
+    name,
+    siteID: process.env.BLOBS_SITE_ID,
+    token: process.env.BLOBS_TOKEN
+  });
+}
+
 // ══════════════════════════════════════
 // ФУНКЦИЯ ПРОВЕРКИ СТАТУСА ЗАДАЧИ
 // ══════════════════════════════════════
@@ -20,7 +29,7 @@ exports.handler = async (event) => {
   }
 
   try {
-    const store = getStore('planner-jobs');
+    const store = getStoreExplicit('planner-jobs');
     const job = await store.get(jobId, { type: 'json' });
 
     if (!job) {
