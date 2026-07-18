@@ -4,6 +4,21 @@ const path = require('path');
 const { getStore } = require('@netlify/blobs');
 
 // ══════════════════════════════════════
+// ПОДКЛЮЧЕНИЕ К NETLIFY BLOBS С ЯВНЫМИ ДАННЫМИ
+// ══════════════════════════════════════
+// На этом сайте автоматическая настройка Netlify Blobs (zero-config) не
+// срабатывает — getStore() без параметров падал с MissingBlobsEnvironmentError.
+// Обходной путь: явно передаём siteID и personal access token через
+// переменные окружения BLOBS_SITE_ID и BLOBS_TOKEN (заданы в Netlify UI).
+function getStoreExplicit(name) {
+  return getStore({
+    name,
+    siteID: process.env.BLOBS_SITE_ID,
+    token: process.env.BLOBS_TOKEN
+  });
+}
+
+// ══════════════════════════════════════
 // ФОНОВАЯ ФУНКЦИЯ (Netlify Background Function)
 // ══════════════════════════════════════
 // Файл называется "planner-background.js" — суффикс "-background" в имени
@@ -74,7 +89,7 @@ function cleanupRequestLog() {
 // ══════════════════════════════════════
 async function getCachedRoute(cacheKey) {
   try {
-    const store = getStore('planner-routes-cache');
+    const store = getStoreExplicit('planner-routes-cache');
     const cached = await store.get(cacheKey, { type: 'json' });
     return cached || null;
   } catch (e) {
@@ -85,7 +100,7 @@ async function getCachedRoute(cacheKey) {
 
 async function saveCachedRoute(cacheKey, route) {
   try {
-    const store = getStore('planner-routes-cache');
+    const store = getStoreExplicit('planner-routes-cache');
     await store.setJSON(cacheKey, route);
   } catch (e) {
     console.error('Route cache write error:', e.message);
@@ -97,7 +112,7 @@ async function saveCachedRoute(cacheKey, route) {
 // ══════════════════════════════════════
 async function setJobStatus(jobId, statusObj) {
   try {
-    const store = getStore('planner-jobs');
+    const store = getStoreExplicit('planner-jobs');
     await store.setJSON(jobId, statusObj);
   } catch (e) {
     console.error('Job status write error:', e.message);
