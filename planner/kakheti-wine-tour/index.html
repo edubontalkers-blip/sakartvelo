@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru" id="htmlRoot">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title id="pageTitle"></title>
+<meta id="metaDesc" name="description" content="">
+<link rel="canonical" href="https://sakartvelo.ai/planner/kakheti-wine-tour/">
+<meta property="og:type" content="website">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--wine:#8b1a1a;--gold:#c4960a;--dark:#1a0d10;--card:#fff8f5;--bg:#fff;--ink:#1a0d10;--muted:#888;--line:#e8ddd5;--radius:16px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+header{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);gap:8px}
+.logo{font-weight:900;color:var(--wine);text-decoration:none;font-size:1.1rem}
+.hbtns{display:flex;gap:8px;align-items:center}
+.langBtn{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 10px;cursor:pointer;font-size:1rem}
+main{max-width:640px;margin:0 auto;padding:24px 20px 60px}
+h1{font-size:1.7rem;font-weight:900;color:var(--wine);margin-bottom:12px;line-height:1.25}
+.intro{color:var(--ink);margin-bottom:20px;font-size:1.02rem}
+.highlights{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 24px;margin-bottom:24px}
+.highlights li{margin-bottom:8px}
+.cta{display:block;text-align:center;background:var(--wine);color:#fff;text-decoration:none;font-weight:700;padding:16px;border-radius:var(--radius);font-size:1.05rem;border:none;width:100%;cursor:pointer}
+footer{text-align:center;padding:24px;color:var(--muted);font-size:.8rem}
+footer a{color:var(--wine);text-decoration:none}
+#langOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100}
+#langSheet{position:absolute;bottom:0;left:0;right:0;background:#fff;border-radius:20px 20px 0 0;padding:20px;max-height:70vh;overflow-y:auto}
+.langGrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
+.langItem{border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center;cursor:pointer;font-size:.85rem}
+.langItem.sel{border-color:var(--gold);background:#fff8ee}
+</style>
+</head>
+<body>
+<header>
+  <a href="https://sakartvelo.ai" class="logo">🍶 sakartvelo.ai</a>
+  <div class="hbtns">
+    <button class="langBtn" id="langBtn" onclick="openLangSheet()">🌐</button>
+    <a href="https://sakartvelo.ai" style="color:var(--gold);font-size:.9rem;text-decoration:none" id="backLink"></a>
+  </div>
+</header>
+
+<div id="langOverlay" onclick="if(event.target===this)closeLangSheet()">
+  <div id="langSheet">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <h2 id="langSheetTitle" style="font-size:1.1rem;color:var(--wine)"></h2>
+      <button onclick="closeLangSheet()" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--muted)">✕</button>
+    </div>
+    <div class="langGrid" id="langGrid"></div>
+  </div>
+</div>
+
+<main>
+  <h1 id="h1"></h1>
+  <p class="intro" id="intro"></p>
+  <div class="highlights">
+    <ul style="padding-left:20px" id="highlightsList"></ul>
+  </div>
+  <button class="cta" id="ctaBtn" onclick="goToPlanner()"></button>
+</main>
+<footer>
+  <a href="https://sakartvelo.ai">sakartvelo.ai</a> — <span id="footer"></span>
+</footer>
+
+<script>
+const PAGE_I18N = {"ru": {"title": "Винный тур по Кахетии — планировщик маршрута по Грузии", "metaDesc": "Спланируйте винный тур по Кахетии: винодельни квеври, Сигнаги, 8000 лет виноделия. Получите бесплатный персональный PDF-гид.", "h1": "🍷 Винный тур по Кахетии", "intro": "Кахетия — место, где зародилось грузинское виноделие более 8000 лет назад, с традиционным методом квеври (глиняного сосуда), защищённым ЮНЕСКО. Этот регион восточнее Тбилиси — дом семейных виноделен, холмистого городка Сигнаги и одних из лучших гастрономических сочетаний в стране.", "highlights": ["Дегустации на винодельнях квеври — традиционное виноделие в глиняных сосудах", "Сигнаги — «Город любви», обнесённый стеной город на холме", "Монастыри Алаверди и Бодбе", "Лучший сезон: сентябрь–октябрь для сбора урожая (Ртвели)"], "cta": "📥 Построить мой персональный маршрут на 4 дня →", "back": "← Назад", "footer": "AI-гид по Грузии 🇬🇪", "langTitle": "Язык"}, "en": {"title": "Kakheti Wine Tour — Georgia Route Planner", "metaDesc": "Plan a Kakheti wine tour in Georgia: qvevri wineries, Sighnaghi, 8000 years of winemaking. Get a free personal PDF guide with tastings and routes.", "h1": "🍷 Kakheti Wine Tour", "intro": "Kakheti is where Georgian winemaking began — over 8,000 years ago, using the traditional qvevri clay vessel method now protected by UNESCO. This region east of Tbilisi is home to family wineries, the hilltop town of Sighnaghi, and some of the best food pairings in the country.", "highlights": ["Qvevri winery tastings — traditional clay-vessel winemaking", "Sighnaghi — the 'City of Love', walled hilltop town", "Alaverdi and Bodbe monasteries", "Best season: September–October for the Rtveli grape harvest"], "cta": "📥 Build my personal 4-day guide →", "back": "← Back", "footer": "AI Travel Guide to Georgia 🇬🇪", "langTitle": "Language"}, "tr": {"title": "Kaheti Şarap Turu — Gürcistan Rota Planlayıcı", "metaDesc": "Gürcistan'da Kaheti şarap turu planlayın: küvevri şaraphaneleri, Sighnaghi, 8000 yıllık şarapçılık. Ücretsiz kişisel PDF rehberi alın.", "h1": "🍷 Kaheti Şarap Turu", "intro": "Kaheti, Gürcü şarapçılığının başladığı yer — 8000 yıldan fazla önce, şimdi UNESCO tarafından korunan geleneksel küvevri kil kap yöntemiyle. Tiflis'in doğusundaki bu bölge, aile şaraphanelerine, tepedeki Signagi kasabasına ve ülkenin en iyi lezzet eşleşmelerine ev sahipliği yapıyor.", "highlights": ["Küvevri şaraphane tadımları — geleneksel kil kapta şarapçılık", "Signagi — 'Aşk Şehri', surlu tepe kasabası", "Alaverdi ve Bodbe manastırları", "En iyi mevsim: Rtveli üzüm hasadı için Eylül–Ekim"], "cta": "📥 Kişisel 4 günlük rehberimi oluştur →", "back": "← Geri", "footer": "Gürcistan için AI Seyahat Rehberi 🇬🇪", "langTitle": "Dil"}, "de": {"title": "Kachetien Weintour — Georgien Routenplaner", "metaDesc": "Planen Sie eine Weintour in Kachetien, Georgien: Qvevri-Weingüter, Sighnaghi, 8000 Jahre Weinbau. Kostenloser persönlicher PDF-Guide.", "h1": "🍷 Kachetien Weintour", "intro": "Kachetien ist der Ursprungsort des georgischen Weinbaus — vor über 8000 Jahren, mit der traditionellen Qvevri-Tongefäßmethode, die heute von der UNESCO geschützt wird. Diese Region östlich von Tiflis beherbergt Familienweingüter, das Hügelstädtchen Sighnaghi und einige der besten Speisekombinationen des Landes.", "highlights": ["Qvevri-Weingut-Verkostungen — traditioneller Weinbau in Tongefäßen", "Sighnaghi — die 'Stadt der Liebe', ummauerte Hügelstadt", "Klöster Alaverdi und Bodbe", "Beste Saison: September–Oktober für die Rtveli-Weinlese"], "cta": "📥 Meinen persönlichen 4-Tage-Guide erstellen →", "back": "← Zurück", "footer": "KI-Reiseführer für Georgien 🇬🇪", "langTitle": "Sprache"}, "it": {"title": "Tour del Vino a Kakheti — Pianificatore di Percorsi Georgia", "metaDesc": "Pianifica un tour del vino a Kakheti in Georgia: cantine qvevri, Sighnaghi, 8000 anni di vinificazione. Guida PDF personale gratuita.", "h1": "🍷 Tour del Vino a Kakheti", "intro": "Kakheti è dove è iniziata la vinificazione georgiana — oltre 8000 anni fa, con il metodo tradizionale del qvevri (vaso di terracotta) ora protetto dall'UNESCO. Questa regione a est di Tbilisi ospita cantine familiari, la cittadina collinare di Sighnaghi e alcuni dei migliori abbinamenti gastronomici del paese.", "highlights": ["Degustazioni nelle cantine qvevri — vinificazione tradizionale in vasi di terracotta", "Sighnaghi — la 'Città dell'Amore', città murata sulla collina", "Monasteri di Alaverdi e Bodbe", "Stagione migliore: settembre–ottobre per la vendemmia Rtveli"], "cta": "📥 Crea la mia guida personale di 4 giorni →", "back": "← Indietro", "footer": "Guida di viaggio AI per la Georgia 🇬🇪", "langTitle": "Lingua"}, "es": {"title": "Tour de Vino en Kakheti — Planificador de Rutas de Georgia", "metaDesc": "Planifica un tour de vino en Kakheti, Georgia: bodegas qvevri, Sighnaghi, 8000 años de vinificación. Guía PDF personal gratuita.", "h1": "🍷 Tour de Vino en Kakheti", "intro": "Kakheti es donde comenzó la vinificación georgiana — hace más de 8000 años, con el método tradicional de la vasija de barro qvevri, ahora protegido por la UNESCO. Esta región al este de Tiflis alberga bodegas familiares, el pueblo en la colina de Sighnaghi y algunos de los mejores maridajes del país.", "highlights": ["Catas en bodegas qvevri — vinificación tradicional en vasijas de barro", "Sighnaghi — la 'Ciudad del Amor', pueblo amurallado en la colina", "Monasterios de Alaverdi y Bodbe", "Mejor temporada: septiembre–octubre para la vendimia Rtveli"], "cta": "📥 Crear mi guía personal de 4 días →", "back": "← Atrás", "footer": "Guía de viaje con IA para Georgia 🇬🇪", "langTitle": "Idioma"}, "ar": {"title": "جولة النبيذ في كاختي — مخطط مسارات جورجيا", "metaDesc": "خطط لجولة نبيذ في كاختي بجورجيا: مصانع نبيذ كفيفري، سيغناغي، 8000 عام من صناعة النبيذ. دليل PDF شخصي مجاني.", "h1": "🍷 جولة النبيذ في كاختي", "intro": "كاختي هي حيث بدأت صناعة النبيذ الجورجية — منذ أكثر من 8000 عام، باستخدام طريقة إناء الطين كفيفري التقليدية المحمية الآن من اليونسكو. تضم هذه المنطقة شرق تبليسي مصانع نبيذ عائلية، وبلدة سيغناغي على التلة، وبعض من أفضل توليفات الطعام في البلاد.", "highlights": ["تذوق في مصانع نبيذ كفيفري — صناعة نبيذ تقليدية بأواني طينية", "سيغناغي — 'مدينة الحب'، بلدة محاطة بأسوار على تلة", "ديرا ألافردي وبودبه", "أفضل موسم: سبتمبر–أكتوبر لحصاد العنب رتفيلي"], "cta": "📥 إنشاء دليلي الشخصي لـ 4 أيام ←", "back": "← رجوع", "footer": "دليل سفر بالذكاء الاصطناعي لجورجيا 🇬🇪", "langTitle": "اللغة"}, "he": {"title": "סיור יין בקחתי — מתכנן מסלולים לג'ורג'יה", "metaDesc": "תכננו סיור יין בקחתי, ג'ורג'יה: יקבי קוורי, סיגנאגי, 8000 שנות ייצור יין. מדריך PDF אישי בחינם.", "h1": "🍷 סיור יין בקחתי", "intro": "קחתי היא המקום בו החל ייצור היין הג'ורג'י — לפני יותר מ-8000 שנה, בשיטת כלי החרס המסורתית קוורי המוגנת כיום על ידי אונסק'ו. אזור זה ממזרח לטביליסי הוא ביתם של יקבים משפחתיים, עיירת הגבעה סיגנאגי, וכמה מהשילובים הקולינריים הטובים ביותר בארץ.", "highlights": ["טעימות ביקבי קוורי — ייצור יין מסורתי בכלי חרס", "סיגנאגי — 'עיר האהבה', עיירת גבעה חומה", "מנזרי אלוורדי ובודבה", "העונה הטובה ביותר: ספטמבר–אוקטובר לבציר רטוולי"], "cta": "📥 בניית המדריך האישי שלי ל-4 ימים ←", "back": "← חזרה", "footer": "מדריך טיולים מבוסס AI לג'ורג'יה 🇬🇪", "langTitle": "שפה"}, "fa": {"title": "تور شراب کاختی — برنامه‌ریز مسیر گرجستان", "metaDesc": "یک تور شراب در کاختی گرجستان برنامه‌ریزی کنید: شراب‌سازی‌های کوهوری، سیغناغی، ۸۰۰۰ سال شراب‌سازی. راهنمای PDF شخصی رایگان.", "h1": "🍷 تور شراب کاختی", "intro": "کاختی جایی است که شراب‌سازی گرجی آغاز شد — بیش از ۸۰۰۰ سال پیش، با روش سنتی ظرف گلی کوهوری که اکنون توسط یونسکو حفاظت می‌شود. این منطقه در شرق تفلیس خانه شراب‌سازی‌های خانوادگی، شهر تپه‌ای سیغناغی و برخی از بهترین ترکیبات غذایی کشور است.", "highlights": ["چشیدن در شراب‌سازی‌های کوهوری — شراب‌سازی سنتی در ظروف گلی", "سیغناغی — «شهر عشق»، شهر تپه‌ای دیوارکشی‌شده", "صومعه‌های آلاوردی و بودبه", "بهترین فصل: سپتامبر–اکتبر برای برداشت انگور رتولی"], "cta": "📥 ساخت راهنمای شخصی ۴ روزه من ←", "back": "← بازگشت", "footer": "راهنمای سفر هوش‌مصنوعی گرجستان 🇬🇪", "langTitle": "زبان"}};
+const LANGUAGES = [{"code": "ru", "flag": "🇷🇺", "name": "Русский"}, {"code": "en", "flag": "🇬🇧", "name": "English"}, {"code": "tr", "flag": "🇹🇷", "name": "Türkçe"}, {"code": "ar", "flag": "🇸🇦", "name": "العربية"}, {"code": "he", "flag": "🇮🇱", "name": "עברית"}, {"code": "fa", "flag": "🇮🇷", "name": "فارسی"}, {"code": "de", "flag": "🇩🇪", "name": "Deutsch"}, {"code": "it", "flag": "🇮🇹", "name": "Italiano"}, {"code": "es", "flag": "🇪🇸", "name": "Español"}];
+const CATEGORY = "wine";
+const DAYS = "4";
+
+function detectLang(){
+  const validCodes = LANGUAGES.map(l => l.code);
+  let saved = null;
+  try { saved = localStorage.getItem('sak_lang'); } catch(e) {}
+  if (saved && validCodes.indexOf(saved) !== -1) return saved;
+  const nav = (navigator.language || 'en').slice(0,2).toLowerCase();
+  if (validCodes.indexOf(nav) !== -1) return nav;
+  return 'en';
+}
+let curLang = detectLang();
+
+function render(){
+  const t = PAGE_I18N[curLang] || PAGE_I18N.en;
+  const isRTL = (curLang === 'ar' || curLang === 'he' || curLang === 'fa');
+  document.getElementById('htmlRoot').setAttribute('lang', curLang);
+  document.getElementById('htmlRoot').setAttribute('dir', isRTL ? 'rtl' : 'ltr');
+  document.getElementById('pageTitle').textContent = t.title;
+  document.getElementById('metaDesc').setAttribute('content', t.metaDesc);
+  document.getElementById('h1').textContent = t.h1;
+  document.getElementById('intro').textContent = t.intro;
+  document.getElementById('highlightsList').innerHTML = t.highlights.map(h => '<li>' + h + '</li>').join('');
+  document.getElementById('ctaBtn').textContent = t.cta;
+  document.getElementById('backLink').textContent = t.back;
+  document.getElementById('footer').textContent = t.footer;
+}
+
+function goToPlanner(){
+  window.location.href = '/planner/?category=' + CATEGORY + '&days=' + DAYS;
+}
+
+function openLangSheet(){
+  const t = PAGE_I18N[curLang] || PAGE_I18N.en;
+  document.getElementById('langSheetTitle').textContent = t.langTitle;
+  document.getElementById('langGrid').innerHTML = LANGUAGES.map(l =>
+    '<div class="langItem' + (l.code===curLang?' sel':'') + '" onclick="switchLang(\'' + l.code + '\')">' +
+    '<div style="font-size:1.3rem">' + l.flag + '</div><div>' + l.name + '</div></div>'
+  ).join('');
+  document.getElementById('langOverlay').style.display = 'block';
+}
+function closeLangSheet(){ document.getElementById('langOverlay').style.display = 'none'; }
+function switchLang(code){
+  curLang = code;
+  try { localStorage.setItem('sak_lang', code); } catch(e) {}
+  render();
+  closeLangSheet();
+}
+
+render();
+</script>
+</body>
+</html>
