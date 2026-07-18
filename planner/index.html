@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Georgia Route Planner — sakartvelo.ai</title>
+<meta name="description" content="Plan your perfect Georgia trip. Get a personalized PDF guide with route, packing list, emergency numbers. Free. Works offline.">
+<link rel="canonical" href="https://sakartvelo.ai/planner/">
+<meta property="og:title" content="Georgia Route Planner — sakartvelo.ai">
+<meta property="og:description" content="Your personal Georgia travel guide PDF. Free. Works offline in the mountains.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Georgia Route Planner","url":"https://sakartvelo.ai/planner/","applicationCategory":"TravelApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--wine:#8b1a1a;--gold:#c4960a;--dark:#1a0d10;--card:#fff8f5;--bg:#fff;--ink:#1a0d10;--muted:#888;--line:#e8ddd5;--radius:16px}
+[data-theme=dark]{--bg:#120a0c;--card:#1e1214;--ink:#f0e8e0;--line:#2a1a1e;--muted:#aaa}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;transition:background .3s}
+header{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line)}
+.logo{font-weight:900;color:var(--wine);text-decoration:none;font-size:1.1rem}
+.back{color:var(--gold);font-size:.9rem;text-decoration:none;font-weight:600}
+.theme-btn{background:none;border:1px solid var(--line);border-radius:20px;padding:5px 12px;cursor:pointer;color:var(--ink);font-size:.9rem}
+main{max-width:600px;margin:0 auto;padding:24px 16px}
+h1{font-size:1.8rem;font-weight:900;color:var(--wine);margin-bottom:8px;line-height:1.2}
+.subtitle{color:var(--muted);margin-bottom:28px;font-size:1rem;line-height:1.5}
+
+/* Progress */
+.progress-bar{background:var(--line);border-radius:10px;height:6px;margin-bottom:24px;overflow:hidden}
+.progress-fill{background:var(--gold);height:100%;border-radius:10px;transition:width .4s ease}
+
+/* Screen */
+.screen{display:none;animation:fadeIn .3s ease}
+.screen.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* Category cards */
+.cats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.cat-card{background:var(--card);border:2px solid var(--line);border-radius:var(--radius);padding:16px;cursor:pointer;text-align:left;transition:all .2s}
+.cat-card:hover,.cat-card.selected{border-color:var(--gold);background:#fff8e6}
+.cat-emoji{font-size:1.8rem;margin-bottom:6px;display:block}
+.cat-title{font-weight:700;font-size:.9rem;color:var(--ink);margin-bottom:4px}
+.cat-desc{font-size:.78rem;color:var(--muted);line-height:1.4}
+
+/* Question */
+.question-title{font-size:1.2rem;font-weight:700;margin-bottom:16px;color:var(--ink)}
+.options{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+.opt-btn{background:var(--card);border:2px solid var(--line);border-radius:30px;padding:10px 18px;cursor:pointer;font-size:.9rem;color:var(--ink);transition:all .2s;font-family:inherit}
+.opt-btn:hover,.opt-btn.selected{border-color:var(--gold);background:#fff8e6;color:var(--dark)}
+.name-input{width:100%;padding:14px 16px;border:2px solid var(--line);border-radius:var(--radius);font-size:1rem;background:var(--card);color:var(--ink);font-family:inherit;margin-bottom:16px}
+.name-input:focus{outline:none;border-color:var(--gold)}
+
+/* Buttons */
+.btn{display:block;width:100%;padding:15px;background:var(--wine);color:#fff;border:none;border-radius:var(--radius);font-size:1rem;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .2s;text-align:center}
+.btn:hover{opacity:.9}
+.btn.gold{background:var(--gold);color:var(--dark)}
+.btn.outline{background:none;border:2px solid var(--line);color:var(--ink)}
+.btn-row{display:flex;gap:10px;margin-top:8px}
+.btn-row .btn{flex:1}
+
+/* Loading */
+.loading{text-align:center;padding:40px 0}
+.loading-logo{font-size:3rem;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.loading-text{color:var(--muted);margin-top:16px;font-size:1rem}
+
+/* Result */
+.result-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin-bottom:12px}
+.result-title{font-weight:700;color:var(--wine);font-size:1.1rem;margin-bottom:4px}
+.result-sub{color:var(--muted);font-size:.85rem}
+.day-item{padding:10px 0;border-bottom:1px solid var(--line);font-size:.9rem}
+.day-item:last-child{border-bottom:none}
+.day-num{font-weight:700;color:var(--gold)}
+.warning{background:#fff3cd;border:1px solid #ffc107;border-radius:10px;padding:10px 14px;font-size:.85rem;margin-bottom:8px;color:#856404}
+.warning.red{background:#fde8e8;border-color:#dc3545;color:#721c24}
+
+/* Lang picker */
+.lang-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:20px}
+.lang-btn{background:var(--card);border:2px solid var(--line);border-radius:12px;padding:12px 8px;cursor:pointer;text-align:center;transition:all .2s;font-family:inherit}
+.lang-btn:hover,.lang-btn.selected{border-color:var(--gold);background:#fff8e6}
+.lang-flag{font-size:1.4rem;display:block;margin-bottom:4px}
+.lang-name{font-size:.78rem;color:var(--ink);font-weight:600}
+
+/* After download */
+.success-icon{font-size:3rem;text-align:center;margin-bottom:12px}
+.tip-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:8px;font-size:.9rem}
+.tip-card strong{color:var(--wine)}
+footer{text-align:center;padding:30px 20px;color:var(--muted);font-size:.8rem}
+footer a{color:var(--wine);text-decoration:none}
+</style>
+</head>
+<body>
+<header>
+  <a href="https://sakartvelo.ai" class="logo">🍶 sakartvelo.ai</a>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button class="theme-btn" id="langBtn" onclick="openLangSheet()">🌐</button>
+    <button class="theme-btn" id="themeBtn">🌙</button>
+    <a href="https://sakartvelo.ai" class="back" id="backLink">← Back</a>
+  </div>
+</header>
+
+<!-- Языковой шит -->
+<div id="langOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100" onclick="if(event.target===this)closeLangSheet()">
+  <div style="position:absolute;bottom:0;left:0;right:0;background:var(--bg);border-radius:20px 20px 0 0;padding:20px;max-height:70vh;overflow-y:auto">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h2 style="font-size:1.1rem;color:var(--wine)" id="langSheetTitle">Language</h2>
+      <button onclick="closeLangSheet()" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--muted)">✕</button>
+    </div>
+    <div class="lang-grid" id="langSheetGrid"></div>
+  </div>
+</div>
+
+<main>
+  <!-- Progress bar -->
+  <div class="progress-bar" id="progressBar" style="display:none">
+    <div class="progress-fill" id="progressFill" style="width:0%"></div>
+  </div>
+
+  <!-- SCREEN 1: Category -->
+  <div class="screen active" id="screen1">
+    <h1 id="s1Title">What kind of trip do you want?</h1>
+    <p class="subtitle" id="s1Sub">Choose your style — we'll build your personal Georgia guide</p>
+    <div class="cats" id="catGrid"></div>
+    <button class="btn" id="s1NextBtn" onclick="goToQuestions()">Next →</button>
+  </div>
+
+  <!-- SCREEN 2: Questions -->
+  <div class="screen" id="screen2">
+    <div id="questionContainer"></div>
+  </div>
+
+  <!-- SCREEN 3: Loading -->
+  <div class="screen" id="screen3">
+    <div class="loading">
+      <div class="loading-logo">🍶</div>
+      <h2 style="margin-top:16px;color:var(--wine)" id="s3Title">Chacha is building your route...</h2>
+      <p class="loading-text" id="s3Sub">Personalizing for you — just a moment</p>
+    </div>
+  </div>
+
+  <!-- SCREEN 4: Route preview -->
+  <div class="screen" id="screen4">
+    <h1 id="routeTitle">Your Route</h1>
+    <p class="subtitle" id="routeTagline"></p>
+    <div id="routePreview"></div>
+    <button class="btn gold" style="margin-top:16px" id="s4DownloadBtn" onclick="showLangPicker()">📥 Download PDF Guide →</button>
+    <button class="btn outline" style="margin-top:8px" id="s4AskBtn" onclick="askChacha()">🤖 Ask Chacha AI</button>
+  </div>
+
+  <!-- SCREEN 5: Language picker -->
+  <div class="screen" id="screen5">
+    <h1 id="s5Title">Choose your PDF language</h1>
+    <p class="subtitle" id="s5Sub">Your guide will be generated in the selected language</p>
+    <div class="lang-grid" id="langGrid"></div>
+    <button class="btn gold" id="downloadBtn" onclick="generatePDF()">📥 Create & Download PDF</button>
+    <div id="pdfLoading" style="display:none;text-align:center;margin-top:16px;color:var(--muted)">Generating your PDF...</div>
+  </div>
+
+  <!-- SCREEN 6: Done -->
+  <div class="screen" id="screen6">
+    <div class="success-icon">✅</div>
+    <h1 id="s6Title">Your PDF is ready!</h1>
+    <p class="subtitle" id="successMsg"></p>
+    <div class="tip-card" id="s6Tip1"><strong>💡 Tip:</strong> Save it to your phone — it works without internet in the mountains</div>
+    <div class="tip-card" id="s6Tip2"><strong>📴 Offline:</strong> No signal in Svaneti and Tusheti — your PDF will save you</div>
+    <div class="tip-card" id="s6Tip3"><strong>🆘 Emergency:</strong> All emergency numbers are on the last page</div>
+    <div style="margin-top:16px">
+      <button class="btn" id="s6AskBtn" onclick="askChacha()">🤖 Ask Chacha about your route</button>
+      <button class="btn outline" style="margin-top:8px" id="s6BackBtn" onclick="location.href='https://sakartvelo.ai'">← Back to sakartvelo.ai</button>
+    </div>
+  </div>
+</main>
+
+<footer id="siteFooter">
+  <a href="https://sakartvelo.ai">sakartvelo.ai</a> — AI Travel Guide to Georgia 🇬🇪
+</footer>
+
+<script>
+// ══════════════════════════════════════
+// DATA
+// ══════════════════════════════════════
+const CATEGORIES = [
+  {id:'mountains', emoji:'🏔️', title:'Mountains & Trekking', desc:'Kazbegi, Svaneti, Tusheti — real mountains for real people'},
+  {id:'wine', emoji:'🍷', title:'Wine Sommelier', desc:'Kakheti, qvevri, tastings — 8000 years of winemaking'},
+  {id:'detox', emoji:'♨️', title:'Georgian Detox', desc:'Borjomi mineral springs + sulfur baths + slow travel'},
+  {id:'yoga', emoji:'🧘‍♀️', title:'Yoga Retreat Tour', desc:'Yoga studios and retreats across Tbilisi, Batumi & the mountains'},
+  {id:'history', emoji:'🏛️', title:'Time Machine', desc:'Vardzia, Mtskheta, David Gareja — ancient mysteries'},
+  {id:'beach', emoji:'🌊', title:'Black Sea Relax', desc:'Batumi, Ureki, subtropics — sea and palm trees'},
+  {id:'food', emoji:'🍽️', title:'Gastronomic Heaven', desc:'Khinkali, khachapuri, chacha — eat like a Georgian'},
+  {id:'nature', emoji:'🌿', title:'Wild Nature', desc:'Lagodekhi, Borjomi-Kharagauli — untouched forests'},
+  {id:'all', emoji:'✨', title:'Everything at Once', desc:'Mountains + wine + history + sea — perfect for first visit'},
+];
+
+const QUESTIONS = [
+  {id:'name', type:'text', q:'What is your name?', placeholder:'Your name'},
+  {id:'days', type:'options', q:'How many days?', opts:['3 days','5 days','7 days','10 days','14 days']},
+  {id:'group', type:'options', q:'You are traveling:', opts:['Solo 🧍','Couple 👫','Friends 👥','Family with kids 👨‍👩‍👧']},
+  {id:'fitness', type:'options', q:'Physical fitness:', opts:['Love comfort 😅','Average 🚶','Sporty 💪']},
+  {id:'vibe', type:'options', q:'What matters more:', opts:['Peace & quiet 🧘','Adventure 🏃','Mix of both ⚖️']},
+  {id:'accommodation', type:'options', q:'Accommodation:', opts:['Local guesthouse 🏡','Hotel ⭐','Glamping in mountains ⛺']},
+  {id:'food_pref', type:'options', q:'Food preference:', opts:['Georgian only 🇬🇪','Vegetarian 🌱','No preference 🍽️']},
+  {id:'budget', type:'options', q:'Daily budget per person:', opts:['$30-50 💚','$50-100 💛','$100+ 💎']},
+  {id:'startCity', type:'options', q:'Where do you start?', opts:['Tbilisi ✈️','Batumi ✈️','Kutaisi ✈️']},
+  {id:'arrivalDate', type:'date', q:'Arrival date?', hint:'Used for seasonal warnings'},
+];
+
+const LANGUAGES = [
+  {code:'ru', flag:'🇷🇺', name:'Русский'},
+  {code:'en', flag:'🇬🇧', name:'English'},
+  {code:'tr', flag:'🇹🇷', name:'Türkçe'},
+  {code:'ar', flag:'🇸🇦', name:'العربية'},
+  {code:'he', flag:'🇮🇱', name:'עברית'},
+  {code:'fa', flag:'🇮🇷', name:'فارسی'},
+  {code:'de', flag:'🇩🇪', name:'Deutsch'},
+  {code:'it', flag:'🇮🇹', name:'Italiano'},
+  {code:'es', flag:'🇪🇸', name:'Español'},
+];
+
+const PLANNER_I18N = {"en": {"back": "← Back", "h1": "What kind of trip do you want?", "sub": "Choose your style — we'll build your personal Georgia guide", "next": "Next →", "backQ": "← Back", "generate": "Generate Route →", "alertCategory": "Please choose a category", "alertName": "Please enter your name", "alertOption": "Please select an option", "alertLang": "Please choose a language", "loadingTitle": "Chacha is building your route...", "loadingSub": "Personalizing for you — just a moment", "dayWord": "Day", "routeOverview": "📍 Route Overview", "budgetLabel": "💰 Budget estimate:", "economy": "Economy", "mid": "Mid", "luxury": "Luxury", "viewMaps": "🗺️ View on Google Maps →", "downloadPdf": "📥 Download PDF Guide →", "askChacha": "🤖 Ask Chacha AI", "choosePdfLang": "Choose your PDF language", "subPdfLang": "Your guide will be generated in the selected language", "createDownload": "📥 Create & Download PDF", "generating": "Generating your PDF...", "pdfReady": "Your PDF is ready!", "successMsg": "Your Georgia guide has been downloaded, {name}!", "tipSave": "💡 Tip: Save it to your phone — it works without internet in the mountains", "tipOffline": "📴 Offline: No signal in Svaneti and Tusheti — your PDF will save you", "tipEmergency": "🆘 Emergency: All emergency numbers are on the last page", "askChachaRoute": "🤖 Ask Chacha about your route", "backToSite": "← Back to sakartvelo.ai", "footer": "AI Travel Guide to Georgia 🇬🇪", "cats": {"mountains": {"title": "Mountains & Trekking", "desc": "Kazbegi, Svaneti, Tusheti — real mountains for real people"}, "wine": {"title": "Wine Sommelier", "desc": "Kakheti, qvevri, tastings — 8000 years of winemaking"}, "detox": {"title": "Georgian Detox", "desc": "Borjomi mineral springs + sulfur baths + slow travel"}, "yoga": {"title": "Yoga Retreat Tour", "desc": "Yoga studios and retreats across Tbilisi, Batumi & the mountains"}, "history": {"title": "Time Machine", "desc": "Vardzia, Mtskheta, David Gareja — ancient mysteries"}, "beach": {"title": "Black Sea Relax", "desc": "Batumi, Ureki, subtropics — sea and palm trees"}, "food": {"title": "Gastronomic Heaven", "desc": "Khinkali, khachapuri, chacha — eat like a Georgian"}, "nature": {"title": "Wild Nature", "desc": "Lagodekhi, Borjomi-Kharagauli — untouched forests"}, "all": {"title": "Everything at Once", "desc": "Mountains + wine + history + sea — perfect for first visit"}}, "q": {"name": {"q": "What is your name?", "type": "text", "placeholder": "Your name"}, "days": {"q": "How many days?", "type": "options", "opts": ["3 days", "5 days", "7 days", "10 days", "14 days", "30 days"]}, "group": {"q": "You are traveling:", "type": "options", "opts": ["Solo 🧍", "Couple 👫", "Friends 👥", "Family with kids 👨‍👩‍👧"]}, "fitness": {"q": "Physical fitness:", "type": "options", "opts": ["Love comfort 😅", "Average 🚶", "Sporty 💪"]}, "vibe": {"q": "What matters more:", "type": "options", "opts": ["Peace & quiet 🧘", "Adventure 🏃", "Mix of both ⚖️"]}, "accommodation": {"q": "Accommodation:", "type": "options", "opts": ["Local guesthouse 🏡", "Hotel ⭐", "Glamping in mountains ⛺"]}, "food_pref": {"q": "Food preference:", "type": "options", "opts": ["Georgian only 🇬🇪", "Vegetarian 🌱", "No preference 🍽️"]}, "budget": {"q": "Daily budget per person:", "type": "options", "opts": ["$30-50 💚", "$50-100 💛", "$100+ 💎"]}, "startCity": {"q": "Where do you start?", "type": "options", "opts": ["Tbilisi ✈️", "Batumi ✈️", "Kutaisi ✈️"]}, "arrivalDate": {"q": "Arrival date?", "type": "date", "hint": "Used for seasonal warnings"}}, "pdf": {"schedule": "SCHEDULE", "food": "FOOD", "accommodation": "ACCOMMODATION", "morning": "Morning: ", "lunch": "Lunch: ", "dinner": "Dinner: ", "tip": "Tip: ", "packingList": "PACKING LIST", "documents": "DOCUMENTS", "clothes": "CLOTHES", "tech": "TECH", "medicine": "MEDICINE", "foodWater": "FOOD & WATER", "warnings": "IMPORTANT WARNINGS", "routeOverview": "ROUTE OVERVIEW", "budgetEstimate": "BUDGET ESTIMATE", "economy": "Economy", "midRange": "Mid-range", "luxury": "Luxury", "drive": "Drive: ", "coverSubtitle": "YOUR PERSONAL TRAVEL GUIDE", "dayLabel": "DAY", "shopsOnRoute": "SHOPS ON ROUTE"}}, "ru": {"back": "← Назад", "h1": "Какое путешествие вы хотите?", "sub": "Выберите свой стиль — мы соберём для вас личный гид по Грузии", "next": "Далее →", "backQ": "← Назад", "generate": "Построить маршрут →", "alertCategory": "Пожалуйста, выберите категорию", "alertName": "Пожалуйста, введите имя", "alertOption": "Пожалуйста, выберите вариант", "alertLang": "Пожалуйста, выберите язык", "loadingTitle": "Чача строит ваш маршрут...", "loadingSub": "Подбираем персонально для вас — один момент", "dayWord": "День", "routeOverview": "📍 Обзор маршрута", "budgetLabel": "💰 Оценка бюджета:", "economy": "Эконом", "mid": "Средний", "luxury": "Люкс", "viewMaps": "🗺️ Открыть в Google Maps →", "downloadPdf": "📥 Скачать PDF-гид →", "askChacha": "🤖 Спросить Чачу", "choosePdfLang": "Выберите язык PDF", "subPdfLang": "Ваш гид будет создан на выбранном языке", "createDownload": "📥 Создать и скачать PDF", "generating": "Создаём ваш PDF...", "pdfReady": "Ваш PDF готов!", "successMsg": "Ваш гид по Грузии скачан, {name}!", "tipSave": "💡 Совет: сохраните на телефон — работает без интернета в горах", "tipOffline": "📴 Офлайн: нет связи в Сванетии и Тушетии — ваш PDF спасёт вас", "tipEmergency": "🆘 Экстренная помощь: все номера — на последней странице", "askChachaRoute": "🤖 Спросить Чачу о маршруте", "backToSite": "← Назад на sakartvelo.ai", "footer": "AI-гид по Грузии 🇬🇪", "cats": {"mountains": {"title": "Горы и трекинг", "desc": "Казбеги, Сванетия, Тушетия — настоящие горы для настоящих людей"}, "wine": {"title": "Винный сомелье", "desc": "Кахетия, квеври, дегустации — 8000 лет виноделия"}, "detox": {"title": "Грузинский детокс", "desc": "Боржоми + серные бани + неспешные путешествия"}, "yoga": {"title": "Йога-тур", "desc": "Студии и ретриты йоги в Тбилиси, Батуми и горах"}, "history": {"title": "Машина времени", "desc": "Вардзиа, Мцхета, Давид Гареджи — древние тайны"}, "beach": {"title": "Отдых на Чёрном море", "desc": "Батуми, Уреки, субтропики — море и пальмы"}, "food": {"title": "Гастрономический рай", "desc": "Хинкали, хачапури, чача — ешь как грузин"}, "nature": {"title": "Дикая природа", "desc": "Лагодехи, Боржоми-Харагаули — нетронутые леса"}, "all": {"title": "Всё сразу", "desc": "Горы + вино + история + море — идеально для первого визита"}}, "q": {"name": {"q": "Как вас зовут?", "type": "text", "placeholder": "Ваше имя"}, "days": {"q": "Сколько дней?", "type": "options", "opts": ["3 дня", "5 дней", "7 дней", "10 дней", "14 дней", "30 дней"]}, "group": {"q": "Вы путешествуете:", "type": "options", "opts": ["Один(а) 🧍", "Вдвоём 👫", "С друзьями 👥", "С семьёй и детьми 👨‍👩‍👧"]}, "fitness": {"q": "Физическая форма:", "type": "options", "opts": ["Люблю комфорт 😅", "Средняя 🚶", "Спортивная 💪"]}, "vibe": {"q": "Что важнее:", "type": "options", "opts": ["Покой и тишина 🧘", "Приключения 🏃", "И то, и другое ⚖️"]}, "accommodation": {"q": "Проживание:", "type": "options", "opts": ["Местный гестхаус 🏡", "Отель ⭐", "Глэмпинг в горах ⛺"]}, "food_pref": {"q": "Пищевые предпочтения:", "type": "options", "opts": ["Только грузинская 🇬🇪", "Вегетарианская 🌱", "Без предпочтений 🍽️"]}, "budget": {"q": "Бюджет в день на человека:", "type": "options", "opts": ["$30-50 💚", "$50-100 💛", "$100+ 💎"]}, "startCity": {"q": "Откуда начинаете?", "type": "options", "opts": ["Тбилиси ✈️", "Батуми ✈️", "Кутаиси ✈️"]}, "arrivalDate": {"q": "Дата прибытия?", "type": "date", "hint": "Используется для сезонных предупреждений"}}, "pdf": {"schedule": "РАСПИСАНИЕ", "food": "ЕДА", "accommodation": "ПРОЖИВАНИЕ", "morning": "Утро: ", "lunch": "Обед: ", "dinner": "Ужин: ", "tip": "Совет: ", "packingList": "ЧЕК-ЛИСТ СБОРОВ", "documents": "ДОКУМЕНТЫ", "clothes": "ОДЕЖДА", "tech": "ТЕХНИКА", "medicine": "АПТЕЧКА", "foodWater": "ЕДА И ВОДА", "warnings": "ВАЖНЫЕ ПРЕДУПРЕЖДЕНИЯ", "routeOverview": "ОБЗОР МАРШРУТА", "budgetEstimate": "ОЦЕНКА БЮДЖЕТА", "economy": "Эконом", "midRange": "Средний", "luxury": "Люкс", "drive": "В пути: ", "coverSubtitle": "ВАШ ЛИЧНЫЙ ГИД ПО ПУТЕШЕСТВИЮ", "dayLabel": "ДЕНЬ", "shopsOnRoute": "МАГАЗИНЫ НА МАРШРУТЕ"}}, "tr": {"back": "← Geri", "h1": "Nasıl bir seyahat istiyorsun?", "sub": "Tarzını seç — sana özel Gürcistan rehberini hazırlayalım", "next": "İleri →", "backQ": "← Geri", "generate": "Rota Oluştur →", "alertCategory": "Lütfen bir kategori seç", "alertName": "Lütfen adını gir", "alertOption": "Lütfen bir seçenek seç", "alertLang": "Lütfen bir dil seç", "loadingTitle": "Chacha rotanı oluşturuyor...", "loadingSub": "Senin için kişiselleştiriliyor — bir an", "dayWord": "Gün", "routeOverview": "📍 Rota Özeti", "budgetLabel": "💰 Bütçe tahmini:", "economy": "Ekonomik", "mid": "Orta", "luxury": "Lüks", "viewMaps": "🗺️ Google Haritalar'da Gör →", "downloadPdf": "📥 PDF Rehberi İndir →", "askChacha": "🤖 Chacha'ya Sor", "choosePdfLang": "PDF dilini seç", "subPdfLang": "Rehberin seçilen dilde oluşturulacak", "createDownload": "📥 PDF Oluştur ve İndir", "generating": "PDF'in oluşturuluyor...", "pdfReady": "PDF'in hazır!", "successMsg": "Gürcistan rehberin indirildi, {name}!", "tipSave": "💡 İpucu: Telefonuna kaydet — dağlarda internetsiz çalışır", "tipOffline": "📴 Çevrimdışı: Svaneti ve Tuşeti'de sinyal yok — PDF'in seni kurtaracak", "tipEmergency": "🆘 Acil durum: tüm acil numaralar son sayfada", "askChachaRoute": "🤖 Rotan hakkında Chacha'ya sor", "backToSite": "← sakartvelo.ai'ye dön", "footer": "Gürcistan için AI Seyahat Rehberi 🇬🇪", "cats": {"mountains": {"title": "Dağlar ve Trekking", "desc": "Kazbegi, Svaneti, Tuşeti — gerçek insanlar için gerçek dağlar"}, "wine": {"title": "Şarap Sommelier'i", "desc": "Kaheti, küvevri, tadımlar — 8000 yıllık şarapçılık"}, "detox": {"title": "Gürcü Detoksu", "desc": "Borjomi + kükürtlü hamamlar + yavaş seyahat"}, "yoga": {"title": "Yoga Turu", "desc": "Tiflis, Batum ve dağlarda yoga stüdyoları ve retreatler"}, "history": {"title": "Zaman Makinesi", "desc": "Vardzia, Mtshketa, Davit Gareca — antik gizemler"}, "beach": {"title": "Karadeniz'de Dinlenme", "desc": "Batum, Ureki, subtropikal — deniz ve palmiyeler"}, "food": {"title": "Gastronomi Cenneti", "desc": "Hinkali, haçapuri, çaça — bir Gürcü gibi ye"}, "nature": {"title": "Vahşi Doğa", "desc": "Lagodehi, Borjomi-Haragauli — el değmemiş ormanlar"}, "all": {"title": "Hepsi Bir Arada", "desc": "Dağlar + şarap + tarih + deniz — ilk ziyaret için mükemmel"}}, "q": {"name": {"q": "Adın ne?", "type": "text", "placeholder": "Adın"}, "days": {"q": "Kaç gün?", "type": "options", "opts": ["3 gün", "5 gün", "7 gün", "10 gün", "14 gün", "30 gün"]}, "group": {"q": "Nasıl seyahat ediyorsun:", "type": "options", "opts": ["Tek başına 🧍", "Çift 👫", "Arkadaşlarla 👥", "Çocuklu aile 👨‍👩‍👧"]}, "fitness": {"q": "Fiziksel kondisyon:", "type": "options", "opts": ["Konforu severim 😅", "Ortalama 🚶", "Sportif 💪"]}, "vibe": {"q": "Senin için önemli olan:", "type": "options", "opts": ["Huzur ve sessizlik 🧘", "Macera 🏃", "İkisi de ⚖️"]}, "accommodation": {"q": "Konaklama:", "type": "options", "opts": ["Yerel pansiyon 🏡", "Otel ⭐", "Dağlarda glamping ⛺"]}, "food_pref": {"q": "Yemek tercihi:", "type": "options", "opts": ["Sadece Gürcü mutfağı 🇬🇪", "Vejetaryen 🌱", "Fark etmez 🍽️"]}, "budget": {"q": "Kişi başı günlük bütçe:", "type": "options", "opts": ["$30-50 💚", "$50-100 💛", "$100+ 💎"]}, "startCity": {"q": "Nereden başlıyorsun?", "type": "options", "opts": ["Tiflis ✈️", "Batum ✈️", "Kutaisi ✈️"]}, "arrivalDate": {"q": "Varış tarihi?", "type": "date", "hint": "Mevsimsel uyarılar için kullanılır"}}, "pdf": {"schedule": "PROGRAM", "food": "YEMEK", "accommodation": "KONAKLAMA", "morning": "Sabah: ", "lunch": "Öğle: ", "dinner": "Akşam: ", "tip": "İpucu: ", "packingList": "BAVUL LİSTESİ", "documents": "BELGELER", "clothes": "KIYAFETLER", "tech": "TEKNOLOJİ", "medicine": "İLAÇ ÇANTASI", "foodWater": "YİYECEK VE SU", "warnings": "ÖNEMLİ UYARILAR", "routeOverview": "ROTA ÖZETİ", "budgetEstimate": "BÜTÇE TAHMİNİ", "economy": "Ekonomik", "midRange": "Orta", "luxury": "Lüks", "drive": "Yol: ", "coverSubtitle": "KİŞİSEL SEYAHAT REHBERİN", "dayLabel": "GÜN", "shopsOnRoute": "ROTA ÜZERİNDEKİ MAĞAZALAR"}}, "de": {"back": "← Zurück", "h1": "Welche Art von Reise möchtest du?", "sub": "Wähle deinen Stil — wir erstellen deinen persönlichen Georgien-Guide", "next": "Weiter →", "backQ": "← Zurück", "generate": "Route erstellen →", "alertCategory": "Bitte wähle eine Kategorie", "alertName": "Bitte gib deinen Namen ein", "alertOption": "Bitte wähle eine Option", "alertLang": "Bitte wähle eine Sprache", "loadingTitle": "Chacha erstellt deine Route...", "loadingSub": "Wird für dich personalisiert — einen Moment", "dayWord": "Tag", "routeOverview": "📍 Routenübersicht", "budgetLabel": "💰 Budgetschätzung:", "economy": "Sparsam", "mid": "Mittel", "luxury": "Luxus", "viewMaps": "🗺️ In Google Maps ansehen →", "downloadPdf": "📥 PDF-Guide herunterladen →", "askChacha": "🤖 Chacha fragen", "choosePdfLang": "Wähle die PDF-Sprache", "subPdfLang": "Dein Guide wird in der gewählten Sprache erstellt", "createDownload": "📥 PDF erstellen und herunterladen", "generating": "Dein PDF wird erstellt...", "pdfReady": "Dein PDF ist fertig!", "successMsg": "Dein Georgien-Guide wurde heruntergeladen, {name}!", "tipSave": "💡 Tipp: Speichere es auf deinem Handy — funktioniert ohne Internet in den Bergen", "tipOffline": "📴 Offline: Kein Signal in Swanetien und Tuscheti — dein PDF rettet dich", "tipEmergency": "🆘 Notfall: Alle Notrufnummern stehen auf der letzten Seite", "askChachaRoute": "🤖 Chacha zu deiner Route fragen", "backToSite": "← Zurück zu sakartvelo.ai", "footer": "KI-Reiseführer für Georgien 🇬🇪", "cats": {"mountains": {"title": "Berge & Trekking", "desc": "Kasbegi, Swanetien, Tuscheti — echte Berge für echte Menschen"}, "wine": {"title": "Wein-Sommelier", "desc": "Kachetien, Qvevri, Verkostungen — 8000 Jahre Weinbau"}, "detox": {"title": "Georgisches Detox", "desc": "Borjomi + Schwefelbäder + entschleunigtes Reisen"}, "yoga": {"title": "Yoga-Retreat-Tour", "desc": "Yoga-Studios und Retreats in Tiflis, Batumi und den Bergen"}, "history": {"title": "Zeitmaschine", "desc": "Wardsia, Mzcheta, David Gareja — antike Geheimnisse"}, "beach": {"title": "Entspannung am Schwarzen Meer", "desc": "Batumi, Ureki, subtropisch — Meer und Palmen"}, "food": {"title": "Gastronomischer Himmel", "desc": "Chinkali, Chatschapuri, Tscha-Tscha — iss wie ein Georgier"}, "nature": {"title": "Wilde Natur", "desc": "Lagodechi, Borjomi-Charagauli — unberührte Wälder"}, "all": {"title": "Alles auf einmal", "desc": "Berge + Wein + Geschichte + Meer — perfekt für den ersten Besuch"}}, "q": {"name": {"q": "Wie heißt du?", "type": "text", "placeholder": "Dein Name"}, "days": {"q": "Wie viele Tage?", "type": "options", "opts": ["3 Tage", "5 Tage", "7 Tage", "10 Tage", "14 Tage", "30 Tage"]}, "group": {"q": "Du reist:", "type": "options", "opts": ["Allein 🧍", "Zu zweit 👫", "Mit Freunden 👥", "Familie mit Kindern 👨‍👩‍👧"]}, "fitness": {"q": "Körperliche Fitness:", "type": "options", "opts": ["Liebe Komfort 😅", "Durchschnitt 🚶", "Sportlich 💪"]}, "vibe": {"q": "Was ist dir wichtiger:", "type": "options", "opts": ["Ruhe & Stille 🧘", "Abenteuer 🏃", "Beides ⚖️"]}, "accommodation": {"q": "Unterkunft:", "type": "options", "opts": ["Lokales Gästehaus 🏡", "Hotel ⭐", "Glamping in den Bergen ⛺"]}, "food_pref": {"q": "Essenspräferenz:", "type": "options", "opts": ["Nur georgisch 🇬🇪", "Vegetarisch 🌱", "Keine Präferenz 🍽️"]}, "budget": {"q": "Tagesbudget pro Person:", "type": "options", "opts": ["$30-50 💚", "$50-100 💛", "$100+ 💎"]}, "startCity": {"q": "Wo startest du?", "type": "options", "opts": ["Tiflis ✈️", "Batumi ✈️", "Kutaisi ✈️"]}, "arrivalDate": {"q": "Ankunftsdatum?", "type": "date", "hint": "Wird für saisonale Warnungen verwendet"}}, "pdf": {"schedule": "ZEITPLAN", "food": "ESSEN", "accommodation": "UNTERKUNFT", "morning": "Morgen: ", "lunch": "Mittag: ", "dinner": "Abend: ", "tip": "Tipp: ", "packingList": "PACKLISTE", "documents": "DOKUMENTE", "clothes": "KLEIDUNG", "tech": "TECHNIK", "medicine": "MEDIZIN", "foodWater": "ESSEN & WASSER", "warnings": "WICHTIGE WARNUNGEN", "routeOverview": "ROUTENÜBERSICHT", "budgetEstimate": "BUDGETSCHÄTZUNG", "economy": "Sparsam", "midRange": "Mittel", "luxury": "Luxus", "drive": "Fahrt: ", "coverSubtitle": "DEIN PERSÖNLICHER REISEFÜHRER", "dayLabel": "TAG", "shopsOnRoute": "GESCHÄFTE AUF DER ROUTE"}}, "it": {"back": "← Indietro", "h1": "Che tipo di viaggio vuoi?", "sub": "Scegli il tuo stile — creeremo la tua guida personale della Georgia", "next": "Avanti →", "backQ": "← Indietro", "generate": "Genera percorso →", "alertCategory": "Scegli una categoria", "alertName": "Inserisci il tuo nome", "alertOption": "Scegli un'opzione", "alertLang": "Scegli una lingua", "loadingTitle": "Chacha sta creando il tuo percorso...", "loadingSub": "Personalizzazione in corso — un attimo", "dayWord": "Giorno", "routeOverview": "📍 Panoramica del percorso", "budgetLabel": "💰 Stima del budget:", "economy": "Economico", "mid": "Medio", "luxury": "Lusso", "viewMaps": "🗺️ Vedi su Google Maps →", "downloadPdf": "📥 Scarica la guida PDF →", "askChacha": "🤖 Chiedi a Chacha", "choosePdfLang": "Scegli la lingua del PDF", "subPdfLang": "La tua guida sarà generata nella lingua selezionata", "createDownload": "📥 Crea e scarica il PDF", "generating": "Generazione del PDF in corso...", "pdfReady": "Il tuo PDF è pronto!", "successMsg": "La tua guida della Georgia è stata scaricata, {name}!", "tipSave": "💡 Consiglio: salvala sul telefono — funziona senza internet in montagna", "tipOffline": "📴 Offline: nessun segnale in Svaneti e Tusheti — il tuo PDF ti salverà", "tipEmergency": "🆘 Emergenza: tutti i numeri di emergenza sono nell'ultima pagina", "askChachaRoute": "🤖 Chiedi a Chacha del tuo percorso", "backToSite": "← Torna a sakartvelo.ai", "footer": "Guida di viaggio AI per la Georgia 🇬🇪", "cats": {"mountains": {"title": "Montagne e Trekking", "desc": "Kazbegi, Svaneti, Tusheti — montagne vere per persone vere"}, "wine": {"title": "Sommelier del vino", "desc": "Kakheti, qvevri, degustazioni — 8000 anni di vinificazione"}, "detox": {"title": "Detox georgiano", "desc": "Borjomi + bagni di zolfo + viaggio lento"}, "yoga": {"title": "Tour di Yoga Retreat", "desc": "Studi e ritiri yoga a Tbilisi, Batumi e in montagna"}, "history": {"title": "Macchina del tempo", "desc": "Vardzia, Mtskheta, David Gareja — antichi misteri"}, "beach": {"title": "Relax sul Mar Nero", "desc": "Batumi, Ureki, subtropicale — mare e palme"}, "food": {"title": "Paradiso gastronomico", "desc": "Khinkali, khachapuri, chacha — mangia come un georgiano"}, "nature": {"title": "Natura selvaggia", "desc": "Lagodekhi, Borjomi-Kharagauli — foreste incontaminate"}, "all": {"title": "Tutto in uno", "desc": "Montagne + vino + storia + mare — perfetto per la prima visita"}}, "q": {"name": {"q": "Come ti chiami?", "type": "text", "placeholder": "Il tuo nome"}, "days": {"q": "Quanti giorni?", "type": "options", "opts": ["3 giorni", "5 giorni", "7 giorni", "10 giorni", "14 giorni", "30 giorni"]}, "group": {"q": "Viaggi:", "type": "options", "opts": ["Da solo/a 🧍", "In coppia 👫", "Con amici 👥", "Famiglia con bambini 👨‍👩‍👧"]}, "fitness": {"q": "Forma fisica:", "type": "options", "opts": ["Amo il comfort 😅", "Nella media 🚶", "Sportivo 💪"]}, "vibe": {"q": "Cosa conta di più:", "type": "options", "opts": ["Pace e tranquillità 🧘", "Avventura 🏃", "Un mix di entrambi ⚖️"]}, "accommodation": {"q": "Alloggio:", "type": "options", "opts": ["Guesthouse locale 🏡", "Hotel ⭐", "Glamping in montagna ⛺"]}, "food_pref": {"q": "Preferenza alimentare:", "type": "options", "opts": ["Solo georgiana 🇬🇪", "Vegetariana 🌱", "Nessuna preferenza 🍽️"]}, "budget": {"q": "Budget giornaliero a persona:", "type": "options", "opts": ["$30-50 💚", "$50-100 💛", "$100+ 💎"]}, "startCity": {"q": "Da dove parti?", "type": "options", "opts": ["Tbilisi ✈️", "Batumi ✈️", "Kutaisi ✈️"]}, "arrivalDate": {"q": "Data di arrivo?", "type": "date", "hint": "Usata per gli avvisi stagionali"}}, "pdf": {"schedule": "PROGRAMMA", "food": "CIBO", "accommodation": "ALLOGGIO", "morning": "Mattina: ", "lunch": "Pranzo: ", "dinner": "Cena: ", "tip": "Consiglio: ", "packingList": "LISTA VALIGIA", "documents": "DOCUMENTI", "clothes": "ABBIGLIAMENTO", "tech": "TECNOLOGIA", "medicine": "MEDICINE", "foodWater": "CIBO E ACQUA", "warnings": "AVVISI IMPORTANTI", "routeOverview": "PANORAMICA DEL PERCORSO", "budgetEstimate": "STIMA DEL BUDGET", "economy": "Economico", "midRange": "Medio", "luxury": "Lusso", "drive": "Percorso: ", "coverSubtitle": "LA TUA GUIDA DI VIAGGIO PERSONALE", "dayLabel": "GIORNO", "shopsOnRoute": "NEGOZI SUL PERCORSO"}}, "es": {"back": "← Atrás", "h1": "¿Qué tipo de viaje quieres?", "sub": "Elige tu estilo — crearemos tu guía personal de Georgia", "next": "Siguiente →", "backQ": "← Atrás", "generate": "Generar ruta →", "alertCategory": "Por favor elige una categoría", "alertName": "Por favor introduce tu nombre", "alertOption": "Por favor elige una opción", "alertLang": "Por favor elige un idioma", "loadingTitle": "Chacha está creando tu ruta...", "loadingSub": "Personalizando para ti — un momento", "dayWord": "Día", "routeOverview": "📍 Resumen de la ruta", "budgetLabel": "💰 Estimación de presupuesto:", "economy": "Económico", "mid": "Medio", "luxury": "Lujo", "viewMaps": "🗺️ Ver en Google Maps →", "downloadPdf": "📥 Descargar guía PDF →", "askChacha": "🤖 Preguntar a Chacha", "choosePdfLang": "Elige el idioma del PDF", "subPdfLang": "Tu guía se generará en el idioma seleccionado", "createDownload": "📥 Crear y descargar PDF", "generating": "Generando tu PDF...", "pdfReady": "¡Tu PDF está listo!", "successMsg": "Tu guía de Georgia se ha descargado, {name}!", "tipSave": "💡 Consejo: guárdalo en tu teléfono — funciona sin internet en las montañas", "tipOffline": "📴 Sin conexión: no hay señal en Svaneti y Tusheti — tu PDF te salvará", "tipEmergency": "🆘 Emergencia: todos los números de emergencia están en la última página", "askChachaRoute": "🤖 Preguntar a Chacha sobre tu ruta", "backToSite": "← Volver a sakartvelo.ai", "footer": "Guía de viaje con IA para Georgia 🇬🇪", "cats": {"mountains": {"title": "Montañas y senderismo", "desc": "Kazbegi, Svaneti, Tusheti — montañas de verdad para gente de verdad"}, "wine": {"title": "Sommelier de vino", "desc": "Kakheti, qvevri, catas — 8000 años de vinicultura"}, "detox": {"title": "Detox georgiano", "desc": "Borjomi + baños de azufre + viaje lento"}, "yoga": {"title": "Tour de Retiro de Yoga", "desc": "Estudios y retiros de yoga en Tiflis, Batumi y las montañas"}, "history": {"title": "Máquina del tiempo", "desc": "Vardzia, Mtskheta, David Gareja — misterios antiguos"}, "beach": {"title": "Relax en el Mar Negro", "desc": "Batumi, Ureki, subtrópico — mar y palmeras"}, "food": {"title": "Paraíso gastronómico", "desc": "Khinkali, khachapuri, chacha — come como un georgiano"}, "nature": {"title": "Naturaleza salvaje", "desc": "Lagodekhi, Borjomi-Kharagauli — bosques vírgenes"}, "all": {"title": "Todo a la vez", "desc": "Montañas + vino + historia + mar — perfecto para la primera visita"}}, "q": {"name": {"q": "¿Cómo te llamas?", "type": "text", "placeholder": "Tu nombre"}, "days": {"q": "¿Cuántos días?", "type": "options", "opts": ["3 días", "5 días", "7 días", "10 días", "14 días", "30 días"]}, "group": {"q": "Viajas:", "type": "options", "opts": ["Solo/a 🧍", "En pareja 👫", "Con amigos 👥", "Familia con niños 👨‍👩‍👧"]}, "fitness": {"q": "Condición física:", "type": "options", "opts": ["Amo la comodidad 😅", "Media 🚶", "Deportista 💪"]}, "vibe": {"q": "Qué importa más:", "type": "options", "opts": ["Paz y tranquilidad 🧘", "Aventura 🏃", "Un poco de ambos ⚖️"]}, "accommodation": {"q": "Alojamiento:", "type": "options", "opts": ["Casa de huéspedes local 🏡", "Hotel ⭐", "Glamping en montaña ⛺"]}, "food_pref": {"q": "Preferencia de comida:", "type": "options", "opts": ["Solo georgiana 🇬🇪", "Vegetariana 🌱", "Sin preferencia 🍽️"]}, "budget": {"q": "Presupuesto diario por persona:", "type": "options", "opts": ["$30-50 💚", "$50-100 💛", "$100+ 💎"]}, "startCity": {"q": "¿Desde dónde empiezas?", "type": "options", "opts": ["Tiflis ✈️", "Batumi ✈️", "Kutaisi ✈️"]}, "arrivalDate": {"q": "¿Fecha de llegada?", "type": "date", "hint": "Se usa para avisos estacionales"}}, "pdf": {"schedule": "HORARIO", "food": "COMIDA", "accommodation": "ALOJAMIENTO", "morning": "Mañana: ", "lunch": "Almuerzo: ", "dinner": "Cena: ", "tip": "Consejo: ", "packingList": "LISTA DE EQUIPAJE", "documents": "DOCUMENTOS", "clothes": "ROPA", "tech": "TECNOLOGÍA", "medicine": "MEDICINAS", "foodWater": "COMIDA Y AGUA", "warnings": "AVISOS IMPORTANTES", "routeOverview": "RESUMEN DE LA RUTA", "budgetEstimate": "ESTIMACIÓN DE PRESUPUESTO", "economy": "Económico", "midRange": "Medio", "luxury": "Lujo", "drive": "Trayecto: ", "coverSubtitle": "TU GUÍA DE VIAJE PERSONAL", "dayLabel": "DÍA", "shopsOnRoute": "TIENDAS EN LA RUTA"}}, "ar": {"back": "← رجوع", "h1": "ما نوع الرحلة التي تريدها؟", "sub": "اختر أسلوبك — سنعدّ لك دليل جورجيا الشخصي", "next": "التالي ←", "backQ": "← رجوع", "generate": "إنشاء المسار ←", "alertCategory": "يرجى اختيار فئة", "alertName": "يرجى إدخال اسمك", "alertOption": "يرجى اختيار خيار", "alertLang": "يرجى اختيار لغة", "loadingTitle": "تشاتشا يبني مسارك...", "loadingSub": "يتم التخصيص من أجلك — لحظة واحدة", "dayWord": "يوم", "routeOverview": "📍 نظرة عامة على المسار", "budgetLabel": "💰 تقدير الميزانية:", "economy": "اقتصادي", "mid": "متوسط", "luxury": "فاخر", "viewMaps": "🗺️ عرض في خرائط جوجل ←", "downloadPdf": "📥 تحميل دليل PDF ←", "askChacha": "🤖 اسأل تشاتشا", "choosePdfLang": "اختر لغة PDF", "subPdfLang": "سيتم إنشاء دليلك باللغة المختارة", "createDownload": "📥 إنشاء وتحميل PDF", "generating": "جارٍ إنشاء ملف PDF...", "pdfReady": "ملف PDF الخاص بك جاهز!", "successMsg": "تم تحميل دليل جورجيا الخاص بك، {name}!", "tipSave": "💡 نصيحة: احفظه على هاتفك — يعمل بدون إنترنت في الجبال", "tipOffline": "📴 دون اتصال: لا توجد إشارة في سفانيتي وتوشيتي — ملف PDF سينقذك", "tipEmergency": "🆘 الطوارئ: جميع أرقام الطوارئ في الصفحة الأخيرة", "askChachaRoute": "🤖 اسأل تشاتشا عن مسارك", "backToSite": "← العودة إلى sakartvelo.ai", "footer": "دليل سفر بالذكاء الاصطناعي لجورجيا 🇬🇪", "cats": {"mountains": {"title": "الجبال والتنزه", "desc": "كازبيغي، سفانيتي، توشيتي — جبال حقيقية لأناس حقيقيين"}, "wine": {"title": "خبير النبيذ", "desc": "كاختي، كفيفري، تذوق — 8000 عام من صناعة النبيذ"}, "detox": {"title": "ديتوكس جورجي", "desc": "بورجومي + حمامات كبريتية + سفر هادئ"}, "yoga": {"title": "جولة معتكف اليوغا", "desc": "استوديوهات ومعتكفات يوغا في تبليسي وباتومي والجبال"}, "history": {"title": "آلة الزمن", "desc": "فردزيا، متسخيتا، ديفيد غاريجا — أسرار قديمة"}, "beach": {"title": "استرخاء على البحر الأسود", "desc": "باتومي، أوريكي، شبه استوائي — بحر ونخيل"}, "food": {"title": "جنة الذواقة", "desc": "خينكالي، خاتشابوري، تشاتشا — كل مثل الجورجي"}, "nature": {"title": "طبيعة برية", "desc": "لاغوديخي، بورجومي-خاراغاولي — غابات بكر"}, "all": {"title": "كل شيء دفعة واحدة", "desc": "جبال + نبيذ + تاريخ + بحر — مثالي للزيارة الأولى"}}, "q": {"name": {"q": "ما اسمك؟", "type": "text", "placeholder": "اسمك"}, "days": {"q": "كم يومًا؟", "type": "options", "opts": ["3 أيام", "5 أيام", "7 أيام", "10 أيام", "14 يومًا", "30 يومًا"]}, "group": {"q": "أنت تسافر:", "type": "options", "opts": ["بمفردي 🧍", "مع شريك 👫", "مع أصدقاء 👥", "عائلة مع أطفال 👨‍👩‍👧"]}, "fitness": {"q": "اللياقة البدنية:", "type": "options", "opts": ["أحب الراحة 😅", "متوسطة 🚶", "رياضي 💪"]}, "vibe": {"q": "ما الأهم بالنسبة لك:", "type": "options", "opts": ["الهدوء والسكينة 🧘", "المغامرة 🏃", "مزيج من الاثنين ⚖️"]}, "accommodation": {"q": "الإقامة:", "type": "options", "opts": ["بيت ضيافة محلي 🏡", "فندق ⭐", "تخييم فاخر في الجبال ⛺"]}, "food_pref": {"q": "تفضيل الطعام:", "type": "options", "opts": ["جورجي فقط 🇬🇪", "نباتي 🌱", "لا تفضيل 🍽️"]}, "budget": {"q": "الميزانية اليومية للفرد:", "type": "options", "opts": ["30-50$ 💚", "50-100$ 💛", "100$+ 💎"]}, "startCity": {"q": "من أين تبدأ؟", "type": "options", "opts": ["تبليسي ✈️", "باتومي ✈️", "كوتايسي ✈️"]}, "arrivalDate": {"q": "تاريخ الوصول؟", "type": "date", "hint": "يُستخدم لتحذيرات موسمية"}}, "pdf": {"schedule": "الجدول الزمني", "food": "الطعام", "accommodation": "الإقامة", "morning": "الصباح: ", "lunch": "الغداء: ", "dinner": "العشاء: ", "tip": "نصيحة: ", "packingList": "قائمة الحقائب", "documents": "الوثائق", "clothes": "الملابس", "tech": "التقنية", "medicine": "الأدوية", "foodWater": "الطعام والماء", "warnings": "تحذيرات مهمة", "routeOverview": "نظرة عامة على المسار", "budgetEstimate": "تقدير الميزانية", "economy": "اقتصادي", "midRange": "متوسط", "luxury": "فاخر", "drive": "القيادة: ", "coverSubtitle": "دليل سفرك الشخصي", "dayLabel": "يوم", "shopsOnRoute": "متاجر على المسار"}}, "he": {"back": "← חזרה", "h1": "איזה סוג טיול אתה רוצה?", "sub": "בחר את הסגנון שלך — ניצור עבורך מדריך אישי לגאורגיה", "next": "הבא ←", "backQ": "← חזרה", "generate": "צור מסלול ←", "alertCategory": "אנא בחר קטגוריה", "alertName": "אנא הזן את שמך", "alertOption": "אנא בחר אפשרות", "alertLang": "אנא בחר שפה", "loadingTitle": "צ'אצ'ה בונה את המסלול שלך...", "loadingSub": "מתאים במיוחד בשבילך — רגע אחד", "dayWord": "יום", "routeOverview": "📍 סקירת מסלול", "budgetLabel": "💰 הערכת תקציב:", "economy": "חסכוני", "mid": "בינוני", "luxury": "יוקרתי", "viewMaps": "🗺️ צפה במפות גוגל ←", "downloadPdf": "📥 הורד מדריך PDF ←", "askChacha": "🤖 שאל את צ'אצ'ה", "choosePdfLang": "בחר שפת PDF", "subPdfLang": "המדריך שלך ייווצר בשפה שנבחרה", "createDownload": "📥 צור והורד PDF", "generating": "יוצר את ה-PDF שלך...", "pdfReady": "ה-PDF שלך מוכן!", "successMsg": "מדריך גאורגיה שלך הורד, {name}!", "tipSave": "💡 טיפ: שמור בטלפון שלך — עובד ללא אינטרנט בהרים", "tipOffline": "📴 אופליין: אין קליטה בסוואנטי ובטושטי — ה-PDF שלך יציל אותך", "tipEmergency": "🆘 חירום: כל מספרי החירום נמצאים בעמוד האחרון", "askChachaRoute": "🤖 שאל את צ'אצ'ה על המסלול שלך", "backToSite": "← חזרה ל-sakartvelo.ai", "footer": "מדריך טיולים מבוסס AI לגאורגיה 🇬🇪", "cats": {"mountains": {"title": "הרים וטרקים", "desc": "קזבגי, סוואנטי, טושטי — הרים אמיתיים לאנשים אמיתיים"}, "wine": {"title": "סומלייה יין", "desc": "קחתי, קוורי, טעימות — 8000 שנות ייצור יין"}, "detox": {"title": "דטוקס גאורגי", "desc": "בורג'ומי + אמבטיות גופרית + טיול איטי"}, "yoga": {"title": "סיור ריטריט יוגה", "desc": "סטודיו וריטריטים ליוגה בטביליסי, באטומי וההרים"}, "history": {"title": "מכונת זמן", "desc": "וארדזיה, מצחתה, דוד גארג'ה — מסתורין עתיקים"}, "beach": {"title": "הרפיה על הים השחור", "desc": "באטומי, אורקי, סובטרופי — ים ודקלים"}, "food": {"title": "גן עדן גסטרונומי", "desc": "חינקלי, חצ'פורי, צ'אצ'ה — אכול כמו גאורגי"}, "nature": {"title": "טבע פראי", "desc": "לגודחי, בורג'ומי-חרגאולי — יערות בתוליים"}, "all": {"title": "הכל ביחד", "desc": "הרים + יין + היסטוריה + ים — מושלם לביקור ראשון"}}, "q": {"name": {"q": "מה שמך?", "type": "text", "placeholder": "השם שלך"}, "days": {"q": "כמה ימים?", "type": "options", "opts": ["3 ימים", "5 ימים", "7 ימים", "10 ימים", "14 ימים", "30 ימים"]}, "group": {"q": "אתה מטייל:", "type": "options", "opts": ["לבד 🧍", "בזוגיות 👫", "עם חברים 👥", "משפחה עם ילדים 👨‍👩‍👧"]}, "fitness": {"q": "כושר גופני:", "type": "options", "opts": ["אוהב נוחות 😅", "ממוצע 🚶", "ספורטיבי 💪"]}, "vibe": {"q": "מה חשוב יותר:", "type": "options", "opts": ["שקט ורוגע 🧘", "הרפתקאות 🏃", "שילוב של שניהם ⚖️"]}, "accommodation": {"q": "לינה:", "type": "options", "opts": ["בית הארחה מקומי 🏡", "מלון ⭐", "גלמפינג בהרים ⛺"]}, "food_pref": {"q": "העדפת אוכל:", "type": "options", "opts": ["גאורגי בלבד 🇬🇪", "צמחוני 🌱", "אין העדפה 🍽️"]}, "budget": {"q": "תקציב יומי לאדם:", "type": "options", "opts": ["30-50$ 💚", "50-100$ 💛", "100$+ 💎"]}, "startCity": {"q": "מאיפה אתה מתחיל?", "type": "options", "opts": ["טביליסי ✈️", "באטומי ✈️", "קוטאיסי ✈️"]}, "arrivalDate": {"q": "תאריך הגעה?", "type": "date", "hint": "משמש לאזהרות עונתיות"}}, "pdf": {"schedule": "לוח זמנים", "food": "אוכל", "accommodation": "לינה", "morning": "בוקר: ", "lunch": "צהריים: ", "dinner": "ערב: ", "tip": "טיפ: ", "packingList": "רשימת אריזה", "documents": "מסמכים", "clothes": "בגדים", "tech": "טכנולוגיה", "medicine": "תרופות", "foodWater": "אוכל ומים", "warnings": "אזהרות חשובות", "routeOverview": "סקירת מסלול", "budgetEstimate": "הערכת תקציב", "economy": "חסכוני", "midRange": "בינוני", "luxury": "יוקרתי", "drive": "נסיעה: ", "coverSubtitle": "מדריך הטיולים האישי שלך", "dayLabel": "יום", "shopsOnRoute": "חנויות במסלול"}}, "fa": {"back": "← بازگشت", "h1": "چه نوع سفری می‌خواهی؟", "sub": "سبک خودت را انتخاب کن — راهنمای شخصی گرجستان را برایت می‌سازیم", "next": "بعدی ←", "backQ": "← بازگشت", "generate": "ساخت مسیر ←", "alertCategory": "لطفاً یک دسته انتخاب کن", "alertName": "لطفاً نامت را وارد کن", "alertOption": "لطفاً یک گزینه انتخاب کن", "alertLang": "لطفاً یک زبان انتخاب کن", "loadingTitle": "چاچا در حال ساخت مسیر توست...", "loadingSub": "در حال شخصی‌سازی برای تو — یک لحظه", "dayWord": "روز", "routeOverview": "📍 مرور مسیر", "budgetLabel": "💰 برآورد بودجه:", "economy": "اقتصادی", "mid": "متوسط", "luxury": "لوکس", "viewMaps": "🗺️ نمایش در گوگل مپ ←", "downloadPdf": "📥 دانلود راهنمای PDF ←", "askChacha": "🤖 از چاچا بپرس", "choosePdfLang": "زبان PDF را انتخاب کن", "subPdfLang": "راهنمای تو به زبان انتخابی ساخته می‌شود", "createDownload": "📥 ساخت و دانلود PDF", "generating": "در حال ساخت PDF تو...", "pdfReady": "PDF تو آماده است!", "successMsg": "راهنمای گرجستان تو دانلود شد، {name}!", "tipSave": "💡 نکته: آن را در گوشی‌ات ذخیره کن — بدون اینترنت در کوهستان کار می‌کند", "tipOffline": "📴 آفلاین: در سوانتی و توشتی سیگنال نیست — PDF تو نجاتت می‌دهد", "tipEmergency": "🆘 اورژانس: همه شماره‌های اضطراری در صفحه آخر است", "askChachaRoute": "🤖 از چاچا درباره مسیرت بپرس", "backToSite": "← بازگشت به sakartvelo.ai", "footer": "راهنمای سفر هوش‌مصنوعی گرجستان 🇬🇪", "cats": {"mountains": {"title": "کوهستان و پیاده‌روی", "desc": "کازبگی، سوانتی، توشتی — کوه‌های واقعی برای آدم‌های واقعی"}, "wine": {"title": "کارشناس شراب", "desc": "کاختی، کوهوری، چشیدن — 8000 سال شراب‌سازی"}, "detox": {"title": "دیتاکس گرجی", "desc": "بورجومی + حمام‌های گوگردی + سفر آرام"}, "yoga": {"title": "تور اقامتگاه یوگا", "desc": "استودیوها و اقامتگاه‌های یوگا در تفلیس، باتومی و کوهستان"}, "history": {"title": "ماشین زمان", "desc": "واردزیا، متسخیتا، داوید گارجا — رازهای باستانی"}, "beach": {"title": "آرامش در دریای سیاه", "desc": "باتومی، اورکی، نیمه‌گرمسیری — دریا و نخل"}, "food": {"title": "بهشت غذا", "desc": "خینکالی، خاچاپوری، چاچا — مثل یک گرجی غذا بخور"}, "nature": {"title": "طبیعت وحشی", "desc": "لاگودخی، بورجومی-خاراگائولی — جنگل‌های دست‌نخورده"}, "all": {"title": "همه چیز با هم", "desc": "کوه + شراب + تاریخ + دریا — عالی برای اولین سفر"}}, "q": {"name": {"q": "اسمت چیست؟", "type": "text", "placeholder": "اسم تو"}, "days": {"q": "چند روز؟", "type": "options", "opts": ["3 روز", "5 روز", "7 روز", "10 روز", "14 روز", "30 روز"]}, "group": {"q": "سفرت را با چه کسی می‌روی:", "type": "options", "opts": ["تنها 🧍", "دو نفره 👫", "با دوستان 👥", "خانواده با بچه 👨‍👩‍👧"]}, "fitness": {"q": "آمادگی جسمی:", "type": "options", "opts": ["راحتی را دوست دارم 😅", "متوسط 🚶", "ورزشکار 💪"]}, "vibe": {"q": "چه چیزی مهم‌تر است:", "type": "options", "opts": ["آرامش و سکوت 🧘", "ماجراجویی 🏃", "ترکیبی از هر دو ⚖️"]}, "accommodation": {"q": "اقامت:", "type": "options", "opts": ["مهمان‌خانه محلی 🏡", "هتل ⭐", "گلمپینگ در کوهستان ⛺"]}, "food_pref": {"q": "ترجیح غذایی:", "type": "options", "opts": ["فقط گرجی 🇬🇪", "گیاه‌خواری 🌱", "بدون ترجیح 🍽️"]}, "budget": {"q": "بودجه روزانه هر نفر:", "type": "options", "opts": ["30-50$ 💚", "50-100$ 💛", "100$+ 💎"]}, "startCity": {"q": "از کجا شروع می‌کنی؟", "type": "options", "opts": ["تفلیس ✈️", "باتومی ✈️", "کوتایسی ✈️"]}, "arrivalDate": {"q": "تاریخ ورود؟", "type": "date", "hint": "برای هشدارهای فصلی استفاده می‌شود"}}, "pdf": {"schedule": "برنامه زمانی", "food": "غذا", "accommodation": "اقامت", "morning": "صبح: ", "lunch": "ناهار: ", "dinner": "شام: ", "tip": "نکته: ", "packingList": "چک‌لیست بار سفر", "documents": "مدارک", "clothes": "لباس", "tech": "وسایل فناوری", "medicine": "دارو", "foodWater": "غذا و آب", "warnings": "هشدارهای مهم", "routeOverview": "مرور مسیر", "budgetEstimate": "برآورد بودجه", "economy": "اقتصادی", "midRange": "متوسط", "luxury": "لوکس", "drive": "مسیر رانندگی: ", "coverSubtitle": "راهنمای سفر شخصی تو", "dayLabel": "روز", "shopsOnRoute": "فروشگاه‌های مسیر"}}};
+
+const EMERGENCY = {
+  ru: {title:'ЭКСТРЕННЫЕ НОМЕРА', main:'ГЛАВНЫЙ НОМЕР', note:'(полиция + скорая + пожарные)', amb:'Скорая', pol:'Полиция', fire:'Пожарные', priv:'Частная скорая', tour:'Горячая линия туризма', ins:'Страховка Aldagi', embTitle:'ПОСОЛЬСТВА В ТБИЛИСИ'},
+  en: {title:'EMERGENCY NUMBERS', main:'MAIN NUMBER', note:'(police + ambulance + fire)', amb:'Ambulance', pol:'Police', fire:'Fire', priv:'Private ambulance', tour:'Tourism hotline', ins:'Insurance Aldagi', embTitle:'EMBASSIES IN TBILISI'},
+  tr: {title:'ACİL NUMARALAR', main:'ANA NUMARA', note:'(polis + ambulans + itfaiye)', amb:'Ambulans', pol:'Polis', fire:'İtfaiye', priv:'Özel ambulans', tour:'Turizm hattı', ins:'Sigorta Aldagi', embTitle:'TİFLİS\'TEKİ BÜYÜKELÇILIKLERI'},
+  de: {title:'NOTRUFNUMMERN', main:'HAUPTNUMMER', note:'(Polizei + Krankenwagen + Feuerwehr)', amb:'Krankenwagen', pol:'Polizei', fire:'Feuerwehr', priv:'Privater Krankenwagen', tour:'Tourismushotline', ins:'Versicherung Aldagi', embTitle:'BOTSCHAFTEN IN TIFLIS'},
+  it: {title:'NUMERI DI EMERGENZA', main:'NUMERO PRINCIPALE', note:'(polizia + ambulanza + vigili del fuoco)', amb:'Ambulanza', pol:'Polizia', fire:'Vigili del fuoco', priv:'Ambulanza privata', tour:'Hotline turismo', ins:'Assicurazione Aldagi', embTitle:'AMBASCIATE A TBILISI'},
+  es: {title:'NÚMEROS DE EMERGENCIA', main:'NÚMERO PRINCIPAL', note:'(policía + ambulancia + bomberos)', amb:'Ambulancia', pol:'Policía', fire:'Bomberos', priv:'Ambulancia privada', tour:'Línea de turismo', ins:'Seguro Aldagi', embTitle:'EMBAJADAS EN TIFLIS'},
+  ar: {title:'أرقام الطوارئ', main:'الرقم الرئيسي', note:'(شرطة + إسعاف + إطفاء)', amb:'إسعاف', pol:'شرطة', fire:'إطفاء', priv:'إسعاف خاص', tour:'خط السياحة الساخن', ins:'تأمين Aldagi', embTitle:'السفارات في تبليسي'},
+  he: {title:'מספרי חירום', main:'המספר הראשי', note:'(משטרה + אמבולנס + כבאים)', amb:'אמבולנס', pol:'משטרה', fire:'כבאים', priv:'אמבולנס פרטי', tour:'קו חם לתיירים', ins:'ביטוח Aldagi', embTitle:'שגרירויות בטביליסי'},
+  fa: {title:'شماره‌های اضطراری', main:'شماره اصلی', note:'(پلیس + آمبولانس + آتش‌نشانی)', amb:'آمبولانس', pol:'پلیس', fire:'آتش‌نشانی', priv:'آمبولانس خصوصی', tour:'خط کمک گردشگری', ins:'بیمه Aldagi', embTitle:'سفارت‌خانه‌ها در تفلیس'},
+};
+
+const EMBASSIES = [
+  {country:'Russia / Россия', phone:'+995 32 298 09 09'},
+  {country:'United Kingdom', phone:'+995 32 227 47 47'},
+  {country:'Germany / Deutschland', phone:'+995 32 243 93 00'},
+  {country:'Israel / ישראל', phone:'+995 32 296 53 31'},
+  {country:'Iran / ایران', phone:'+995 32 299 77 11'},
+  {country:'Turkey / Türkiye', phone:'+995 32 225 20 72'},
+  {country:'Italy / Italia', phone:'+995 32 236 50 90'},
+  {country:'Spain / España', phone:'+995 32 292 20 47'},
+  {country:'Saudi Arabia', phone:'+995 32 220 80 00'},
+];
+
+// ══════════════════════════════════════
+// STATE
+// ══════════════════════════════════════
+let answers = {};
+let currentQ = 0;
+let uiLang = 'en';
+let selectedLang = 'en';
+let generatedRoute = null;
+
+// ══════════════════════════════════════
+// LANGUAGE
+// ══════════════════════════════════════
+function detectLang() {
+  const validCodes = LANGUAGES.map(l => l.code);
+  let saved = null;
+  try { saved = localStorage.getItem('sak_lang'); } catch(e) {}
+  if (saved && validCodes.indexOf(saved) !== -1) return saved;
+  const nav = (navigator.language || 'en').slice(0,2).toLowerCase();
+  if (validCodes.indexOf(nav) !== -1) return nav;
+  return 'en';
+}
+
+function t() { return PLANNER_I18N[uiLang] || PLANNER_I18N.en; }
+
+function applyStaticTexts() {
+  const tr = t();
+  const isRTL = (uiLang === 'ar' || uiLang === 'he' || uiLang === 'fa');
+  document.documentElement.setAttribute('lang', uiLang);
+  document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
+  document.getElementById('backLink').textContent = tr.back;
+  document.getElementById('s1Title').textContent = tr.h1;
+  document.getElementById('s1Sub').textContent = tr.sub;
+  document.getElementById('s1NextBtn').textContent = tr.next;
+  document.getElementById('s3Title').textContent = tr.loadingTitle;
+  document.getElementById('s3Sub').textContent = tr.loadingSub;
+  document.getElementById('s4DownloadBtn').textContent = tr.downloadPdf;
+  document.getElementById('s4AskBtn').textContent = tr.askChacha;
+  document.getElementById('s5Title').textContent = tr.choosePdfLang;
+  document.getElementById('s5Sub').textContent = tr.subPdfLang;
+  document.getElementById('downloadBtn').textContent = tr.createDownload;
+  document.getElementById('pdfLoading').textContent = tr.generating;
+  document.getElementById('s6Title').textContent = tr.pdfReady;
+  document.getElementById('s6Tip1').innerHTML = '<strong>' + tr.tipSave.split(':')[0] + ':</strong>' + tr.tipSave.split(':').slice(1).join(':');
+  document.getElementById('s6Tip2').innerHTML = '<strong>' + tr.tipOffline.split(':')[0] + ':</strong>' + tr.tipOffline.split(':').slice(1).join(':');
+  document.getElementById('s6Tip3').innerHTML = '<strong>' + tr.tipEmergency.split(':')[0] + ':</strong>' + tr.tipEmergency.split(':').slice(1).join(':');
+  document.getElementById('s6AskBtn').textContent = tr.askChachaRoute;
+  document.getElementById('s6BackBtn').textContent = tr.backToSite;
+  document.getElementById('siteFooter').innerHTML = '<a href="https://sakartvelo.ai">sakartvelo.ai</a> — ' + tr.footer;
+}
+
+// ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  uiLang = detectLang();
+  selectedLang = uiLang;
+  applyStaticTexts();
+  renderCategories();
+  renderLangs();
+  initTheme();
+  applyUrlPrefill();
+});
+
+function applyUrlPrefill() {
+  // Позволяет SEO-страницам вида /planner/kazbegi-mountain-trek/ вести сюда
+  // с уже выбранной категорией — meньше трения для пользователя.
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const cat = params.get('category');
+    if (cat && CATEGORIES.some(c => c.id === cat)) {
+      const el = document.querySelector(`.cat-card[data-id="${cat}"]`);
+      if (el) selectCat(cat, el);
+    }
+    const days = params.get('days');
+    if (days) answers.days = days;
+  } catch (e) { /* некритично */ }
+}
+
+function initTheme() {
+  const saved = localStorage.getItem('sak_theme') || 'light';
+  if (saved === 'dark') document.body.setAttribute('data-theme','dark');
+  document.getElementById('themeBtn').onclick = () => {
+    const isDark = document.body.getAttribute('data-theme') === 'dark';
+    document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    document.getElementById('themeBtn').textContent = isDark ? '🌙' : '☀️';
+    localStorage.setItem('sak_theme', isDark ? 'light' : 'dark');
+  };
+}
+
+function renderCategories() {
+  const tr = t();
+  const grid = document.getElementById('catGrid');
+  grid.innerHTML = CATEGORIES.map(c => {
+    const ct = tr.cats[c.id] || c;
+    return `<div class="cat-card" data-id="${c.id}" onclick="selectCat('${c.id}',this)">
+      <span class="cat-emoji">${c.emoji}</span>
+      <div class="cat-title">${ct.title}</div>
+      <div class="cat-desc">${ct.desc}</div>
+    </div>`;
+  }).join('');
+}
+
+function selectCat(id, el) {
+  document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  const tr = t();
+  answers.category = id;
+  answers.categoryTitle = (tr.cats[id] || CATEGORIES.find(c => c.id === id)).title;
+}
+
+function renderLangs() {
+  document.getElementById('langGrid').innerHTML = LANGUAGES.map(l =>
+    `<div class="lang-btn${l.code===selectedLang?' selected':''}" data-code="${l.code}" onclick="selectLang('${l.code}',this)">
+      <span class="lang-flag">${l.flag}</span>
+      <span class="lang-name">${l.name}</span>
+    </div>`
+  ).join('');
+}
+
+function selectLang(code, el) {
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedLang = code;
+}
+
+// ══════════════════════════════════════
+// ПЕРЕКЛЮЧАТЕЛЬ ЯЗЫКА ИНТЕРФЕЙСА (кнопка 🌐 в шапке)
+// ══════════════════════════════════════
+function openLangSheet() {
+  const tr = t();
+  document.getElementById('langSheetTitle').textContent = tr.choosePdfLang.replace(/PDF/i,'').trim() || 'Language';
+  document.getElementById('langSheetGrid').innerHTML = LANGUAGES.map(l =>
+    `<div class="lang-btn${l.code===uiLang?' selected':''}" onclick="switchUiLang('${l.code}')">
+      <span class="lang-flag">${l.flag}</span>
+      <span class="lang-name">${l.name}</span>
+    </div>`
+  ).join('');
+  document.getElementById('langOverlay').style.display = 'block';
+}
+
+function closeLangSheet() {
+  document.getElementById('langOverlay').style.display = 'none';
+}
+
+function switchUiLang(code) {
+  uiLang = code;
+  selectedLang = code;
+  try { localStorage.setItem('sak_lang', code); } catch (e) {}
+  applyStaticTexts();
+  renderCategories();
+  renderLangs();
+  // Если пользователь уже в квизе — перерисовать текущий вопрос на новом языке
+  if (document.getElementById('screen2').classList.contains('active')) {
+    renderQuestion();
+  }
+  closeLangSheet();
+}
+
+// ══════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════
+function showScreen(n) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen'+n).classList.add('active');
+}
+
+function goToQuestions() {
+  if (!answers.category) { alert(t().alertCategory); return; }
+  currentQ = 0;
+  document.getElementById('progressBar').style.display = 'block';
+  showScreen(2);
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const tr = t();
+  const q = QUESTIONS[currentQ];
+  const qt = tr.q[q.id] || q;
+  const pct = (currentQ / QUESTIONS.length) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+
+  let html = `<p class="question-title">${qt.q}</p>`;
+  if (q.type === 'text') {
+    html += `<input class="name-input" id="nameInput" placeholder="${qt.placeholder}" value="${answers[q.id]||''}">`;
+  } else if (q.type === 'options') {
+    html += `<div class="options">${qt.opts.map(o =>
+      `<button class="opt-btn${answers[q.id]===o?' selected':''}" onclick="selectOpt('${q.id}','${o.replace(/'/g,"\\'")}',this)">${o}</button>`
+    ).join('')}</div>`;
+  } else if (q.type === 'date') {
+    html += `<p style="color:var(--muted);font-size:.85rem;margin-bottom:12px">${qt.hint}</p>
+    <input type="date" class="name-input" id="dateInput" value="${answers[q.id]||''}" style="max-width:240px">`;
+  }
+
+  const isLast = currentQ === QUESTIONS.length - 1;
+  html += `<div class="btn-row">
+    ${currentQ > 0 ? '<button class="btn outline" onclick="prevQ()">' + tr.backQ + '</button>' : ''}
+    <button class="btn" onclick="nextQ()">${isLast ? tr.generate : tr.next}</button>
+  </div>`;
+
+  document.getElementById('questionContainer').innerHTML = html;
+}
+
+function selectOpt(qid, val, el) {
+  document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  answers[qid] = val;
+}
+
+function nextQ() {
+  const q = QUESTIONS[currentQ];
+  if (q.type === 'text') {
+    const v = document.getElementById('nameInput')?.value?.trim();
+    if (!v) { alert(t().alertName); return; }
+    answers[q.id] = v;
+  } else if (q.type === 'date') {
+    answers[q.id] = document.getElementById('dateInput')?.value || '';
+  } else if (!answers[q.id]) {
+    alert(t().alertOption); return;
+  }
+
+  if (currentQ < QUESTIONS.length - 1) {
+    currentQ++;
+    renderQuestion();
+  } else {
+    generateRoute();
+  }
+}
+
+function prevQ() {
+  if (currentQ > 0) { currentQ--; renderQuestion(); }
+}
+
+function showLangPicker() { showScreen(5); }
+
+function askChacha() { window.location.href = 'https://sakartvelo.ai'; }
+
+// ══════════════════════════════════════
+// ROUTE GENERATION
+// ══════════════════════════════════════
+async function generateRoute() {
+  showScreen(3);
+  document.getElementById('progressFill').style.width = '100%';
+
+  try {
+    const res = await fetch('/.netlify/functions/planner', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(Object.assign({}, answers, { lang: uiLang }))
+    });
+    const data = await res.json();
+    generatedRoute = data;
+    showRoutePreview(data);
+  } catch(e) {
+    // Fallback demo route
+    generatedRoute = buildDemoRoute();
+    showRoutePreview(generatedRoute);
+  }
+}
+
+function buildDemoRoute() {
+  const days = parseInt(answers.days) || 5;
+  const cat = answers.categoryTitle || 'Georgia Adventure';
+  const daysList = [
+    {day:1,location:'Tbilisi',title:'Arrival & Old Town',schedule:[{time:'14:00',place:'Abanotubani Sulfur Baths',duration:'2 hours',tip:'Book private room in advance',price_mid:'$30'},{time:'17:00',place:'Narikala Fortress',duration:'1.5 hours',tip:'Take cable car from Rike Park',price_mid:'Free'},{time:'20:00',place:'Dinner in Old Town',duration:'2 hours',tip:'Try Shavi Lomi restaurant',price_mid:'$25'}],food:{breakfast:'Skip or hotel',lunch:'Café Pupur',dinner:'Shavi Lomi'},hotel:{budget:'Fabrika Hostel $25',mid:'Hotel Rooms $90',luxury:'Stamba Hotel $200'},shops:['Carrefour — Rustaveli Ave (24/7)','Goodwill — city center'],shop_warning:''},
+    {day:2,location:'Mtskheta & Kazbegi',title:'Ancient Capital to the Mountains',schedule:[{time:'07:00',place:'Depart Tbilisi',duration:'30 min',tip:'Buy food and water here before leaving',price_mid:''},{ time:'08:30',place:'Jvari Monastery',duration:'45 min',tip:'First Christian church in Georgia',price_mid:'Free'},{time:'11:00',place:'Arrive Stepantsminda',duration:'2.5 hrs drive',tip:'Scenic Georgian Military Highway',price_mid:''},{time:'13:00',place:'Gergeti Trinity Church',duration:'3 hours',tip:'Hike 1.5h or take 4WD $15',price_mid:'$15'}],food:{breakfast:'Tbilisi hotel',lunch:'Pack food from Tbilisi',dinner:'Local guesthouse'},hotel:{budget:'Guesthouse $20',mid:'Rooms Hotel Kazbegi $80',luxury:'Rooms Hotel Kazbegi $200'},shops:['Small shops in Stepantsminda (unpredictable hours)'],shop_warning:'WARNING: Above Stepantsminda NO shops. Buy water and food in Tbilisi!'},
+  ];
+  // Fill remaining days — раньше обрывалось на 7-м дне даже если просили больше
+  const locationThemes = [
+    ['Kakheti Wine Region','Vineyards & Qvevri Tastings'],
+    ['Batumi Black Sea','Seaside & Botanical Garden'],
+    ['Svaneti Mountains','Ancient Towers & Glaciers'],
+    ['Kutaisi & Prometheus Cave','Caves & Colchis Legends'],
+    ['Borjomi & Bakuriani','Mineral Springs & Pine Forests'],
+    ['Vardzia Cave Town','Rock-Hewn Monastery'],
+    ['Sighnaghi & Alaverdi','City of Love & Ancient Cathedral'],
+    ['Tusheti Mountains','Remote Highland Villages'],
+    ['Gudauri','Alpine Views & Paragliding'],
+    ['Martvili Canyon','Turquoise Waters & Boat Ride'],
+    ['Uplistsikhe','Cave City of the Sun God'],
+    ['Rustavi Lake','Lakeside Relaxation'],
+    ['David Gareja','Desert Monastery Complex'],
+    ['Lagodekhi Reserve','Untouched Forest Trails'],
+  ];
+  for (let i = 2; i < days; i++) {
+    const cycle = Math.floor((i - 2) / locationThemes.length); // 0 первый круг, 1 второй и т.д.
+    const [loc, theme] = locationThemes[(i - 2) % locationThemes.length];
+    const dayTitle = cycle === 0 ? theme : `${theme} (Return Visit)`;
+    daysList.push({day:i+1,location:loc,title:dayTitle,schedule:[{time:'09:00',place:'Morning exploration',duration:'4 hours',tip:'Check local conditions',price_mid:'Varies'}],food:{breakfast:'Local guesthouse',lunch:'Local cafe',dinner:'Restaurant'},hotel:{budget:'Guesthouse $25',mid:'Hotel $70',luxury:'Hotel $150'},shops:['Check local market'],shop_warning:''});
+  }
+  return {
+    title: `${cat} — ${answers.days || (days + ' days')}`,
+    tagline: 'Your personal Georgia adventure',
+    days: daysList.slice(0, days),
+    packing_list: {
+      documents:['Passport','Travel insurance (MANDATORY from 2026)','Photo copies of documents'],
+      clothes:['Jacket (even in summer in mountains)','Trekking shoes','Rain jacket'],
+      tech:['Powerbank (no charging in mountains)','eSIM or local SIM'],
+      medicine:['Painkillers','Bandages','Motion sickness pills (mountain roads!)','Sunscreen'],
+      food_water:['Water reserves for mountain days','Snacks for long drives','Buy food in last big city before mountains']
+    },
+    budget_total: {budget:'$'+Math.round(days*45),mid:'$'+Math.round(days*85),luxury:'$'+Math.round(days*180)},
+    warnings: ['Travel insurance MANDATORY from January 2026 — law of Georgia','No ATMs in mountain villages — bring cash (Georgian Lari)','No shops above 2000m altitude — stock up before','Phone signal unreliable in mountains — save PDF offline'],
+    google_maps_url: 'https://www.google.com/maps/dir/Tbilisi,+Georgia/Stepantsminda,+Georgia/Kakheti,+Georgia/'
+  };
+}
+
+function showRoutePreview(route) {
+  const tr = t();
+  document.getElementById('routeTitle').textContent = route.title;
+  document.getElementById('routeTagline').textContent = route.tagline;
+
+  let html = '<div class="result-card">';
+  html += `<div class="result-title">${tr.routeOverview}</div>`;
+  route.days.forEach(d => {
+    html += `<div class="day-item"><span class="day-num">${tr.dayWord} ${d.day}</span> — ${d.location}: ${d.title}</div>`;
+  });
+  html += `<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--line)">
+    <strong>${tr.budgetLabel}</strong><br>
+    ${tr.economy}: ${route.budget_total.budget} &nbsp;|&nbsp; ${tr.mid}: ${route.budget_total.mid} &nbsp;|&nbsp; ${tr.luxury}: ${route.budget_total.luxury}
+  </div></div>`;
+
+  if (route.warnings && route.warnings.length) {
+    route.warnings.forEach((w,i) => {
+      const cls = i === 0 ? 'warning red' : 'warning';
+      html += `<div class="${cls}">⚠️ ${w}</div>`;
+    });
+  }
+
+  html += `<a href="${route.google_maps_url}" target="_blank" style="display:block;text-align:center;margin-top:12px;color:var(--gold);font-size:.9rem">${tr.viewMaps}</a>`;
+
+  html += `<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;justify-content:center">
+    <a href="${AFFILIATE_LINKS.hotel}" target="_blank" rel="noopener" class="opt-btn" style="text-decoration:none;font-size:.82rem">🏨 Hotels</a>
+    <a href="${AFFILIATE_LINKS.transfer}" target="_blank" rel="noopener" class="opt-btn" style="text-decoration:none;font-size:.82rem">🚕 Transfer</a>
+    <a href="${AFFILIATE_LINKS.tour}" target="_blank" rel="noopener" class="opt-btn" style="text-decoration:none;font-size:.82rem">🗺️ Tours</a>
+    <a href="${AFFILIATE_LINKS.esim}" target="_blank" rel="noopener" class="opt-btn" style="text-decoration:none;font-size:.82rem">📲 eSIM</a>
+    <a href="${AFFILIATE_LINKS.flights}" target="_blank" rel="noopener" class="opt-btn" style="text-decoration:none;font-size:.82rem">✈️ Flights</a>
+    <a href="${AFFILIATE_LINKS.insurance}" target="_blank" rel="noopener" class="opt-btn" style="text-decoration:none;font-size:.82rem">🛡️ Insurance</a>
+  </div>`;
+
+  document.getElementById('routePreview').innerHTML = html;
+  showScreen(4);
+}
+
+// Настоящие партнёрские ссылки — те же, что уже используются на главной странице sakartvelo.ai
+const AFFILIATE_LINKS = {
+  hotel: 'https://www.booking.com/searchresults.html?aid=7916610',
+  transfer: 'https://kiwitaxi.com/?marker=732753',
+  tour: 'https://www.viator.com/searchResults/all?text=Georgia',
+  insurance: 'https://travelgeorgia.aldagi.ge/',
+  esim: 'https://airalo.tpm.lv/lbmgE1xZ',
+  flights: 'https://aviasales.tpm.lv/3v2DPRiC'
+};
+
+// ══════════════════════════════════════
+// PDF GENERATION
+// ══════════════════════════════════════
+async function loadDejaVuFont() {
+  if (window.__DEJAVU_FONT_B64) return; // уже загружен
+  await new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = '/planner/dejavu-font.js';
+    s.onload = resolve;
+    s.onerror = () => reject(new Error('Не удалось загрузить шрифт'));
+    document.head.appendChild(s);
+  });
+}
+
+async function generatePDF() {
+  if (!selectedLang) { alert(t().alertLang); return; }
+  document.getElementById('downloadBtn').style.display = 'none';
+  document.getElementById('pdfLoading').style.display = 'block';
+
+  const tr = t();
+  const em = EMERGENCY[selectedLang] || EMERGENCY.en;
+  const pt = tr.pdf;
+  const name = answers.name || 'Traveler';
+
+  // Пытаемся сгенерировать PDF на сервере через Puppeteer — там правильно
+  // "сшиваются" арабские/персидские буквы, чего клиентский jsPDF не умеет.
+  try {
+    const res = await fetch('/.netlify/functions/generate-pdf', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ route: generatedRoute, lang: selectedLang, name, em, pt })
+    });
+
+    if (!res.ok) throw new Error('Server PDF generation returned ' + res.status);
+
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'georgia-guide-' + name.replace(/\s+/g,'-').toLowerCase() + '.pdf';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+
+    document.getElementById('successMsg').textContent = tr.successMsg.replace('{name}', name);
+    showScreen(6);
+    return;
+
+  } catch (e) {
+    console.warn('Серверная генерация PDF недоступна, откат на клиентскую:', e.message);
+    // Тихо переключаемся на запасной вариант ниже — пользователь не должен
+    // заметить разницу, кроме как в качестве арабского/фарси текста.
+    return generatePDF_client();
+  }
+}
+
+async function generatePDF_client() {
+  if (!selectedLang) { alert(t().alertLang); return; }
+  document.getElementById('downloadBtn').style.display = 'none';
+  document.getElementById('pdfLoading').style.display = 'block';
+
+  try {
+    // Шрифт со всеми алфавитами грузим только сейчас, по клику — чтобы не раздувать
+    // вес страницы для тех, кто квиз не проходит до конца
+    await loadDejaVuFont();
+
+    const route = generatedRoute;
+    const name = answers.name || 'Traveler';
+    const date = new Date().toLocaleDateString('en-GB');
+    const em = EMERGENCY[selectedLang] || EMERGENCY.en;
+    const pt = (PLANNER_I18N[selectedLang] || PLANNER_I18N.en).pdf;
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('p','mm','a4');
+    registerDejaVuFont(doc);
+    const BASE_FONT = 'DejaVuSans';
+    if (selectedLang === 'ar' || selectedLang === 'he' || selectedLang === 'fa') {
+      doc.setR2L(true);
+    }
+    const W = 210, H = 297;
+    const M = 18; // margin
+    const CW = W - M*2; // content width
+
+    // Colors
+    const wine = [139,26,26];
+    const gold = [196,150,10];
+    const dark = [26,13,16];
+    const white = [255,255,255];
+    const light = [249,245,240];
+    const red = [139,0,0];
+
+    // ── PAGE 1: COVER ──
+    doc.setFillColor(...dark);
+    doc.rect(0,0,W,H,'F');
+    doc.setFillColor(...gold);
+    doc.rect(0,0,W,8,'F');
+    doc.rect(0,H-8,W,8,'F');
+
+    doc.setTextColor(...gold);
+    doc.setFontSize(11);
+    doc.setFont(BASE_FONT,'normal');
+    doc.text('sakartvelo.ai', W/2, 22, {align:'center'});
+
+    doc.setTextColor(...white);
+    doc.setFontSize(40);
+    doc.text('GEORGIA', W/2, 80, {align:'center'});
+
+    doc.setFontSize(14);
+    doc.setTextColor(...gold);
+    doc.text(pt.coverSubtitle, W/2, 95, {align:'center'});
+
+    doc.setFillColor(...wine);
+    doc.roundedRect(M, 110, CW, 0.5, 0.25, 0.25, 'F');
+
+    doc.setTextColor(...white);
+    doc.setFontSize(20);
+    doc.setFont(BASE_FONT,'bold');
+    const titleLines = doc.splitTextToSize(route.title, CW);
+    doc.text(titleLines, W/2, 125, {align:'center'});
+
+    doc.setFontSize(12);
+    doc.setFont(BASE_FONT,'normal');
+    doc.setTextColor(...gold);
+    const tagLines = doc.splitTextToSize(route.tagline, CW);
+    doc.text(tagLines, W/2, 145, {align:'center'});
+
+    doc.setFillColor(...wine);
+    doc.roundedRect(M, 165, CW, 0.5, 0.25, 0.25, 'F');
+
+    doc.setTextColor(...white);
+    doc.setFontSize(18);
+    doc.setFont(BASE_FONT,'bold');
+    doc.text(name, W/2, 180, {align:'center'});
+
+    doc.setFontSize(11);
+    doc.setFont(BASE_FONT,'normal');
+    doc.setTextColor(180,150,120);
+    doc.text(route.days.length + ' days  |  ' + answers.categoryTitle + '  |  ' + date, W/2, 192, {align:'center'});
+
+    doc.setTextColor(...gold);
+    doc.setFontSize(10);
+    doc.text('sakartvelo.ai — AI Travel Guide to Georgia', W/2, H-14, {align:'center'});
+
+    // ── PAGE 2: OVERVIEW ──
+    doc.addPage();
+    doc.setFillColor(...wine);
+    doc.rect(0,0,W,14,'F');
+    doc.setTextColor(...white);
+    doc.setFontSize(13);
+    doc.setFont(BASE_FONT,'bold');
+    doc.text(pt.routeOverview, M, 9);
+
+    let y = 24;
+    route.days.forEach(d => {
+      doc.setFillColor(...light);
+      doc.roundedRect(M, y, CW, 12, 2, 2, 'F');
+      doc.setTextColor(...wine);
+      doc.setFontSize(9);
+      doc.setFont(BASE_FONT,'bold');
+      doc.text(pt.dayLabel + ' ' + d.day, M+4, y+7.5);
+      doc.setTextColor(...dark);
+      doc.setFont(BASE_FONT,'normal');
+      doc.text(d.location + ' — ' + d.title, M+22, y+7.5);
+      y += 14;
+    });
+
+    y += 8;
+    doc.setFillColor(...gold);
+    doc.roundedRect(M, y, CW, 24, 3, 3, 'F');
+    doc.setTextColor(...dark);
+    doc.setFontSize(10);
+    doc.setFont(BASE_FONT,'bold');
+    doc.text(pt.budgetEstimate, M+6, y+8);
+    doc.setFont(BASE_FONT,'normal');
+    doc.setFontSize(9);
+    doc.text(pt.economy + ': ' + route.budget_total.budget, M+6, y+16);
+    doc.text(pt.midRange + ': ' + route.budget_total.mid, M+55, y+16);
+    doc.text(pt.luxury + ': ' + route.budget_total.luxury, M+115, y+16);
+
+    // ── PAGES 3+: EACH DAY ──
+    route.days.forEach(d => {
+      doc.addPage();
+      doc.setFillColor(...wine);
+      doc.rect(0,0,W,14,'F');
+      doc.setTextColor(...white);
+      doc.setFontSize(13);
+      doc.setFont(BASE_FONT,'bold');
+      doc.text(pt.dayLabel + ' ' + d.day + ' — ' + d.location.toUpperCase(), M, 9);
+
+      y = 24;
+      doc.setTextColor(...wine);
+      doc.setFontSize(11);
+      doc.setFont(BASE_FONT,'bold');
+      doc.text(d.title, M, y);
+      y += 8;
+
+      if (d.drive_from_prev) {
+        doc.setFillColor(240,248,240);
+        doc.roundedRect(M, y, CW, 10, 2, 2, 'F');
+        doc.setTextColor(40,100,40);
+        doc.setFontSize(8);
+        doc.setFont(BASE_FONT,'normal');
+        doc.text(pt.drive + d.drive_from_prev, M+4, y+6.5);
+        y += 13;
+      }
+
+      // Schedule
+      doc.setFontSize(10);
+      doc.setFont(BASE_FONT,'bold');
+      doc.setTextColor(...dark);
+      doc.text(pt.schedule, M, y); y += 6;
+
+      d.schedule.forEach(s => {
+        if (y > 240) { doc.addPage(); y = 20; }
+        doc.setFillColor(...light);
+        doc.roundedRect(M, y, CW, s.tip ? 22 : 16, 2, 2, 'F');
+        doc.setTextColor(...gold);
+        doc.setFontSize(9);
+        doc.setFont(BASE_FONT,'bold');
+        doc.text(s.time, M+4, y+7);
+        doc.setTextColor(...dark);
+        doc.setFont(BASE_FONT,'bold');
+        doc.text(s.place, M+20, y+7);
+        doc.setFont(BASE_FONT,'normal');
+        doc.setTextColor(100,100,100);
+        doc.text(s.duration, M+CW-4, y+7, {align:'right'});
+        if (s.tip) {
+          doc.setFontSize(8);
+          doc.setTextColor(80,80,80);
+          const tipLines = doc.splitTextToSize(pt.tip + s.tip, CW-12);
+          doc.text(tipLines, M+4, y+14);
+        }
+        if (s.price_mid && s.price_mid !== '') {
+          doc.setFontSize(8);
+          doc.setTextColor(...wine);
+          doc.text(s.price_mid, M+CW-4, y+(s.tip?19:13), {align:'right'});
+        }
+        y += s.tip ? 25 : 19;
+      });
+
+      y += 4;
+
+      // Food
+      if (y < 230) {
+        doc.setFontSize(10);
+        doc.setFont(BASE_FONT,'bold');
+        doc.setTextColor(...dark);
+        doc.text(pt.food, M, y); y += 6;
+        doc.setFontSize(9);
+        doc.setFont(BASE_FONT,'normal');
+        if (d.food.breakfast) { doc.setTextColor(...gold); doc.text(pt.morning, M, y); doc.setTextColor(...dark); doc.text(d.food.breakfast, M+18, y); y+=6; }
+        if (d.food.lunch) { doc.setTextColor(...gold); doc.text(pt.lunch, M, y); doc.setTextColor(...dark); doc.text(d.food.lunch, M+16, y); y+=6; }
+        if (d.food.dinner) { doc.setTextColor(...gold); doc.text(pt.dinner, M, y); doc.setTextColor(...dark); doc.text(d.food.dinner, M+17, y); y+=8; }
+      }
+
+      // Hotel
+      if (y < 240) {
+        doc.setFontSize(10);
+        doc.setFont(BASE_FONT,'bold');
+        doc.setTextColor(...dark);
+        doc.text(pt.accommodation, M, y); y+=6;
+        doc.setFontSize(9);
+        doc.setFont(BASE_FONT,'normal');
+        if (d.hotel.budget) { doc.setTextColor(40,120,40); doc.text(d.hotel.budget, M, y); y+=6; }
+        if (d.hotel.mid) { doc.setTextColor(150,100,0); doc.text(d.hotel.mid, M, y); y+=6; }
+        if (d.hotel.luxury) { doc.setTextColor(...wine); doc.text(d.hotel.luxury, M, y); y+=8; }
+      }
+
+      // Shops
+      if (d.shops && d.shops.length && y < 250) {
+        doc.setFontSize(10);
+        doc.setFont(BASE_FONT,'bold');
+        doc.setTextColor(...dark);
+        doc.text(pt.shopsOnRoute, M, y); y+=6;
+        doc.setFontSize(9);
+        doc.setFont(BASE_FONT,'normal');
+        d.shops.forEach(sh => {
+          doc.setTextColor(40,120,40);
+          doc.text('+ ' + sh, M, y); y+=6;
+        });
+        if (d.shop_warning) {
+          doc.setFillColor(255,240,230);
+          const wLines = doc.splitTextToSize(d.shop_warning, CW-10);
+          const wH = wLines.length * 6 + 8;
+          doc.roundedRect(M, y, CW, wH, 2, 2, 'F');
+          doc.setTextColor(180,60,0);
+          doc.setFont(BASE_FONT,'bold');
+          doc.text(wLines, M+4, y+6);
+          y += wH + 4;
+        }
+      }
+    });
+
+    // ── PACKING LIST ──
+    doc.addPage();
+    doc.setFillColor(...wine);
+    doc.rect(0,0,W,14,'F');
+    doc.setTextColor(...white);
+    doc.setFontSize(13);
+    doc.setFont(BASE_FONT,'bold');
+    doc.text(pt.packingList, M, 9);
+
+    y = 22;
+    const packSections = [
+      {icon:'📄', title:pt.documents, items: route.packing_list.documents},
+      {icon:'👕', title:pt.clothes, items: route.packing_list.clothes},
+      {icon:'📱', title:pt.tech, items: route.packing_list.tech},
+      {icon:'💊', title:pt.medicine, items: route.packing_list.medicine},
+      {icon:'🥤', title:pt.foodWater, items: route.packing_list.food_water},
+    ];
+    packSections.forEach(sec => {
+      if (y > 255) { doc.addPage(); y = 20; }
+      doc.setFontSize(10);
+      doc.setFont(BASE_FONT,'bold');
+      doc.setTextColor(...wine);
+      doc.text(sec.title, M, y); y+=6;
+      sec.items.forEach(item => {
+        doc.setFontSize(9);
+        doc.setFont(BASE_FONT,'normal');
+        doc.setTextColor(...dark);
+        const lines = doc.splitTextToSize('[ ]  ' + item, CW);
+        doc.text(lines, M+2, y);
+        y += lines.length * 6;
+      });
+      y += 6;
+    });
+
+    // ── WARNINGS ──
+    doc.addPage();
+    doc.setFillColor(...wine);
+    doc.rect(0,0,W,14,'F');
+    doc.setTextColor(...white);
+    doc.setFontSize(13);
+    doc.setFont(BASE_FONT,'bold');
+    doc.text(pt.warnings, M, 9);
+
+    y = 24;
+    route.warnings.forEach((w, i) => {
+      if (y > 265) { doc.addPage(); y = 20; }
+      const bgColor = i === 0 ? [255,230,230] : [255,248,220];
+      const txColor = i === 0 ? [139,0,0] : [133,100,4];
+      doc.setFillColor(...bgColor);
+      const wLines = doc.splitTextToSize((i===0?'!!! ':'!! ') + w, CW-10);
+      const boxH = wLines.length * 7 + 10;
+      doc.roundedRect(M, y, CW, boxH, 3, 3, 'F');
+      doc.setTextColor(...txColor);
+      doc.setFontSize(10);
+      doc.setFont(BASE_FONT,'bold');
+      doc.text(wLines, M+6, y+8);
+      y += boxH + 8;
+    });
+
+    // ── LAST PAGE: EMERGENCY ──
+    doc.addPage();
+    doc.setFillColor(...red);
+    doc.rect(0,0,W,H,'F');
+    doc.setFillColor(...gold);
+    doc.rect(0,0,W,6,'F');
+    doc.rect(0,H-6,W,6,'F');
+
+    doc.setTextColor(...white);
+    doc.setFontSize(16);
+    doc.setFont(BASE_FONT,'bold');
+    doc.text(em.title || 'EMERGENCY NUMBERS', W/2, 18, {align:'center'});
+
+    doc.setFillColor(...gold);
+    doc.roundedRect(M, 22, CW, 20, 3, 3, 'F');
+    doc.setTextColor(...dark);
+    doc.setFontSize(28);
+    doc.setFont(BASE_FONT,'bold');
+    doc.text('112', W/2, 36, {align:'center'});
+    doc.setFontSize(9);
+    doc.setFont(BASE_FONT,'normal');
+    doc.text(em.main + ' ' + (em.note||''), W/2, 40, {align:'center'});
+
+    y = 50;
+    const nums = [
+      [em.amb||'Ambulance', '112'],
+      [em.pol||'Police', '112'],
+      [em.fire||'Fire', '111'],
+      [em.priv||'Private ambulance', '+995 32 244 44 44'],
+      [em.tour||'Tourism hotline', '1505'],
+    ];
+    doc.setFontSize(10);
+    nums.forEach(([label, num]) => {
+      doc.setTextColor(255,220,180);
+      doc.setFont(BASE_FONT,'normal');
+      doc.text(label + ':', M, y);
+      doc.setTextColor(...white);
+      doc.setFont(BASE_FONT,'bold');
+      doc.text(num, W-M, y, {align:'right'});
+      y += 9;
+    });
+
+    y += 4;
+    doc.setFillColor(100,0,0);
+    doc.roundedRect(M, y, CW, 0.5, 0.25, 0.25, 'F');
+    y += 8;
+    doc.setTextColor(...gold);
+    doc.setFontSize(11);
+    doc.setFont(BASE_FONT,'bold');
+    doc.text(em.embTitle || 'EMBASSIES IN TBILISI', M, y); y += 8;
+
+    doc.setFontSize(9);
+    EMBASSIES.forEach(e => {
+      doc.setTextColor(255,220,180);
+      doc.setFont(BASE_FONT,'normal');
+      doc.text(e.country + ':', M, y);
+      doc.setTextColor(...white);
+      doc.setFont(BASE_FONT,'bold');
+      doc.text(e.phone, W-M, y, {align:'right'});
+      y += 8;
+    });
+
+    y += 4;
+    doc.setFillColor(100,0,0);
+    doc.roundedRect(M, y, CW, 0.5, 0.25, 0.25, 'F');
+    y += 8;
+    doc.setTextColor(255,220,180);
+    doc.setFontSize(9);
+    doc.setFont(BASE_FONT,'normal');
+    doc.text(em.ins||'Insurance Aldagi', M, y);
+    doc.setTextColor(...white);
+    doc.setFont(BASE_FONT,'bold');
+    doc.text('+995 32 244 44 00', W-M, y, {align:'right'});
+
+    doc.setTextColor(...gold);
+    doc.setFontSize(10);
+    doc.setFont(BASE_FONT,'bold');
+    doc.text('sakartvelo.ai — Created for ' + name, W/2, H-14, {align:'center'});
+
+    // Save
+    doc.save('georgia-guide-' + name.replace(/\s+/g,'-').toLowerCase() + '.pdf');
+
+    document.getElementById('successMsg').textContent =
+      t().successMsg.replace('{name}', name);
+    showScreen(6);
+
+  } catch(e) {
+    console.error(e);
+    alert('Error generating PDF. Please try again.');
+    document.getElementById('downloadBtn').style.display = 'block';
+    document.getElementById('pdfLoading').style.display = 'none';
+  }
+}
+</script>
+</body>
+</html>
