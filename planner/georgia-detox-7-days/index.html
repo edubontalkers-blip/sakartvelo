@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru" id="htmlRoot">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title id="pageTitle"></title>
+<meta id="metaDesc" name="description" content="">
+<link rel="canonical" href="https://sakartvelo.ai/planner/georgia-detox-7-days/">
+<meta property="og:type" content="website">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--wine:#8b1a1a;--gold:#c4960a;--dark:#1a0d10;--card:#fff8f5;--bg:#fff;--ink:#1a0d10;--muted:#888;--line:#e8ddd5;--radius:16px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+header{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);gap:8px}
+.logo{font-weight:900;color:var(--wine);text-decoration:none;font-size:1.1rem}
+.hbtns{display:flex;gap:8px;align-items:center}
+.langBtn{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 10px;cursor:pointer;font-size:1rem}
+main{max-width:640px;margin:0 auto;padding:24px 20px 60px}
+h1{font-size:1.7rem;font-weight:900;color:var(--wine);margin-bottom:12px;line-height:1.25}
+.intro{color:var(--ink);margin-bottom:20px;font-size:1.02rem}
+.highlights{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 24px;margin-bottom:24px}
+.highlights li{margin-bottom:8px}
+.cta{display:block;text-align:center;background:var(--wine);color:#fff;text-decoration:none;font-weight:700;padding:16px;border-radius:var(--radius);font-size:1.05rem;border:none;width:100%;cursor:pointer}
+footer{text-align:center;padding:24px;color:var(--muted);font-size:.8rem}
+footer a{color:var(--wine);text-decoration:none}
+#langOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100}
+#langSheet{position:absolute;bottom:0;left:0;right:0;background:#fff;border-radius:20px 20px 0 0;padding:20px;max-height:70vh;overflow-y:auto}
+.langGrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
+.langItem{border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center;cursor:pointer;font-size:.85rem}
+.langItem.sel{border-color:var(--gold);background:#fff8ee}
+</style>
+</head>
+<body>
+<header>
+  <a href="https://sakartvelo.ai" class="logo">🍶 sakartvelo.ai</a>
+  <div class="hbtns">
+    <button class="langBtn" id="langBtn" onclick="openLangSheet()">🌐</button>
+    <a href="https://sakartvelo.ai" style="color:var(--gold);font-size:.9rem;text-decoration:none" id="backLink"></a>
+  </div>
+</header>
+
+<div id="langOverlay" onclick="if(event.target===this)closeLangSheet()">
+  <div id="langSheet">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <h2 id="langSheetTitle" style="font-size:1.1rem;color:var(--wine)"></h2>
+      <button onclick="closeLangSheet()" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--muted)">✕</button>
+    </div>
+    <div class="langGrid" id="langGrid"></div>
+  </div>
+</div>
+
+<main>
+  <h1 id="h1"></h1>
+  <p class="intro" id="intro"></p>
+  <div class="highlights">
+    <ul style="padding-left:20px" id="highlightsList"></ul>
+  </div>
+  <button class="cta" id="ctaBtn" onclick="goToPlanner()"></button>
+</main>
+<footer>
+  <a href="https://sakartvelo.ai">sakartvelo.ai</a> — <span id="footer"></span>
+</footer>
+
+<script>
+const PAGE_I18N = {"ru": {"title": "Грузинский детокс на 7 дней — планировщик маршрута", "metaDesc": "Спланируйте 7-дневный детокс-ретрит в Грузии: серные бани Боржоми, горная йога, минеральные источники. Бесплатный персональный PDF-гид.", "h1": "🧘 Грузинский детокс — 7 дней", "intro": "Минеральные источники Боржоми и древние серные бани Тбилиси веками привлекают людей, ищущих перезагрузку. Этот 7-дневный маршрут сочетает нацпарк Боржоми-Харагаули, серные бани и горную тишину — создан для тех, кто хочет замедлиться, а не просто осмотреть достопримечательности.", "highlights": ["Серные бани Абанотубани в Старом Тбилиси", "Минеральные источники и нацпарк Боржоми", "Горная йога и спокойные прогулки на природе", "Лучший сезон: круглый год, весна и осень — самые мягкие"], "cta": "📥 Построить мой персональный маршрут на 7 дней →", "back": "← Назад", "footer": "AI-гид по Грузии 🇬🇪", "langTitle": "Язык"}, "en": {"title": "Georgia Detox Retreat, 7 Days — Route Planner", "metaDesc": "Plan a 7-day Georgia detox retreat: Borjomi sulfur baths, mountain yoga, mineral water springs. Get a free personal PDF guide.", "h1": "🧘 Georgia Detox — 7 Days", "intro": "Borjomi's mineral springs and Tbilisi's ancient sulfur baths have drawn people seeking a reset for centuries. This 7-day route combines Borjomi-Kharagauli National Park, sulfur bathhouses, and mountain quiet — built for travelers who want to slow down, not just sightsee.", "highlights": ["Abanotubani sulfur baths in Tbilisi's Old Town", "Borjomi mineral water springs and national park", "Mountain yoga and quiet nature walks", "Best season: year-round, spring and autumn are mildest"], "cta": "📥 Build my personal 7-day guide →", "back": "← Back", "footer": "AI Travel Guide to Georgia 🇬🇪", "langTitle": "Language"}, "tr": {"title": "Gürcistan Detoksu, 7 Gün — Rota Planlayıcı", "metaDesc": "7 günlük Gürcistan detoks kaçamağı planlayın: Borjomi kükürtlü hamamları, dağ yogası, mineral su kaynakları. Ücretsiz kişisel PDF rehberi alın.", "h1": "🧘 Gürcistan Detoksu — 7 Gün", "intro": "Borjomi'nin mineral kaynakları ve Tiflis'in antik kükürtlü hamamları yüzyıllardır sıfırlanma arayan insanları çekiyor. Bu 7 günlük rota, Borjomi-Harogauli Milli Parkı'nı, kükürtlü hamamları ve dağ sessizliğini birleştiriyor — sadece gezmek değil, yavaşlamak isteyen gezginler için tasarlandı.", "highlights": ["Tiflis Eski Şehir'de Abanotubani kükürtlü hamamları", "Borjomi mineral su kaynakları ve milli parkı", "Dağ yogası ve sessiz doğa yürüyüşleri", "En iyi mevsim: yıl boyunca, ilkbahar ve sonbahar en ılımlısı"], "cta": "📥 Kişisel 7 günlük rehberimi oluştur →", "back": "← Geri", "footer": "Gürcistan için AI Seyahat Rehberi 🇬🇪", "langTitle": "Dil"}, "de": {"title": "Georgien Detox-Retreat, 7 Tage — Routenplaner", "metaDesc": "Planen Sie ein 7-tägiges Detox-Retreat in Georgien: Borjomi Schwefelbäder, Bergyoga, Mineralwasserquellen. Kostenloser persönlicher PDF-Guide.", "h1": "🧘 Georgien Detox — 7 Tage", "intro": "Die Mineralquellen von Borjomi und die antiken Schwefelbäder von Tiflis ziehen seit Jahrhunderten Menschen an, die eine Auszeit suchen. Diese 7-tägige Route kombiniert den Borjomi-Charagauli-Nationalpark, Schwefelbäder und Bergruhe — für Reisende, die entschleunigen wollen, nicht nur sightseeing.", "highlights": ["Abanotubani Schwefelbäder in Tiflis' Altstadt", "Borjomi Mineralwasserquellen und Nationalpark", "Bergyoga und ruhige Naturwanderungen", "Beste Saison: ganzjährig, Frühling und Herbst sind am mildesten"], "cta": "📥 Meinen persönlichen 7-Tage-Guide erstellen →", "back": "← Zurück", "footer": "KI-Reiseführer für Georgien 🇬🇪", "langTitle": "Sprache"}, "it": {"title": "Ritiro Detox in Georgia, 7 Giorni — Pianificatore di Percorsi", "metaDesc": "Pianifica un ritiro detox di 7 giorni in Georgia: bagni di zolfo di Borjomi, yoga in montagna, sorgenti minerali. Guida PDF personale gratuita.", "h1": "🧘 Detox in Georgia — 7 Giorni", "intro": "Le sorgenti minerali di Borjomi e gli antichi bagni di zolfo di Tbilisi attirano da secoli persone in cerca di un reset. Questo percorso di 7 giorni combina il Parco Nazionale di Borjomi-Kharagauli, bagni di zolfo e quiete montana — per chi vuole rallentare, non solo visitare.", "highlights": ["Bagni di zolfo di Abanotubani nella Città Vecchia di Tbilisi", "Sorgenti minerali e parco nazionale di Borjomi", "Yoga in montagna e tranquille passeggiate nella natura", "Stagione migliore: tutto l'anno, primavera e autunno sono i più miti"], "cta": "📥 Crea la mia guida personale di 7 giorni →", "back": "← Indietro", "footer": "Guida di viaggio AI per la Georgia 🇬🇪", "langTitle": "Lingua"}, "es": {"title": "Retiro Detox en Georgia, 7 Días — Planificador de Rutas", "metaDesc": "Planifica un retiro detox de 7 días en Georgia: baños de azufre de Borjomi, yoga de montaña, manantiales minerales. Guía PDF personal gratuita.", "h1": "🧘 Detox en Georgia — 7 Días", "intro": "Los manantiales minerales de Borjomi y los antiguos baños de azufre de Tiflis han atraído durante siglos a personas en busca de un reinicio. Esta ruta de 7 días combina el Parque Nacional Borjomi-Kharagauli, baños de azufre y tranquilidad de montaña — para viajeros que quieren ir más despacio, no solo hacer turismo.", "highlights": ["Baños de azufre de Abanotubani en el Casco Antiguo de Tiflis", "Manantiales minerales y parque nacional de Borjomi", "Yoga de montaña y tranquilos paseos por la naturaleza", "Mejor temporada: todo el año, primavera y otoño son los más suaves"], "cta": "📥 Crear mi guía personal de 7 días →", "back": "← Atrás", "footer": "Guía de viaje con IA para Georgia 🇬🇪", "langTitle": "Idioma"}, "ar": {"title": "معتكف ديتوكس جورجيا، 7 أيام — مخطط المسارات", "metaDesc": "خطط لمعتكف ديتوكس لمدة 7 أيام في جورجيا: حمامات بورجومي الكبريتية، يوغا الجبال، ينابيع المياه المعدنية. دليل PDF شخصي مجاني.", "h1": "🧘 ديتوكس جورجيا — 7 أيام", "intro": "جذبت ينابيع بورجومي المعدنية وحمامات تبليسي الكبريتية القديمة الناس الباحثين عن إعادة الضبط لقرون. يجمع هذا المسار من 7 أيام بين متنزه بورجومي-خاراغاولي الوطني والحمامات الكبريتية وهدوء الجبال — مصمم للمسافرين الذين يريدون التباطؤ، وليس فقط المشاهدة.", "highlights": ["حمامات أبانوتوباني الكبريتية في تبليسي القديمة", "ينابيع بورجومي المعدنية والمتنزه الوطني", "يوغا الجبال ونزهات طبيعية هادئة", "أفضل موسم: طوال العام، الربيع والخريف الأكثر اعتدالًا"], "cta": "📥 إنشاء دليلي الشخصي لـ 7 أيام ←", "back": "← رجوع", "footer": "دليل سفر بالذكاء الاصطناعي لجورجيا 🇬🇪", "langTitle": "اللغة"}, "he": {"title": "מפגש דיטוקס בג'ורג'יה, 7 ימים — מתכנן מסלולים", "metaDesc": "תכננו מפגש דיטוקס בן 7 ימים בג'ורג'יה: אמבטיות גופרית בורג'ומי, יוגת הרים, מעיינות מינרליים. מדריך PDF אישי בחינם.", "h1": "🧘 דיטוקס ג'ורג'י — 7 ימים", "intro": "מעיינות המינרלים של בורג'ומי ואמבטיות הגופרית העתיקות של טביליסי מושכות אנשים המחפשים איפוס כבר מאות שנים. מסלול בן 7 ימים זה משלב את פארק בורג'ומי-חראגאולי הלאומי, בתי מרחץ גופרית ושקט הררי — בנוי עבור מטיילים שרוצים להאט, לא רק לסייר.", "highlights": ["אמבטיות גופרית אבנוטובני בעיר העתיקה של טביליסי", "מעיינות מינרליים ופארק לאומי בבורג'ומי", "יוגת הרים וטיולי טבע שקטים", "העונה הטובה ביותר: כל השנה, אביב וסתיו הכי מתונים"], "cta": "📥 בניית המדריך האישי שלי ל-7 ימים ←", "back": "← חזרה", "footer": "מדריך טיולים מבוסס AI לג'ורג'יה 🇬🇪", "langTitle": "שפה"}, "fa": {"title": "اقامتگاه دیتاکس گرجستان، ۷ روز — برنامه‌ریز مسیر", "metaDesc": "یک اقامتگاه دیتاکس ۷ روزه در گرجستان برنامه‌ریزی کنید: حمام‌های گوگردی بورجومی، یوگای کوهستان، چشمه‌های آب معدنی. راهنمای PDF شخصی رایگان.", "h1": "🧘 دیتاکس گرجستان — ۷ روز", "intro": "چشمه‌های معدنی بورجومی و حمام‌های گوگردی باستانی تفلیس قرن‌هاست افرادی را که به دنبال بازیابی هستند جذب می‌کند. این مسیر ۷ روزه پارک ملی بورجومی-خاراگائولی، حمام‌های گوگردی و آرامش کوهستان را ترکیب می‌کند — برای مسافرانی که می‌خواهند آرام شوند، نه فقط بازدید کنند.", "highlights": ["حمام‌های گوگردی آبانوتوبانی در شهر قدیم تفلیس", "چشمه‌های آب معدنی و پارک ملی بورجومی", "یوگای کوهستان و پیاده‌روی‌های آرام در طبیعت", "بهترین فصل: تمام سال، بهار و پاییز ملایم‌ترین هستند"], "cta": "📥 ساخت راهنمای شخصی ۷ روزه من ←", "back": "← بازگشت", "footer": "راهنمای سفر هوش‌مصنوعی گرجستان 🇬🇪", "langTitle": "زبان"}};
+const LANGUAGES = [{"code": "ru", "flag": "🇷🇺", "name": "Русский"}, {"code": "en", "flag": "🇬🇧", "name": "English"}, {"code": "tr", "flag": "🇹🇷", "name": "Türkçe"}, {"code": "ar", "flag": "🇸🇦", "name": "العربية"}, {"code": "he", "flag": "🇮🇱", "name": "עברית"}, {"code": "fa", "flag": "🇮🇷", "name": "فارسی"}, {"code": "de", "flag": "🇩🇪", "name": "Deutsch"}, {"code": "it", "flag": "🇮🇹", "name": "Italiano"}, {"code": "es", "flag": "🇪🇸", "name": "Español"}];
+const CATEGORY = "detox";
+const DAYS = "7";
+
+function detectLang(){
+  const validCodes = LANGUAGES.map(l => l.code);
+  let saved = null;
+  try { saved = localStorage.getItem('sak_lang'); } catch(e) {}
+  if (saved && validCodes.indexOf(saved) !== -1) return saved;
+  const nav = (navigator.language || 'en').slice(0,2).toLowerCase();
+  if (validCodes.indexOf(nav) !== -1) return nav;
+  return 'en';
+}
+let curLang = detectLang();
+
+function render(){
+  const t = PAGE_I18N[curLang] || PAGE_I18N.en;
+  const isRTL = (curLang === 'ar' || curLang === 'he' || curLang === 'fa');
+  document.getElementById('htmlRoot').setAttribute('lang', curLang);
+  document.getElementById('htmlRoot').setAttribute('dir', isRTL ? 'rtl' : 'ltr');
+  document.getElementById('pageTitle').textContent = t.title;
+  document.getElementById('metaDesc').setAttribute('content', t.metaDesc);
+  document.getElementById('h1').textContent = t.h1;
+  document.getElementById('intro').textContent = t.intro;
+  document.getElementById('highlightsList').innerHTML = t.highlights.map(h => '<li>' + h + '</li>').join('');
+  document.getElementById('ctaBtn').textContent = t.cta;
+  document.getElementById('backLink').textContent = t.back;
+  document.getElementById('footer').textContent = t.footer;
+}
+
+function goToPlanner(){
+  window.location.href = '/planner/?category=' + CATEGORY + '&days=' + DAYS;
+}
+
+function openLangSheet(){
+  const t = PAGE_I18N[curLang] || PAGE_I18N.en;
+  document.getElementById('langSheetTitle').textContent = t.langTitle;
+  document.getElementById('langGrid').innerHTML = LANGUAGES.map(l =>
+    '<div class="langItem' + (l.code===curLang?' sel':'') + '" onclick="switchLang(\'' + l.code + '\')">' +
+    '<div style="font-size:1.3rem">' + l.flag + '</div><div>' + l.name + '</div></div>'
+  ).join('');
+  document.getElementById('langOverlay').style.display = 'block';
+}
+function closeLangSheet(){ document.getElementById('langOverlay').style.display = 'none'; }
+function switchLang(code){
+  curLang = code;
+  try { localStorage.setItem('sak_lang', code); } catch(e) {}
+  render();
+  closeLangSheet();
+}
+
+render();
+</script>
+</body>
+</html>
