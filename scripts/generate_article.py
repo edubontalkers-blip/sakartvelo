@@ -93,6 +93,7 @@ def call_claude(prompt, use_web_search=False, max_tokens=8000):
     body = {
         "model": "claude-sonnet-4-6",
         "max_tokens": max_tokens,
+        "stream": True,
         "messages": [{"role": "user", "content": prompt}]
     }
     if use_web_search:
@@ -109,30 +110,56 @@ def call_claude(prompt, use_web_search=False, max_tokens=8000):
         },
         method='POST'
     )
-    # 600 секунд (10 минут) — с запасом. Это выполняется в GitHub Actions,
-    # никто не ждёт вживую на сайте, поэтому можно позволить себе долгий
-    # таймаут. Веб-поиск + генерация статьи сразу на 9 языках иногда
-    # занимает больше, чем стандартные 120 секунд.
+
+    # ══════════════════════════════════════
+    # ПОТОКОВЫЙ РЕЖИМ (SSE streaming)
+    # ══════════════════════════════════════
+    # Раньше ждали ответ целиком одним куском — при долгих запросах
+    # (веб-поиск + много токенов) соединение иногда обрывалось
+    # ("Remote end closed connection without response"), похоже, из-за
+    # долгого простоя без данных на линии. В потоковом режиме сервер
+    # присылает данные постепенно, по мере генерации, что намного надёжнее
+    # для длинных запросов.
+    blocks = {}  # index -> {"type": ..., "text": ...}
+    stop_reason = None
+
     try:
         with urllib.request.urlopen(req, timeout=600) as resp:
-            raw_body = resp.read().decode('utf-8')
+            for raw_line in resp:
+                line = raw_line.decode('utf-8', errors='replace').strip()
+                if not line or not line.startswith('data:'):
+                    continue
+                payload = line[len('data:'):].strip()
+                if payload == '[DONE]':
+                    break
+                try:
+                    event = json.loads(payload)
+                except json.JSONDecodeError:
+                    continue
+
+                etype = event.get('type')
+                if etype == 'content_block_start':
+                    idx = event['index']
+                    blocks[idx] = {"type": event['content_block'].get('type'), "text": ""}
+                elif etype == 'content_block_delta':
+                    idx = event['index']
+                    delta = event.get('delta', {})
+                    if delta.get('type') == 'text_delta' and idx in blocks:
+                        blocks[idx]['text'] += delta.get('text', '')
+                elif etype == 'message_delta':
+                    stop_reason = event.get('delta', {}).get('stop_reason', stop_reason)
+                elif etype == 'error':
+                    raise RuntimeError(f"Anthropic stream error: {event.get('error')}")
     except urllib.error.HTTPError as e:
-        # Печатаем реальное тело ответа с ошибкой от Anthropic (там обычно
-        # понятное сообщение — неверный ключ, лимит, неверный формат запроса)
         err_body = e.read().decode('utf-8', errors='replace')
         raise RuntimeError(f'Anthropic API HTTP {e.code}: {err_body[:1000]}')
 
-    result = json.loads(raw_body)
+    block_types = [b['type'] for _, b in sorted(blocks.items())]
+    print(f'API response (stream): stop_reason={stop_reason}, blocks={block_types}')
 
-    # Диагностика: показываем, что реально пришло, чтобы легче было
-    # разбираться при следующем сбое (типы блоков и причина остановки)
-    block_types = [b.get('type') for b in result.get('content', [])]
-    print(f'API response: stop_reason={result.get("stop_reason")}, blocks={block_types}')
-
-    # Собираем текст только из text-блоков (пропускаем служебные блоки поиска)
-    text_parts = [b['text'] for b in result.get('content', []) if b.get('type') == 'text' and b.get('text', '').strip()]
+    text_parts = [b['text'] for _, b in sorted(blocks.items()) if b['type'] == 'text' and b['text'].strip()]
     if not text_parts:
-        raise RuntimeError('No non-empty text content in Claude response: ' + json.dumps(result)[:1500])
+        raise RuntimeError('No non-empty text content in streamed response. Blocks: ' + json.dumps(block_types))
     return text_parts[-1].strip()
 
 
