@@ -1,0 +1,63 @@
+{
+  "updated": "2026-07-19T08:07:37.654584",
+  "season": "summer",
+  "general": [
+    {
+      "level": "red",
+      "text": "Travel insurance is MANDATORY from January 2026 — Georgian law. You cannot enter without it."
+    },
+    {
+      "level": "yellow",
+      "text": "No ATMs in mountain villages — always bring Georgian Lari cash."
+    },
+    {
+      "level": "yellow",
+      "text": "No shops above 2000m altitude — stock up food and water before going to mountains."
+    },
+    {
+      "level": "yellow",
+      "text": "Phone signal is unreliable in mountains — download your PDF before going."
+    },
+    {
+      "level": "green",
+      "text": "Georgia is a very safe country for tourists."
+    }
+  ],
+  "road_warnings": [
+    {
+      "level": "green",
+      "text": "Tusheti is OPEN — enjoy the most remote region of Georgia (open June-October)"
+    },
+    {
+      "level": "green",
+      "text": "Batumi Black Sea — swimming season is open"
+    },
+    {
+      "level": "yellow",
+      "text": "Svaneti — always requires 4WD vehicle for mountain roads"
+    },
+    {
+      "level": "green",
+      "text": "Kazbegi (Stepantsminda) — open year round"
+    },
+    {
+      "level": "green",
+      "text": "Gudauri — summer hiking season, ski season December-April"
+    }
+  ],
+  "seasonal_tips": [
+    "High season July — book hotels 2-3 weeks in advance",
+    "Mountains are the best escape from Tbilisi heat in summer",
+    "Batumi beach is perfect — warm Black Sea water",
+    "Tusheti is open — most remote and beautiful region of Georgia"
+  ],
+  "transport_prices": {
+    "tbilisi_to_kazbegi_taxi": "$60-85 per car",
+    "tbilisi_to_kazbegi_marshrutka": "$5-7 per person",
+    "tbilisi_to_batumi_train": "$10-15 per person",
+    "tbilisi_to_kakheti_marshrutka": "$3-5 per person",
+    "tbilisi_metro": "1 GEL per trip (~$0.35)",
+    "tbilisi_taxi_in_city": "$2-5 per trip (Yandex/Bolt app)",
+    "note": "Prices approximate for summer 2026. Verify locally."
+  }
+}
