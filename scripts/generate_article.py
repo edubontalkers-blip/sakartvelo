@@ -83,6 +83,58 @@ EVERGREEN_TOPICS = [
 
 
 # ══════════════════════════════════════
+# JSON-СХЕМА ДЛЯ TOOL USE
+# ══════════════════════════════════════
+# Вместо того чтобы просить модель вручную напечатать JSON текстом (что
+# ненадёжно — легко забыть экранировать кавычку или спецсимвол в тексте на
+# 9 языках, из-за чего JSON ломается), используем механизм "tool use" —
+# Anthropic API сам гарантирует, что аргументы вызова инструмента будут
+# валидным JSON, соответствующим схеме. Это устраняет целый класс ошибок.
+ARTICLE_LANG_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "title": {"type": "string"},
+        "tagline": {"type": "string"},
+        "intro": {"type": "string"},
+        "sections": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "heading": {"type": "string"},
+                    "body": {"type": "string"}
+                },
+                "required": ["heading", "body"]
+            },
+            "minItems": 3,
+            "maxItems": 5
+        },
+        "closing": {"type": "string"}
+    },
+    "required": ["title", "tagline", "intro", "sections", "closing"]
+}
+
+SUBMIT_ARTICLE_TOOL = {
+    "name": "submit_article",
+    "description": "Submit the finished multi-language article for publishing.",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "slug": {"type": "string", "description": "Short URL-safe English slug, no spaces"},
+            "topic_key": {"type": "string", "description": "Short stable English key for de-duplication"},
+            "emoji": {"type": "string", "description": "Single emoji representing the topic"},
+            "content": {
+                "type": "object",
+                "properties": {lang: ARTICLE_LANG_SCHEMA for lang in LANGS},
+                "required": LANGS
+            }
+        },
+        "required": ["slug", "topic_key", "emoji", "content"]
+    }
+}
+
+
+# ══════════════════════════════════════
 # ANTHROPIC API (raw HTTPS, без сторонних библиотек)
 # ══════════════════════════════════════
 def call_claude(prompt, use_web_search=False, max_tokens=8000):
@@ -90,14 +142,19 @@ def call_claude(prompt, use_web_search=False, max_tokens=8000):
     if not api_key:
         raise RuntimeError('ANTHROPIC_API_KEY is not set')
 
+    tools = [SUBMIT_ARTICLE_TOOL]
+    if use_web_search:
+        tools.append({"type": "web_search_20250305", "name": "web_search", "max_uses": 5})
+
     body = {
         "model": "claude-sonnet-4-6",
         "max_tokens": max_tokens,
         "stream": True,
+        "tools": tools,
+        # Не форсируем tool_choice — модели нужно свободно пользоваться
+        # web_search сначала, и только потом вызвать submit_article.
         "messages": [{"role": "user", "content": prompt}]
     }
-    if use_web_search:
-        body["tools"] = [{"type": "web_search_20250305", "name": "web_search", "max_uses": 5}]
 
     data = json.dumps(body).encode('utf-8')
     req = urllib.request.Request(
@@ -114,13 +171,7 @@ def call_claude(prompt, use_web_search=False, max_tokens=8000):
     # ══════════════════════════════════════
     # ПОТОКОВЫЙ РЕЖИМ (SSE streaming)
     # ══════════════════════════════════════
-    # Раньше ждали ответ целиком одним куском — при долгих запросах
-    # (веб-поиск + много токенов) соединение иногда обрывалось
-    # ("Remote end closed connection without response"), похоже, из-за
-    # долгого простоя без данных на линии. В потоковом режиме сервер
-    # присылает данные постепенно, по мере генерации, что намного надёжнее
-    # для длинных запросов.
-    blocks = {}  # index -> {"type": ..., "text": ...}
+    blocks = {}  # index -> {"type": ..., "text": "", "name": ...}
     stop_reason = None
 
     try:
@@ -140,12 +191,18 @@ def call_claude(prompt, use_web_search=False, max_tokens=8000):
                 etype = event.get('type')
                 if etype == 'content_block_start':
                     idx = event['index']
-                    blocks[idx] = {"type": event['content_block'].get('type'), "text": ""}
+                    cb = event['content_block']
+                    blocks[idx] = {"type": cb.get('type'), "text": "", "name": cb.get('name')}
                 elif etype == 'content_block_delta':
                     idx = event['index']
                     delta = event.get('delta', {})
-                    if delta.get('type') == 'text_delta' and idx in blocks:
+                    dtype = delta.get('type')
+                    if dtype == 'text_delta' and idx in blocks:
                         blocks[idx]['text'] += delta.get('text', '')
+                    elif dtype == 'input_json_delta' and idx in blocks:
+                        # Частичный JSON аргументов вызова инструмента —
+                        # накапливаем как строку, разберём после завершения
+                        blocks[idx]['text'] += delta.get('partial_json', '')
                 elif etype == 'message_delta':
                     stop_reason = event.get('delta', {}).get('stop_reason', stop_reason)
                 elif etype == 'error':
@@ -154,30 +211,16 @@ def call_claude(prompt, use_web_search=False, max_tokens=8000):
         err_body = e.read().decode('utf-8', errors='replace')
         raise RuntimeError(f'Anthropic API HTTP {e.code}: {err_body[:1000]}')
 
-    block_types = [b['type'] for _, b in sorted(blocks.items())]
+    block_types = [(b['type'], b.get('name')) for _, b in sorted(blocks.items())]
     print(f'API response (stream): stop_reason={stop_reason}, blocks={block_types}')
 
-    text_parts = [b['text'] for _, b in sorted(blocks.items()) if b['type'] == 'text' and b['text'].strip()]
-    if not text_parts:
-        raise RuntimeError('No non-empty text content in streamed response. Blocks: ' + json.dumps(block_types))
-    return text_parts[-1].strip()
+    # Ищем именно вызов инструмента submit_article — его "input" гарантированно
+    # валидный JSON благодаря структурированной схеме на стороне API.
+    for _, b in sorted(blocks.items()):
+        if b['type'] == 'tool_use' and b.get('name') == 'submit_article':
+            return json.loads(b['text'])
 
-
-def extract_json(text):
-    text = text.strip()
-    text = re.sub(r'^```json\s*', '', text)
-    text = re.sub(r'^```\s*', '', text)
-    text = re.sub(r'\s*```$', '', text)
-    try:
-        return json.loads(text)
-    except json.JSONDecodeError:
-        # Резервный вариант: если вокруг JSON есть лишний текст —
-        # вырезаем от первой { до последней }, пробуем ещё раз.
-        start = text.find('{')
-        end = text.rfind('}')
-        if start != -1 and end != -1 and end > start:
-            return json.loads(text[start:end + 1])
-        raise
+    raise RuntimeError('submit_article tool was not called. Blocks: ' + json.dumps(block_types))
 
 
 # ══════════════════════════════════════
@@ -247,29 +290,12 @@ dates, or names."""
 
 Write the article in ALL of these {len(LANGS)} languages: {lang_list}.
 
-Return ONLY valid JSON (no markdown, no explanation, no code fences), with this
-exact structure:
-{{
-  "slug": "short-url-safe-english-slug-no-spaces",
-  "topic_key": "a short stable English key identifying this topic (for de-duplication)",
-  "emoji": "single emoji representing the topic",
-  "content": {{
-    "ru": {{"title": "...", "tagline": "...", "intro": "2-3 sentences", "sections": [{{"heading":"...","body":"2-4 sentences"}}, ... 3 to 5 sections], "closing": "1-2 sentences"}},
-    "en": {{ ... same structure ... }},
-    "tr": {{ ... }},
-    "ar": {{ ... }},
-    "he": {{ ... }},
-    "fa": {{ ... }},
-    "de": {{ ... }},
-    "it": {{ ... }},
-    "es": {{ ... }}
-  }}
-}}
-
 Important: all 9 languages must have genuinely translated, natural-sounding
 content (not literal word-for-word translation) — same facts, same structure,
 each written as if by a native speaker. The "slug" and "topic_key" stay in
-English regardless of content language."""
+English regardless of content language.
+
+When ready, call the submit_article tool with the finished article."""
 
 
 def generate_article():
@@ -285,7 +311,7 @@ def generate_article():
     # Без запаса ответ обрывается на середине (stop_reason=max_tokens).
     tokens_for_call = 24000 if mode == 'news' else 14000
     raw = call_claude(prompt, use_web_search=(mode == 'news'), max_tokens=tokens_for_call)
-    data = extract_json(raw)
+    data = raw  # call_claude уже вернул разобранный dict через tool use
 
     # Гарантируем уникальность slug (на случай редкого совпадения)
     existing_slugs = {a['slug'] for a in manifest['articles']}
