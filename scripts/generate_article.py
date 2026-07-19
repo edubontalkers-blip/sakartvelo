@@ -113,21 +113,44 @@ def call_claude(prompt, use_web_search=False, max_tokens=8000):
     # никто не ждёт вживую на сайте, поэтому можно позволить себе долгий
     # таймаут. Веб-поиск + генерация статьи сразу на 9 языках иногда
     # занимает больше, чем стандартные 120 секунд.
-    with urllib.request.urlopen(req, timeout=600) as resp:
-        result = json.loads(resp.read().decode('utf-8'))
+    try:
+        with urllib.request.urlopen(req, timeout=600) as resp:
+            raw_body = resp.read().decode('utf-8')
+    except urllib.error.HTTPError as e:
+        # Печатаем реальное тело ответа с ошибкой от Anthropic (там обычно
+        # понятное сообщение — неверный ключ, лимит, неверный формат запроса)
+        err_body = e.read().decode('utf-8', errors='replace')
+        raise RuntimeError(f'Anthropic API HTTP {e.code}: {err_body[:1000]}')
+
+    result = json.loads(raw_body)
+
+    # Диагностика: показываем, что реально пришло, чтобы легче было
+    # разбираться при следующем сбое (типы блоков и причина остановки)
+    block_types = [b.get('type') for b in result.get('content', [])]
+    print(f'API response: stop_reason={result.get("stop_reason")}, blocks={block_types}')
 
     # Собираем текст только из text-блоков (пропускаем служебные блоки поиска)
-    text_parts = [b['text'] for b in result.get('content', []) if b.get('type') == 'text']
+    text_parts = [b['text'] for b in result.get('content', []) if b.get('type') == 'text' and b.get('text', '').strip()]
     if not text_parts:
-        raise RuntimeError('No text content in Claude response: ' + json.dumps(result)[:500])
+        raise RuntimeError('No non-empty text content in Claude response: ' + json.dumps(result)[:1500])
     return text_parts[-1].strip()
 
 
 def extract_json(text):
     text = text.strip()
     text = re.sub(r'^```json\s*', '', text)
+    text = re.sub(r'^```\s*', '', text)
     text = re.sub(r'\s*```$', '', text)
-    return json.loads(text)
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        # Резервный вариант: если вокруг JSON есть лишний текст —
+        # вырезаем от первой { до последней }, пробуем ещё раз.
+        start = text.find('{')
+        end = text.rfind('}')
+        if start != -1 and end != -1 and end > start:
+            return json.loads(text[start:end + 1])
+        raise
 
 
 # ══════════════════════════════════════
@@ -516,5 +539,7 @@ if __name__ == '__main__':
     try:
         main()
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         print(f'ERROR: {e}', file=sys.stderr)
         sys.exit(1)
