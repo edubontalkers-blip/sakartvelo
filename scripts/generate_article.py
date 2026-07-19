@@ -550,42 +550,120 @@ INDEX_TEMPLATE = '''<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Georgia Travel News & Guides | sakartvelo.ai</title>
 <meta name="description" content="Latest travel news and guides about Georgia — updated regularly.">
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,600;1,6..72,500&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#241f1a;--muted:#6b6055;--bg:#f4efe4;--paper:#fffdf8;--line:rgba(36,31,26,.1);--accent:#0e7c78}
+[data-theme=dark]{--bg:#0c1615;--paper:#16211f;--ink:#eef0ee;--muted:#9aa8a4;--line:rgba(255,255,255,.09);--accent:#4fd8cf}
 *{box-sizing:border-box}
-body{margin:0;font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--ink)}
-h1{font-family:'Newsreader',serif}
-.wrap{max-width:700px;margin:0 auto;padding:20px}
+body{margin:0;font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+h1{font-family:'Newsreader',serif;margin:0}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:var(--paper);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
+.logo{font-family:'Newsreader',serif;font-weight:600;font-size:1.15rem;color:var(--accent);text-decoration:none;display:flex;align-items:center;gap:8px}
+#tb{border:1px solid var(--line);background:var(--bg);border-radius:100px;width:38px;height:38px;font-size:1rem;cursor:pointer}
+.langpick{border:1px solid var(--line);background:var(--bg);border-radius:100px;padding:8px 14px;font-size:.85rem;font-weight:500;display:flex;align-items:center;gap:6px}
+select#langSel{border:none;background:transparent;font-family:inherit;font-size:.85rem;font-weight:500;color:var(--ink)}
+.wrap{max-width:700px;margin:0 auto;padding:24px 20px}
 .item{display:block;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:12px;text-decoration:none;color:var(--ink)}
 .item .e{font-size:1.4rem;margin-bottom:6px}
 .item .t{font-weight:600;font-size:1.05rem}
 .item .d{color:var(--muted);font-size:.8rem;margin-top:4px}
-a.back{color:var(--accent);font-weight:500;text-decoration:none}
+html[data-theme=dark] .nav{background:#16211f !important;border-color:rgba(255,255,255,.09) !important}
+html[data-theme=dark] .langpick,html[data-theme=dark] #tb{background:#0c1615 !important;border-color:rgba(255,255,255,.09) !important;color:#eef0ee !important}
+html[data-theme=dark] #langSel{color:#eef0ee !important}
+html[data-theme=dark] .item{background:#16211f !important;border-color:rgba(255,255,255,.09) !important}
 </style>
 </head>
 <body>
+<nav class="nav">
+  <a href="https://sakartvelo.ai" class="logo">🍶 sakartvelo.ai</a>
+  <div style="display:flex;align-items:center;gap:8px">
+    <button id="tb" onclick="toggleTheme()">🌙</button>
+    <div class="langpick">🌐
+      <select id="langSel" onchange="setLang(this.value)">
+        <option value="ru">Русский</option>
+        <option value="en">English</option>
+        <option value="tr">Türkçe</option>
+        <option value="ar">العربية</option>
+        <option value="he">עברית</option>
+        <option value="fa">فارسی</option>
+        <option value="de">Deutsch</option>
+        <option value="it">Italiano</option>
+        <option value="es">Español</option>
+      </select>
+    </div>
+  </div>
+</nav>
 <div class="wrap">
-  <p><a class="back" href="https://sakartvelo.ai">← sakartvelo.ai</a></p>
-  <h1>🇬🇪 Georgia Travel News & Guides</h1>
-  __ITEMS__
+  <h1 id="pageTitle" style="margin-bottom:18px;font-size:1.6rem">🇬🇪 Georgia Travel News & Guides</h1>
+  <div id="itemsList"></div>
 </div>
+<script>
+var ARTICLES=__ARTICLES_JSON__;
+var PAGE_TITLE = {
+  ru:'🇬🇪 Новости и статьи о Грузии', en:'🇬🇪 Georgia Travel News & Guides', tr:'🇬🇪 Gürcistan Seyahat Haberleri',
+  ar:'🇬🇪 أخبار ومقالات السفر في جورجيا', he:'🇬🇪 חדשות וטיולים בגאורגיה', fa:'🇬🇪 اخبار و مقالات سفر گرجستان',
+  de:'🇬🇪 Georgien Reisenachrichten', it:'🇬🇪 Notizie di viaggio Georgia', es:'🇬🇪 Noticias de viaje Georgia'
+};
+function g(id){return document.getElementById(id)}
+function setLang(lang){
+  var isRTL = (lang==='he' || lang==='ar' || lang==='fa');
+  document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
+  document.documentElement.setAttribute('lang', lang);
+  g('pageTitle').textContent = PAGE_TITLE[lang] || PAGE_TITLE.en;
+  var html = '';
+  ARTICLES.forEach(function(a){
+    var title = (a.titles && a.titles[lang]) || a.title_en || a.slug;
+    html += '<a class="item" href="https://sakartvelo.ai/news/'+a.slug+'/">'
+      + '<div class="e">'+(a.emoji||'🇬🇪')+'</div>'
+      + '<div class="t">'+title+'</div>'
+      + '<div class="d">'+(a.date||'')+'</div></a>\\n';
+  });
+  g('itemsList').innerHTML = html;
+  try{ localStorage.setItem('sak_lang', lang); }catch(e){}
+}
+function toggleTheme(){
+  var dk = document.documentElement.dataset.theme === 'dark';
+  document.documentElement.dataset.theme = dk ? '' : 'dark';
+  try{ localStorage.setItem('sak_theme', dk ? '' : 'dark'); }catch(e){}
+  g('tb').textContent = dk ? '\\ud83c\\udf19' : '\\u2600\\ufe0f';
+}
+try{
+  if(localStorage.getItem('sak_theme')==='dark'){
+    document.documentElement.dataset.theme='dark';
+    document.addEventListener('DOMContentLoaded', function(){ g('tb').textContent='\\u2600\\ufe0f'; });
+  }
+}catch(e){}
+(function(){
+  var saved = 'en';
+  try{ saved = localStorage.getItem('sak_lang') || 'en'; }catch(e){}
+  var browserLang = (navigator.language || 'en').slice(0,2);
+  if (!['ru','en','tr','ar','he','fa','de','it','es'].includes(saved)) saved = 'en';
+  if (saved === 'en' && ['ru','tr','ar','he','fa','de','it','es'].indexOf(browserLang) !== -1) saved = browserLang;
+  document.getElementById('langSel').value = saved;
+  setLang(saved);
+})();
+</script>
 </body>
 </html>
 '''
 
 
 def rebuild_news_index(manifest):
-    items_html = ''
+    articles_for_js = []
     for a in reversed(manifest['articles'][-100:]):
-        items_html += (f'<a class="item" href="https://sakartvelo.ai/news/{a["slug"]}/">'
-                        f'<div class="e">{a.get("emoji","🇬🇪")}</div>'
-                        f'<div class="t">{a.get("title_en","")}</div>'
-                        f'<div class="d">{a.get("date","")}</div></a>\n  ')
-    html = INDEX_TEMPLATE.replace('__ITEMS__', items_html)
+        articles_for_js.append({
+            'slug': a['slug'],
+            'emoji': a.get('emoji', '🇬🇪'),
+            'date': a.get('date', ''),
+            'title_en': a.get('title_en', a['slug']),
+            'titles': a.get('titles', {'en': a.get('title_en', a['slug'])}),
+        })
+    html = INDEX_TEMPLATE.replace('__ARTICLES_JSON__', json.dumps(articles_for_js, ensure_ascii=False))
     (NEWS_DIR / 'index.html').write_text(html, encoding='utf-8')
 
 
@@ -611,6 +689,7 @@ def main():
         'slug': data['slug'],
         'topic_key': data.get('topic_key', data['slug']),
         'title_en': data['content'].get('en', {}).get('title', data['slug']),
+        'titles': {lang: data['content'].get(lang, {}).get('title', data['slug']) for lang in LANGS},
         'emoji': data.get('emoji', '🇬🇪'),
         'mode': mode,
         'date': datetime.now(timezone.utc).strftime('%Y-%m-%d'),
