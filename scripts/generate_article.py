@@ -109,7 +109,11 @@ def call_claude(prompt, use_web_search=False, max_tokens=8000):
         },
         method='POST'
     )
-    with urllib.request.urlopen(req, timeout=120) as resp:
+    # 600 секунд (10 минут) — с запасом. Это выполняется в GitHub Actions,
+    # никто не ждёт вживую на сайте, поэтому можно позволить себе долгий
+    # таймаут. Веб-поиск + генерация статьи сразу на 9 языках иногда
+    # занимает больше, чем стандартные 120 секунд.
+    with urllib.request.urlopen(req, timeout=600) as resp:
         result = json.loads(resp.read().decode('utf-8'))
 
     # Собираем текст только из text-блоков (пропускаем служебные блоки поиска)
