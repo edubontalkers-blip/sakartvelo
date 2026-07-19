@@ -313,6 +313,16 @@ def generate_article():
     raw = call_claude(prompt, use_web_search=(mode == 'news'), max_tokens=tokens_for_call)
     data = raw  # call_claude уже вернул разобранный dict через tool use
 
+    # Защита: иногда модель по ошибке сериализует вложенный объект "content"
+    # в строку (двойное JSON-кодирование) вместо настоящего объекта, хотя
+    # схема требует object. Если так — пробуем разобрать ещё раз.
+    if isinstance(data.get('content'), str):
+        print('WARNING: content came as a string, attempting to re-parse as JSON')
+        data['content'] = json.loads(data['content'])
+
+    if not isinstance(data.get('content'), dict):
+        raise RuntimeError(f'"content" is not an object even after re-parse attempt: {type(data.get("content"))}')
+
     # Гарантируем уникальность slug (на случай редкого совпадения)
     existing_slugs = {a['slug'] for a in manifest['articles']}
     base_slug = data['slug']
