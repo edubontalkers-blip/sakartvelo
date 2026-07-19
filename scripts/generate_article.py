@@ -233,7 +233,12 @@ def generate_article():
 
     print(f'Mode: {mode}, topic hint: {topic or "(web search)"}')
     prompt = build_prompt(topic, mode, recent_titles)
-    raw = call_claude(prompt, use_web_search=(mode == 'news'), max_tokens=12000)
+    # Для режима "news" с веб-поиском нужен больший запас токенов — сам
+    # процесс поиска (несколько раундов server_tool_use/web_search_tool_result)
+    # тоже расходует токены ДО того, как модель напишет финальный JSON.
+    # Без запаса ответ обрывается на середине (stop_reason=max_tokens).
+    tokens_for_call = 24000 if mode == 'news' else 14000
+    raw = call_claude(prompt, use_web_search=(mode == 'news'), max_tokens=tokens_for_call)
     data = extract_json(raw)
 
     # Гарантируем уникальность slug (на случай редкого совпадения)
