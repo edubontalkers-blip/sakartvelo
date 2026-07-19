@@ -1,3 +1,23 @@
 {
-  "articles": []
+  "articles": [
+    {
+      "slug": "georgia-caucasus-travel-guide-2026",
+      "topic_key": "georgia-caucasus-travel-2026",
+      "title_en": "Georgia in 2026: Everything You Need to Know Before You Go",
+      "titles": {
+        "ru": "Грузия в 2026 году: всё, что нужно знать перед поездкой",
+        "en": "Georgia in 2026: Everything You Need to Know Before You Go",
+        "tr": "2026'da Gürcistan: Gitmeden Önce Bilmeniz Gereken Her Şey",
+        "ar": "جورجيا 2026: كل ما تحتاج معرفته قبل السفر",
+        "he": "גאורגיה 2026: כל מה שצריך לדעת לפני הנסיעה",
+        "fa": "گرجستان در ۲۰۲۶: همه چیزی که پیش از سفر باید بدانید",
+        "de": "Georgien 2026: Alles, was du vor der Reise wissen musst",
+        "it": "Georgia 2026: tutto quello che devi sapere prima di partire",
+        "es": "Georgia en 2026: todo lo que necesitas saber antes de viajar"
+      },
+      "emoji": "🇬🇪",
+      "mode": "news",
+      "date": "2026-07-19"
+    }
+  ]
 }
