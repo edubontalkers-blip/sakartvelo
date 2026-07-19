@@ -41,8 +41,8 @@
 <link rel="dns-prefetch" href="https://open.er-api.com">
 <link rel="dns-prefetch" href="https://api.anthropic.com">
 <!-- Async font load: не блокирует рендер, display=swap гарантирует текст виден сразу -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,900&family=Manrope:wght@400;700&display=swap" media="print" onload="this.media='all';this.onload=null">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,900&family=Manrope:wght@400;700&display=swap"></noscript>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Manrope:wght@400;500;700;800&display=swap" media="print" onload="this.media='all';this.onload=null">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Manrope:wght@400;500;700;800&display=swap"></noscript>
 
 <!-- AI-индексация: структурированные данные -->
 <script type="application/ld+json">
@@ -60,21 +60,23 @@
 <style>
 /* ===== ДИЗАЙН-ТОКЕНЫ ===== */
 :root{
-  --wine:#7a1220; --wine-deep:#5a0c18; --wine-bright:#c8334a;
-  --gold:#e3b35e; --gold-soft:#f0d39a;
-  --cream:#fbf6ee; --ink:#f4e9dc; --muted:#b09a8c;
-  --bg:#120a0c; --card:#1d1113; --card-2:#26171a;
-  --line:rgba(227,179,94,.22);
-  --ok:#3f9d6a; --radius:20px;
-  --shadow:0 18px 50px -18px rgba(0,0,0,.7);
-  --font-display:'Fraunces',Georgia,serif;font-display:swap;
+  --wine:#E63946; --wine-deep:#B32332; --wine-bright:#FF4D5E;
+  --gold:#FFC93C; --gold-soft:#FFDD7A;
+  --teal:#1FC8D6; --teal-deep:#0E7C87; --teal-bright:#4FE0EA;
+  --cream:#EAF7F7; --ink:#F0FAFA; --muted:#8FB8BC;
+  --bg:#073B45; --card:#0D4B57; --card-2:#125A67;
+  --line:rgba(31,200,214,.28);
+  --ok:#3f9d6a; --radius:14px;
+  --shadow:0 18px 50px -18px rgba(0,0,0,.75);
+  --font-display:'Bricolage Grotesque',Georgia,serif;font-display:swap;
   --font-body:'Manrope',-apple-system,system-ui,sans-serif;
 }
 [data-theme="light"]{
-  --wine:#da291c; --wine-bright:#e8112d; --gold:#c8911f; --gold-soft:#e0b450;
-  --cream:#fff6f4; --bg:#fff6f4; --card:#ffffff; --card-2:#fff0ee;
-  --ink:#1f1413; --muted:#8a7068; --line:rgba(218,41,28,.16);
-  --shadow:0 18px 50px -22px rgba(218,41,28,.30);
+  --wine:#D6283A; --wine-bright:#E63946; --gold:#E0A400; --gold-soft:#FFC93C;
+  --teal:#0E9AA8; --teal-deep:#077580; --teal-bright:#1FC8D6;
+  --cream:#F0FBFB; --bg:#F0FBFB; --card:#ffffff; --card-2:#E3F5F5;
+  --ink:#0B2C30; --muted:#5C8A8F; --line:rgba(14,154,168,.20);
+  --shadow:0 18px 50px -22px rgba(14,154,168,.25);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 a,button,[onclick]{touch-action:manipulation;}
@@ -95,15 +97,15 @@ body{
 body::before{
   content:"";position:fixed;inset:0;z-index:-2;
   background:
-    radial-gradient(55% 40% at 88% 8%,rgba(168,36,58,.22),transparent 60%),
-    radial-gradient(45% 35% at 6% 30%,rgba(216,164,74,.12),transparent 55%),
-    radial-gradient(70% 60% at 50% 112%,rgba(90,12,24,.55),transparent 60%);
+    radial-gradient(55% 40% at 88% 8%,rgba(31,200,214,.20),transparent 60%),
+    radial-gradient(45% 35% at 6% 30%,rgba(255,201,60,.12),transparent 55%),
+    radial-gradient(70% 60% at 50% 112%,rgba(230,57,70,.14),transparent 60%);
 }
 [data-theme="light"] body::before{
   background:
-    radial-gradient(75% 48% at 82% -6%,rgba(232,17,45,.20),transparent 60%),
-    radial-gradient(60% 45% at 12% 4%,rgba(218,41,28,.14),transparent 58%),
-    radial-gradient(70% 50% at 50% 106%,rgba(200,145,31,.12),transparent 60%);
+    radial-gradient(75% 48% at 82% -6%,rgba(14,154,168,.10),transparent 60%),
+    radial-gradient(60% 45% at 12% 4%,rgba(224,164,0,.08),transparent 58%),
+    radial-gradient(70% 50% at 50% 106%,rgba(214,40,58,.07),transparent 60%);
 }
 /* Тонкое зерно — тактильность 2026, чистый SVG, вес ~0, не мешает кликам */
 body::after{
@@ -130,35 +132,46 @@ header.top{
 .theme-btn:active{transform:scale(.9)}
 
 /* ===== ГЕРОЙ ===== */
-.hero{text-align:center;padding:18px 0 8px;position:relative}
+.hero{
+  text-align:center;padding:64px 16px 40px;position:relative;z-index:0;
+  margin:0 0 8px;overflow:hidden;
+  background:
+    linear-gradient(180deg,rgba(7,59,69,.55) 0%,rgba(7,59,69,.35) 40%,rgba(7,59,69,.75) 100%),
+    url('/hero-kazbegi.jpg') center 35%/cover no-repeat;
+  border-bottom:1px solid var(--line);
+}
+[data-theme="light"] .hero{
+  background:
+    linear-gradient(180deg,rgba(7,59,69,.45) 0%,rgba(7,59,69,.30) 40%,rgba(7,59,69,.70) 100%),
+    url('/hero-kazbegi.jpg') center 35%/cover no-repeat;
+}
+.hero::after{
+  content:"";position:absolute;top:0;left:0;right:0;height:5px;
+  background:linear-gradient(90deg,var(--teal) 0%,var(--teal) 33%,var(--wine) 33%,var(--wine) 66%,var(--gold) 66%,var(--gold) 100%);
+}
 /* Тёмная подложка-сияние позади заголовка — гарантирует читаемость на любом фоне */
-.hero::before{
-  content:"";position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);
-  width:120%;height:150%;z-index:-1;pointer-events:none;
-  background:radial-gradient(closest-side,rgba(18,10,12,.85),rgba(18,10,12,.45) 55%,transparent 80%);
-}
-[data-theme="light"] .hero::before{
-  background:radial-gradient(closest-side,rgba(253,242,230,.85),rgba(253,242,230,.4) 55%,transparent 80%);
-}
+.hero::before{display:none}
+[data-theme="light"] .hero::before{display:none}
 .hero h1{
-  font-family:var(--font-display);font-weight:900;
-  font-size:clamp(2.1rem,8vw,3.3rem);line-height:1.04;
-  letter-spacing:-1.5px;margin-bottom:14px;
-  color:var(--ink);
-  text-shadow:0 2px 4px rgba(0,0,0,.55),0 1px 22px rgba(0,0,0,.4);
+  font-family:var(--font-display);font-weight:800;
+  font-size:clamp(2.1rem,8vw,3.4rem);line-height:1.02;
+  letter-spacing:-0.5px;margin-bottom:14px;
+  color:#fff;
+  text-shadow:0 2px 14px rgba(0,0,0,.5),0 1px 4px rgba(0,0,0,.6);
 }
 [data-theme="light"] .hero h1{
-  color:var(--wine);
-  text-shadow:0 1px 2px rgba(255,255,255,.7);
+  color:#fff;
+  text-shadow:0 2px 14px rgba(0,0,0,.5),0 1px 4px rgba(0,0,0,.6);
 }
-.hero h1 .em{color:var(--gold);font-style:italic}
+.hero h1 .em{color:var(--gold-soft);font-style:normal}
 .hero .greet{
-  min-height:1.6em;font-size:1.05rem;color:var(--gold-soft);
-  font-weight:600;margin-bottom:6px;
+  min-height:1.6em;font-size:1.05rem;color:var(--teal-bright);
+  font-weight:700;margin-bottom:6px;
   transition:opacity .25s ease;
+  text-shadow:0 1px 8px rgba(0,0,0,.5);
 }
-[data-theme="light"] .hero .greet{color:var(--wine-bright)}
-.hero .sub{color:var(--muted);font-size:1rem;max-width:430px;margin:0 auto 20px}
+[data-theme="light"] .hero .greet{color:var(--teal-bright)}
+.hero .sub{color:rgba(255,255,255,.92);font-size:1rem;max-width:430px;margin:0 auto 20px;text-shadow:0 1px 8px rgba(0,0,0,.5)}
 
 /* Бейдж доверия */
 .trust{
@@ -291,10 +304,37 @@ header.top{
 }
 .tile:active{transform:scale(.97);border-color:var(--gold)}
 a.tile{text-decoration:none}
+
+/* ══════════════════════════════════════
+   ФИРМЕННЫЕ АКЦЕНТЫ ПЛИТОК — сдержанно и уверенно
+   Один смелый коралловый + один янтарный, строго чередуются.
+   Не радуга, а осознанный, узнаваемый цветовой почерк бренда.
+   ══════════════════════════════════════ */
+/* ══════════════════════════════════════
+   ТРОПИЧЕСКАЯ ПАЛИТРА ПЛИТОК — бирюза, красный, жёлтый по кругу
+   ══════════════════════════════════════ */
+.bento > *:nth-child(3n+1){--tacc:var(--teal)}
+.bento > *:nth-child(3n+2){--tacc:var(--wine)}
+.bento > *:nth-child(3n+3){--tacc:var(--gold)}
+
+.tile{border-left:4px solid var(--tacc,var(--gold));position:relative;overflow:hidden;border-radius:12px}
+.tile::after{
+  content:"";position:absolute;top:-30%;right:-20%;width:70%;height:160%;
+  background:radial-gradient(circle,var(--tacc,var(--gold)) 0%,transparent 70%);
+  opacity:.10;pointer-events:none;z-index:0;
+}
+.tile .ti{
+  position:relative;z-index:1;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:42px;height:42px;border-radius:13px;
+  background:var(--tacc,var(--gold));box-shadow:0 4px 12px -2px rgba(0,0,0,.35);
+}
+
+.tile h3,.tile p{position:relative;z-index:1}
 .tile.big{grid-column:span 2}
 .tile .ti{font-size:1.6rem}
-.tile h3,.tile h4{font-size:.98rem;font-weight:700;text-wrap:balance}
-.tile p{font-size:.78rem;color:var(--muted);line-height:1.35}
+.tile h3,.tile h4{font-size:1.12rem;font-weight:800;text-wrap:balance;color:var(--ink)}
+.tile p{font-size:.86rem;font-weight:500;color:var(--muted);line-height:1.4}
 
 /* ===== МОДАЛКА ИНСТРУМЕНТА ===== */
 .modal{position:fixed;inset:0;will-change:transform;contain:layout style;z-index:100;display:none;flex-direction:column;
@@ -672,6 +712,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;padding
     <a href="/planner/" class="tile big" style="text-decoration:none;display:block;background:linear-gradient(135deg,var(--wine,#8b1a1a),#5a1010);color:#fff"><span class="ti">🗺️</span><h3 data-i18n="t_planner_h" style="color:#fff">Составь свой маршрут</h3><p data-i18n="t_planner_p" style="color:#f0d9c8">Ответь на 10 вопросов — получи личный PDF-гид с расписанием, бюджетом и чек-листом</p></a>
     <button class="tile big" data-tool="weather"><span class="ti">🌤️</span><h3 data-i18n="t_weather_h">Погода в Грузии</h3><p data-i18n="t_weather_p">7 дней · 11 городов · обновляется каждый час</p></button>
     <a class="tile big" href="https://sakartvelo.ai/news/"><span class="ti">📰</span><h3 data-i18n="t_news_h">Новости и статьи</h3><p data-i18n="t_news_p">Свежие материалы о Грузии — обновляется каждый день</p></a>
+    <a class="tile big" href="https://sakartvelo.ai/geo/regions-guide/"><span class="ti">🗺️</span><h3 data-i18n="t_regions_h">Регионы и города</h3><p data-i18n="t_regions_p">Все 12 регионов Грузии — куда поехать и что посмотреть</p></a>
     <button class="tile" data-tool="metro"><span class="ti">🚇</span><h3 data-i18n="t_metro_h">Метро Тбилиси</h3><p data-i18n="t_metro_p">Маршрут, цена, пересадка. Офлайн.</p></button>
     <button class="tile" data-tool="phrases"><span class="ti">📖</span><h3 data-i18n="t_phrases_h">Разговорник</h3><p data-i18n="t_phrases_p">Грузинские фразы + произношение</p></button>
     <button class="tile" data-tool="currency"><span class="ti">💱</span><h3 data-i18n="t_currency_h">Курс лари</h3><p data-i18n="t_currency_p">GEL в твою валюту</p></button>
@@ -684,7 +725,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;padding
     <button class="tile" data-tool="torch"><span class="ti">🔦</span><h3 data-i18n="t_torch_h">Фонарик</h3><p data-i18n="t_torch_p">Свет в темноте</p></button>
     <button class="tile" data-tool="luggage"><span class="ti">🧳</span><h3 data-i18n="t_luggage_h">Камера хранения</h3><p data-i18n="t_luggage_p">Оставь багаж — гуляй налегке</p></button>
     <button class="tile big" data-tool="prices"><span class="ti">🛡️</span><h3 data-i18n="t_prices_h">Честные цены 2026</h3><p data-i18n="t_prices_p">Сколько что стоит — не дай себя обсчитать. Такси, курс, метро, музеи.</p></button>
-    <button class="tile big" data-tool="story"><span class="ti">🌿</span><h3 data-i18n="t_story_h">Цитаты о Грузии</h3><p data-i18n="t_story_p">Выбери и поделись своей любимой цитатой о Грузии.</p></button>
+    <button class="tile big" data-tool="story"><span class="ti">💬</span><h3 data-i18n="t_story_h">Цитаты о Грузии</h3><p data-i18n="t_story_p">Выбери и поделись своей любимой цитатой о Грузии.</p></button>
     <button class="tile big" data-tool="places"><span class="ti">📍</span><h3 data-i18n="t_places_h">Лучшие места — от туристов</h3><p data-i18n="t_places_p">Рестораны, кафе, достопримечательности. Добавляй сам и голосуй ❤️</p></button>
         <button class="tile big" data-tool="games"><span class="ti">🎮</span><h3 data-i18n="t_games_h">Игры — убей время в дороге</h3><p data-i18n="t_games_p">Шахматы, Сапёр, Морской бой. Бесплатно, без регистрации.</p></button>
     <button class="tile big" data-tool="airports"><span class="ti">✈️</span><h3 data-i18n="t_airports_h">Табло аэропортов Грузии</h3><p data-i18n="t_airports_p">Прилёты и вылеты Тбилиси, Батуми, Кутаиси — онлайн в реальном времени.</p></button>
@@ -869,7 +910,7 @@ var I18N={
     t_phrases_h:'Разговорник',t_phrases_p:'Грузинские фразы + озвучка',
     t_currency_h:'Курс лари',t_currency_p:'GEL в твою валюту',
     t_radio_h:'Радио разных стран',t_radio_p:'Твоя страна + Грузия',
-    t_weather_h:'Погода в Грузии',t_weather_p:'7 дней · 11 городов · каждый час',t_news_h:'Новости и статьи',t_news_p:'Свежие материалы о Грузии — обновляется каждый день',
+    t_weather_h:'Погода в Грузии',t_weather_p:'7 дней · 11 городов · каждый час',t_news_h:'Новости и статьи',t_news_p:'Свежие материалы о Грузии — обновляется каждый день',t_regions_h:'Регионы и города',t_regions_p:'Все 12 регионов Грузии — куда поехать и что посмотреть',
     t_emergency_h:'Экстренное',t_emergency_p:'112, посольство, помощь',
     t_tips_h:'Чаевые',t_tips_p:'Делёж счёта супры',
     t_checklist_h:'Чек-лист сборов',t_checklist_p:'Со страховкой 2026',
@@ -902,7 +943,7 @@ var I18N={
     t_phrases_h:'Phrasebook',t_phrases_p:'Georgian phrases + pronunciation',
     t_currency_h:'Lari rate',t_currency_p:'GEL to your currency',
     t_radio_h:'Radio from around the world',t_radio_p:'Your country + Georgia',
-    t_weather_h:'Georgia Weather',t_weather_p:'7-day forecast · 11 cities · updated hourly',t_news_h:'Travel News & Guides',t_news_p:'Fresh Georgia content — updated daily',
+    t_weather_h:'Georgia Weather',t_weather_p:'7-day forecast · 11 cities · updated hourly',t_news_h:'Travel News & Guides',t_news_p:'Fresh Georgia content — updated daily',t_regions_h:'Regions & Cities',t_regions_p:'All 12 regions of Georgia — where to go and what to see',
     t_emergency_h:'Emergency',t_emergency_p:'112, embassy, help',
     t_tips_h:'Tips',t_tips_p:'Split the supra bill',
     t_checklist_h:'Packing checklist',t_checklist_p:'With 2026 insurance',
@@ -970,7 +1011,7 @@ var I18N={
     t_phrases_h:'Konuşma kılavuzu',t_phrases_p:'Gürcüce ifadeler + ses',
     t_currency_h:'Lari kuru',t_currency_p:'GEL kendi paranda',
     t_radio_h:'Farklı ülkelerden radyo',t_radio_p:'Ülken + Gürcistan',
-    t_weather_h:'Gürcistan Hava Durumu',t_weather_p:'7 gün · 11 şehir · saatte bir güncellenir',t_news_h:'Seyahat Haberleri',t_news_p:'Güncel Gürcistan içerikleri — her gün yenilenir',
+    t_weather_h:'Gürcistan Hava Durumu',t_weather_p:'7 gün · 11 şehir · saatte bir güncellenir',t_news_h:'Seyahat Haberleri',t_news_p:'Güncel Gürcistan içerikleri — her gün yenilenir',t_regions_h:'Bölgeler ve Şehirler',t_regions_p:'Gürcistan\u2019ın 12 bölgesi — nereye gidilir, ne görülür',
     t_emergency_h:'Acil',t_emergency_p:'112, elçilik, yardım',
     emergency_numbers:'Gürcistan Acil Numaraları',
     emergency_112:'birleşik acil (polis, ambulans, itfaiye)',
@@ -1019,7 +1060,7 @@ var I18N={
     t_phrases_h:'كتاب العبارات',t_phrases_p:'عبارات جورجية + صوت',
     t_currency_h:'سعر اللاري',t_currency_p:'GEL بعملتك',
     t_radio_h:'راديو من دول مختلفة',t_radio_p:'بلدك + جورجيا',
-    t_weather_h:'طقس جورجيا',t_weather_p:'7 أيام · 11 مدينة · يُحدَّث كل ساعة',t_news_h:'أخبار السفر',t_news_p:'محتوى جديد عن جورجيا — يتم التحديث يوميًا',
+    t_weather_h:'طقس جورجيا',t_weather_p:'7 أيام · 11 مدينة · يُحدَّث كل ساعة',t_news_h:'أخبار السفر',t_news_p:'محتوى جديد عن جورجيا — يتم التحديث يوميًا',t_regions_h:'المناطق والمدن',t_regions_p:'كل مناطق جورجيا الـ12 — إلى أين تذهب وماذا ترى',
     t_emergency_h:'الطوارئ',t_emergency_p:'112، السفارة، المساعدة',
     emergency_numbers:'أرقام الطوارئ في جورجيا',
     emergency_112:'الطوارئ الموحدة (شرطة، إسعاف، إطفاء)',
@@ -1132,7 +1173,7 @@ var I18N={
     t_phrases_h:'ספר שיחות',t_phrases_p:'ביטויים גאורגיים + אודיו',
     t_currency_h:'שער הלארי',t_currency_p:'GEL למטבע שלך',
     t_radio_h:'רדיו ממדינות שונות',t_radio_p:'המדינה שלך + גאורגיה',
-    t_weather_h:'מזג אוויר בגאורגיה',t_weather_p:'7 ימים · 11 ערים · מתעדכן כל שעה',t_news_h:'חדשות טיולים',t_news_p:'תוכן טרי על גאורגיה — מתעדכן מדי יום',
+    t_weather_h:'מזג אוויר בגאורגיה',t_weather_p:'7 ימים · 11 ערים · מתעדכן כל שעה',t_news_h:'חדשות טיולים',t_news_p:'תוכן טרי על גאורגיה — מתעדכן מדי יום',t_regions_h:'אזורים וערים',t_regions_p:'כל 12 האזורים של גאורגיה — לאן לנסוע ומה לראות',
     t_emergency_h:'חירום',t_emergency_p:'112, שגרירות, עזרה',
     emergency_numbers:'מספרי חירום בגאורגיה',
     emergency_112:'חירום מאוחד (משטרה, אמבולנס, כיבוי)',
@@ -1181,7 +1222,7 @@ var I18N={
     t_phrases_h:'Guide de conversation',t_phrases_p:'Phrases géorgiennes + audio',
     t_currency_h:'Taux du lari',t_currency_p:'GEL dans ta devise',
     t_radio_h:'Radio de différents pays',t_radio_p:'Ton pays + Géorgie',
-    t_weather_h:'Météo Géorgie',t_weather_p:'7 jours · 11 villes · mis à jour chaque heure',t_news_h:'Actualités voyage',t_news_p:'Contenu frais sur la Géorgie — mis à jour chaque jour',
+    t_weather_h:'Météo Géorgie',t_weather_p:'7 jours · 11 villes · mis à jour chaque heure',t_news_h:'Actualités voyage',t_news_p:'Contenu frais sur la Géorgie — mis à jour chaque jour',t_regions_h:'Régions et villes',t_regions_p:'Les 12 régions de Géorgie — où aller et que voir',
     t_emergency_h:'Urgence',t_emergency_p:'112, ambassade, aide',
     emergency_numbers:'Numeros durgence Georgie',
     emergency_112:'urgences unifiées (police, ambulance, pompiers)',
@@ -1230,7 +1271,7 @@ var I18N={
     t_phrases_h:'Guía de conversación',t_phrases_p:'Frases georgianas + audio',
     t_currency_h:'Tipo de cambio lari',t_currency_p:'GEL a tu moneda',
     t_radio_h:'Radio de distintos países',t_radio_p:'Tu país + Georgia',
-    t_weather_h:'Clima Georgia',t_weather_p:'7 días · 11 ciudades · actualizado cada hora',t_news_h:'Noticias de viaje',t_news_p:'Contenido fresco sobre Georgia — actualizado a diario',
+    t_weather_h:'Clima Georgia',t_weather_p:'7 días · 11 ciudades · actualizado cada hora',t_news_h:'Noticias de viaje',t_news_p:'Contenido fresco sobre Georgia — actualizado a diario',t_regions_h:'Regiones y ciudades',t_regions_p:'Las 12 regiones de Georgia — adónde ir y qué ver',
     t_emergency_h:'Emergencia',t_emergency_p:'112, embajada, ayuda',
     emergency_numbers:'Números de emergencia Georgia',
     emergency_112:'emergencia unificada (policía, ambulancia, bomberos)',
@@ -1279,7 +1320,7 @@ var I18N={
     t_phrases_h:'Sprachführer',t_phrases_p:'Georgische Phrasen + Audio',
     t_currency_h:'Lari-Kurs',t_currency_p:'GEL in deine Währung',
     t_radio_h:'Radio aus verschiedenen Ländern',t_radio_p:'Dein Land + Georgien',
-    t_weather_h:'Wetter in Georgien',t_weather_p:'7 Tage · 11 Städte · stündlich aktualisiert',t_news_h:'Reise-Neuigkeiten',t_news_p:'Frische Inhalte über Georgien — täglich aktualisiert',
+    t_weather_h:'Wetter in Georgien',t_weather_p:'7 Tage · 11 Städte · stündlich aktualisiert',t_news_h:'Reise-Neuigkeiten',t_news_p:'Frische Inhalte über Georgien — täglich aktualisiert',t_regions_h:'Regionen und Städte',t_regions_p:'Alle 12 Regionen Georgiens — wohin reisen und was sehen',
     t_emergency_h:'Notfall',t_emergency_p:'112, Botschaft, Hilfe',
     emergency_numbers:'Notfallnummern Georgien',
     emergency_112:'einheitlicher Notruf (Polizei, Rettung, Feuerwehr)',
@@ -1473,7 +1514,7 @@ var I18N={
   ky:{trust:'🆓 Түбөлүк акысыз · <b>ишенимдүү бренддер</b>',sub:'Бүтүндөй сапарыңызда жанашкан жолдош.',law_h:'2026-жылдын жаңы мыйзамы — камсыздандыруу милдеттүү',law_p:'2026-жылдын 1-январынан баштап ар бир турист медициналык камсыздандырууга ээ болуусу керек.',law_a:'Камсыздандыруу алуу →',tools_h:'🧰 Грузияда пайдалуу',tools_sub:'Жерде керек болгон баары',t_translator_h:'Котормочу',t_translator_p:'Өз тилиңизде жазыңыз',t_metro_h:'Тбилиси метросу',t_metro_p:'Маршрут, баа. Офлайн.',t_phrases_h:'Сүйлөшүү',t_phrases_p:'Грузин сөздөрү',t_currency_h:'Лари курсу',t_currency_p:'GEL сиздин валютаңызга',t_emergency_h:'Тез жардам',t_emergency_p:'112, элчилик',t_tips_h:'Чай акча',t_tips_p:'Эсепти бөлүшүү',t_checklist_h:'Жыйноо тизмеси',t_checklist_p:'2026 камсыздандыруу менен',t_food_h:'Эмне заказ берүү',t_food_p:'Грузин тамактары',t_visa_h:'Виза күндөрү',t_visa_p:'Визасыз жыл',t_alarm_h:'Ойготкуч',t_alarm_p:'Экскурсияны өткөрүп жибербе',t_torch_h:'Чырак',t_torch_p:'Каранкыда жарык',t_luggage_h:'Жүк сактоо',t_luggage_p:'Чемоданды коюп кет',t_prices_h:'Адилеттүү баалар 2026',t_prices_p:'Эмне канча турат',t_games_h:'Оюндар',t_games_p:'Шахмат, жылан, 2048. Акысыз.',t_airports_h:'Грузия аэропорттору',t_airports_p:'Тбилиси, Батуми, Кутаиси',t_trains_h:'Грузия поезддери',t_trains_p:'Тбилиси\u2194Батуми',t_flights_h:'Түз рейстер',t_flights_p:'Тбилиси, Батуми',share_h:'Бөлүшүү 🍶',share_sub:'Грузияга баратын досторуңа айт',f_terms:'Шарттар',f_privacy:'Купуялык',f_about:'Биз жөнүндө',f_note:'Чача акысыз AI жардамчы. 🇬🇪',consent:'Макулмун 🍶',consent_no:'Баш тартуу',disclaimer:'Чача AI, жаңылышы мүмкүн 🍶',ph:'Чачага кабар жибер...',back:'← Артка'},
   ja:{trust:'🆓 永久無料 · <b>信頼できるブランド</b>での支払い',sub:'旅全体の心強いパートナー。ジョージアについて何でも聞いてください。',law_h:'2026年新法律 — 保険が必須',law_p:'2026年1月1日から、すべての観光客は医療保険が必要です（最低30,000₾）。',law_a:'保険を申し込む →',tools_h:'🧰 ジョージアで役立つ',tools_sub:'現地で必要なすべて',t_translator_h:'翻訳',t_translator_p:'あなたの言語で入力 — グルジア語訳を確認',t_metro_h:'トビリシ地下鉄',t_metro_p:'ルート、料金、乗り換え。オフライン。',t_phrases_h:'会話ガイド',t_phrases_p:'グルジア語フレーズ＋発音',t_currency_h:'ラリ為替レート',t_currency_p:'GELをあなたの通貨に',t_emergency_h:'緊急援助',t_emergency_p:'112、大使館',t_tips_h:'チップ',t_tips_p:'スプラの会計を分割',t_checklist_h:'荷造りリスト',t_checklist_p:'2026年保険付き',t_food_h:'何を注文するか',t_food_p:'グルジア料理とワイン',t_visa_h:'ビザ日数',t_visa_p:'ビザなし年間 — カウンター',t_alarm_h:'アラーム',t_alarm_p:'ツアーを見逃さないで',t_torch_h:'懐中電灯',t_torch_p:'暗闇の中の光',t_luggage_h:'荷物預かり',t_luggage_p:'荷物を預けて',t_prices_h:'適正価格 2026',t_prices_p:'料金目安',t_games_h:'ゲーム',t_games_p:'チェス、スネーク、2048。無料。',t_airports_h:'空港案内板',t_airports_p:'トビリシ、バトゥミ、クタイシ',t_trains_h:'ジョージアの列車',t_trains_p:'トビリシ\u2194バトゥミ',t_flights_h:'直行便',t_flights_p:'トビリシ、バトゥミ、クタイシへ',share_h:'シェア 🍶',share_sub:'ジョージアに行く友人に教えよう',f_terms:'利用規約',f_privacy:'プライバシー',f_about:'私たちについて',f_note:'チャチャは無料AIアシスタント。 🇬🇪',consent:'同意します 🍶',consent_no:'拒否',disclaimer:'チャチャはAIです。回答を確認してください 🍶',ph:'チャチャにメッセージを送る...',back:'← 戻る'},
   ko:{trust:'🆓 영원히 무료 · <b>신뢰할 수 있는 브랜드</b>로 결제',sub:'여행 내내 함께하는 든든한 동반자. 조지아에 대해 무엇이든 물어보세요.',law_h:'2026년 새 법률 — 보험 필수',law_p:'2026년 1월 1일부터 모든 관광객은 의료 보험이 필요합니다 (최소 30,000₾).',law_a:'보험 가입하기 →',tools_h:'🧰 조지아에서 유용한 것',tools_sub:'현장에서 필요한 모든 것',t_translator_h:'번역기',t_translator_p:'당신의 언어로 입력 — 조지아어 번역 확인',t_metro_h:'트빌리시 지하철',t_metro_p:'노선, 요금, 환승. 오프라인.',t_phrases_h:'회화 가이드',t_phrases_p:'조지아어 표현 + 발음',t_currency_h:'라리 환율',t_currency_p:'GEL을 당신의 통화로',t_emergency_h:'긴급 도움',t_emergency_p:'112, 대사관',t_tips_h:'팁',t_tips_p:'수프라 계산서 분할',t_checklist_h:'짐 목록',t_checklist_p:'2026 보험 포함',t_food_h:'무엇을 주문할까',t_food_p:'조지아 음식과 와인',t_visa_h:'비자 일수',t_visa_p:'무비자 연간 — 카운터',t_alarm_h:'알람',t_alarm_p:'투어를 놓치지 마세요',t_torch_h:'손전등',t_torch_p:'어둠 속의 빛',t_luggage_h:'수하물 보관',t_luggage_p:'짐을 맡기고',t_prices_h:'적정 가격 2026',t_prices_p:'요금 기준',t_games_h:'게임',t_games_p:'체스, 뱀, 2048. 무료.',t_airports_h:'공항 안내판',t_airports_p:'트빌리시, 바투미, 쿠타이시',t_trains_h:'조지아 기차',t_trains_p:'트빌리시\u2194바투미',t_flights_h:'직항편',t_flights_p:'트빌리시, 바투미, 쿠타이시행',share_h:'공유 🍶',share_sub:'조지아에 가는 친구에게 알려줘',f_terms:'약관',f_privacy:'개인정보',f_about:'우리에 대해',f_note:'차차는 무료 AI 어시스턴트. 🇬🇪',consent:'동의합니다 🍶',consent_no:'거부',disclaimer:'차차는 AI이며 실수할 수 있습니다 🍶',ph:'차차에게 메시지 보내기...',back:'← 뒤로'},
-  it:{trust:'🆓 Gratis per sempre · pagamento tramite <b>marchi affidabili</b>',sub:'Non solo un pianificatore — un compagno premuroso per tutto il viaggio.',law_h:'Nuova legge 2026 — assicurazione obbligatoria',law_p:'Dal 1 gennaio 2026 ogni turista deve avere un assicurazione medica (min. 30.000 ₾).',law_a:'Stipula assicurazione →',tools_h:'🧰 Utile in Georgia',tools_sub:'Tutto ciò di cui hai bisogno sul posto',t_translator_h:'Traduttore',t_translator_p:'Scrivi nella tua lingua — vedi la traduzione',t_metro_h:'Metro di Tbilisi',t_metro_p:'Percorso, prezzo, coincidenze. Offline.',t_planner_h:'Crea il tuo percorso',t_planner_p:'Rispondi a 10 domande — ricevi una guida PDF personale con programma, budget e lista valigia',t_phrases_h:'Guida alla conversazione',t_phrases_p:'Frasi georgiane + pronuncia',t_currency_h:'Tasso Lari',t_currency_p:'GEL nella tua valuta',t_weather_h:'Meteo Georgia',t_weather_p:'7 giorni · 11 città · aggiornato ogni ora',t_news_h:'Notizie di viaggio',t_news_p:'Contenuti freschi sulla Georgia — aggiornati ogni giorno',
+  it:{trust:'🆓 Gratis per sempre · pagamento tramite <b>marchi affidabili</b>',sub:'Non solo un pianificatore — un compagno premuroso per tutto il viaggio.',law_h:'Nuova legge 2026 — assicurazione obbligatoria',law_p:'Dal 1 gennaio 2026 ogni turista deve avere un assicurazione medica (min. 30.000 ₾).',law_a:'Stipula assicurazione →',tools_h:'🧰 Utile in Georgia',tools_sub:'Tutto ciò di cui hai bisogno sul posto',t_translator_h:'Traduttore',t_translator_p:'Scrivi nella tua lingua — vedi la traduzione',t_metro_h:'Metro di Tbilisi',t_metro_p:'Percorso, prezzo, coincidenze. Offline.',t_planner_h:'Crea il tuo percorso',t_planner_p:'Rispondi a 10 domande — ricevi una guida PDF personale con programma, budget e lista valigia',t_phrases_h:'Guida alla conversazione',t_phrases_p:'Frasi georgiane + pronuncia',t_currency_h:'Tasso Lari',t_currency_p:'GEL nella tua valuta',t_weather_h:'Meteo Georgia',t_weather_p:'7 giorni · 11 città · aggiornato ogni ora',t_news_h:'Notizie di viaggio',t_news_p:'Contenuti freschi sulla Georgia — aggiornati ogni giorno',t_regions_h:'Regioni e città',t_regions_p:'Tutte le 12 regioni della Georgia — dove andare e cosa vedere',
     t_emergency_h:'Emergenze',t_emergency_p:'112, ambasciata',t_tips_h:'Mance',t_tips_p:'Dividi il conto della supra',t_checklist_h:'Lista bagagli',t_checklist_p:'Con assicurazione 2026',t_food_h:'Cosa ordinare',t_food_p:'Piatti georgiani e vino',t_visa_h:'Giorni visto',t_visa_p:'Anno senza visto — contatore',t_alarm_h:'Sveglia',t_alarm_p:'Non perdere il tour',t_torch_h:'Torcia',t_torch_p:'Luce nel buio',t_luggage_h:'Deposito bagagli',t_luggage_p:'Lascia i bagagli',t_prices_h:'Prezzi equi 2026',t_prices_p:'Quanto costa cosa',t_games_h:'Giochi',t_games_p:'Scacchi, Campo Minato, Battaglia navale. Gratis.',t_airports_h:'Aeroporti Georgia',t_airports_p:'Tbilisi, Batumi, Kutaisi',t_trains_h:'Treni in Georgia',t_trains_p:'Tbilisi\u2194Batumi',t_flights_h:'Voli diretti',t_flights_p:'Per Tbilisi, Batumi, Kutaisi',share_h:'Condividi 🍶',share_sub:'Dillo agli amici che vanno in Georgia',f_terms:'Termini',f_privacy:'Privacy',f_about:'Chi siamo',f_note:'Chacha è un assistente AI gratuito. 🇬🇪',consent:'Accetto 🍶',consent_no:'Rifiuta',disclaimer:'Chacha è AI e può sbagliare 🍶',ph:'Invia un messaggio a Chacha...',back:'← Indietro',
     h1:'La tua amica <span class="em">Chacha</span><br>in Georgia 🇬🇪',
     chacha:'Chacha',
