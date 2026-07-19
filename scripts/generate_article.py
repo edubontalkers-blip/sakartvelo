@@ -211,19 +211,38 @@ def pick_topic(manifest):
 def build_prompt(topic, mode, recent_titles):
     lang_list = ', '.join(f"{code} ({name})" for code, name in LANG_NAMES.items())
     recent_block = ('\n\nDo NOT repeat these recently published topics:\n' + '\n'.join(f'- {t}' for t in recent_titles)) if recent_titles else ''
+    today = datetime.now(timezone.utc).strftime('%B %d, %Y')
+    current_year = datetime.now(timezone.utc).year
+
+    date_warning = f"""
+CRITICAL — today's real date is {today}. Web search results often contain
+stale pages from previous years (event announcements, festival dates, price
+lists) that were never removed from the internet. Before including ANY date,
+festival, event, price, or "happening now" claim in the article:
+1. Explicitly check whether the year mentioned in your source matches {current_year}.
+2. If a source describes an event from a past year (e.g. "{current_year - 1}"),
+   do NOT present it as current or "happening right now" in {current_year}.
+   Either search specifically for the {current_year} edition of that event, or
+   write about the topic in a way that doesn't falsely imply it's happening today.
+3. Never let an outdated year silently slip through — this is the single most
+   important accuracy rule for this article."""
 
     if mode == 'news':
         topic_instruction = f"""Search the web for a genuinely current, real, and specific piece of news or
-practical update relevant to tourists visiting Georgia (the country) right now
+practical update relevant to tourists visiting Georgia (the country) right now,
+in {current_year}
 — e.g. a new attraction, a changed regulation, a seasonal event, a transport
 change, a price change, weather-related travel advice, or similar. It must be
-something a real news search actually surfaced, not invented.{recent_block}"""
+something a real news search actually surfaced, not invented, AND it must be
+genuinely current for {current_year} (see date-accuracy rules below).{recent_block}"""
     else:
         topic_instruction = f"""Write an engaging, factually accurate evergreen article about this specific
 topic: "{topic}". Use only real, verifiable facts — do not invent statistics,
 dates, or names."""
 
     return f"""You are writing one article for a Georgia (Caucasus) travel guide website.
+{date_warning}
+
 {topic_instruction}
 
 Write the article in ALL of these {len(LANGS)} languages: {lang_list}.
