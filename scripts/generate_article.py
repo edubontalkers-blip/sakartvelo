@@ -484,7 +484,7 @@ function setLang(lang){
   st('footerText', FOOTER_TEXT[lang] || FOOTER_TEXT.en);
   g('bcardBtn').href = 'https://www.booking.com/searchresults.html?aid=7916610&ss=Tbilisi%2C+Georgia&lang='+lang+'&order=bayesian_review_score';
 
-  try{ localStorage.setItem('sakartvelo_lang', lang); }catch(e){}
+  try{ localStorage.setItem('sak_lang', lang); }catch(e){}
   document.title = d.title + ' | sakartvelo.ai';
 }
 
@@ -503,7 +503,7 @@ try{
 
 (function(){
   var saved = 'en';
-  try{ saved = localStorage.getItem('sakartvelo_lang') || 'en'; }catch(e){}
+  try{ saved = localStorage.getItem('sak_lang') || 'en'; }catch(e){}
   var browserLang = (navigator.language || 'en').slice(0,2);
   if (D[browserLang] && saved === 'en') saved = browserLang;
   var chosen = D[saved] ? saved : 'en';
