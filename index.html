@@ -136,14 +136,14 @@ header.top{
   text-align:center;padding:64px 16px 40px;position:relative;z-index:0;
   margin:0 0 8px;overflow:hidden;
   background:
-    linear-gradient(180deg,rgba(7,59,69,.55) 0%,rgba(7,59,69,.35) 40%,rgba(7,59,69,.75) 100%),
-    url('/hero-kazbegi.jpg') center 35%/cover no-repeat;
+    linear-gradient(180deg,rgba(255,255,255,.80) 0%,rgba(255,255,255,.55) 40%,rgba(255,255,255,.85) 100%),
+    url('/hero-kazbegi.jpeg') center 35%/cover no-repeat;
   border-bottom:1px solid var(--line);
 }
 [data-theme="light"] .hero{
   background:
-    linear-gradient(180deg,rgba(7,59,69,.45) 0%,rgba(7,59,69,.30) 40%,rgba(7,59,69,.70) 100%),
-    url('/hero-kazbegi.jpg') center 35%/cover no-repeat;
+    linear-gradient(180deg,rgba(255,255,255,.82) 0%,rgba(255,255,255,.58) 40%,rgba(255,255,255,.86) 100%),
+    url('/hero-kazbegi.jpeg') center 35%/cover no-repeat;
 }
 .hero::after{
   content:"";position:absolute;top:0;left:0;right:0;height:5px;
@@ -156,22 +156,22 @@ header.top{
   font-family:var(--font-display);font-weight:800;
   font-size:clamp(2.1rem,8vw,3.4rem);line-height:1.02;
   letter-spacing:-0.5px;margin-bottom:14px;
-  color:#fff;
-  text-shadow:0 2px 14px rgba(0,0,0,.5),0 1px 4px rgba(0,0,0,.6);
+  color:#1a1a1a;
+  text-shadow:0 1px 3px rgba(255,255,255,.5);
 }
 [data-theme="light"] .hero h1{
-  color:#fff;
-  text-shadow:0 2px 14px rgba(0,0,0,.5),0 1px 4px rgba(0,0,0,.6);
+  color:#1a1a1a;
+  text-shadow:0 1px 3px rgba(255,255,255,.5);
 }
-.hero h1 .em{color:var(--gold-soft);font-style:normal}
+.hero h1 .em{color:var(--wine);font-style:normal}
 .hero .greet{
-  min-height:1.6em;font-size:1.05rem;color:var(--teal-bright);
+  min-height:1.6em;font-size:1.05rem;color:var(--wine);
   font-weight:700;margin-bottom:6px;
   transition:opacity .25s ease;
-  text-shadow:0 1px 8px rgba(0,0,0,.5);
+  text-shadow:0 1px 3px rgba(255,255,255,.5);
 }
-[data-theme="light"] .hero .greet{color:var(--teal-bright)}
-.hero .sub{color:rgba(255,255,255,.92);font-size:1rem;max-width:430px;margin:0 auto 20px;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+[data-theme="light"] .hero .greet{color:var(--wine)}
+.hero .sub{color:#2a2a2a;font-size:1rem;max-width:430px;margin:0 auto 20px;text-shadow:0 1px 3px rgba(255,255,255,.4)}
 
 /* Бейдж доверия */
 .trust{
@@ -3079,6 +3079,100 @@ var METRO_TAGS={
   ru:{bus:'🚐 автовокзал',transferTrain:'🔄🚂 пересадка + поезд',monument:'🏛️🚠 памятник + канатка',church:'⛪ церковь',transfer:'🔄 пересадка'},
   fa:{bus:'🚐 ایستگاه اتوبوس',transferTrain:'🔄🚂 تعویض + قطار',monument:'🏛️🚠 بنای یادبود + تله‌کابین',church:'⛪ کلیسا',transfer:'🔄 تعویض'},
 };
+
+var METRO_STATION_INFO={
+  ru:{title:'📍 Что рядом со станциями',footer:'🍶 Грузины очень дружелюбны — если не найдёте сразу, просто спросите у местных, они с радостью подскажут.',
+    stations:[
+      {icon:'🚉',name:'Садгурис Моедани (Вокзальная площадь)',text:'Крупнейший транспортный и торговый узел: ж/д вокзал, межгородние автобусы и маршрутки, пересадка на вторую линию, огромный вещевой рынок (одежда, обувь, сумки, электроника), один из крупнейших золотых рынков, рынок «Дезертирка» (овощи, фрукты, сыры, специи). Рядом много обменников — часто лучший курс в городе.'},
+      {icon:'⛪',name:'Авлабари',text:'Собор Самеба, район Метехи, канатная дорога к крепости Нарикала (красивые виды по пути), мост Метехи.'},
+      {icon:'🏨',name:'Исани',text:'Современный район: отели, рестораны, кафе, торговые центры, обменники. В ~5 минутах ходьбы — популярная кондитерская (торты, пирожные, десерты) по ценам для местных — спросите у грузин поблизости, где именно, они с радостью покажут.'},
+      {icon:'🥬',name:'Самгори',text:'Один из самых больших и дешёвых продуктовых рынков города: овощи, фрукты, сыры, мясо, специи, цветы, недорогая одежда, товары для дома, блошиный рынок. Обменники с хорошим курсом рядом.'},
+      {icon:'🍽️',name:'300 Арагвели',text:'Рядом кулинария в формате столовой: готовая грузинская еда на развес или поесть на месте (пхали, бажа, сациви, шашлык, хачапури, лобио, супы, десерты). Также рядом маленькая пекарня — свежий шоти-пури, лаваш, хачапури. Спросите местных — покажут, где ближайшая.'},
+      {icon:'💈',name:'Варкетили',text:'Жилой район: парикмахерские у выходов, кафе, магазины. В ~5 минутах ходьбы — популярная кондитерская (торты, десерты) по местным ценам — спросите у грузин рядом.'}
+    ]},
+  en:{title:'📍 What\'s Near Each Station',footer:'🍶 Georgians are very friendly — if you can\'t find it right away, just ask a local, they\'ll gladly point you the right way.',
+    stations:[
+      {icon:'🚉',name:'Station Square (Sadguris Moedani)',text:'Tbilisi\'s biggest transport and shopping hub: train station, intercity buses and marshrutkas, transfer to the second metro line, a huge clothing market (clothes, shoes, bags, electronics), one of the city\'s largest gold markets, and the "Dezertirka" bazaar (vegetables, fruit, cheese, spices). Many exchange offices nearby — often the best rates in town.'},
+      {icon:'⛪',name:'Avlabari',text:'Sameba Cathedral, the Metekhi district, a cable car up to Narikala Fortress (great views along the way), the Metekhi Bridge.'},
+      {icon:'🏨',name:'Isani',text:'A modern district: hotels, restaurants, cafés, malls, currency exchange. About 5 minutes\' walk — a popular bakery (cakes, pastries, desserts) at local prices — ask nearby Georgians where exactly, they\'ll happily show you.'},
+      {icon:'🥬',name:'Samgori',text:'One of the biggest and cheapest food markets in the city: vegetables, fruit, cheese, meat, spices, flowers, cheap clothes, household goods, a flea market. Good-rate exchange offices nearby.'},
+      {icon:'🍽️',name:'300 Aragveli',text:'A canteen-style eatery nearby with ready Georgian food, eat-in or takeaway by weight (pkhali, bazha, satsivi, mtsvadi, khachapuri, lobio, soups, desserts). There\'s also a small bakery — fresh shoti bread, lavash, khachapuri. Ask locals — they\'ll point you to the nearest one.'},
+      {icon:'💈',name:'Varketili',text:'A residential district: barbershops right at the exits, cafés, shops. About 5 minutes\' walk — a popular bakery (cakes, desserts) at local prices — ask nearby Georgians.'}
+    ]},
+  tr:{title:'📍 Her İstasyonun Yakınında Ne Var',footer:'🍶 Gürcüler çok samimidir — hemen bulamazsan, bir yerliye sor, seve seve yol gösterirler.',
+    stations:[
+      {icon:'🚉',name:'Sadguris Moedani (Tren Garı Meydanı)',text:'Tiflis\'in en büyük ulaşım ve alışveriş merkezi: tren garı, şehirlerarası otobüsler ve dolmuşlar, ikinci metro hattına aktarma, devasa bir giysi pazarı (kıyafet, ayakkabı, çanta, elektronik), şehrin en büyük altın pazarlarından biri ve "Dezertirka" pazarı (sebze, meyve, peynir, baharat). Yakında çok sayıda döviz bürosu var — genelde şehrin en iyi kurları burada.'},
+      {icon:'⛪',name:'Avlabari',text:'Sameba Katedrali, Metekhi bölgesi, Narikala Kalesi\'ne çıkan teleferik (yolda güzel manzaralar), Metekhi Köprüsü.'},
+      {icon:'🏨',name:'İsani',text:'Modern bir bölge: oteller, restoranlar, kafeler, alışveriş merkezleri, döviz büroları. Yürüyerek yaklaşık 5 dakika — yerel fiyatlarla popüler bir pastane (pasta, tatlı) — tam olarak nerede olduğunu yakındaki Gürcülere sor, seve seve gösterirler.'},
+      {icon:'🥬',name:'Samgori',text:'Şehrin en büyük ve en ucuz gıda pazarlarından biri: sebze, meyve, peynir, et, baharat, çiçek, ucuz kıyafet, ev eşyaları, bit pazarı. Yakında iyi kurlu döviz büroları.'},
+      {icon:'🍽️',name:'300 Aragveli',text:'Yakında lokanta tarzı bir yer var, hazır Gürcü yemekleri, orada ye ya da tartıyla paket yap (phali, baja, satsivi, mtsvadi, khachapuri, lobio, çorbalar, tatlılar). Ayrıca küçük bir fırın var — taze shoti ekmeği, lavash, khachapuri. Yerlilere sor — en yakınını gösterirler.'},
+      {icon:'💈',name:'Varketili',text:'Bir yerleşim bölgesi: çıkışlarda berberler, kafeler, dükkanlar. Yürüyerek yaklaşık 5 dakika — yerel fiyatlarla popüler bir pastane — yakındaki Gürcülere sor.'}
+    ]},
+  ar:{title:'📍 ما هو قريب من كل محطة',footer:'🍶 الجورجيون ودودون جدًا — إذا لم تجده فورًا، فقط اسأل أحد السكان المحليين، سيسعدون بإرشادك.',
+    stations:[
+      {icon:'🚉',name:'ساحة المحطة (سادغوريس مويداني)',text:'أكبر مركز نقل وتسوق في تبليسي: محطة القطار، حافلات بين المدن وميني باصات، تبديل إلى الخط الثاني للمترو، سوق ملابس ضخم (ملابس، أحذية، حقائب، إلكترونيات)، أحد أكبر أسواق الذهب في المدينة، وسوق "ديزرتيركا" (خضروات، فواكه، جبن، توابل). يوجد العديد من مكاتب الصرافة قريبًا — غالبًا أفضل الأسعار في المدينة.'},
+      {icon:'⛪',name:'أفلاباري',text:'كاتدرائية ساميبا، حي متخي، تلفريك يصعد إلى قلعة ناريكالا (مناظر جميلة في الطريق)، جسر متخي.'},
+      {icon:'🏨',name:'إيساني',text:'حي حديث: فنادق، مطاعم، مقاهي، مراكز تسوق، صرافة. على بعد حوالي 5 دقائق سيرًا — مخبز حلويات شهير (كعك، حلويات) بأسعار محلية — اسأل الجورجيين القريبين عن المكان بالضبط، سيسعدون بإرشادك.'},
+      {icon:'🥬',name:'سامغوري',text:'أحد أكبر وأرخص أسواق الطعام في المدينة: خضروات، فواكه، جبن، لحوم، توابل، زهور، ملابس رخيصة، أدوات منزلية، سوق للأغراض المستعملة. مكاتب صرافة بأسعار جيدة قريبًا.'},
+      {icon:'🍽️',name:'300 أراغفيلي',text:'بالقرب مطعم على طراز الكافتيريا، طعام جورجي جاهز، تناول الطعام هناك أو خذه معك بالوزن (بخالي، باجا، ساتسيفي، متسفادي، خاتشابوري، لوبيو، شوربات، حلويات). يوجد أيضًا مخبز صغير — خبز شوتي طازج، لافاش، خاتشابوري. اسأل السكان المحليين — سيدلونك على الأقرب.'},
+      {icon:'💈',name:'فاركتيلي',text:'حي سكني: صالونات حلاقة عند المخارج، مقاهي، محلات. على بعد حوالي 5 دقائق سيرًا — مخبز حلويات شهير بأسعار محلية — اسأل الجورجيين القريبين.'}
+    ]},
+  he:{title:'📍 מה נמצא ליד כל תחנה',footer:'🍶 הגאורגים ידידותיים מאוד — אם לא מוצאים מיד, פשוט שאלו מקומי, הם ישמחו להראות לכם.',
+    stations:[
+      {icon:'🚉',name:'כיכר התחנה (סדגוריס מוידני)',text:'צומת התחבורה והקניות הגדול ביותר בטביליסי: תחנת רכבת, אוטובוסים בין-עירוניים ומיניבוסים, החלפה לקו המטרו השני, שוק בגדים ענק (בגדים, נעליים, תיקים, אלקטרוניקה), אחד משוקי הזהב הגדולים בעיר, ושוק "דזרטירקה" (ירקות, פירות, גבינות, תבלינים). ליד יש הרבה חנויות חליפין — לרוב השערים הכי טובים בעיר.'},
+      {icon:'⛪',name:'אבלברי',text:'קתדרלת סמבה, שכונת מטחי, רכבל העולה למבצר נריקלה (נופים יפים בדרך), גשר מטחי.'},
+      {icon:'🏨',name:'איסני',text:'שכונה מודרנית: מלונות, מסעדות, בתי קפה, קניונים, החלפת מטבע. כ-5 דקות הליכה — קונדיטוריה פופולרית (עוגות, מאפים) במחירים מקומיים — שאלו גאורגים בסביבה איפה בדיוק, הם ישמחו להראות.'},
+      {icon:'🥬',name:'סמגורי',text:'אחד משווקי המזון הגדולים והזולים ביותר בעיר: ירקות, פירות, גבינות, בשר, תבלינים, פרחים, בגדים זולים, מוצרי בית, שוק פשפשים. חנויות חליפין בשער טוב בסביבה.'},
+      {icon:'🍽️',name:'300 אראגוולי',text:'ליד יש מסעדה בסגנון קפיטריה, אוכל גאורגי מוכן, לאכול שם או לקחת לפי משקל (פחלי, באז\'ה, סאציווי, מצוודי, חצ\'פורי, לוביו, מרקים, קינוחים). יש גם מאפייה קטנה — לחם שוטי טרי, לאבש, חצ\'פורי. שאלו את המקומיים — יראו לכם את הקרובה ביותר.'},
+      {icon:'💈',name:'וארקטילי',text:'שכונת מגורים: מספרות ממש ליד היציאות, בתי קפה, חנויות. כ-5 דקות הליכה — קונדיטוריה פופולרית במחירים מקומיים — שאלו גאורגים בסביבה.'}
+    ]},
+  fa:{title:'📍 نزدیک هر ایستگاه چه چیزی هست',footer:'🍶 گرجی\'ها بسیار دوستانه‌اند — اگر بلافاصله پیدا نکردی، فقط از یک محلی بپرس، آن‌ها با کمال میل راهنمایی می‌کنند.',
+    stations:[
+      {icon:'🚉',name:'میدان ایستگاه (سادگوریس مویدانی)',text:'بزرگ‌ترین گره حمل‌ونقل و خرید تفلیس: ایستگاه راه‌آهن، اتوبوس‌های بین‌شهری و مینی‌بوس‌ها، تعویض به خط دوم مترو، بازار بزرگ پوشاک (لباس، کفش، کیف، الکترونیک)، یکی از بزرگ‌ترین بازارهای طلای شهر، و بازار «دزرتیرکا» (سبزیجات، میوه، پنیر، ادویه). صرافی‌های زیادی نزدیک هست — اغلب بهترین نرخ شهر.'},
+      {icon:'⛪',name:'آولابری',text:'کلیسای جامع سامبا، محله متخی، تله‌کابین به سمت قلعه ناریکالا (مناظر زیبا در مسیر)، پل متخی.'},
+      {icon:'🏨',name:'ایسانی',text:'محله‌ای مدرن: هتل‌ها، رستوران‌ها، کافه‌ها، مراکز خرید، صرافی. حدود 5 دقیقه پیاده‌روی — شیرینی‌فروشی محبوب (کیک، شیرینی) با قیمت‌های محلی — از گرجی‌های اطراف بپرس دقیقاً کجاست، آن‌ها با کمال میل نشانت می‌دهند.'},
+      {icon:'🥬',name:'سامگوری',text:'یکی از بزرگ‌ترین و ارزان‌ترین بازارهای مواد غذایی شهر: سبزیجات، میوه، پنیر، گوشت، ادویه، گل، لباس ارزان، لوازم خانه، بازار دست‌دوم. صرافی‌های با نرخ خوب نزدیک.'},
+      {icon:'🍽️',name:'300 آراگولی',text:'نزدیک یک رستوران به سبک سلف‌سرویس هست، غذای گرجی آماده، همان‌جا بخور یا با وزن ببر (پخالی، باژا، ساتسیوی، متسوادی، خاچاپوری، لوبیو، سوپ، دسر). یک نانوایی کوچک هم هست — نان شوتی تازه، لواش، خاچاپوری. از محلی‌ها بپرس — نزدیک‌ترین را نشانت می‌دهند.'},
+      {icon:'💈',name:'وارکتیلی',text:'محله‌ای مسکونی: آرایشگاه‌ها درست کنار خروجی‌ها، کافه‌ها، مغازه‌ها. حدود 5 دقیقه پیاده‌روی — شیرینی‌فروشی محبوب با قیمت‌های محلی — از گرجی‌های اطراف بپرس.'}
+    ]},
+  de:{title:'📍 Was in der Nähe jeder Station ist',footer:'🍶 Georgier sind sehr freundlich — findest du es nicht sofort, frag einfach einen Einheimischen, er zeigt es dir gern.',
+    stations:[
+      {icon:'🚉',name:'Bahnhofsplatz (Sadguris Moedani)',text:'Tiflis\' größter Verkehrs- und Einkaufsknotenpunkt: Bahnhof, Fernbusse und Marschrutkas, Umstieg zur zweiten Metrolinie, ein riesiger Kleidermarkt (Kleidung, Schuhe, Taschen, Elektronik), einer der größten Goldmärkte der Stadt und der „Desertirka"-Basar (Gemüse, Obst, Käse, Gewürze). In der Nähe gibt es viele Wechselstuben — oft die besten Kurse der Stadt.'},
+      {icon:'⛪',name:'Avlabari',text:'Sameba-Kathedrale, das Viertel Metechi, eine Seilbahn hinauf zur Festung Narikala (schöne Aussichten unterwegs), die Metechi-Brücke.'},
+      {icon:'🏨',name:'Isani',text:'Ein modernes Viertel: Hotels, Restaurants, Cafés, Einkaufszentren, Geldwechsel. Etwa 5 Minuten zu Fuß — eine beliebte Konditorei (Torten, Gebäck) zu lokalen Preisen — frag Georgier in der Nähe, wo genau, sie zeigen es dir gern.'},
+      {icon:'🥬',name:'Samgori',text:'Einer der größten und günstigsten Lebensmittelmärkte der Stadt: Gemüse, Obst, Käse, Fleisch, Gewürze, Blumen, günstige Kleidung, Haushaltswaren, ein Flohmarkt. Wechselstuben mit guten Kursen in der Nähe.'},
+      {icon:'🍽️',name:'300 Aragweli',text:'In der Nähe ein Imbiss im Kantinenstil mit fertigem georgischem Essen, vor Ort essen oder nach Gewicht mitnehmen (Pkhali, Basha, Satsivi, Mzvadi, Chatschapuri, Lobio, Suppen, Desserts). Es gibt auch eine kleine Bäckerei — frisches Schoti-Brot, Lawasch, Chatschapuri. Frag Einheimische — sie zeigen dir die nächste.'},
+      {icon:'💈',name:'Varketili',text:'Ein Wohnviertel: Friseursalons direkt an den Ausgängen, Cafés, Läden. Etwa 5 Minuten zu Fuß — eine beliebte Konditorei zu lokalen Preisen — frag Georgier in der Nähe.'}
+    ]},
+  it:{title:'📍 Cosa c\'è vicino a ogni stazione',footer:'🍶 I georgiani sono molto amichevoli — se non la trovi subito, chiedi semplicemente a un locale, sarà felice di indicarti la strada.',
+    stations:[
+      {icon:'🚉',name:'Piazza della Stazione (Sadguris Moedani)',text:'Il più grande snodo di trasporti e shopping di Tbilisi: stazione ferroviaria, autobus interurbani e marshrutka, cambio per la seconda linea della metro, un enorme mercato di abbigliamento (vestiti, scarpe, borse, elettronica), uno dei più grandi mercati dell\'oro della città e il bazar "Dezertirka" (verdura, frutta, formaggio, spezie). Nelle vicinanze ci sono molti uffici di cambio — spesso i tassi migliori della città.'},
+      {icon:'⛪',name:'Avlabari',text:'Cattedrale della Santissima Trinità (Sameba), il quartiere di Metekhi, una funivia che sale alla fortezza di Narikala (bei panorami lungo il percorso), il ponte di Metekhi.'},
+      {icon:'🏨',name:'Isani',text:'Un quartiere moderno: hotel, ristoranti, caffè, centri commerciali, cambio valuta. Circa 5 minuti a piedi — una pasticceria popolare (torte, dolci) a prezzi locali — chiedi ai georgiani nei paraggi esattamente dove si trova, saranno felici di mostrartelo.'},
+      {icon:'🥬',name:'Samgori',text:'Uno dei mercati alimentari più grandi ed economici della città: verdura, frutta, formaggio, carne, spezie, fiori, abbigliamento economico, articoli per la casa, un mercato delle pulci. Uffici di cambio con buoni tassi nelle vicinanze.'},
+      {icon:'🍽️',name:'300 Aragveli',text:'Nelle vicinanze una tavola calda in stile mensa, cibo georgiano già pronto, da mangiare lì o da asporto a peso (pkhali, bazha, satsivi, mtsvadi, khachapuri, lobio, zuppe, dolci). C\'è anche un piccolo forno — pane shoti fresco, lavash, khachapuri. Chiedi ai locali — ti indicheranno il più vicino.'},
+      {icon:'💈',name:'Varketili',text:'Un quartiere residenziale: barbieri proprio alle uscite, caffè, negozi. Circa 5 minuti a piedi — una pasticceria popolare a prezzi locali — chiedi ai georgiani nei paraggi.'}
+    ]},
+  es:{title:'📍 Qué hay cerca de cada estación',footer:'🍶 Los georgianos son muy amables — si no la encuentras enseguida, simplemente pregunta a un local, estará encantado de indicarte el camino.',
+    stations:[
+      {icon:'🚉',name:'Plaza de la Estación (Sadguris Moedani)',text:'El mayor nodo de transporte y compras de Tiflis: estación de tren, autobuses interurbanos y marshrutkas, transbordo a la segunda línea de metro, un enorme mercado de ropa (ropa, calzado, bolsos, electrónica), uno de los mayores mercados de oro de la ciudad, y el bazar "Dezertirka" (verduras, frutas, quesos, especias). Cerca hay muchas casas de cambio — a menudo las mejores tasas de la ciudad.'},
+      {icon:'⛪',name:'Avlabari',text:'Catedral de la Sameba, el barrio de Meteji, un teleférico que sube a la fortaleza de Narikala (bonitas vistas en el camino), el puente de Meteji.'},
+      {icon:'🏨',name:'Isani',text:'Un barrio moderno: hoteles, restaurantes, cafés, centros comerciales, cambio de divisas. Unos 5 minutos a pie — una pastelería popular (tartas, dulces) a precios locales — pregunta a los georgianos cercanos dónde exactamente, estarán encantados de mostrártelo.'},
+      {icon:'🥬',name:'Samgori',text:'Uno de los mercados de alimentos más grandes y baratos de la ciudad: verduras, frutas, quesos, carne, especias, flores, ropa barata, artículos para el hogar, un mercado de pulgas. Casas de cambio con buenas tasas cerca.'},
+      {icon:'🍽️',name:'300 Aragveli',text:'Cerca hay un comedor tipo cafetería, comida georgiana ya preparada, para comer allí o llevar por peso (pkhali, bazha, satsivi, mtsvadi, khachapuri, lobio, sopas, postres). También hay una pequeña panadería — pan shoti fresco, lavash, khachapuri. Pregunta a los locales — te indicarán la más cercana.'},
+      {icon:'💈',name:'Varketili',text:'Un barrio residencial: peluquerías justo en las salidas, cafés, tiendas. Unos 5 minutos a pie — una pastelería popular a precios locales — pregunta a los georgianos cercanos.'}
+    ]}
+};
+function renderMetroStationInfo(lang){
+  var d=METRO_STATION_INFO[lang]||METRO_STATION_INFO.en;
+  var html='<div class="result" style="margin-top:16px"><b>'+d.title+'</b></div>';
+  d.stations.forEach(function(s){
+    html+='<div class="result" style="margin-top:8px"><b>'+s.icon+' '+s.name+'</b><br><span class="hint" style="margin:0">'+s.text+'</span></div>';
+  });
+  html+='<p class="hint" style="margin-top:10px">'+d.footer+'</p>';
+  return html;
+}
+
 function buildMetroLine(base,lang){
   var tags=METRO_TAGS[lang]||METRO_TAGS.en;
   return base.map(function(s){return s.n+(s.t?' '+tags[s.t]:'');});
@@ -3101,7 +3195,8 @@ tools.metro=async function(){openModal(TT('metro_title'));
     '<label class="hint">'+TTX('metro_to')+'</label><select class="field" id="mTo"><optgroup label="'+TTX('metro_red')+'">'+opts(redLine,'r')+'</optgroup><optgroup label="'+TTX('metro_green')+'">'+opts(greenLine,'g')+'</optgroup></select>'+
     '<button class="btn" id="mGo">'+TTX('metro_go')+'</button><div id="mRes"></div>'+
     '<div class="result" style="margin-top:14px"><b>'+TTX('metro_bus_title')+'</b><br><span class="hint" style="margin:0">'+TTX('metro_bus_body')+'</span></div>'+
-    '<p class="hint" style="margin-top:10px">'+TTX('metro_tip')+'</p>';
+    '<p class="hint" style="margin-top:10px">'+TTX('metro_tip')+'</p>'+
+    renderMetroStationInfo(ul);
   document.getElementById('mGo').onclick=function(){
     var f=document.getElementById('mFrom').value.split(':'),t=document.getElementById('mTo').value.split(':');
     var fl=f[0],fi=+f[1],tl=t[0],ti=+t[1];
