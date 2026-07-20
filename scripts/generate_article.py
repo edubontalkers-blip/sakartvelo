@@ -114,35 +114,37 @@ ARTICLE_LANG_SCHEMA = {
     "required": ["title", "tagline", "intro", "sections", "closing"]
 }
 
-SUBMIT_ARTICLE_TOOL = {
-    "name": "submit_article",
-    "description": "Submit the finished multi-language article for publishing.",
+SUBMIT_ARTICLE_DRAFT_TOOL = {
+    "name": "submit_article_draft",
+    "description": "Submit the finished article draft in English.",
     "input_schema": {
         "type": "object",
         "properties": {
             "slug": {"type": "string", "description": "Short URL-safe English slug, no spaces"},
             "topic_key": {"type": "string", "description": "Short stable English key for de-duplication"},
             "emoji": {"type": "string", "description": "Single emoji representing the topic"},
-            "content": {
-                "type": "object",
-                "properties": {lang: ARTICLE_LANG_SCHEMA for lang in LANGS},
-                "required": LANGS
-            }
+            "content": ARTICLE_LANG_SCHEMA
         },
         "required": ["slug", "topic_key", "emoji", "content"]
     }
+}
+
+SUBMIT_TRANSLATION_TOOL = {
+    "name": "submit_translation",
+    "description": "Submit the translated article content.",
+    "input_schema": ARTICLE_LANG_SCHEMA
 }
 
 
 # ══════════════════════════════════════
 # ANTHROPIC API (raw HTTPS, без сторонних библиотек)
 # ══════════════════════════════════════
-def call_claude(prompt, use_web_search=False, max_tokens=8000):
+def call_claude(prompt, tool, use_web_search=False, max_tokens=16000):
     api_key = os.environ.get('ANTHROPIC_API_KEY')
     if not api_key:
         raise RuntimeError('ANTHROPIC_API_KEY is not set')
 
-    tools = [SUBMIT_ARTICLE_TOOL]
+    tools = [tool]
     if use_web_search:
         tools.append({"type": "web_search_20250305", "name": "web_search", "max_uses": 5})
 
@@ -152,7 +154,7 @@ def call_claude(prompt, use_web_search=False, max_tokens=8000):
         "stream": True,
         "tools": tools,
         # Не форсируем tool_choice — модели нужно свободно пользоваться
-        # web_search сначала, и только потом вызвать submit_article.
+        # web_search сначала, и только потом вызвать нужный инструмент.
         "messages": [{"role": "user", "content": prompt}]
     }
 
@@ -214,13 +216,31 @@ def call_claude(prompt, use_web_search=False, max_tokens=8000):
     block_types = [(b['type'], b.get('name')) for _, b in sorted(blocks.items())]
     print(f'API response (stream): stop_reason={stop_reason}, blocks={block_types}')
 
-    # Ищем именно вызов инструмента submit_article — его "input" гарантированно
-    # валидный JSON благодаря структурированной схеме на стороне API.
+    target_name = tool['name']
     for _, b in sorted(blocks.items()):
-        if b['type'] == 'tool_use' and b.get('name') == 'submit_article':
+        if b['type'] == 'tool_use' and b.get('name') == target_name:
+            if stop_reason == 'max_tokens':
+                raise RuntimeError(
+                    f'Ответ обрезан по лимиту токенов (max_tokens={max_tokens}) ДО того, как '
+                    f'модель закончила вызов {target_name} — JSON гарантированно неполный.'
+                )
             return json.loads(b['text'])
 
-    raise RuntimeError('submit_article tool was not called. Blocks: ' + json.dumps(block_types))
+    raise RuntimeError(f'{target_name} tool was not called. Blocks: ' + json.dumps(block_types))
+
+
+def call_claude_with_retry(prompt, tool, use_web_search=False, max_tokens=16000, attempts=2):
+    """Небольшая обёртка с автоповтором — генерация немного случайна,
+    поэтому если один запрос не удался (обрыв по токенам, редкая ошибка
+    формата), почти всегда помогает просто попробовать ещё раз."""
+    last_error = None
+    for attempt in range(1, attempts + 1):
+        try:
+            return call_claude(prompt, tool, use_web_search=use_web_search, max_tokens=max_tokens)
+        except RuntimeError as e:
+            last_error = e
+            print(f'Попытка {attempt}/{attempts} не удалась: {e}')
+    raise last_error
 
 
 # ══════════════════════════════════════
@@ -252,7 +272,6 @@ def pick_topic(manifest):
 # ГЕНЕРАЦИЯ СТАТЬИ ЧЕРЕЗ CLAUDE
 # ══════════════════════════════════════
 def build_prompt(topic, mode, recent_titles):
-    lang_list = ', '.join(f"{code} ({name})" for code, name in LANG_NAMES.items())
     recent_block = ('\n\nDo NOT repeat these recently published topics:\n' + '\n'.join(f'- {t}' for t in recent_titles)) if recent_titles else ''
     today = datetime.now(timezone.utc).strftime('%B %d, %Y')
     current_year = datetime.now(timezone.utc).year
@@ -288,14 +307,35 @@ dates, or names."""
 
 {topic_instruction}
 
-Write the article in ALL of these {len(LANGS)} languages: {lang_list}.
+Write the article in English.
 
-Important: all 9 languages must have genuinely translated, natural-sounding
-content (not literal word-for-word translation) — same facts, same structure,
-each written as if by a native speaker. The "slug" and "topic_key" stay in
-English regardless of content language.
+When ready, call the submit_article_draft tool with the finished article."""
 
-When ready, call the submit_article tool with the finished article."""
+
+def build_translation_prompt(english_content, lang_name):
+    return f"""You are a professional native-speaker translator specializing in travel and
+tourism content, translating for a published, edited travel guide website —
+not a rough draft. Translate the following Georgia (Caucasus) travel article
+from English into {lang_name}.
+
+Quality bar — this must read as if it were originally written in {lang_name}
+by a professional travel writer, not translated:
+- Never translate word-for-word. Rephrase idioms, sentence rhythm, and word
+  order the way a native {lang_name} speaker naturally would.
+- Use natural, idiomatic phrasing and the register appropriate for a
+  polished travel publication (warm, engaging, precise) — not stiff or
+  overly literal.
+- Preserve every fact exactly: numbers, prices, dates, proper names, place
+  names. Do not invent, drop, or alter any factual detail.
+- Keep the same structure and the same number of sections as the original —
+  do not add or remove content, only translate it.
+- Grammar, spelling, and punctuation must be flawless native-level
+  {lang_name}, as if reviewed by a professional copy editor.
+
+Article to translate (JSON):
+{json.dumps(english_content, ensure_ascii=False)}
+
+When ready, call the submit_translation tool with the translated content."""
 
 
 def generate_article():
@@ -303,25 +343,55 @@ def generate_article():
     topic, mode = pick_topic(manifest)
     recent_titles = [a.get('title_en', '') for a in manifest['articles'][-15:]]
 
+def generate_article():
+    manifest = load_manifest()
+    topic, mode = pick_topic(manifest)
+    recent_titles = [a.get('title_en', '') for a in manifest['articles'][-15:]]
+
     print(f'Mode: {mode}, topic hint: {topic or "(web search)"}')
-    prompt = build_prompt(topic, mode, recent_titles)
-    # Для режима "news" с веб-поиском нужен больший запас токенов — сам
-    # процесс поиска (несколько раундов server_tool_use/web_search_tool_result)
-    # тоже расходует токены ДО того, как модель напишет финальный JSON.
-    # Без запаса ответ обрывается на середине (stop_reason=max_tokens).
-    tokens_for_call = 24000 if mode == 'news' else 14000
-    raw = call_claude(prompt, use_web_search=(mode == 'news'), max_tokens=tokens_for_call)
-    data = raw  # call_claude уже вернул разобранный dict через tool use
 
-    # Защита: иногда модель по ошибке сериализует вложенный объект "content"
-    # в строку (двойное JSON-кодирование) вместо настоящего объекта, хотя
-    # схема требует object. Если так — пробуем разобрать ещё раз.
-    if isinstance(data.get('content'), str):
-        print('WARNING: content came as a string, attempting to re-parse as JSON')
-        data['content'] = json.loads(data['content'])
+    # ── Шаг 1: пишем черновик ТОЛЬКО на английском (с веб-поиском, если news) ──
+    # Один язык — маленький, предсказуемый объём, обрыв по токенам практически
+    # исключён даже с умеренным лимитом. Веб-поиску (только тут) даём побольше
+    # запаса, так как сам процесс поиска тоже расходует токены.
+    draft_prompt = build_prompt(topic, mode, recent_titles)
+    draft_tokens = 24000 if mode == 'news' else 12000
+    draft = call_claude_with_retry(
+        draft_prompt, SUBMIT_ARTICLE_DRAFT_TOOL,
+        use_web_search=(mode == 'news'), max_tokens=draft_tokens
+    )
 
-    if not isinstance(data.get('content'), dict):
-        raise RuntimeError(f'"content" is not an object even after re-parse attempt: {type(data.get("content"))}')
+    if isinstance(draft.get('content'), str):
+        draft['content'] = json.loads(draft['content'])
+    if not isinstance(draft.get('content'), dict):
+        raise RuntimeError(f'English draft "content" is not an object: {type(draft.get("content"))}')
+
+    print(f'Черновик на английском готов: "{draft["content"].get("title", "?")}"')
+
+    # ── Шаг 2: переводим на остальные 8 языков — по одному языку за запрос ──
+    # Каждый перевод — маленький, независимый запрос. Без веб-поиска, без
+    # накопления контекста нескольких языков в одном ответе — практически
+    # невозможно упереться в лимит токенов даже без максимального запаса.
+    content_all = {'en': draft['content']}
+    for lang in LANGS:
+        if lang == 'en':
+            continue
+        print(f'Перевод на {LANG_NAMES[lang]}...')
+        tr_prompt = build_translation_prompt(draft['content'], LANG_NAMES[lang])
+        translated = call_claude_with_retry(
+            tr_prompt, SUBMIT_TRANSLATION_TOOL,
+            use_web_search=False, max_tokens=8000
+        )
+        if isinstance(translated, str):
+            translated = json.loads(translated)
+        content_all[lang] = translated
+
+    data = {
+        'slug': draft['slug'],
+        'topic_key': draft.get('topic_key', draft['slug']),
+        'emoji': draft.get('emoji', '🇬🇪'),
+        'content': content_all
+    }
 
     # Гарантируем уникальность slug (на случай редкого совпадения)
     existing_slugs = {a['slug'] for a in manifest['articles']}
