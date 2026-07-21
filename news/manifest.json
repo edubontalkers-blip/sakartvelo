@@ -37,6 +37,25 @@
       "emoji": "🥟",
       "mode": "evergreen",
       "date": "2026-07-20"
+    },
+    {
+      "slug": "georgia-mandatory-travel-insurance-2026",
+      "topic_key": "georgia-caucasus-mandatory-insurance-2026",
+      "title_en": "Georgia Now Requires Travel Insurance: What Every Visitor Must Know in 2026",
+      "titles": {
+        "ru": "Грузия вводит обязательную туристическую страховку: всё, что нужно знать каждому путешественнику в 2026 году",
+        "en": "Georgia Now Requires Travel Insurance: What Every Visitor Must Know in 2026",
+        "tr": "Gürcistan Artık Seyahat Sigortası Zorunlu Kılıyor: 2026'da Her Ziyaretçinin Bilmesi Gerekenler",
+        "ar": "جورجيا تُلزم الزوار بالتأمين على السفر: كل ما تحتاج معرفته في 2026",
+        "he": "גאורגיה מחייבת כעת ביטוח נסיעות: כל מה שכל מבקר חייב לדעת ב-2026",
+        "fa": "گرجستان بیمه سفر را اجباری کرد: آنچه هر بازدیدکننده‌ای باید در سال ۲۰۲۶ بداند",
+        "de": "Georgien schreibt Reiseversicherung vor: Was alle Besucher 2026 wissen müssen",
+        "it": "Georgia: dal 2026 l'assicurazione di viaggio è obbligatoria — tutto quello che ogni visitatore deve sapere",
+        "es": "Georgia exige seguro de viaje: todo lo que debes saber antes de viajar en 2026"
+      },
+      "emoji": "🛡️",
+      "mode": "news",
+      "date": "2026-07-21"
     }
   ]
 }
