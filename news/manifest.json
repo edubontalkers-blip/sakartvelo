@@ -56,6 +56,25 @@
       "emoji": "🛡️",
       "mode": "news",
       "date": "2026-07-21"
+    },
+    {
+      "slug": "gelati-monastery-unesco-medieval-georgia",
+      "topic_key": "gelati_monastery_kutaisi",
+      "title_en": "Gelati Monastery: Georgia's Crown Jewel of Faith and Learning",
+      "titles": {
+        "ru": "Монастырь Гелати: жемчужина веры и знания в венце грузинской истории",
+        "en": "Gelati Monastery: Georgia's Crown Jewel of Faith and Learning",
+        "tr": "Gelati Manastırı: Gürcistan'ın İman ve Bilimin Taç Eseri",
+        "ar": "دير جيلاتي: جوهرة جورجيا التاج في الإيمان والمعرفة",
+        "he": "מנזר גלאטי: אבן הכותרת של גאורגיה — אמונה וידע בלב ההרים",
+        "fa": "صومعه‌ی گِلاتی: گوهر تاج‌بخش ایمان و دانش در گرجستان",
+        "de": "Kloster Gelati: Georgiens Kronjuwel des Glaubens und der Gelehrsamkeit",
+        "it": "Il Monastero di Gelati: il gioiello spirituale della Georgia",
+        "es": "El monasterio de Gelati: la joya espiritual de Georgia"
+      },
+      "emoji": "🕌",
+      "mode": "evergreen",
+      "date": "2026-07-22"
     }
   ]
 }
