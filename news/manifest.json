@@ -75,6 +75,25 @@
       "emoji": "🕌",
       "mode": "evergreen",
       "date": "2026-07-22"
+    },
+    {
+      "slug": "tbilisi-tripadvisor-trending-destination-2026",
+      "topic_key": "tbilisi-tripadvisor-trending-2026",
+      "title_en": "Tbilisi Is Officially the World's #2 Trending Destination — Here's Why Every Traveller Is Talking About It",
+      "titles": {
+        "ru": "Тбилиси официально признан вторым по популярности направлением в мире — вот почему о нём говорят все путешественники",
+        "en": "Tbilisi Is Officially the World's #2 Trending Destination — Here's Why Every Traveller Is Talking About It",
+        "tr": "Tbilisi Resmen Dünyanın 2. En Trend Destinasyonu — Gezginlerin Dilinden Düşmeyen Şehir",
+        "ar": "تبليسي تتربّع رسمياً على المرتبة الثانية بين أكثر وجهات العالم رواجاً — إليك السرّ وراء حديث المسافرين عنها",
+        "he": "טביליסי היא רשמית יעד מספר 2 בעולם — וכך תסבירו מדוע כל מטייל מדבר עליה",
+        "fa": "تفلیس رسماً دومین مقصد پرطرفدار جهان شد — و این است دلیل اینکه همه از آن حرف می‌زنند",
+        "de": "Tiflis ist offiziell das zweitbeliebteste Trendreiseziel der Welt – und genau das macht die Stadt zum Gesprächsthema Nummer eins",
+        "it": "Tbilisi è ufficialmente la seconda destinazione di tendenza al mondo — ecco perché tutti ne parlano",
+        "es": "Tiflis es oficialmente el segundo destino más de moda del mundo: esto es lo que todo viajero comenta"
+      },
+      "emoji": "🏙️",
+      "mode": "news",
+      "date": "2026-07-23"
     }
   ]
 }
