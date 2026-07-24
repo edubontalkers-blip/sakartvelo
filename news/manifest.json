@@ -94,6 +94,25 @@
       "emoji": "🏙️",
       "mode": "news",
       "date": "2026-07-23"
+    },
+    {
+      "slug": "uplistsikhe-ancient-rock-hewn-city",
+      "topic_key": "uplistsikhe",
+      "title_en": "Uplistsikhe: Inside Georgia's Extraordinary Ancient Rock-Hewn City",
+      "titles": {
+        "ru": "Уплисцихе: внутри удивительного древнего пещерного города Грузии",
+        "en": "Uplistsikhe: Inside Georgia's Extraordinary Ancient Rock-Hewn City",
+        "tr": "Uplistsikhe: Gürcistan'ın Olağanüstü Kaya Oyma Antik Kentinin İçinde",
+        "ar": "أوبليستسيخه: جولة في مدينة جورجيا الأثرية المنحوتة في الصخر",
+        "he": "אופליסציხה: אל תוך עיר הסלע העתיקה והמדהימה של גאורגיה",
+        "fa": "اوپلیستسیخه: در دل شگفت‌انگیزترین شهر صخره‌کَند باستانی گرجستان",
+        "de": "Uplisziche: Georgiens außergewöhnliche, in den Fels gehauene Geisterstadt",
+        "it": "Uplistsikhe: dentro la straordinaria città rupestre della Georgia",
+        "es": "Uplistsikhe: una visita a la extraordinaria ciudad rupestre de Georgia"
+      },
+      "emoji": "🏛️",
+      "mode": "evergreen",
+      "date": "2026-07-24"
     }
   ]
 }
