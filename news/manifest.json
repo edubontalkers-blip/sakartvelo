@@ -113,6 +113,25 @@
       "emoji": "🏛️",
       "mode": "evergreen",
       "date": "2026-07-24"
+    },
+    {
+      "slug": "batumi-black-sea-georgia-summer-2026",
+      "topic_key": "batumi-summer-guide-2026",
+      "title_en": "Batumi Right Now: Why Georgia's Black Sea Capital Is Having Its Best Summer Yet",
+      "titles": {
+        "ru": "Батуми сегодня: почему грузинская столица Чёрного моря переживает лучшее лето в своей истории",
+        "en": "Batumi Right Now: Why Georgia's Black Sea Capital Is Having Its Best Summer Yet",
+        "tr": "Batumi Şu An: Gürcistan'ın Karadeniz Başkenti Neden En İyi Yazını Yaşıyor?",
+        "ar": "باتومي الآن: لماذا تعيش عاصمة جورجيا على البحر الأسود أزهى صيف في تاريخها",
+        "he": "באטומי עכשיו: למה קיץ 2026 הוא הטוב ביותר שידעה עיר הים השחור של גאורגיה",
+        "fa": "باتومی، همین الان: چرا پایتخت دریای سیاه گرجستان بهترین تابستان خود را تجربه می‌کند",
+        "de": "Batumi heute: Warum Georgiens Schwarzmeermetropole ihren bislang besten Sommer erlebt",
+        "it": "Batumi Oggi: Perché la Capitale Georgiana sul Mar Nero Sta Vivendo la sua Estate Migliore",
+        "es": "Batumi hoy: por qué la capital georgiana del Mar Negro vive su mejor verano"
+      },
+      "emoji": "🏖️",
+      "mode": "news",
+      "date": "2026-07-25"
     }
   ]
 }
