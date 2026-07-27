@@ -151,6 +151,25 @@
       "emoji": "🎩",
       "mode": "evergreen",
       "date": "2026-07-26"
+    },
+    {
+      "slug": "gudauri-rotana-luxury-ski-resort-georgia-2026",
+      "topic_key": "gudauri-rotana-resort-2026",
+      "title_en": "Gudauri Just Got a Major Upgrade: A Luxury Ski Resort Is Coming to Georgia's Greatest Mountain",
+      "titles": {
+        "ru": "Гудаури выходит на новый уровень: в сердце главной горы Грузии появится роскошный горнолыжный курорт",
+        "en": "Gudauri Just Got a Major Upgrade: A Luxury Ski Resort Is Coming to Georgia's Greatest Mountain",
+        "tr": "Gudauri Büyük Bir Dönüşümün Eşiğinde: Gürcistan'ın En Görkemli Dağına Lüks Bir Kayak Tesisi Geliyor",
+        "ar": "غوداوري على موعد مع تحوّل كبير: منتجع فاخر للتزلج في طريقه إلى أعظم جبال جورجيا",
+        "he": "גודאורי קיבלה שדרוג מרשים: נופש סקי יוקרתי עולה על ההר הגדול של גאורגיה",
+        "fa": "گوداوری یک ارتقای بزرگ دریافت کرد: یک ریزورت لوکس اسکی در راه است به بلندترین کوه گرجستان",
+        "de": "Gudauri bekommt ein großes Upgrade: Ein Luxus-Skiresort kommt in Georgiens großartigstes Gebirge",
+        "it": "Gudauri si rinnova in grande stile: un resort di lusso sulle nevi del Caucaso georgiano",
+        "es": "Gudauri da un gran salto adelante: un resort de esquí de lujo llega a la gran montaña de Georgia"
+      },
+      "emoji": "⛷️",
+      "mode": "news",
+      "date": "2026-07-27"
     }
   ]
 }
