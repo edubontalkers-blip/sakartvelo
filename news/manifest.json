@@ -170,6 +170,25 @@
       "emoji": "⛷️",
       "mode": "news",
       "date": "2026-07-27"
+    },
+    {
+      "slug": "georgian-orthodox-christmas-traditions",
+      "topic_key": "georgian-orthodox-christmas",
+      "title_en": "Georgian Orthodox Christmas: A Celebration Like No Other",
+      "titles": {
+        "ru": "Православное Рождество в Грузии: праздник, которого нет больше нигде",
+        "en": "Georgian Orthodox Christmas: A Celebration Like No Other",
+        "tr": "Gürcü Ortodoks Noel'i: Eşsiz Bir Kutlama",
+        "ar": "عيد الميلاد الأرثوذكسي الجورجي: احتفالٌ لا مثيل له",
+        "he": "חג המולד האורתודוקסי הגאורגי: חגיגה שאין כמוה",
+        "fa": "کریسمس ارتدکس گرجستان: جشنی بی‌نظیر",
+        "de": "Georgisches Orthodoxes Weihnachten: Ein Fest wie kein anderes",
+        "it": "Il Natale Ortodosso Georgiano: Una Celebrazione Senza Pari",
+        "es": "La Navidad ortodoxa georgiana: una celebración sin igual"
+      },
+      "emoji": "🕯️",
+      "mode": "evergreen",
+      "date": "2026-07-28"
     }
   ]
 }
