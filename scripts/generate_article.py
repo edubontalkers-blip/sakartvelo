@@ -243,6 +243,37 @@ def call_claude_with_retry(prompt, tool, use_web_search=False, max_tokens=16000,
     raise last_error
 
 
+def call_claude_with_retry_and_parse(prompt, tool, use_web_search=False, max_tokens=16000,
+                                      attempts=3, parse_field=None):
+    """Как call_claude_with_retry, но дополнительно защищает от редкого
+    случая, когда модель кладёт вложенный объект (например, 'content')
+    не как настоящий JSON-объект, а как JSON-текст ВНУТРИ строки —
+    и этот текст оказывается чуть кривым (не хватает запятой/скобки).
+
+    Раньше эта проверка стояла ПОСЛЕ call_claude_with_retry и падала
+    без единой попытки повтора — одна кривая генерация роняла весь скрипт.
+    Теперь любая проблема (сетевая, обрыв по токенам, кривой вложенный
+    JSON) уходит в один и тот же цикл повторов."""
+    last_error = None
+    for attempt in range(1, attempts + 1):
+        try:
+            result = call_claude(prompt, tool, use_web_search=use_web_search, max_tokens=max_tokens)
+            if parse_field is not None:
+                value = result.get(parse_field)
+                if isinstance(value, str):
+                    value = json.loads(value)  # может бросить JSONDecodeError — поймаем ниже
+                if not isinstance(value, dict):
+                    raise RuntimeError(
+                        f'Поле "{parse_field}" не объект и не строка-JSON: {type(value)}'
+                    )
+                result[parse_field] = value
+            return result
+        except (RuntimeError, json.JSONDecodeError) as e:
+            last_error = e
+            print(f'Попытка {attempt}/{attempts} не удалась: {e}')
+    raise last_error
+
+
 # ══════════════════════════════════════
 # ВЫБОР ТЕМЫ ДНЯ
 # ══════════════════════════════════════
@@ -343,11 +374,6 @@ def generate_article():
     topic, mode = pick_topic(manifest)
     recent_titles = [a.get('title_en', '') for a in manifest['articles'][-15:]]
 
-def generate_article():
-    manifest = load_manifest()
-    topic, mode = pick_topic(manifest)
-    recent_titles = [a.get('title_en', '') for a in manifest['articles'][-15:]]
-
     print(f'Mode: {mode}, topic hint: {topic or "(web search)"}')
 
     # ── Шаг 1: пишем черновик ТОЛЬКО на английском (с веб-поиском, если news) ──
@@ -356,15 +382,11 @@ def generate_article():
     # запаса, так как сам процесс поиска тоже расходует токены.
     draft_prompt = build_prompt(topic, mode, recent_titles)
     draft_tokens = 24000 if mode == 'news' else 12000
-    draft = call_claude_with_retry(
+    draft = call_claude_with_retry_and_parse(
         draft_prompt, SUBMIT_ARTICLE_DRAFT_TOOL,
-        use_web_search=(mode == 'news'), max_tokens=draft_tokens
+        use_web_search=(mode == 'news'), max_tokens=draft_tokens,
+        parse_field='content'
     )
-
-    if isinstance(draft.get('content'), str):
-        draft['content'] = json.loads(draft['content'])
-    if not isinstance(draft.get('content'), dict):
-        raise RuntimeError(f'English draft "content" is not an object: {type(draft.get("content"))}')
 
     print(f'Черновик на английском готов: "{draft["content"].get("title", "?")}"')
 
@@ -378,12 +400,11 @@ def generate_article():
             continue
         print(f'Перевод на {LANG_NAMES[lang]}...')
         tr_prompt = build_translation_prompt(draft['content'], LANG_NAMES[lang])
-        translated = call_claude_with_retry(
+        translated = call_claude_with_retry_and_parse(
             tr_prompt, SUBMIT_TRANSLATION_TOOL,
-            use_web_search=False, max_tokens=8000
+            use_web_search=False, max_tokens=8000,
+            parse_field=None
         )
-        if isinstance(translated, str):
-            translated = json.loads(translated)
         content_all[lang] = translated
 
     data = {
