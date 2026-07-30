@@ -208,6 +208,25 @@
       "emoji": "🚇",
       "mode": "news",
       "date": "2026-07-29"
+    },
+    {
+      "slug": "prometheus-cave-underground-rivers-stalactites",
+      "topic_key": "prometheus-cave-georgia",
+      "title_en": "Prometheus Cave: Georgia's Subterranean World of Rivers and Stone",
+      "titles": {
+        "ru": "Пещера Прометея: подземный мир рек и камня",
+        "en": "Prometheus Cave: Georgia's Subterranean World of Rivers and Stone",
+        "tr": "Prometeus Mağarası: Gürcistan'ın Yeraltı Dünyası — Nehirler ve Taş",
+        "ar": "كهف بروميثيوس: عالم جورجيا الخفي من الأنهار والحجارة",
+        "he": "מערת פרומתאוס: עולם התת-קרקע של גאורגיה — נהרות ואבן",
+        "fa": "غار پرومتئوس: دنیای زیرزمینی رودخانه‌ها و سنگ در گرجستان",
+        "de": "Prometheus-Höhle: Georgiens unterirdische Welt aus Flüssen und Stein",
+        "it": "La Grotta di Prometeo: il mondo sotterraneo di fiumi e pietra della Georgia",
+        "es": "La Cueva de Prometeo: el mundo subterráneo de ríos y piedra de Georgia"
+      },
+      "emoji": "🕯️",
+      "mode": "evergreen",
+      "date": "2026-07-30"
     }
   ]
 }
