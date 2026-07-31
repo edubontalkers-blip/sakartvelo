@@ -227,6 +227,25 @@
       "emoji": "🕯️",
       "mode": "evergreen",
       "date": "2026-07-30"
+    },
+    {
+      "slug": "europe-discovers-georgia-record-visitors-2026",
+      "topic_key": "eu-uk-visitor-record-georgia-2026",
+      "title_en": "Europe Has Fallen for Georgia — And the Numbers Prove It",
+      "titles": {
+        "ru": "Европа влюбилась в Грузию — и цифры это подтверждают",
+        "en": "Europe Has Fallen for Georgia — And the Numbers Prove It",
+        "tr": "Avrupa Gürcistan'a Âşık Oldu — Ve Rakamlar Bunu Kanıtlıyor",
+        "ar": "أوروبا وقعت في غرام جورجيا — والأرقام تثبت ذلك",
+        "he": "אירופה התאהבה בגאורגיה — והמספרים מדברים בעד עצמם",
+        "fa": "اروپا عاشق گرجستان شده — و آمار هم این را ثابت می‌کند",
+        "de": "Europa hat sich in Georgien verliebt – und die Zahlen sprechen für sich",
+        "it": "L'Europa si è innamorata della Georgia — e i numeri lo dimostrano",
+        "es": "Europa se ha enamorado de Georgia — y las cifras lo demuestran"
+      },
+      "emoji": "🇬🇪",
+      "mode": "news",
+      "date": "2026-07-31"
     }
   ]
 }
