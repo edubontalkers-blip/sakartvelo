@@ -246,6 +246,25 @@
       "emoji": "🇬🇪",
       "mode": "news",
       "date": "2026-07-31"
+    },
+    {
+      "slug": "rtveli-grape-harvest-festival-kakheti",
+      "topic_key": "kakheti-rtveli-harvest-festival",
+      "title_en": "Rtveli: Kakheti's Ancient Grape Harvest Festival",
+      "titles": {
+        "ru": "Ртвели: древний праздник сбора винограда в Кахетии",
+        "en": "Rtveli: Kakheti's Ancient Grape Harvest Festival",
+        "tr": "Rtveli: Kakheti'nin Binlerce Yıllık Bağbozumu Şenliği",
+        "ar": "رتفيلي: مهرجان قطاف العنب العريق في كاخيتي",
+        "he": "רטבלי: חג בציר הענבים העתיק של קחטי",
+        "fa": "رتوِلی: جشن باستانی برداشت انگور در کاخِتی",
+        "de": "Rtveli: Kachetiens uraltes Weinlesefest",
+        "it": "Rtveli: l'antica festa della vendemmia in Kakhetia",
+        "es": "Rtveli: el ancestral festival de la vendimia en Kakheti"
+      },
+      "emoji": "🍇",
+      "mode": "evergreen",
+      "date": "2026-08-01"
     }
   ]
 }
