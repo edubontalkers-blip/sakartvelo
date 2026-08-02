@@ -265,6 +265,25 @@
       "emoji": "🍇",
       "mode": "evergreen",
       "date": "2026-08-01"
+    },
+    {
+      "slug": "kakheti-wine-tourism-2026-record-harvest",
+      "topic_key": "kakheti-wine-tourism-record-harvest-2026",
+      "title_en": "The Best Time Ever to Visit Kakheti: Georgia's Record Wine Harvest Is Reshaping Wine Tourism",
+      "titles": {
+        "ru": "Лучшее время для поездки в Кахетию: рекордный урожай винограда в Грузии меняет облик винного туризма",
+        "en": "The Best Time Ever to Visit Kakheti: Georgia's Record Wine Harvest Is Reshaping Wine Tourism",
+        "tr": "Kakheti'yi Ziyaret Etmek İçin En Doğru Zaman: Gürcistan'ın Rekor Bağbozumu Şarap Turizmini Yeniden Şekillendiriyor",
+        "ar": "أفضل وقت على الإطلاق لزيارة كاخيتي: موسم حصاد العنب القياسي يُعيد تشكيل السياحة الخمرية في جورجيا",
+        "he": "הזמן הטוב ביותר אי פעם לבקר בקחתי: קציר הענבים השיאי של גאורגיה משנה את פני תיירות היין",
+        "fa": "بهترین زمان برای سفر به کاخِتی: رکورد تاریخی برداشت انگور، گردشگری شراب در گرجستان را متحول می‌کند",
+        "de": "Der perfekte Moment für Kacheti: Georgiens Rekordweinlese verändert den Weintourismus",
+        "it": "Il momento migliore di sempre per visitare la Kakheti: la vendemmia record della Georgia sta rivoluzionando il turismo del vino",
+        "es": "El mejor momento para visitar Kajeti: la vendimia récord de Georgia está transformando el turismo del vino"
+      },
+      "emoji": "🍷",
+      "mode": "news",
+      "date": "2026-08-02"
     }
   ]
 }
