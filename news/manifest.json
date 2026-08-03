@@ -284,6 +284,25 @@
       "emoji": "🍷",
       "mode": "news",
       "date": "2026-08-02"
+    },
+    {
+      "slug": "georgian-polyphonic-singing-unesco-heritage",
+      "topic_key": "georgian-polyphonic-singing-unesco",
+      "title_en": "Georgian Polyphonic Singing: The Ancient Voice of a Nation",
+      "titles": {
+        "ru": "Грузинское многоголосие: древний голос народа",
+        "en": "Georgian Polyphonic Singing: The Ancient Voice of a Nation",
+        "tr": "Gürcü Polifonik Müziği: Bir Milletin Kadim Sesi",
+        "ar": "الغناء البوليفوني الجورجي: الصوت العريق لأمةٍ بأسرها",
+        "he": "השירה הפוליפונית הגאורגית: הקול העתיק של עם",
+        "fa": "آواز پولیفونیک گرجی: صدای کهن یک ملت",
+        "de": "Georgischer Mehrstimmiger Gesang: Die uralte Stimme einer Nation",
+        "it": "Il canto polifonico georgiano: l'antica voce di un popolo",
+        "es": "El canto polifónico georgiano: la voz ancestral de todo un pueblo"
+      },
+      "emoji": "🎶",
+      "mode": "evergreen",
+      "date": "2026-08-03"
     }
   ]
 }
