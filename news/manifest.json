@@ -303,6 +303,25 @@
       "emoji": "🎶",
       "mode": "evergreen",
       "date": "2026-08-03"
+    },
+    {
+      "slug": "georgia-record-european-flights-summer-2026",
+      "topic_key": "georgia-aviation-expansion-european-visitors-2026",
+      "title_en": "Georgia Has Never Been This Easy to Reach: A Record Summer for Flights and European Visitors",
+      "titles": {
+        "ru": "Грузия стала ближе, чем когда-либо: рекордное лето для авиасообщения и европейских туристов",
+        "en": "Georgia Has Never Been This Easy to Reach: A Record Summer for Flights and European Visitors",
+        "tr": "Gürcistan'a Ulaşmak Hiç Bu Kadar Kolay Olmamıştı: 2026 Yazında Rekor Uçuşlar ve Rekor Avrupalı Ziyaretçiler",
+        "ar": "جورجيا لم تكن يومًا بهذه السهولة في المتناول: صيفٌ قياسي للرحلات الجوية والزوار الأوروبيين",
+        "he": "גאורגיה מעולם לא הייתה קרובה כל כך: קיץ שיא בטיסות ובמבקרים אירופאים",
+        "fa": "گرجستان هرگز تا به این حد در دسترس نبوده است: یک تابستان رکوردشکن برای پروازها و گردشگران اروپایی",
+        "de": "Georgien so nah wie nie: Ein Rekordsommer für Flugverbindungen und europäische Besucher",
+        "it": "La Georgia non è mai stata così facile da raggiungere: un'estate record per i voli e i visitatori europei",
+        "es": "Georgia nunca había sido tan fácil de alcanzar: un verano récord en vuelos y visitantes europeos"
+      },
+      "emoji": "✈️",
+      "mode": "news",
+      "date": "2026-08-04"
     }
   ]
 }
