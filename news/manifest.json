@@ -322,6 +322,25 @@
       "emoji": "✈️",
       "mode": "news",
       "date": "2026-08-04"
+    },
+    {
+      "slug": "georgian-felt-hats-svan-wool-crafts-2",
+      "topic_key": "georgian-felt-hats-svan-wool-crafts",
+      "title_en": "Georgian Felt Hats and Svan Wool Crafts: Mountain Traditions Woven in Time",
+      "titles": {
+        "ru": "Грузинские войлочные шапки и сванские шерстяные ремёсла: горные традиции, вотканные во время",
+        "en": "Georgian Felt Hats and Svan Wool Crafts: Mountain Traditions Woven in Time",
+        "tr": "Gürcü Keçe Şapkaları ve Svan Yün El Sanatları: Zaman İçinde Örülmüş Dağ Gelenekleri",
+        "ar": "القبعات اللبادية الجورجية وحرف صوف السفان: تقاليد جبلية منسوجة في عمق الزمن",
+        "he": "כובעי הלבד הגאורגיים ומלאכת הצמר הסוואנית: מסורות הרים שנארגו בתוך הזמן",
+        "fa": "کلاه‌های نمدی گرجستان و صنایع دستی پشمی سوانی: سنت‌های کوهستانی که در بافت زمان جاودانه شده‌اند",
+        "de": "Georgische Filzhüte und Swaner Wollhandwerk: Bergtraditionen, die die Zeit überdauern",
+        "it": "Cappelli di feltro georgiani e artigianato in lana svana: tradizioni montane intessute nel tempo",
+        "es": "Sombreros de fieltro georgianos y artesanía en lana svana: tradiciones de montaña tejidas en el tiempo"
+      },
+      "emoji": "🎩",
+      "mode": "evergreen",
+      "date": "2026-08-05"
     }
   ]
 }
