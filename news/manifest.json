@@ -341,6 +341,25 @@
       "emoji": "🎩",
       "mode": "evergreen",
       "date": "2026-08-05"
+    },
+    {
+      "slug": "georgia-mandatory-travel-insurance-2026-2",
+      "topic_key": "georgia-mandatory-travel-insurance-2026",
+      "title_en": "Georgia Now Requires Travel Insurance — Everything You Need to Know Before You Arrive",
+      "titles": {
+        "ru": "Грузия вводит обязательную туристическую страховку — всё, что нужно знать перед поездкой",
+        "en": "Georgia Now Requires Travel Insurance — Everything You Need to Know Before You Arrive",
+        "tr": "Gürcistan Artık Seyahat Sigortası Zorunlu Kılıyor — Varıştan Önce Bilmeniz Gereken Her Şey",
+        "ar": "جورجيا تُلزم السيّاح بالتأمين على السفر — كلّ ما تحتاج معرفته قبل وصولك",
+        "he": "גאורגיה מחייבת כעת ביטוח נסיעות — כל מה שצריך לדעת לפני שמגיעים",
+        "fa": "گرجستان بیمه سفر را اجباری کرد — هر آنچه پیش از ورود باید بدانید",
+        "de": "Georgien schreibt Reiseversicherung vor – alles, was Sie vor Ihrer Einreise wissen müssen",
+        "it": "La Georgia introduce l'assicurazione di viaggio obbligatoria — tutto quello che devi sapere prima di partire",
+        "es": "Georgia exige seguro de viaje obligatorio: todo lo que necesitas saber antes de llegar"
+      },
+      "emoji": "🛡️",
+      "mode": "news",
+      "date": "2026-08-06"
     }
   ]
 }
