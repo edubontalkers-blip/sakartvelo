@@ -360,6 +360,25 @@
       "emoji": "🛡️",
       "mode": "news",
       "date": "2026-08-06"
+    },
+    {
+      "slug": "davit-gareja-cave-monastery-azerbaijan-border",
+      "topic_key": "davit-gareja-cave-monastery",
+      "title_en": "Davit Gareja: Georgia's Extraordinary Cave Monastery on the Edge of Two Nations",
+      "titles": {
+        "ru": "Давит Гареджа: уникальный пещерный монастырь Грузии на границе двух государств",
+        "en": "Davit Gareja: Georgia's Extraordinary Cave Monastery on the Edge of Two Nations",
+        "tr": "Davit Gareja: İki Ülkenin Sınırında Georgia'nın Olağanüstü Mağara Manastırı",
+        "ar": "داود غاريجا: دير الكهوف الاستثنائي في جورجيا على حافة دولتين",
+        "he": "דוויט גארז'ה: מנזר המערות יוצא הדופן של גאורגיה על גבול שתי מדינות",
+        "fa": "داویت گارجا: صومعه‌ی شگفت‌انگیز غاری گرجستان بر لبه‌ی مرز دو کشور",
+        "de": "Dawit Garedscha: Georgiens außergewöhnliches Höhlenkloster am Rand zweier Nationen",
+        "it": "Davit Gareja: lo straordinario monastero rupestre della Georgia al confine tra due nazioni",
+        "es": "Davit Gareja: el extraordinario monasterio rupestre de Georgia en la frontera entre dos naciones"
+      },
+      "emoji": "⛪",
+      "mode": "evergreen",
+      "date": "2026-08-07"
     }
   ]
 }
