@@ -379,6 +379,25 @@
       "emoji": "⛪",
       "mode": "evergreen",
       "date": "2026-08-07"
+    },
+    {
+      "slug": "planet-hollywood-tbilisi-integrated-resort-2026",
+      "topic_key": "planet-hollywood-tbilisi-resort-2026",
+      "title_en": "Hollywood Comes to the Caucasus: Tbilisi Is Getting Georgia's First Integrated Resort",
+      "titles": {
+        "ru": "Голливуд приходит на Кавказ: в Тбилиси появится первый интегрированный курорт Грузии",
+        "en": "Hollywood Comes to the Caucasus: Tbilisi Is Getting Georgia's First Integrated Resort",
+        "tr": "Hollywood Kafkasya'ya Geliyor: Tiflis, Gürcistan'ın İlk Entegre Tatil Köyüne Kavuşuyor",
+        "ar": "هوليوود تحطّ رحالها في القوقاز: تبليسي على موعد مع أول منتجع متكامل في جورجيا",
+        "he": "הוליווד מגיעה לקווקז: טביליסי עומדת לקבל את הנופש המשולב הראשון בגאורגיה",
+        "fa": "هالیوود به قفقاز می‌رسد: تفلیس میزبان نخستین ریزورت یکپارچه گرجستان می‌شود",
+        "de": "Hollywood im Kaukasus: Tiflis bekommt Georgiens erstes Integrated Resort",
+        "it": "Hollywood sbarca nel Caucaso: a Tbilisi sorgerà il primo resort integrato della Georgia",
+        "es": "Hollywood llega al Cáucaso: Tiflis acogerá el primer resort integrado de Georgia"
+      },
+      "emoji": "🎬",
+      "mode": "news",
+      "date": "2026-08-08"
     }
   ]
 }
