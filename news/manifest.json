@@ -398,6 +398,25 @@
       "emoji": "🎬",
       "mode": "news",
       "date": "2026-08-08"
+    },
+    {
+      "slug": "gelati-monastery-unesco-medieval-georgia-2",
+      "topic_key": "gelati-monastery-georgia",
+      "title_en": "Gelati Monastery — UNESCO Academy of Medieval Georgia",
+      "titles": {
+        "ru": "Монастырь Гелати — средневековая академия Грузии под охраной ЮНЕСКО",
+        "en": "Gelati Monastery — UNESCO Academy of Medieval Georgia",
+        "tr": "Gelati Manastırı — UNESCO'nun Ortaçağ Gürcistanı Akademisi",
+        "ar": "دير غيلاتي — أكاديمية اليونسكو في جورجيا العصور الوسطى",
+        "he": "מנזר גלאטי — אקדמיית ימי הביניים של גאורגיה, אתר מורשת עולמית של יונסק\"ו",
+        "fa": "صومعه‌ی گلاتی — آکادمی یونسکو از گرجستان قرون وسطا",
+        "de": "Kloster Gelati – Georgiens mittelalterliche UNESCO-Akademie im Kaukasus",
+        "it": "Il Monastero di Gelati — L'Accademia UNESCO della Georgia Medievale",
+        "es": "El Monasterio de Gelati — la academia medieval de Georgia declarada Patrimonio de la Humanidad"
+      },
+      "emoji": "⛪",
+      "mode": "evergreen",
+      "date": "2026-08-09"
     }
   ]
 }
