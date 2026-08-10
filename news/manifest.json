@@ -417,6 +417,25 @@
       "emoji": "⛪",
       "mode": "evergreen",
       "date": "2026-08-09"
+    },
+    {
+      "slug": "georgia-hiking-trails-adventure-tourism-2026",
+      "topic_key": "georgia-hiking-trail-expansion-2026",
+      "title_en": "Georgia Is Quietly Becoming One of the World's Great Hiking Destinations",
+      "titles": {
+        "ru": "Грузия негромко становится одним из лучших туристических направлений в мире",
+        "en": "Georgia Is Quietly Becoming One of the World's Great Hiking Destinations",
+        "tr": "Gürcistan, Sessiz Sedasız Dünyanın En İyi Yürüyüş Destinasyonlarından Biri Haline Geliyor",
+        "ar": "جورجيا تتحوّل بهدوء إلى واحدة من أعظم وجهات المشي لمسافات طويلة في العالم",
+        "he": "גאורגיה הופכת בשקט לאחד מיעדי הטיולים הגדולים בעולם",
+        "fa": "گرجستان، آرام آرام به یکی از بهترین مقصدهای کوهنوردی جهان تبدیل می‌شود",
+        "de": "Georgien entwickelt sich still und leise zu einem der großen Wanderreiseziele der Welt",
+        "it": "La Georgia sta diventando, in silenzio, una delle grandi mete mondiali del trekking",
+        "es": "Georgia se convierte, en silencio, en uno de los grandes destinos de senderismo del mundo"
+      },
+      "emoji": "🥾",
+      "mode": "news",
+      "date": "2026-08-10"
     }
   ]
 }
