@@ -436,6 +436,25 @@
       "emoji": "🥾",
       "mode": "news",
       "date": "2026-08-10"
+    },
+    {
+      "slug": "adjika-georgian-spice-paste",
+      "topic_key": "adjika-georgian-spice-paste",
+      "title_en": "Adjika: The Fiery Spice Paste That Defines Georgian Flavor",
+      "titles": {
+        "ru": "Аджика: огненная пряная паста, которая определяет вкус Грузии",
+        "en": "Adjika: The Fiery Spice Paste That Defines Georgian Flavor",
+        "tr": "Acika: Gürcü Mutfağının Ruhunu Taşıyan Ateşli Baharat Ezmesi",
+        "ar": "الأدجيكا: معجون التوابل الناري الذي يجسّد روح المطبخ الجورجي",
+        "he": "אדז'יקה: משחת התבלינים הלוהטת שמגדירה את הטעם הגאורגי",
+        "fa": "آجیکا: خمیر ادویه‌ای آتشین که روح طعم گرجستان را در خود دارد",
+        "de": "Adschika: Die feurige Gewürzpaste, die Georgiens Küche prägt",
+        "it": "Adjika: La Pasta di Spezie dal Carattere Ardente che Definisce il Sapore Georgiano",
+        "es": "Adjika: La ardiente pasta de especias que define el sabor georgiano"
+      },
+      "emoji": "🌶️",
+      "mode": "evergreen",
+      "date": "2026-08-11"
     }
   ]
 }
