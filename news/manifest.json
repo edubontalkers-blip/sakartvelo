@@ -455,6 +455,25 @@
       "emoji": "🌶️",
       "mode": "evergreen",
       "date": "2026-08-11"
+    },
+    {
+      "slug": "gudauri-georgia-ski-resort-rotana-2026",
+      "topic_key": "gudauri-ski-resort-guide-2026",
+      "title_en": "Gudauri Is Having Its Moment: Georgia's High-Altitude Resort Just Got a Major Upgrade",
+      "titles": {
+        "ru": "Гудаури на подъёме: высокогорный курорт Грузии переживает масштабное обновление",
+        "en": "Gudauri Is Having Its Moment: Georgia's High-Altitude Resort Just Got a Major Upgrade",
+        "tr": "Gudauri'nin Yıldızı Parlıyor: Gürcistan'ın Yüksek İrtifadaki Kayak Merkezi Büyük Bir Dönüşüm Geçiriyor",
+        "ar": "غوداوري في عزّ ألقها: المنتجع الجورجي على الأسقف الشاهقة يخطو نقلةً نوعيةً كبرى",
+        "he": "גודאורי בשיאה: אתר הסקי הגבוה של גאורגיה עבר שדרוג מסיבי",
+        "fa": "گوداوری در اوج توجه جهانی: ارتقای بزرگ پرطمطراق‌ترین پیست اسکی گرجستان",
+        "de": "Gudauris großer Moment: Georgiens Hochgebirgsresort erlebt einen epochalen Aufstieg",
+        "it": "Gudauri: è arrivato il suo momento. La stazione d'alta quota della Georgia si rinnova con un grande salto di qualità",
+        "es": "Gudauri vive su gran momento: la estación de alta montaña de Georgia acaba de dar un salto de categoría"
+      },
+      "emoji": "⛷️",
+      "mode": "news",
+      "date": "2026-08-12"
     }
   ]
 }
