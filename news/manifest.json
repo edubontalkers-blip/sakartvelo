@@ -474,6 +474,25 @@
       "emoji": "⛷️",
       "mode": "news",
       "date": "2026-08-12"
+    },
+    {
+      "slug": "georgian-alphabet-unique-script",
+      "topic_key": "georgian-alphabet-unique-scripts",
+      "title_en": "Georgian Alphabet: One of Just 14 Truly Unique Scripts in the World",
+      "titles": {
+        "ru": "Грузинский алфавит: одна из всего 14 по-настоящему уникальных письменностей мира",
+        "en": "Georgian Alphabet: One of Just 14 Truly Unique Scripts in the World",
+        "tr": "Gürcü Alfabesi: Dünyadaki Yalnızca 14 Gerçekten Özgün Yazı Sisteminden Biri",
+        "ar": "الأبجدية الجورجية: واحدة من 14 نظام كتابة فريداً حقاً في العالم",
+        "he": "האלפבית הגאורגי: אחת מ-14 מערכות הכתב הייחודיות באמת בעולם",
+        "fa": "الفبای گرجی: یکی از تنها ۱۴ خط واقعاً منحصربه‌فرد در جهان",
+        "de": "Das georgische Alphabet: Eines von nur 14 wirklich einzigartigen Schriftsystemen der Welt",
+        "it": "L'alfabeto georgiano: uno dei soli 14 sistemi di scrittura davvero unici al mondo",
+        "es": "El alfabeto georgiano: uno de los apenas 14 sistemas de escritura verdaderamente únicos en el mundo"
+      },
+      "emoji": "🔤",
+      "mode": "evergreen",
+      "date": "2026-08-13"
     }
   ]
 }
