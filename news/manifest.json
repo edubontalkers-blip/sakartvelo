@@ -493,6 +493,25 @@
       "emoji": "🔤",
       "mode": "evergreen",
       "date": "2026-08-13"
+    },
+    {
+      "slug": "batumi-black-sea-georgia-summer-guide",
+      "topic_key": "batumi-black-sea-coast",
+      "title_en": "Batumi in Summer: Georgia's Black Sea City Is Having Its Best Season Yet",
+      "titles": {
+        "ru": "Батуми летом: лучший сезон в истории грузинского города на Чёрном море",
+        "en": "Batumi in Summer: Georgia's Black Sea City Is Having Its Best Season Yet",
+        "tr": "Yazın Batum: Gürcistan'ın Karadeniz Kenti En Parlak Sezonunu Yaşıyor",
+        "ar": "باتومي في الصيف: مدينة جورجيا على البحر الأسود تعيش أزهى فصولها",
+        "he": "באטומי בקיץ: עיר הים השחור של גאורגיה חווה את העונה הטובה ביותר שלה",
+        "fa": "باتومی در تابستان: بهترین فصل تاریخ این شهر ساحلی گرجستان",
+        "de": "Batumi im Sommer: Georgiens Stadt am Schwarzen Meer erlebt ihre beste Saison",
+        "it": "Batumi d'estate: la città georgiana sul Mar Nero vive la sua stagione migliore",
+        "es": "Batumi en verano: la ciudad georgiana del mar Negro vive su mejor temporada"
+      },
+      "emoji": "🌊",
+      "mode": "news",
+      "date": "2026-08-14"
     }
   ]
 }
