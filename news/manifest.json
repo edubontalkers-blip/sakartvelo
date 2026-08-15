@@ -512,6 +512,25 @@
       "emoji": "🌊",
       "mode": "news",
       "date": "2026-08-14"
+    },
+    {
+      "slug": "vashlovani-nature-reserve-georgia-semi-desert",
+      "topic_key": "vashlovani_nature_reserve",
+      "title_en": "Vashlovani Nature Reserve: Georgia's Hidden Semi-Desert Wilderness",
+      "titles": {
+        "ru": "Заповедник Вашловани: затерянная полупустыня Грузии",
+        "en": "Vashlovani Nature Reserve: Georgia's Hidden Semi-Desert Wilderness",
+        "tr": "Vaşlovani Tabiat Rezervi: Gürcistan'ın Keşfedilmemiş Yarı Çöl Vahşeti",
+        "ar": "محمية فاشلوفاني الطبيعية: جورجيا التي لا يعرفها أحد",
+        "he": "שמורת הטבע ושלובאני: מדבר חצי-יבש נסתר בגיאורגיה",
+        "fa": "ذخیره‌گاه طبیعی واشلووانی: گوشه‌ای پنهان از بیابان‌های نیمه‌خشک گرجستان",
+        "de": "Vashlovani-Naturreservat: Georgiens verborgene Halbwüste",
+        "it": "Riserva Naturale di Vashlovani: il deserto nascosto della Georgia",
+        "es": "Reserva Natural de Vashlovani: el desierto escondido de Georgia"
+      },
+      "emoji": "🏜️",
+      "mode": "evergreen",
+      "date": "2026-08-15"
     }
   ]
 }
