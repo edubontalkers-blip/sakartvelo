@@ -531,6 +531,25 @@
       "emoji": "🏜️",
       "mode": "evergreen",
       "date": "2026-08-15"
+    },
+    {
+      "slug": "gabriadze-wonders-station-tbilisi-2026",
+      "topic_key": "gabriadze-wonders-station-tbilisi",
+      "title_en": "Tbilisi Just Gained a Magical New Cultural Space — and It's Already a Must-Visit",
+      "titles": {
+        "ru": "В Тбилиси открылось волшебное новое культурное пространство — и оно уже стало местом, которое нельзя пропустить",
+        "en": "Tbilisi Just Gained a Magical New Cultural Space — and It's Already a Must-Visit",
+        "tr": "Tiflis'te Büyülü Bir Kültür Mekânı Doğdu — ve Zaten Görülmesi Gereken Yerler Listesinin Başına Oturdu",
+        "ar": "تبليسي تحتضن فضاءً ثقافياً سحرياً جديداً — وقد بات وجهةً لا غنى عنها",
+        "he": "תביליסי קיבלה מרחב תרבותי קסום וחדש — וכבר אי אפשר לפספס אותו",
+        "fa": "تفلیس میزبان یک فضای فرهنگی شگفت‌انگیز شد — و از همان ابتدا باید دیدش",
+        "de": "Tiflis hat einen zauberhaften neuen Kulturort gewonnen – und er ist jetzt schon ein Muss",
+        "it": "A Tbilisi ha aperto uno straordinario nuovo spazio culturale — ed è già imperdibile",
+        "es": "Tiflis acaba de inaugurar un mágico nuevo espacio cultural — y ya es visita obligada"
+      },
+      "emoji": "🎭",
+      "mode": "news",
+      "date": "2026-08-16"
     }
   ]
 }
