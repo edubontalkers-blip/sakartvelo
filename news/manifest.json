@@ -550,6 +550,25 @@
       "emoji": "🎭",
       "mode": "news",
       "date": "2026-08-16"
+    },
+    {
+      "slug": "chacha-georgia-grape-brandy-explained",
+      "topic_key": "chacha_grape_brandy_georgia",
+      "title_en": "Chacha: Georgia's Legendary Grape Brandy Explained",
+      "titles": {
+        "ru": "Чача: легендарный грузинский виноградный бренди",
+        "en": "Chacha: Georgia's Legendary Grape Brandy Explained",
+        "tr": "Chacha: Gürcistan'ın Efsanevi Üzüm Brandisi",
+        "ar": "الشاشا: براندي العنب الأسطوري في جورجيا",
+        "he": "צ'אצ'ה: הברנדי הענבי האגדי של גאורגיה",
+        "fa": "چاچا: براندی انگوری افسانه‌ای گرجستان",
+        "de": "Tscha-Tscha: Georgiens legendärer Traubenbrand",
+        "it": "Chacha: tutto quello che c'è da sapere sul leggendario brandy d'uva georgiano",
+        "es": "Chacha: todo sobre el legendario aguardiente de uva de Georgia"
+      },
+      "emoji": "🍇",
+      "mode": "evergreen",
+      "date": "2026-08-17"
     }
   ]
 }
