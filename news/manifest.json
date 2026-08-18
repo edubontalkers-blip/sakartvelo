@@ -569,6 +569,25 @@
       "emoji": "🍇",
       "mode": "evergreen",
       "date": "2026-08-17"
+    },
+    {
+      "slug": "rtveli-georgia-grape-harvest-kakheti-2026",
+      "topic_key": "rtveli-grape-harvest-kakheti",
+      "title_en": "Rtveli: How to Experience Georgia's Ancient Grape Harvest This Autumn",
+      "titles": {
+        "ru": "Ртвели: как провести осень на грузинском виноградном сборе",
+        "en": "Rtveli: How to Experience Georgia's Ancient Grape Harvest This Autumn",
+        "tr": "Rtveli: Bu Sonbaharda Gürcistan'ın Kadim Bağ Bozumu Geleneğini Yaşamak",
+        "ar": "رتفيلي: كيف تعيش تجربة موسم قطف العنب العريق في جورجيا هذا الخريف",
+        "he": "רטבלי: כיצד לחוות את בציר הענבים העתיק של גאורגיה בסתיו הקרוב",
+        "fa": "رتولی: چگونه این پاییز در جشن باستانی برداشت انگور گرجستان شرکت کنیم",
+        "de": "Rtveli: So erlebt man Georgiens uralte Weinlese in diesem Herbst",
+        "it": "Rtveli: come vivere l'antica vendemmia georgiana questo autunno",
+        "es": "Rtveli: cómo vivir la milenaria vendimia de Georgia este otoño"
+      },
+      "emoji": "🍇",
+      "mode": "news",
+      "date": "2026-08-18"
     }
   ]
 }
