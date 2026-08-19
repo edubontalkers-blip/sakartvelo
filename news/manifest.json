@@ -588,6 +588,25 @@
       "emoji": "🍇",
       "mode": "news",
       "date": "2026-08-18"
+    },
+    {
+      "slug": "sighnaghi-city-of-love-wall",
+      "topic_key": "sighnaghi-city-of-love-wall",
+      "title_en": "Sighnaghi — The City of Love and Its Ancient Wall",
+      "titles": {
+        "ru": "Сигнахи — Город любви и его древние стены",
+        "en": "Sighnaghi — The City of Love and Its Ancient Wall",
+        "tr": "Sighnaghi — Aşk Şehri ve Kadim Surları",
+        "ar": "سيغناغي — مدينة الحب وسورها العتيق",
+        "he": "סיגנאגי — עיר האהבה וחומתה העתיקה",
+        "fa": "سیگناغی — شهر عشق و دیوار باستانی‌اش",
+        "de": "Sighnaghi – Die Stadt der Liebe und ihre antike Stadtmauer",
+        "it": "Sighnaghi — La Città dell'Amore e le Sue Antiche Mura",
+        "es": "Sighnaghi — La Ciudad del Amor y su Muralla Milenaria"
+      },
+      "emoji": "❤️",
+      "mode": "evergreen",
+      "date": "2026-08-19"
     }
   ]
 }
