@@ -607,6 +607,25 @@
       "emoji": "❤️",
       "mode": "evergreen",
       "date": "2026-08-19"
+    },
+    {
+      "slug": "kazbegi-stepantsminda-georgia-travel-guide-2026",
+      "topic_key": "kazbegi-stepantsminda-guide",
+      "title_en": "Kazbegi (Stepantsminda): Georgia's Most Dramatic Mountain Escape",
+      "titles": {
+        "ru": "Казбеги (Степанцминда): самый захватывающий горный уголок Грузии",
+        "en": "Kazbegi (Stepantsminda): Georgia's Most Dramatic Mountain Escape",
+        "tr": "Kazbegi (Stepantsminda): Gürcistan'ın En Etkileyici Dağ Kaçamağı",
+        "ar": "كازبيغي (ستيبانتسميندا): أكثر وجهات الجبال إثارةً في جورجيا",
+        "he": "קזבגי (סטפנצמינדה): המפלט ההררי המרהיב ביותר של גאורגיה",
+        "fa": "کازبگی (استپانتسمیندا): شکوهمندترین پناهگاه کوهستانی گرجستان",
+        "de": "Kazbegi (Stepantsminda): Georgiens dramatischstes Bergabenteuer",
+        "it": "Kazbegi (Stepantsminda): la fuga tra le montagne più spettacolari della Georgia",
+        "es": "Kazbegi (Stepantsminda): la escapada de montaña más espectacular de Georgia"
+      },
+      "emoji": "⛰️",
+      "mode": "news",
+      "date": "2026-08-20"
     }
   ]
 }
