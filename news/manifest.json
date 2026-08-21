@@ -626,6 +626,25 @@
       "emoji": "⛰️",
       "mode": "news",
       "date": "2026-08-20"
+    },
+    {
+      "slug": "georgian-dance-kartuli-mountain-warrior-dances",
+      "topic_key": "georgian-dance-kartuli-warrior",
+      "title_en": "Georgian Dance: The Grace of Kartuli and the Fire of Mountain Warrior Dances",
+      "titles": {
+        "ru": "Грузинский танец: изящество картули и огонь горских воинских плясок",
+        "en": "Georgian Dance: The Grace of Kartuli and the Fire of Mountain Warrior Dances",
+        "tr": "Gürcü Dansı: Kartuli'nin Zarafeti ve Dağ Savaşçısı Danslarının Ateşi",
+        "ar": "الرقص الجورجي: رقة الكارتولي ونار رقصات المحاربين الجبليين",
+        "he": "הריקוד הגאורגי: חנו של קרתולי ואש ריקודי לוחמי ההרים",
+        "fa": "رقص گرجستانی: لطافت کارتولی و آتش رقص‌های جنگاوران کوهستان",
+        "de": "Georgischer Tanz: Die Anmut des Kartuli und das Feuer der Kriegeretänze aus den Bergen",
+        "it": "La danza georgiana: la grazia del Kartuli e il fuoco delle danze guerriere di montagna",
+        "es": "La danza georgiana: la gracia del Kartuli y el fuego de las danzas guerreras de montaña"
+      },
+      "emoji": "💃",
+      "mode": "evergreen",
+      "date": "2026-08-21"
     }
   ]
 }
