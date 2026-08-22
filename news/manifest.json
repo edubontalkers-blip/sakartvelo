@@ -645,6 +645,25 @@
       "emoji": "💃",
       "mode": "evergreen",
       "date": "2026-08-21"
+    },
+    {
+      "slug": "georgia-mandatory-travel-insurance-2026-3",
+      "topic_key": "georgia-mandatory-travel-insurance-2026",
+      "title_en": "New Rule, No Exceptions: Georgia Now Requires Travel Insurance for Every Tourist",
+      "titles": {
+        "ru": "Новое правило без исключений: Грузия обязала каждого туриста оформить туристическую страховку",
+        "en": "New Rule, No Exceptions: Georgia Now Requires Travel Insurance for Every Tourist",
+        "tr": "Yeni Kural, İstisna Yok: Gürcistan Artık Her Turistten Seyahat Sigortası Talep Ediyor",
+        "ar": "قاعدة جديدة بلا استثناءات: جورجيا تُلزم كل سائح بالتأمين على السفر",
+        "he": "כלל חדש, ללא יוצאים מן הכלל: גאורגיה מחייבת עכשיו ביטוח נסיעות לכל תייר",
+        "fa": "قانون جدید، بدون استثنا: گرجستان بیمه سفر را برای تمام گردشگران اجباری کرد",
+        "de": "Neue Pflicht, keine Ausnahmen: Georgien verlangt ab sofort Reiseversicherung für alle Touristen",
+        "it": "Nuova Regola, Nessuna Eccezione: la Georgia Richiede Ora l'Assicurazione di Viaggio per Tutti i Turisti",
+        "es": "Nueva norma sin excepciones: Georgia exige seguro de viaje a todos los turistas"
+      },
+      "emoji": "🛡️",
+      "mode": "news",
+      "date": "2026-08-22"
     }
   ]
 }
