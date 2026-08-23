@@ -664,6 +664,25 @@
       "emoji": "🛡️",
       "mode": "news",
       "date": "2026-08-22"
+    },
+    {
+      "slug": "tbilisi-sulfur-baths-history-how-to-visit",
+      "topic_key": "tbilisi-sulfur-baths",
+      "title_en": "Tbilisi's Sulfur Baths: A 1,500-Year-Old Soak in the Heart of the City",
+      "titles": {
+        "ru": "Серные бани Тбилиси: полторы тысячи лет удовольствия в самом сердце города",
+        "en": "Tbilisi's Sulfur Baths: A 1,500-Year-Old Soak in the Heart of the City",
+        "tr": "Tiflis'in Kükürt Hamamları: Şehrin Kalbinde 1.500 Yıllık Bir Şifa Geleneği",
+        "ar": "حمامات الكبريت في تبليسي: نقع في المياه الساخنة منذ ألف وخمسمائة عام في قلب المدينة",
+        "he": "מרחצאות הגופרית של טביליסי: טבילה בת 1,500 שנה בלב העיר",
+        "fa": "حمام‌های گوگردی تفلیس: یک‌ونیم‌هزار سال آبتنی در قلب شهر",
+        "de": "Tiflis' Schwefelbäder: Ein 1.500 Jahre altes Bad im Herzen der Stadt",
+        "it": "I Bagni di Zolfo di Tbilisi: Millecinquecento Anni di Terme nel Cuore della Città",
+        "es": "Los baños de azufre de Tiflis: mil quinientos años de historia en el corazón de la ciudad"
+      },
+      "emoji": "♨️",
+      "mode": "evergreen",
+      "date": "2026-08-23"
     }
   ]
 }
