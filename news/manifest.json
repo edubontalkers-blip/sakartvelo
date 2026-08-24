@@ -683,6 +683,25 @@
       "emoji": "♨️",
       "mode": "evergreen",
       "date": "2026-08-23"
+    },
+    {
+      "slug": "china-eastern-shanghai-tbilisi-direct-flights-2026",
+      "topic_key": "china-eastern-shanghai-tbilisi-route-2026",
+      "title_en": "Tbilisi Just Got Its First Direct Flight from China — and It's Already Full",
+      "titles": {
+        "ru": "В Тбилиси появился первый прямой рейс из Китая — и он уже летит с полной загрузкой",
+        "en": "Tbilisi Just Got Its First Direct Flight from China — and It's Already Full",
+        "tr": "Tiflis'e Çin'den İlk Direkt Uçuş Başladı — ve Biletler Çoktan Doldu",
+        "ar": "تبليسي تستقبل أولى رحلاتها المباشرة من الصين — وهي ممتلئة بالفعل",
+        "he": "טביליסי קיבלה את הטיסה הישירה הראשונה שלה מסין — והיא כבר מלאה עד אחרון המושבים",
+        "fa": "اولین پرواز مستقیم از چین به تفلیس راه‌اندازی شد — و بلیت‌هایش تمام شده",
+        "de": "Tiflis bekommt seine erste Direktverbindung aus China – und sie ist bereits ausgebucht",
+        "it": "Tbilisi ha il suo primo volo diretto dalla Cina — ed è già tutto esaurito",
+        "es": "Tiflis acaba de recibir su primer vuelo directo desde China... y ya va lleno"
+      },
+      "emoji": "✈️",
+      "mode": "news",
+      "date": "2026-08-24"
     }
   ]
 }
