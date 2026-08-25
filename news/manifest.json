@@ -702,6 +702,25 @@
       "emoji": "✈️",
       "mode": "news",
       "date": "2026-08-24"
+    },
+    {
+      "slug": "vardzia-cave-city-queen-tamar-legacy",
+      "topic_key": "vardzia-cave-city-queen-tamar",
+      "title_en": "Vardzia Cave City and Queen Tamar's Legacy",
+      "titles": {
+        "ru": "Вардзиа: пещерный город и наследие царицы Тамары",
+        "en": "Vardzia Cave City and Queen Tamar's Legacy",
+        "tr": "Vardzia Mağara Kenti ve Kraliçe Tamar'ın Mirası",
+        "ar": "فارديا: مدينة الكهوف ومآثر الملكة تامار",
+        "he": "ורדזיה — עיר המערות ומורשתה של המלכה תמר",
+        "fa": "واردزیا، شهر غاری و میراث ملکه تامار",
+        "de": "Wardsia – die Höhlenstadt und das Erbe der Königin Tamar",
+        "it": "Vardzia, la città rupestre e l'eredità della regina Tamar",
+        "es": "Vardzia, la ciudad rupestre y el legado de la reina Tamar"
+      },
+      "emoji": "🏔️",
+      "mode": "evergreen",
+      "date": "2026-08-25"
     }
   ]
 }
