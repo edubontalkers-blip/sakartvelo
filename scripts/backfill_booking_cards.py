@@ -25,6 +25,15 @@ from generate_article import build_bcard_map, NEWS_DIR, MANIFEST_FILE
 DATA_RE = re.compile(r'var D=(\{.*\});\s*\nfunction g\(id\)', re.DOTALL)
 
 MARKER = '__BOOKING_BACKFILL__'
+# Находит уже существующий патч целиком (от открывающего <script id="..."> до
+# закрывающего </body> в самом конце файла) — чтобы можно было БЕЗОПАСНО
+# перезаписать его свежей версией, если логика генерации улучшилась
+# (например, добавился перевод названий мест), а не просто пропускать
+# уже пропатченные статьи навсегда.
+EXISTING_PATCH_RE = re.compile(
+    r'\n<script id="' + re.escape(MARKER) + r'">.*?</script>\s*</body>',
+    re.DOTALL
+)
 
 
 def process_article(slug):
@@ -34,10 +43,7 @@ def process_article(slug):
         return False
 
     html = path.read_text(encoding='utf-8')
-
-    if MARKER in html:
-        print(f'  ⏭  {slug}: уже пропатчен ранее, пропускаю')
-        return False
+    already_patched = MARKER in html
 
     m = DATA_RE.search(html)
     if not m:
@@ -58,6 +64,7 @@ def process_article(slug):
 (function(){{
   var BCARD_OVERRIDE = {json.dumps(bcard_map, ensure_ascii=False)};
   if (typeof window.setLang === 'function') {{
+
     var _origSetLang = window.setLang;
     window.setLang = function(lang){{
       _origSetLang(lang);
@@ -80,11 +87,17 @@ def process_article(slug):
         print(f'  ⚠️  {slug}: не нашёл закрывающий тег </body> — пропускаю')
         return False
 
+    if already_patched:
+        # Убираем старую версию патча целиком, чтобы не копить дубликаты
+        # скрипта при каждом повторном запуске — оставляем чистый </body>
+        html = EXISTING_PATCH_RE.sub('\n</body>', html, count=1)
+
     html = html.replace('</body>', patch, 1)
     path.write_text(html, encoding='utf-8')
 
     place_preview = bcard_map.get('en', {}).get('t', '?')
-    print(f'  ✅ {slug}: "{place_preview}"')
+    action = 'обновлён' if already_patched else 'добавлен'
+    print(f'  ✅ {slug}: {action} — "{place_preview}"')
     return True
 
 
