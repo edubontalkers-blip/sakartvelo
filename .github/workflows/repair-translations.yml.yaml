@@ -1,0 +1,29 @@
+name: Repair Broken Translations (one-time)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Repair broken translations
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python3 scripts/repair_translations.py
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "Chacha Bot"
+          git config user.email "bot@sakartvelo.ai"
+          git add news/
+          git diff --cached --quiet || git commit -m "Repair broken/untranslated language fields on existing articles"
+          git push
