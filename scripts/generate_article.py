@@ -400,20 +400,38 @@ When ready, call the submit_translation tool with the translated content."""
 def validate_translation(en_content, translated, lang_name):
     """Строгая проверка: не просто 'пришёл валидный JSON', а 'действительно
     есть весь текст, ничего не обрезано и не пропущено'. Возвращает список
-    найденных проблем (пустой список = всё хорошо)."""
+    найденных проблем (пустой список = всё хорошо).
+
+    Два разных вида поломки, и оба надо ловить по-разному:
+    1. Обрыв на середине — текст короче оригинала (ловится по длине).
+    2. Поле вообще не перевелось и осталось точной копией английского —
+       по длине это НЕ отличить от нормального перевода (длины совпадают),
+       поэтому здесь отдельная проверка на точное совпадение с оригиналом."""
     problems = []
     if not isinstance(translated, dict):
         return [f'{lang_name}: перевод вообще не объект ({type(translated)})']
 
+    def looks_untranslated(val, en_val):
+        # Точное совпадение с английским — почти наверняка значит, что
+        # поле не перевели, а не что перевод случайно вышел таким же
+        # (для длинных предложений совпадение "случайно" практически
+        # невозможно). Короткие строки (менее 15 символов, например
+        # цифры или само название места) пропускаем — там совпадение
+        # либо ожидаемо, либо не о чем говорит.
+        return len(val) >= 15 and val == en_val
+
     for field in ('title', 'tagline', 'intro', 'closing'):
         val = (translated.get(field) or '').strip()
+        en_val = (en_content.get(field) or '').strip()
         if not val:
             problems.append(f'{lang_name}: пустое поле "{field}"')
-        elif len(val) < 0.25 * len(en_content.get(field, '')):
+        elif len(val) < 0.25 * len(en_val):
             # Резкое сокращение относительно оригинала почти всегда значит,
             # что перевод обрубился на середине, а не что он "просто короткий"
             problems.append(f'{lang_name}: поле "{field}" подозрительно короткое '
-                             f'(похоже на обрыв — {len(val)} симв. против {len(en_content.get(field, ""))} в оригинале)')
+                             f'(похоже на обрыв — {len(val)} симв. против {len(en_val)} в оригинале)')
+        elif looks_untranslated(val, en_val):
+            problems.append(f'{lang_name}: поле "{field}" совпадает с английским дословно — похоже, не перевелось вовсе')
 
     en_sections = en_content.get('sections', [])
     tr_sections = translated.get('sections', [])
@@ -423,11 +441,15 @@ def validate_translation(en_content, translated, lang_name):
         for i, (en_s, tr_s) in enumerate(zip(en_sections, tr_sections)):
             heading = (tr_s.get('heading') or '').strip()
             body = (tr_s.get('body') or '').strip()
+            en_heading = (en_s.get('heading') or '').strip()
+            en_body = (en_s.get('body') or '').strip()
             if not heading or not body:
                 problems.append(f'{lang_name}: раздел {i+1} — пустой заголовок или текст')
-            elif len(body) < 0.25 * len(en_s.get('body', '')):
+            elif len(body) < 0.25 * len(en_body):
                 problems.append(f'{lang_name}: раздел {i+1} подозрительно короткий (обрыв?) — '
-                                 f'{len(body)} симв. против {len(en_s.get("body", ""))}')
+                                 f'{len(body)} симв. против {len(en_body)}')
+            elif looks_untranslated(body, en_body) or looks_untranslated(heading, en_heading):
+                problems.append(f'{lang_name}: раздел {i+1} совпадает с английским дословно — похоже, не перевёлся вовсе')
     return problems
 
 
@@ -807,7 +829,7 @@ def build_related_links(en_content, current_slug):
         links = []
         if geo_slug:
             links.append({
-                'label': RELATED_LABELS['more_about'].get(lang, RELATED_LABELS['more_about']['en']).format(place=place),
+                'label': RELATED_LABELS['more_about'].get(lang, RELATED_LABELS['more_about']['en']).format(place=localized_place(place, lang)),
                 'url': f'https://sakartvelo.ai/geo/{geo_slug}/'
             })
         links.append({
@@ -878,6 +900,36 @@ BOOKABLE_PLACES = [
     ('Mtskheta',  ['mtskheta', 'jvari monastery']),
     ('Ureki',     ['ureki']),
 ]
+
+# Название места ("Vardzia") в тексте — всегда на латинице, потому что
+# определяется по английскому черновику. Но показывать его в русском/
+# арабском/ивритском/персидском предложении на латинице неестественно —
+# здесь то же название на каждом из 9 языков сайта. Для языков с тем же
+# алфавитом, что и английский (tr, de, it, es), латиница уже нормальна.
+PLACE_NAMES = {
+    'Tbilisi':   {'ru': 'Тбилиси', 'ar': 'تبليسي', 'he': 'טביליסי', 'fa': 'تفلیس'},
+    'Batumi':    {'ru': 'Батуми', 'ar': 'باتومي', 'he': 'בטומי', 'fa': 'باتومی'},
+    'Kazbegi':   {'ru': 'Казбеги', 'ar': 'قازبيغي', 'he': 'קזבגי', 'fa': 'کازبگی'},
+    'Kutaisi':   {'ru': 'Кутаиси', 'ar': 'كوتايسي', 'he': 'קוטאיסי', 'fa': 'کوتایسی'},
+    'Svaneti':   {'ru': 'Сванетию', 'ar': 'سفانيتي', 'he': 'סוונטי', 'fa': 'سوانتی'},
+    'Borjomi':   {'ru': 'Боржоми', 'ar': 'بورجومي', 'he': 'בורג\'ומי', 'fa': 'بورجومی'},
+    'Gudauri':   {'ru': 'Гудаури', 'ar': 'غوداوري', 'he': 'גודאורי', 'fa': 'گودائوری'},
+    'Bakuriani': {'ru': 'Бакуриани', 'ar': 'باكورياني', 'he': 'בקוריאני', 'fa': 'باکوریانی'},
+    'Sighnaghi': {'ru': 'Сигнахи', 'ar': 'سيغناغي', 'he': 'סיגנאגי', 'fa': 'سیغناغی'},
+    'Vardzia':   {'ru': 'Вардзиа', 'ar': 'فردزيا', 'he': 'ורדזיה', 'fa': 'واردزیا'},
+    'Mtskheta':  {'ru': 'Мцхету', 'ar': 'متسخيتا', 'he': 'מצחתא', 'fa': 'متسخیتا'},
+    'Ureki':     {'ru': 'Уреки', 'ar': 'أوريكي', 'he': 'אורקי', 'fa': 'اورکی'},
+    'Georgia':   {'ru': 'Грузию', 'ar': 'جورجيا', 'he': 'גאורגיה', 'fa': 'گرجستان'},
+}
+
+
+def localized_place(place, lang):
+    """Название места на нужном языке. Для языков с латиницей (en, tr, de,
+    it, es) исходное английское название и так читается нормально. Для
+    ru/ar/he/fa берём готовый перевод, если он есть в словаре."""
+    if lang in ('en', 'tr', 'de', 'it', 'es'):
+        return place
+    return PLACE_NAMES.get(place, {}).get(lang, place)
 
 
 def detect_place(en):
@@ -974,7 +1026,7 @@ def build_bcard_map(en_content):
     display_place = place or 'Georgia'
     result = {}
     for lang in list(LANG_NAMES.keys()) + ['en']:
-        t = PLACE_BCARD_T.get(lang, PLACE_BCARD_T['en']).format(place=display_place)
+        t = PLACE_BCARD_T.get(lang, PLACE_BCARD_T['en']).format(place=localized_place(display_place, lang))
         s = PLACE_BCARD_S.get(lang, PLACE_BCARD_S['en'])
         btn = PLACE_BCARD_BTN.get(lang, PLACE_BCARD_BTN['en'])
         result[lang] = {
