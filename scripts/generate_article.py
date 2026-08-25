@@ -583,6 +583,10 @@ select#langSel{border:none;background:transparent;font-family:inherit;font-size:
 .bcard .btn{background:#fff;color:var(--accent-deep);font-weight:600;font-size:.85rem;padding:10px 20px;border-radius:100px;text-decoration:none;display:inline-block}
 footer{text-align:center;padding:24px 20px 50px;color:var(--muted);font-size:.78rem}
 .backlink{display:block;text-align:center;margin:20px 0;font-size:.85rem;color:var(--accent-deep);font-weight:500;text-decoration:none}
+.related{margin:24px 0;padding:18px;border:1px solid var(--line);border-radius:var(--radius)}
+.related .rh{font-weight:600;font-size:.9rem;color:var(--muted);margin-bottom:10px}
+.related a{display:block;padding:8px 0;font-size:.92rem;color:var(--accent-deep);font-weight:500;text-decoration:none;border-top:1px solid var(--line)}
+.related a:first-of-type{border-top:none}
 
 html[data-theme=dark] .nav{background:#16211f !important;border-color:rgba(255,255,255,.09) !important}
 html[data-theme=dark] .langpick,html[data-theme=dark] #tb{background:#0c1615 !important;border-color:rgba(255,255,255,.09) !important;color:#eef0ee !important}
@@ -631,6 +635,8 @@ html[data-theme=dark] .closing, html[data-theme=dark] footer{color:#9aa8a4 !impo
     <a class="btn" id="bcardBtn" href="https://www.booking.com/searchresults.html?aid=7916610&ss=Tbilisi%2C+Georgia&order=bayesian_review_score" target="_blank" rel="noopener">See options</a>
   </div>
 
+  <div id="relatedLinks"></div>
+
   <a class="backlink" id="backLink" href="https://sakartvelo.ai/news/">← All articles</a>
 </div>
 
@@ -647,6 +653,7 @@ var BACKLINK_TEXT = {
   he:'← כל המאמרים', fa:'← همه مقالات', de:'← Alle Artikel', it:'← Tutti gli articoli', es:'← Todos los artículos'
 };
 var BCARD = __BCARD_JSON__;
+var RELATED = __RELATED_JSON__;
 var FOOTER_TEXT = {
   ru:'Бесплатный AI-гид по Грузии · sakartvelo.ai', en:'Free AI Travel Guide to Georgia · sakartvelo.ai',
   tr:'Gürcistan için ücretsiz AI Seyahat Rehberi · sakartvelo.ai', ar:'دليل سفر مجاني بالذكاء الاصطناعي لجورجيا · sakartvelo.ai',
@@ -670,6 +677,13 @@ function setLang(lang){
   g('sectionsList').innerHTML = html;
 
   st('backLink', BACKLINK_TEXT[lang] || BACKLINK_TEXT.en);
+  var rel = RELATED[lang] || RELATED.en;
+  var relHtml = '<div class="related"><div class="rh">'+rel.header+'</div>';
+  (rel.links || []).forEach(function(l){
+    relHtml += '<a href="'+l.url+'" target="_blank" rel="noopener">'+l.label+'</a>';
+  });
+  relHtml += '</div>';
+  g('relatedLinks').innerHTML = relHtml;
   var bc = BCARD[lang] || BCARD.en;
   st('bcardT', bc.t); st('bcardS', bc.s);
   g('bcardBtn').textContent = bc.btn;
@@ -738,10 +752,88 @@ def build_jsonld(data, date_iso):
     }
 
 
+# ══════════════════════════════════════
+# "СМОТРИТЕ ТАКЖЕ" (внутренняя перелинковка)
+# ══════════════════════════════════════
+# Только на реально существующие адреса (Google может поднять в поиске
+# только то, что имеет свой URL) — не на разделы главной страницы вроде
+# погоды/фонарика, у которых нет отдельного адреса.
+PLACE_TO_GEO_SLUG = {
+    'Tbilisi': 'tbilisi', 'Batumi': 'batumi', 'Kazbegi': 'kazbegi',
+    'Kutaisi': 'kutaisi', 'Svaneti': 'svaneti', 'Borjomi': 'borjomi',
+    'Gudauri': 'gudauri', 'Vardzia': 'vardzia', 'Mtskheta': 'mtskheta',
+    'Sighnaghi': 'kakheti',  # Сигнаги относится к региону Кахетия — отдельной страницы нет
+}
+
+RELATED_HEADER = {
+    'ru': '📍 Смотрите также', 'en': '📍 Explore more', 'tr': '📍 Daha fazlasını keşfedin',
+    'ar': '📍 اكتشف المزيد', 'he': '📍 גלו עוד', 'fa': '📍 بیشتر بدانید',
+    'de': '📍 Mehr entdecken', 'it': '📍 Scopri di più', 'es': '📍 Descubre más',
+}
+RELATED_LABELS = {
+    'more_about': {
+        'ru': 'Подробнее про {place}', 'en': 'More about {place}', 'tr': '{place} hakkında daha fazla',
+        'ar': 'المزيد عن {place}', 'he': 'עוד על {place}', 'fa': 'بیشتر درباره {place}',
+        'de': 'Mehr über {place}', 'it': 'Scopri di più su {place}', 'es': 'Más sobre {place}',
+    },
+    'regions': {
+        'ru': 'Все регионы Грузии', 'en': 'All regions of Georgia', 'tr': 'Gürcistan\'ın tüm bölgeleri',
+        'ar': 'جميع مناطق جورجيا', 'he': 'כל האזורים בגאורגיה', 'fa': 'همه مناطق گرجستان',
+        'de': 'Alle Regionen Georgiens', 'it': 'Tutte le regioni della Georgia', 'es': 'Todas las regiones de Georgia',
+    },
+    'more_articles': {
+        'ru': 'Другие статьи о Грузии', 'en': 'More Georgia travel articles', 'tr': 'Daha fazla Gürcistan seyahat yazısı',
+        'ar': 'المزيد من مقالات السفر عن جورجيا', 'he': 'עוד מאמרי טיולים על גאורגיה', 'fa': 'مقالات بیشتر درباره سفر به گرجستان',
+        'de': 'Weitere Reiseartikel über Georgien', 'it': 'Altri articoli di viaggio sulla Georgia', 'es': 'Más artículos de viaje sobre Georgia',
+    },
+    'planner': {
+        'ru': 'Составить личный маршрут', 'en': 'Build your personal route', 'tr': 'Kişisel rotanı oluştur',
+        'ar': 'أنشئ مسارك الشخصي', 'he': 'בנו מסלול אישי', 'fa': 'مسیر شخصی خود را بسازید',
+        'de': 'Deine persönliche Route erstellen', 'it': 'Crea il tuo itinerario personale', 'es': 'Crea tu ruta personal',
+    },
+}
+
+
+def build_related_links(en_content, current_slug):
+    """Собирает ссылки 'Смотрите также' — только на реальные страницы
+    сайта (geo-страница места, если есть, все регионы, другие статьи,
+    планировщик). Список примерно одинаковый для всех статей, но первая
+    ссылка (геостраница места) — персональная под конкретную статью."""
+    place = detect_place(en_content)
+    geo_slug = PLACE_TO_GEO_SLUG.get(place) if place else None
+
+    result = {}
+    for lang in list(LANG_NAMES.keys()) + ['en']:
+        links = []
+        if geo_slug:
+            links.append({
+                'label': RELATED_LABELS['more_about'].get(lang, RELATED_LABELS['more_about']['en']).format(place=place),
+                'url': f'https://sakartvelo.ai/geo/{geo_slug}/'
+            })
+        links.append({
+            'label': RELATED_LABELS['regions'].get(lang, RELATED_LABELS['regions']['en']),
+            'url': 'https://sakartvelo.ai/geo/regions-guide/'
+        })
+        links.append({
+            'label': RELATED_LABELS['more_articles'].get(lang, RELATED_LABELS['more_articles']['en']),
+            'url': 'https://sakartvelo.ai/news/'
+        })
+        links.append({
+            'label': RELATED_LABELS['planner'].get(lang, RELATED_LABELS['planner']['en']),
+            'url': 'https://sakartvelo.ai/planner/'
+        })
+        result[lang] = {
+            'header': RELATED_HEADER.get(lang, RELATED_HEADER['en']),
+            'links': links,
+        }
+    return result
+
+
 def render_article_html(data, palette, radius, date_human, date_iso):
     content = data['content']
     en = content.get('en', {})
     bcard_map = build_bcard_map(en)
+    related_map = build_related_links(en, data['slug'])
     jsonld = build_jsonld(data, date_iso)
     html = ARTICLE_TEMPLATE
     html = html.replace('__TITLE_EN__', en.get('title', data['slug']))
@@ -755,6 +847,7 @@ def render_article_html(data, palette, radius, date_human, date_iso):
     html = html.replace('__RADIUS__', radius)
     html = html.replace('__DATA_JSON__', json.dumps(content, ensure_ascii=False))
     html = html.replace('__BCARD_JSON__', json.dumps(bcard_map, ensure_ascii=False))
+    html = html.replace('__RELATED_JSON__', json.dumps(related_map, ensure_ascii=False))
     html = html.replace('__JSONLD__', json.dumps(jsonld, ensure_ascii=False))
     return html
 
