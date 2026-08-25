@@ -18,6 +18,7 @@ generate_article.py — язык считается "сломанным" по т
 """
 import json
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -28,6 +29,23 @@ from generate_article import (
 )
 
 DATA_RE = re.compile(r'var D=(\{.*\});\s*\nfunction g\(id\)', re.DOTALL)
+
+
+def commit_progress(slug):
+    """Сохраняет исправление ЭТОЙ статьи прямо сейчас, отдельным коммитом —
+    а не ждёт, пока починятся вообще все статьи. Так деньги, потраченные
+    на уже готовый перевод, не пропадают зря, даже если весь процесс
+    прервётся на середине (таймаут, отмена, сбой сети) — то, что уже
+    исправлено, уже сохранено на сайте."""
+    try:
+        subprocess.run(['git', 'add', 'news/'], check=False)
+        diff = subprocess.run(['git', 'diff', '--cached', '--quiet'])
+        if diff.returncode != 0:  # есть что коммитить
+            subprocess.run(['git', 'commit', '-m', f'Repair translations: {slug}'], check=False)
+            subprocess.run(['git', 'push'], check=False)
+            print(f'  💾 {slug}: сохранено (commit + push)')
+    except Exception as e:
+        print(f'  ⚠️  {slug}: не удалось сохранить прогресс — {e}')
 
 
 def process_article(slug):
@@ -93,6 +111,7 @@ def main():
     for slug in slugs:
         if process_article(slug):
             updated += 1
+            commit_progress(slug)
 
     print(f'\nГотово: исправлено {updated} из {len(slugs)} статей '
           f'(остальные уже были в порядке).')
