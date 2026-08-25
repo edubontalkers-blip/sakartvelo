@@ -181,5 +181,26 @@ try{
 })();
 </script>
 
+
+<script id="__BOOKING_BACKFILL__">
+(function(){
+  var BCARD_OVERRIDE = {"ru": {"t": "Собираетесь в Sighnaghi?", "s": "Собрали честные варианты — та же цена, что при прямом бронировании, просто чтобы вам не искать самим.", "btn": "Посмотреть варианты", "link": "https://www.viator.com/searchResults/all?text=Sighnaghi%2C%20Georgia&pid=P00056692"}, "en": {"t": "Thinking about visiting Sighnaghi?", "s": "We put together a few honest options — same price as booking direct, just to save you the searching.", "btn": "See options", "link": "https://www.viator.com/searchResults/all?text=Sighnaghi%2C%20Georgia&pid=P00056692"}, "tr": {"t": "Sighnaghi'a gitmeyi düşünüyor musun?", "s": "Dürüst seçenekleri bir araya getirdik — doğrudan rezervasyonla aynı fiyat, sadece aramanızı kolaylaştırmak için.", "btn": "Seçenekleri gör", "link": "https://www.viator.com/searchResults/all?text=Sighnaghi%2C%20Georgia&pid=P00056692"}, "ar": {"t": "هل تفكر في زيارة Sighnaghi؟", "s": "جمعنا لك خيارات صادقة — بنفس سعر الحجز المباشر، فقط لنوفر عليك عناء البحث.", "btn": "عرض الخيارات", "link": "https://www.viator.com/searchResults/all?text=Sighnaghi%2C%20Georgia&pid=P00056692"}, "he": {"t": "חושבים לבקר ב-Sighnaghi?", "s": "ריכזנו כמה אפשרויות הוגנות — באותו מחיר כמו הזמנה ישירה, רק כדי לחסוך לכם את החיפוש.", "btn": "לצפייה באפשרויות", "link": "https://www.viator.com/searchResults/all?text=Sighnaghi%2C%20Georgia&pid=P00056692"}, "fa": {"t": "به Sighnaghi فکر می‌کنی؟", "s": "چند گزینه صادقانه جمع کردیم — با همان قیمت رزرو مستقیم، فقط برای اینکه جست‌وجو نکنید.", "btn": "مشاهده گزینه‌ها", "link": "https://www.viator.com/searchResults/all?text=Sighnaghi%2C%20Georgia&pid=P00056692"}, "de": {"t": "Denkst du an einen Besuch in Sighnaghi?", "s": "Wir haben ein paar ehrliche Optionen zusammengestellt — gleicher Preis wie bei Direktbuchung, nur um dir die Suche zu ersparen.", "btn": "Optionen ansehen", "link": "https://www.viator.com/searchResults/all?text=Sighnaghi%2C%20Georgia&pid=P00056692"}, "it": {"t": "Stai pensando di visitare Sighnaghi?", "s": "Abbiamo raccolto alcune opzioni oneste — stesso prezzo della prenotazione diretta, solo per risparmiarti la ricerca.", "btn": "Vedi opzioni", "link": "https://www.viator.com/searchResults/all?text=Sighnaghi%2C%20Georgia&pid=P00056692"}, "es": {"t": "¿Piensas visitar Sighnaghi?", "s": "Reunimos algunas opciones honestas — mismo precio que la reserva directa, solo para ahorrarte la búsqueda.", "btn": "Ver opciones", "link": "https://www.viator.com/searchResults/all?text=Sighnaghi%2C%20Georgia&pid=P00056692"}};
+  if (typeof window.setLang === 'function') {
+    var _origSetLang = window.setLang;
+    window.setLang = function(lang){
+      _origSetLang(lang);
+      var bc = BCARD_OVERRIDE[lang] || BCARD_OVERRIDE.en;
+      var t = document.getElementById('bcardT');
+      var s = document.getElementById('bcardS');
+      var btn = document.getElementById('bcardBtn');
+      if (t) t.textContent = bc.t;
+      if (s) s.textContent = bc.s;
+      if (btn) { btn.textContent = bc.btn; btn.href = bc.link; }
+    };
+    var currentLang = document.documentElement.getAttribute('lang') || 'en';
+    window.setLang(currentLang);
+  }
+})();
+</script>
 </body>
 </html>
