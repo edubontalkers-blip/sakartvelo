@@ -435,6 +435,15 @@ def validate_translation(en_content, translated, lang_name):
 
     en_sections = en_content.get('sections', [])
     tr_sections = translated.get('sections', [])
+    if not isinstance(tr_sections, list):
+        # Модель иногда кладёт разделы не настоящим списком, а JSON-текстом
+        # ВНУТРИ строки (то же семейство бага, что мы уже чинили для поля
+        # 'content' в черновике). Если это не поймать явно, len() посчитает
+        # не количество разделов, а количество СИМВОЛОВ строки — и выдаст
+        # огромное бессмысленное число вместо честной проверки.
+        problems.append(f'{lang_name}: поле "sections" пришло не списком, а {type(tr_sections).__name__} — '
+                         f'разбор не удался')
+        tr_sections = []
     if len(tr_sections) != len(en_sections):
         problems.append(f'{lang_name}: разделов {len(tr_sections)}, а должно быть {len(en_sections)} (как в английском)')
     else:
@@ -468,6 +477,16 @@ def translate_with_validation(en_content, lang, lang_name, attempts=4):
             use_web_search=False, max_tokens=12000,
             parse_field=None
         )
+        # Та же защита, что для поля 'content' у черновика: если 'sections'
+        # пришло JSON-текстом внутри строки, а не настоящим списком —
+        # разворачиваем его здесь, ДО проверки. Без этого шага абсолютно
+        # нормальный перевод мог браковаться и пересылаться заново
+        # впустую — только из-за формы ответа, а не из-за качества текста.
+        if isinstance(translated, dict) and isinstance(translated.get('sections'), str):
+            try:
+                translated['sections'] = json.loads(translated['sections'])
+            except json.JSONDecodeError:
+                pass  # оставляем как есть — validate_translation поймает и явно сообщит
         problems = validate_translation(en_content, translated, lang_name)
         if not problems:
             return translated, False
