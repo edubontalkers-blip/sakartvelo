@@ -22,6 +22,7 @@ import re
 import sys
 import urllib.request
 import urllib.error
+import urllib.parse
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -39,12 +40,25 @@ LANG_NAMES = {
 # друг от друга, а не были все одного цвета. Скрипт выбирает одну по хэшу
 # темы (детерминированно, без хранения доп. состояния).
 PALETTES = [
-    {"name": "turquoise", "accent": "#0e7c78", "accent_deep": "#0a5a57", "accent_light": "#4fd8cf"},
-    {"name": "forest",    "accent": "#2d6a4f", "accent_deep": "#1b4332", "accent_light": "#74c69d"},
-    {"name": "amber",     "accent": "#b45309", "accent_deep": "#7c3a05", "accent_light": "#f5b25e"},
-    {"name": "plum",      "accent": "#7c3a6d", "accent_deep": "#54244a", "accent_light": "#c98cb9"},
-    {"name": "slate",     "accent": "#3d5a73", "accent_deep": "#25384a", "accent_light": "#8fb3cc"},
+    {"name": "turquoise",   "accent": "#0e7c78", "accent_deep": "#0a5a57", "accent_light": "#4fd8cf"},
+    {"name": "forest",      "accent": "#2d6a4f", "accent_deep": "#1b4332", "accent_light": "#74c69d"},
+    {"name": "amber",       "accent": "#b45309", "accent_deep": "#7c3a05", "accent_light": "#f5b25e"},
+    {"name": "plum",        "accent": "#7c3a6d", "accent_deep": "#54244a", "accent_light": "#c98cb9"},
+    {"name": "slate",       "accent": "#3d5a73", "accent_deep": "#25384a", "accent_light": "#8fb3cc"},
+    {"name": "terracotta",  "accent": "#b8562f", "accent_deep": "#7f3a1f", "accent_light": "#e79a72"},
+    {"name": "wine",        "accent": "#7a1e33", "accent_deep": "#4f1220", "accent_light": "#c96c80"},
+    {"name": "olive",       "accent": "#5c6b1f", "accent_deep": "#3a4413", "accent_light": "#a3b661"},
+    {"name": "indigo",      "accent": "#38427a", "accent_deep": "#232a52", "accent_light": "#8891c9"},
+    {"name": "copper",      "accent": "#8a5a2e", "accent_deep": "#5c3a1a", "accent_light": "#d1a05f"},
+    {"name": "teal_deep",   "accent": "#0b5566", "accent_deep": "#073a46", "accent_light": "#5aa8b8"},
+    {"name": "rose",        "accent": "#9c3f5c", "accent_deep": "#692a3d", "accent_light": "#d692a6"},
 ]
+
+# Лёгкая вариация формы (углы карточек/кнопок) поверх смены цвета — так
+# соседние статьи не выглядят одним перекрашенным шаблоном. Меняем только
+# то, что безопасно параметризовано в CSS (--radius), не трогая структуру
+# вёрстки, чтобы не рисковать сломать отображение непроверенным изменением.
+RADII = ["10px", "18px", "26px"]
 
 # Вечнозелёные темы — пул тем без привязки к текущим событиям.
 # Скрипт выберет ту, что ещё не публиковалась (нет в manifest.json).
@@ -344,10 +358,24 @@ When ready, call the submit_article_draft tool with the finished article."""
 
 
 def build_translation_prompt(english_content, lang_name):
+    n_sections = len(english_content.get('sections', []))
     return f"""You are a professional native-speaker translator specializing in travel and
 tourism content, translating for a published, edited travel guide website —
 not a rough draft. Translate the following Georgia (Caucasus) travel article
 from English into {lang_name}.
+
+CRITICAL COMPLETENESS REQUIREMENT — read before calling the tool:
+- The English original has exactly {n_sections} sections. Your translation
+  MUST have exactly {n_sections} sections too — never fewer, never merged,
+  never summarized down.
+- Before calling submit_translation, silently re-read your own output and
+  compare it field-by-field against the English original: title, tagline,
+  intro, every single section (heading + body), and closing. If any field is
+  noticeably shorter than its English counterpart, that is a sign you have
+  cut it short — go back and translate it in full before submitting.
+- A shortened, summarized, or partially-omitted translation is a failure
+  even if the JSON is technically valid. Completeness matters more than
+  brevity.
 
 Quality bar — this must read as if it were originally written in {lang_name}
 by a professional travel writer, not translated:
@@ -367,6 +395,67 @@ Article to translate (JSON):
 {json.dumps(english_content, ensure_ascii=False)}
 
 When ready, call the submit_translation tool with the translated content."""
+
+
+def validate_translation(en_content, translated, lang_name):
+    """Строгая проверка: не просто 'пришёл валидный JSON', а 'действительно
+    есть весь текст, ничего не обрезано и не пропущено'. Возвращает список
+    найденных проблем (пустой список = всё хорошо)."""
+    problems = []
+    if not isinstance(translated, dict):
+        return [f'{lang_name}: перевод вообще не объект ({type(translated)})']
+
+    for field in ('title', 'tagline', 'intro', 'closing'):
+        val = (translated.get(field) or '').strip()
+        if not val:
+            problems.append(f'{lang_name}: пустое поле "{field}"')
+        elif len(val) < 0.25 * len(en_content.get(field, '')):
+            # Резкое сокращение относительно оригинала почти всегда значит,
+            # что перевод обрубился на середине, а не что он "просто короткий"
+            problems.append(f'{lang_name}: поле "{field}" подозрительно короткое '
+                             f'(похоже на обрыв — {len(val)} симв. против {len(en_content.get(field, ""))} в оригинале)')
+
+    en_sections = en_content.get('sections', [])
+    tr_sections = translated.get('sections', [])
+    if len(tr_sections) != len(en_sections):
+        problems.append(f'{lang_name}: разделов {len(tr_sections)}, а должно быть {len(en_sections)} (как в английском)')
+    else:
+        for i, (en_s, tr_s) in enumerate(zip(en_sections, tr_sections)):
+            heading = (tr_s.get('heading') or '').strip()
+            body = (tr_s.get('body') or '').strip()
+            if not heading or not body:
+                problems.append(f'{lang_name}: раздел {i+1} — пустой заголовок или текст')
+            elif len(body) < 0.25 * len(en_s.get('body', '')):
+                problems.append(f'{lang_name}: раздел {i+1} подозрительно короткий (обрыв?) — '
+                                 f'{len(body)} симв. против {len(en_s.get("body", ""))}')
+    return problems
+
+
+def translate_with_validation(en_content, lang, lang_name, attempts=4):
+    """Переводит на один язык и проверяет результат на полноту. Если
+    перевод неполный/обрублен — пробует снова (до `attempts` раз), а не
+    просто принимает первый ответ, прошедший базовую JSON-валидацию.
+    Если после всех попыток так и не получилось — используем английский
+    текст как безопасный запасной вариант для ЭТОГО языка (лучше показать
+    англ. текст, чем пустую/обрубленную страницу), но громко пишем в лог,
+    чтобы это было заметно, а не потерялось."""
+    tr_prompt = build_translation_prompt(en_content, lang_name)
+    for attempt in range(1, attempts + 1):
+        translated = call_claude_with_retry_and_parse(
+            tr_prompt, SUBMIT_TRANSLATION_TOOL,
+            use_web_search=False, max_tokens=12000,
+            parse_field=None
+        )
+        problems = validate_translation(en_content, translated, lang_name)
+        if not problems:
+            return translated, False
+        print(f'  ⚠️ Попытка {attempt}/{attempts}: перевод на {lang_name} неполный:')
+        for p in problems:
+            print(f'      - {p}')
+    print(f'  🛑 {lang_name}: перевод так и не получился полным за {attempts} попыток. '
+          f'Использую английский текст как запасной вариант для этого языка, '
+          f'чтобы страница не вышла с обрывом или пустыми блоками.')
+    return en_content, True
 
 
 def generate_article():
@@ -395,17 +484,32 @@ def generate_article():
     # накопления контекста нескольких языков в одном ответе — практически
     # невозможно упереться в лимит токенов даже без максимального запаса.
     content_all = {'en': draft['content']}
+    fallback_used = {}
     for lang in LANGS:
         if lang == 'en':
             continue
         print(f'Перевод на {LANG_NAMES[lang]}...')
-        tr_prompt = build_translation_prompt(draft['content'], LANG_NAMES[lang])
-        translated = call_claude_with_retry_and_parse(
-            tr_prompt, SUBMIT_TRANSLATION_TOOL,
-            use_web_search=False, max_tokens=8000,
-            parse_field=None
+        content_all[lang], fallback_used[lang] = translate_with_validation(
+            draft['content'], lang, LANG_NAMES[lang]
         )
-        content_all[lang] = translated
+
+    # Финальная сводка по всем 9 языкам — сразу видно в логе GitHub Actions,
+    # если что-то вышло неполным (в частности немецкий — по нему отдельно
+    # просили быть уверенными на 100%).
+    print('\n=== Проверка полноты по всем языкам ===')
+    all_ok = True
+    for lang in LANGS:
+        if lang == 'en' or not fallback_used.get(lang):
+            print(f'  {LANG_NAMES[lang]:12s}: ✅ полный, непрерванный текст')
+        else:
+            print(f'  {LANG_NAMES[lang]:12s}: ⚠️ перевод не удался за все попытки — стоит английский текст вместо него')
+            all_ok = False
+    if not all_ok:
+        print('Внимание: не все языки перевелись идеально, но статья публикуется — '
+              'там, где перевод не получился, стоит английский текст вместо '
+              'пустого/обрубленного блока.')
+    else:
+        print('Все 9 языков — полный, непрерванный текст. ✅')
 
     data = {
         'slug': draft['slug'],
@@ -438,6 +542,7 @@ ARTICLE_TEMPLATE = '''<!DOCTYPE html>
 <title>__TITLE_EN__ | sakartvelo.ai</title>
 <meta name="description" content="__TAGLINE_EN__">
 <link rel="canonical" href="https://sakartvelo.ai/news/__SLUG__/">
+<script type="application/ld+json">__JSONLD__</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -445,7 +550,7 @@ ARTICLE_TEMPLATE = '''<!DOCTYPE html>
 :root{
   --accent:__ACCENT__; --accent-deep:__ACCENT_DEEP__; --accent-light:__ACCENT_LIGHT__;
   --paper:#fffdf8; --ink:#241f1a; --muted:#6b6055; --bg:#f4efe4;
-  --line:rgba(36,31,26,.1); --radius:18px; --shadow:0 8px 30px rgba(10,50,48,.08);
+  --line:rgba(36,31,26,.1); --radius:__RADIUS__; --shadow:0 8px 30px rgba(10,50,48,.08);
 }
 [data-theme=dark]{
   --bg:#0c1615; --paper:#16211f; --ink:#eef0ee; --muted:#9aa8a4;
@@ -521,9 +626,9 @@ html[data-theme=dark] .closing, html[data-theme=dark] footer{color:#9aa8a4 !impo
   <p class="closing" id="closingText"></p>
 
   <div class="bcard">
-    <div class="t" id="bcardT">Plan your Georgia trip</div>
-    <div class="s" id="bcardS">Hotels, tours and car rental — same price as booking direct</div>
-    <a class="btn" id="bcardBtn" href="https://www.booking.com/searchresults.html?aid=7916610&ss=Tbilisi%2C+Georgia&order=bayesian_review_score" target="_blank" rel="noopener">Explore options</a>
+    <div class="t" id="bcardT">Thinking about visiting Georgia?</div>
+    <div class="s" id="bcardS">We put together a few honest options — same price as booking direct.</div>
+    <a class="btn" id="bcardBtn" href="https://www.booking.com/searchresults.html?aid=7916610&ss=Tbilisi%2C+Georgia&order=bayesian_review_score" target="_blank" rel="noopener">See options</a>
   </div>
 
   <a class="backlink" id="backLink" href="https://sakartvelo.ai/news/">← All articles</a>
@@ -541,22 +646,7 @@ var BACKLINK_TEXT = {
   ru:'← Все статьи', en:'← All articles', tr:'← Tüm makaleler', ar:'← جميع المقالات',
   he:'← כל המאמרים', fa:'← همه مقالات', de:'← Alle Artikel', it:'← Tutti gli articoli', es:'← Todos los artículos'
 };
-var BCARD_T = {
-  ru:'Спланируйте поездку в Грузию', en:'Plan your Georgia trip', tr:'Gürcistan gezinizi planlayın',
-  ar:'خطط لرحلتك إلى جورجيا', he:'תכננו את הטיול שלכם לגאורגיה', fa:'سفر خود به گرجستان را برنامه‌ریزی کنید',
-  de:'Plane deine Georgien-Reise', it:'Pianifica il tuo viaggio in Georgia', es:'Planifica tu viaje a Georgia'
-};
-var BCARD_S = {
-  ru:'Отели, туры и аренда авто — та же цена, что при прямом бронировании',
-  en:'Hotels, tours and car rental — same price as booking direct',
-  tr:'Oteller, turlar ve araç kiralama — doğrudan rezervasyonla aynı fiyat',
-  ar:'فنادق وجولات وتأجير سيارات — نفس سعر الحجز المباشر',
-  he:'מלונות, טיולים והשכרת רכב — אותו מחיר כמו הזמנה ישירה',
-  fa:'هتل، تور و اجاره خودرو — همان قیمت رزرو مستقیم',
-  de:'Hotels, Touren und Mietwagen — gleicher Preis wie bei Direktbuchung',
-  it:'Hotel, tour e noleggio auto — stesso prezzo della prenotazione diretta',
-  es:'Hoteles, tours y alquiler de coches — mismo precio que la reserva directa'
-};
+var BCARD = __BCARD_JSON__;
 var FOOTER_TEXT = {
   ru:'Бесплатный AI-гид по Грузии · sakartvelo.ai', en:'Free AI Travel Guide to Georgia · sakartvelo.ai',
   tr:'Gürcistan için ücretsiz AI Seyahat Rehberi · sakartvelo.ai', ar:'دليل سفر مجاني بالذكاء الاصطناعي لجورجيا · sakartvelo.ai',
@@ -580,10 +670,11 @@ function setLang(lang){
   g('sectionsList').innerHTML = html;
 
   st('backLink', BACKLINK_TEXT[lang] || BACKLINK_TEXT.en);
-  st('bcardT', BCARD_T[lang] || BCARD_T.en);
-  st('bcardS', BCARD_S[lang] || BCARD_S.en);
+  var bc = BCARD[lang] || BCARD.en;
+  st('bcardT', bc.t); st('bcardS', bc.s);
+  g('bcardBtn').textContent = bc.btn;
+  g('bcardBtn').href = bc.link;
   st('footerText', FOOTER_TEXT[lang] || FOOTER_TEXT.en);
-  g('bcardBtn').href = 'https://www.booking.com/searchresults.html?aid=7916610&ss=Tbilisi%2C+Georgia&lang='+lang+'&order=bayesian_review_score';
 
   try{ localStorage.setItem('sak_lang', lang); }catch(e){}
   document.title = d.title + ' | sakartvelo.ai';
@@ -618,9 +709,40 @@ try{
 '''
 
 
-def render_article_html(data, palette, date_human):
+def build_jsonld(data, date_iso):
+    """Структурированная разметка (schema.org/Article) — не видна
+    посетителю, но помогает поисковикам и ИИ-ответам (Google AI Overview,
+    ChatGPT, Perplexity) понять и процитировать статью. В 2026 году это
+    особенно важно: большинство сайтов, которых цитирует AI Overview, НЕ
+    входят в топ-10 обычной выдачи — попадание туда идёт в основном через
+    правильную разметку, а не только через позицию."""
+    en = data['content'].get('en', {})
+    return {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": en.get('title', data['slug']),
+        "description": en.get('tagline', ''),
+        "datePublished": date_iso,
+        "dateModified": date_iso,
+        "inLanguage": "en",
+        "author": {"@type": "Organization", "name": "sakartvelo.ai"},
+        "publisher": {
+            "@type": "Organization",
+            "name": "sakartvelo.ai",
+            "logo": {"@type": "ImageObject", "url": "https://sakartvelo.ai/apple-touch-icon.png"}
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": f"https://sakartvelo.ai/news/{data['slug']}/"
+        },
+    }
+
+
+def render_article_html(data, palette, radius, date_human, date_iso):
     content = data['content']
     en = content.get('en', {})
+    bcard_map = build_bcard_map(en)
+    jsonld = build_jsonld(data, date_iso)
     html = ARTICLE_TEMPLATE
     html = html.replace('__TITLE_EN__', en.get('title', data['slug']))
     html = html.replace('__TAGLINE_EN__', en.get('tagline', ''))
@@ -630,8 +752,143 @@ def render_article_html(data, palette, date_human):
     html = html.replace('__ACCENT__', palette['accent'])
     html = html.replace('__ACCENT_DEEP__', palette['accent_deep'])
     html = html.replace('__ACCENT_LIGHT__', palette['accent_light'])
+    html = html.replace('__RADIUS__', radius)
     html = html.replace('__DATA_JSON__', json.dumps(content, ensure_ascii=False))
+    html = html.replace('__BCARD_JSON__', json.dumps(bcard_map, ensure_ascii=False))
+    html = html.replace('__JSONLD__', json.dumps(jsonld, ensure_ascii=False))
     return html
+
+
+# ══════════════════════════════════════
+# УМНЫЙ БЛОК БРОНИРОВАНИЯ (в конец каждой статьи)
+# ══════════════════════════════════════
+# Идея: не один и тот же общий баннер "Тбилиси" на каждой статье, а блок,
+# который называет именно то место, о котором статья, и звучит как совет
+# друга, а не реклама. Честность (та же цена, что напрямую) — это то, что
+# отличает "заботу" от "впаривания": человек видит, что его не пытаются
+# обмануть, и это единственное, что реально снижает отторжение.
+
+# Места, для которых имеет смысл предлагать бронирование (у остальных тем,
+# вроде "грузинский алфавит" или "хинкали-этикет", прямой ценности от
+# ссылки на отель нет — для них остаётся общий, не привязанный к городу блок)
+BOOKABLE_PLACES = [
+    ('Tbilisi',   ['tbilisi']),
+    ('Batumi',    ['batumi', 'adjara', 'black sea georgia']),
+    ('Kazbegi',   ['kazbegi', 'stepantsminda', 'gergeti']),
+    ('Kutaisi',   ['kutaisi', 'prometheus cave', 'bagrati']),
+    ('Svaneti',   ['svaneti', 'mestia', 'ushba', 'svan tower']),
+    ('Borjomi',   ['borjomi']),
+    ('Gudauri',   ['gudauri', 'kobi', 'kvesheti']),
+    ('Bakuriani', ['bakuriani']),
+    ('Sighnaghi', ['sighnaghi', 'kakheti', 'alaverdi', 'kvevri', 'wine region']),
+    ('Vardzia',   ['vardzia']),
+    ('Mtskheta',  ['mtskheta', 'jvari monastery']),
+    ('Ureki',     ['ureki']),
+]
+
+
+def detect_place(en):
+    """Ищет в английском черновике упоминание конкретного 'бронируемого'
+    места. Возвращает название места или None, если статья про абстрактную
+    тему (алфавит, кухня, история) без явной привязки к городу.
+
+    Сначала смотрим только заголовок (самый надёжный сигнал темы статьи).
+    Если там ничего не нашлось — считаем упоминания по всему тексту и
+    берём то место, которое встречается чаще всего (а не первое попавшееся
+    по порядку в списке), чтобы статьи-маршруты вроде "Тбилиси → Батуми"
+    не всегда цеплялись за первый упомянутый город."""
+    title = en.get('title', '').lower()
+    body = ' '.join([
+        en.get('tagline', ''), en.get('intro', ''), en.get('closing', ''),
+        ' '.join(s.get('heading', '') + ' ' + s.get('body', '')
+                  for s in en.get('sections', []))
+    ]).lower()
+
+    # Заголовок весит больше (это самый надёжный сигнал темы), но не
+    # решает всё единолично — если тело статьи явно про другой город
+    # (как в статьях-маршрутах "Тбилиси → Батуми"), это тоже учитывается.
+    best_place, best_score = None, 0
+    for place, keywords in BOOKABLE_PLACES:
+        score = 3 * sum(title.count(kw) for kw in keywords) + sum(body.count(kw) for kw in keywords)
+        if score > best_score:
+            best_place, best_score = place, score
+    return best_place
+
+
+def detect_booking_type(en):
+    """Грубая эвристика: о чём скорее статья — трансфер/дорога, экскурсия
+    или (по умолчанию) проживание. Определяет, какая партнёрка уместнее."""
+    text = (en.get('title', '') + ' ' + en.get('tagline', '')).lower()
+    if any(k in text for k in ('transfer', 'drive', 'road trip', 'highway',
+                                'rental car', 'car rental')):
+        return 'transfer'
+    if any(k in text for k in ('tour', 'excursion', 'day trip', 'hike',
+                                'hiking', 'trek', 'guided')):
+        return 'tour'
+    return 'hotel'
+
+
+def build_booking_link(place, booking_type, lang):
+    q = urllib.parse.quote(f'{place}, Georgia' if place else 'Tbilisi, Georgia')
+    if booking_type == 'tour':
+        return f'https://www.viator.com/searchResults/all?text={q}&pid=P00056692'
+    if booking_type == 'transfer':
+        return f'https://www.rentalcars.com/SearchResults.do?affiliateCode=travelpayouts732753&city={q}'
+    return (f'https://www.booking.com/searchresults.html?aid=7916610'
+            f'&ss={q}&lang={lang}&order=bayesian_review_score')
+
+
+# Тёплый, честный тон: не "купи сейчас", а "вот что я нашёл, цена та же,
+# что напрямую" — раз человек уже читал именно про это место, упоминание
+# по имени звучит как забота, а не как случайная реклама.
+PLACE_BCARD_T = {
+    'ru': 'Собираетесь в {place}?',
+    'en': 'Thinking about visiting {place}?',
+    'tr': '{place}\'a gitmeyi düşünüyor musun?',
+    'ar': 'هل تفكر في زيارة {place}؟',
+    'he': 'חושבים לבקר ב-{place}?',
+    'fa': 'به {place} فکر می‌کنی؟',
+    'de': 'Denkst du an einen Besuch in {place}?',
+    'it': 'Stai pensando di visitare {place}?',
+    'es': '¿Piensas visitar {place}?',
+}
+PLACE_BCARD_S = {
+    'ru': 'Собрали честные варианты — та же цена, что при прямом бронировании, просто чтобы вам не искать самим.',
+    'en': 'We put together a few honest options — same price as booking direct, just to save you the searching.',
+    'tr': 'Dürüst seçenekleri bir araya getirdik — doğrudan rezervasyonla aynı fiyat, sadece aramanızı kolaylaştırmak için.',
+    'ar': 'جمعنا لك خيارات صادقة — بنفس سعر الحجز المباشر، فقط لنوفر عليك عناء البحث.',
+    'he': 'ריכזנו כמה אפשרויות הוגנות — באותו מחיר כמו הזמנה ישירה, רק כדי לחסוך לכם את החיפוש.',
+    'fa': 'چند گزینه صادقانه جمع کردیم — با همان قیمت رزرو مستقیم، فقط برای اینکه جست‌وجو نکنید.',
+    'de': 'Wir haben ein paar ehrliche Optionen zusammengestellt — gleicher Preis wie bei Direktbuchung, nur um dir die Suche zu ersparen.',
+    'it': 'Abbiamo raccolto alcune opzioni oneste — stesso prezzo della prenotazione diretta, solo per risparmiarti la ricerca.',
+    'es': 'Reunimos algunas opciones honestas — mismo precio que la reserva directa, solo para ahorrarte la búsqueda.',
+}
+PLACE_BCARD_BTN = {
+    'ru': 'Посмотреть варианты', 'en': 'See options', 'tr': 'Seçenekleri gör',
+    'ar': 'عرض الخيارات', 'he': 'לצפייה באפשרויות', 'fa': 'مشاهده گزینه‌ها',
+    'de': 'Optionen ansehen', 'it': 'Vedi opzioni', 'es': 'Ver opciones',
+}
+
+
+def build_bcard_map(en_content):
+    """Собирает готовый словарь {lang: {t, s, btn, link}} на стороне
+    Python — так и в HTML попадает уже финальный, конкретный текст,
+    а не общий шаблон на все статьи подряд. Если статья абстрактная
+    (без конкретного места, например про алфавит) — используем мягкий
+    общий текст про Грузию целиком, а не выдумываем несуществующее место."""
+    place = detect_place(en_content)
+    booking_type = detect_booking_type(en_content)
+    display_place = place or 'Georgia'
+    result = {}
+    for lang in list(LANG_NAMES.keys()) + ['en']:
+        t = PLACE_BCARD_T.get(lang, PLACE_BCARD_T['en']).format(place=display_place)
+        s = PLACE_BCARD_S.get(lang, PLACE_BCARD_S['en'])
+        btn = PLACE_BCARD_BTN.get(lang, PLACE_BCARD_BTN['en'])
+        result[lang] = {
+            't': t, 's': s, 'btn': btn,
+            'link': build_booking_link(place, booking_type, lang),
+        }
+    return result
 
 
 # ══════════════════════════════════════
@@ -768,9 +1025,11 @@ def main():
     data, mode = generate_article()
 
     palette = random.choice(PALETTES)
+    radius = random.choice(RADII)
     date_human = datetime.now(timezone.utc).strftime('%B %d, %Y')
+    date_iso = datetime.now(timezone.utc).strftime('%Y-%m-%d')
 
-    html = render_article_html(data, palette, date_human)
+    html = render_article_html(data, palette, radius, date_human, date_iso)
 
     article_dir = NEWS_DIR / data['slug']
     article_dir.mkdir(parents=True, exist_ok=True)
@@ -789,7 +1048,7 @@ def main():
 
     rebuild_news_index(manifest)
 
-    print(f'Published: news/{data["slug"]}/ (mode={mode}, palette={palette["name"]})')
+    print(f'Published: news/{data["slug"]}/ (mode={mode}, palette={palette["name"]}, radius={radius})')
 
 
 if __name__ == '__main__':
