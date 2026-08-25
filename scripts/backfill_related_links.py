@@ -21,6 +21,10 @@ from generate_article import build_related_links, NEWS_DIR, MANIFEST_FILE
 DATA_RE = re.compile(r'var D=(\{.*\});\s*\nfunction g\(id\)', re.DOTALL)
 
 MARKER = '__RELATED_BACKFILL__'
+EXISTING_PATCH_RE = re.compile(
+    r'\n<script id="' + re.escape(MARKER) + r'">.*?</script>\s*</body>',
+    re.DOTALL
+)
 
 
 def process_article(slug):
@@ -30,10 +34,7 @@ def process_article(slug):
         return False
 
     html = path.read_text(encoding='utf-8')
-
-    if MARKER in html:
-        print(f'  ⏭  {slug}: уже пропатчен ранее, пропускаю')
-        return False
+    already_patched = MARKER in html
 
     m = DATA_RE.search(html)
     if not m:
@@ -97,11 +98,15 @@ def process_article(slug):
         print(f'  ⚠️  {slug}: не нашёл закрывающий тег </body> — пропускаю')
         return False
 
+    if already_patched:
+        html = EXISTING_PATCH_RE.sub('\n</body>', html, count=1)
+
     html = html.replace('</body>', patch, 1)
     path.write_text(html, encoding='utf-8')
 
     n_links = len(related_map.get('en', {}).get('links', []))
-    print(f'  ✅ {slug}: добавлено {n_links} ссылок')
+    action = 'обновлено' if already_patched else 'добавлено'
+    print(f'  ✅ {slug}: {action} {n_links} ссылок')
     return True
 
 
