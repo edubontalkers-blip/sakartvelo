@@ -1,0 +1,27 @@
+name: Backfill Booking Cards (one-time)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run backfill script
+        run: python3 scripts/backfill_booking_cards.py
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "Chacha Bot"
+          git config user.email "bot@sakartvelo.ai"
+          git add news/
+          git diff --cached --quiet || git commit -m "Backfill smart booking cards on existing articles"
+          git push
