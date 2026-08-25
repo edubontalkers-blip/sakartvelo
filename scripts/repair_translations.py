@@ -48,7 +48,7 @@ def commit_progress(slug):
         print(f'  ⚠️  {slug}: не удалось сохранить прогресс — {e}')
 
 
-def process_article(slug):
+def process_article(slug, problem_spots):
     path = NEWS_DIR / slug / 'index.html'
     if not path.exists():
         print(f'  ⚠️  {slug}: файл не найден, пропускаю')
@@ -84,11 +84,17 @@ def process_article(slug):
         print(f'  🔧 {slug} [{LANG_NAMES[lang]}]: найдены проблемы — перевожу заново:')
         for p in problems:
             print(f'      - {p}')
-        fixed, fallback = translate_with_validation(en, lang, LANG_NAMES[lang])
+        # attempts=1 — здесь специально не повторяем по 4 раза каждую
+        # проблему: цель сейчас быстро пройтись по ВСЕМ статьям и увидеть
+        # полный список мест, где перевод не задался, а не тратить время
+        # и деньги на одну и ту же зависающую комбинацию статья+язык.
+        # К отмеченным (🛑) местам вернёмся отдельно после этого прохода.
+        fixed, fallback = translate_with_validation(en, lang, LANG_NAMES[lang], attempts=1)
         content[lang] = fixed
         changed = True
         if fallback:
             print(f'  🛑 {slug} [{LANG_NAMES[lang]}]: даже сейчас не получилось перевести полностью — оставлен английский текст')
+            problem_spots.append((slug, LANG_NAMES[lang]))
         else:
             print(f'  ✅ {slug} [{LANG_NAMES[lang]}]: перевод исправлен и полный')
 
@@ -107,14 +113,22 @@ def main():
     slugs = [a['slug'] for a in manifest['articles']]
     print(f'Проверяю {len(slugs)} статей на всех 8 языках перевода...\n')
 
+    problem_spots = []
     updated = 0
     for slug in slugs:
-        if process_article(slug):
+        if process_article(slug, problem_spots):
             updated += 1
             commit_progress(slug)
 
     print(f'\nГотово: исправлено {updated} из {len(slugs)} статей '
           f'(остальные уже были в порядке).')
+
+    if problem_spots:
+        print(f'\n=== Список мест, куда нужно вернуться отдельно ({len(problem_spots)}) ===')
+        for slug, lang in problem_spots:
+            print(f'  - {slug} [{lang}]')
+    else:
+        print('\nВсе проблемные места удалось исправить с первого раза — возвращаться некуда. ✅')
 
 
 if __name__ == '__main__':
