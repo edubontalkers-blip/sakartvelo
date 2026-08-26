@@ -93,6 +93,37 @@ EVERGREEN_TOPICS = [
     "Georgian dance — Kartuli and the mountain warrior dances",
     "Georgian felt hats and Svan wool crafts",
     "Borjomi mineral water — geology and history",
+    "Narikala Fortress — Tbilisi's ancient guardian",
+    "Metekhi Church and the legend of St. Nino",
+    "Sameba Cathedral — Georgia's largest church",
+    "Rustaveli Avenue — Tbilisi's grand boulevard",
+    "Chronicle of Georgia monument — Tbilisi's modern Stonehenge",
+    "Georgian churchkhela — the 'Georgian Snickers' explained",
+    "Georgian honey and beekeeping traditions",
+    "Tskaltubo — Soviet-era spa town and its abandoned sanatoriums",
+    "Racha — Georgia's least-visited mountain region",
+    "Svaneti cuisine — kubdari and mountain recipes",
+    "Georgian carpet weaving traditions",
+    "Batumi Boulevard — history of the seaside promenade",
+    "Ajarian khachapuri — the boat-shaped cheese bread",
+    "Kutaisi's Motsameta Monastery — legend of the martyrs",
+    "Okatse and Kinchkha waterfalls — Georgia's canyon trails",
+    "Martvili Canyon — turquoise waters and rope swings",
+    "Tusheti — Georgia's most remote highland region",
+    "Khevsureti — chainmail villages of the Caucasus",
+    "Georgian Soviet-era architecture in Tbilisi",
+    "The Georgian zodiac — Kartvelian folk astronomy",
+    "Georgian felt-making and shepherding traditions",
+    "Anaklia and the Georgian Black Sea coast north of Batumi",
+    "Vani — ancient Colchian gold and archaeology",
+    "Georgian Jewish heritage and the Great Synagogue of Tbilisi",
+    "Armenian and Azerbaijani quarters of Old Tbilisi",
+    "Georgian Sulfur Bath district — Abanotubani architecture",
+    "Kazbegi's Gergeti Trinity Church — the mountain pilgrimage",
+    "Georgian wine qvevri UNESCO listing — how it happened",
+    "Shatili — the fortress village of Khevsureti",
+    "Georgian Orthodox monastic life today",
+    "Tbilisi's dry bridge flea market — Soviet antiques and treasures",
 ]
 
 
@@ -149,6 +180,37 @@ SUBMIT_TRANSLATION_TOOL = {
     "input_schema": ARTICLE_LANG_SCHEMA
 }
 
+# ── Облегчённые инструменты для перевода "по кусочку" ──
+# Раньше единственный способ перевода — попросить модель собрать всю
+# статью (заголовок + 3-5 разделов) одним большим вызовом инструмента.
+# На практике для нескольких статей/языков модель регулярно путалась
+# именно в сборке массива 'sections' (см. validate_translation) — упаковывала
+# его текстом вместо настоящего списка. Эти два инструмента ничего не
+# собирают целиком — просят перевести ОДНУ строку или ОДИН раздел за раз,
+# так проще для модели физически невозможно перепутать формат.
+SUBMIT_TEXT_TOOL = {
+    "name": "submit_text",
+    "description": "Submit one translated piece of text.",
+    "input_schema": {
+        "type": "object",
+        "properties": {"text": {"type": "string"}},
+        "required": ["text"]
+    }
+}
+
+SUBMIT_SECTION_TOOL = {
+    "name": "submit_section",
+    "description": "Submit one translated article section.",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "heading": {"type": "string"},
+            "body": {"type": "string"}
+        },
+        "required": ["heading", "body"]
+    }
+}
+
 
 # ══════════════════════════════════════
 # ANTHROPIC API (raw HTTPS, без сторонних библиотек)
@@ -167,6 +229,13 @@ def call_claude(prompt, tool, use_web_search=False, max_tokens=16000):
         "max_tokens": max_tokens,
         "stream": True,
         "tools": tools,
+        # temperature=0 — для структурированных данных (JSON-схема через tool
+        # use) нам не нужна творческая случайность, наоборот — чем стабильнее
+        # и предсказуемее модель собирает вложенную структуру (например,
+        # массив 'sections'), тем реже она "случайно" упаковывает его не
+        # тем форматом. Не устраняет проблему на 100%, но заметно снижает
+        # частоту таких сбоев.
+        "temperature": 0,
         # Не форсируем tool_choice — модели нужно свободно пользоваться
         # web_search сначала, и только потом вызвать нужный инструмент.
         "messages": [{"role": "user", "content": prompt}]
@@ -308,7 +377,14 @@ def pick_topic(manifest):
         # Нечётный день — вечнозелёная тема, ещё не публиковавшаяся
         available = [t for t in EVERGREEN_TOPICS if t not in used_topics]
         if not available:
-            available = EVERGREEN_TOPICS  # если весь пул исчерпан — начинаем по новой
+            # Весь пул вечнозелёных тем уже использован — раньше здесь было
+            # "начинаем по кругу", что приводило к настоящим дублям статей
+            # (одна и та же тема публиковалась второй раз). Теперь вместо
+            # повтора просто переключаемся на новостной режим — он всегда
+            # свежий по своей природе (реальный веб-поиск), дублей дать
+            # не может.
+            print('Пул вечнозелёных тем исчерпан — переключаюсь на новостной режим вместо повтора.')
+            return None, 'news'
         topic = random.choice(available)
         return topic, 'evergreen'
 
@@ -368,6 +444,9 @@ CRITICAL COMPLETENESS REQUIREMENT — read before calling the tool:
 - The English original has exactly {n_sections} sections. Your translation
   MUST have exactly {n_sections} sections too — never fewer, never merged,
   never summarized down.
+- The 'sections' field must be a genuine JSON array of {n_sections} objects
+  in the tool call — never a string containing serialized JSON text. Do not
+  stringify or double-encode it under any circumstances.
 - Before calling submit_translation, silently re-read your own output and
   compare it field-by-field against the English original: title, tagline,
   intro, every single section (heading + body), and closing. If any field is
@@ -462,6 +541,59 @@ def validate_translation(en_content, translated, lang_name):
     return problems
 
 
+def translate_field_by_field(en_content, lang_name):
+    """Более медленный, но намного надёжнее способ перевода — вместо
+    одного большого запроса на всю статью, каждое поле (заголовок,
+    подзаголовок, вступление, каждый раздел, заключение) переводится
+    ОТДЕЛЬНЫМ маленьким запросом. Модели физически негде перепутать
+    формат ответа, когда просят перевести один текст или один раздел,
+    а не собрать сложный вложенный массив целиком.
+
+    Используется точечно — только для мест, которые не поддались обычному
+    translate_with_validation после честной попытки, а не как основной
+    способ перевода (это было бы намного дороже по количеству запросов
+    для ежедневной генерации новых статей)."""
+    def translate_one_text(text, field_label):
+        prompt = f"""Translate this exact piece of text from a Georgia (Caucasus) travel
+article into {lang_name}. Preserve all facts, numbers, names exactly.
+Write natural, native-level {lang_name}, not a literal word-for-word translation.
+
+Text to translate ({field_label}):
+{text}
+
+Call submit_text with the translated text."""
+        result = call_claude_with_retry_and_parse(
+            prompt, SUBMIT_TEXT_TOOL, use_web_search=False, max_tokens=2000, attempts=3
+        )
+        return result.get('text', text)
+
+    def translate_one_section(section):
+        prompt = f"""Translate this one section of a Georgia (Caucasus) travel article into
+{lang_name}. Preserve all facts, numbers, names exactly. Write natural,
+native-level {lang_name}, not a literal word-for-word translation.
+
+Heading: {section.get('heading', '')}
+Body: {section.get('body', '')}
+
+Call submit_section with the translated heading and body."""
+        result = call_claude_with_retry_and_parse(
+            prompt, SUBMIT_SECTION_TOOL, use_web_search=False, max_tokens=2000, attempts=3
+        )
+        return {
+            'heading': result.get('heading', section.get('heading', '')),
+            'body': result.get('body', section.get('body', '')),
+        }
+
+    translated = {
+        'title': translate_one_text(en_content.get('title', ''), 'title'),
+        'tagline': translate_one_text(en_content.get('tagline', ''), 'tagline'),
+        'intro': translate_one_text(en_content.get('intro', ''), 'intro paragraph'),
+        'closing': translate_one_text(en_content.get('closing', ''), 'closing paragraph'),
+        'sections': [translate_one_section(s) for s in en_content.get('sections', [])],
+    }
+    return translated
+
+
 def translate_with_validation(en_content, lang, lang_name, attempts=4):
     """Переводит на один язык и проверяет результат на полноту. Если
     перевод неполный/обрублен — пробует снова (до `attempts` раз), а не
@@ -493,7 +625,25 @@ def translate_with_validation(en_content, lang, lang_name, attempts=4):
         print(f'  ⚠️ Попытка {attempt}/{attempts}: перевод на {lang_name} неполный:')
         for p in problems:
             print(f'      - {p}')
-    print(f'  🛑 {lang_name}: перевод так и не получился полным за {attempts} попыток. '
+
+    # Быстрый способ (весь текст одним запросом) не задался ни разу за
+    # `attempts` попыток. Прежде чем сдаться на английский — пробуем более
+    # медленный, но намного надёжнее способ: переводим по одному кусочку
+    # текста за раз, так модели физически негде перепутать формат ответа.
+    print(f'  🔁 {lang_name}: быстрый способ не сработал, пробую надёжный (по кусочку)...')
+    try:
+        translated = translate_field_by_field(en_content, lang_name)
+        problems = validate_translation(en_content, translated, lang_name)
+        if not problems:
+            print(f'  ✅ {lang_name}: получилось надёжным способом (по кусочку).')
+            return translated, False
+        print(f'  ⚠️ {lang_name}: даже надёжный способ не дал идеальный результат:')
+        for p in problems:
+            print(f'      - {p}')
+    except Exception as e:
+        print(f'  ⚠️ {lang_name}: надёжный способ тоже не сработал — {e}')
+
+    print(f'  🛑 {lang_name}: перевод так и не получился полным ни одним из способов. '
           f'Использую английский текст как запасной вариант для этого языка, '
           f'чтобы страница не вышла с обрывом или пустыми блоками.')
     return en_content, True
@@ -502,7 +652,11 @@ def translate_with_validation(en_content, lang, lang_name, attempts=4):
 def generate_article():
     manifest = load_manifest()
     topic, mode = pick_topic(manifest)
-    recent_titles = [a.get('title_en', '') for a in manifest['articles'][-15:]]
+    # Все опубликованные заголовки, не только последние 15 — с расширением
+    # темного пула новостной режим теперь используется чаще, и модель
+    # должна видеть полную историю, а не узкий срез, чтобы не повторить
+    # то, что публиковалось давно.
+    recent_titles = [a.get('title_en', '') for a in manifest['articles']]
 
     print(f'Mode: {mode}, topic hint: {topic or "(web search)"}')
 
