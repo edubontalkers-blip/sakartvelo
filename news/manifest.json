@@ -759,6 +759,25 @@
       "emoji": "🏜️",
       "mode": "evergreen",
       "date": "2026-08-27"
+    },
+    {
+      "slug": "kobuleti-black-sea-swissotel-2026",
+      "topic_key": "kobuleti-resort-development-2026",
+      "title_en": "Kobuleti Is Changing Fast — and That's Exactly Why You Should Visit Now",
+      "titles": {
+        "ru": "Кобулети меняется стремительно — и именно поэтому стоит приехать сюда прямо сейчас",
+        "en": "Kobuleti Is Changing Fast — and That's Exactly Why You Should Visit Now",
+        "tr": "Kobuleti Hızla Değişiyor — ve Şimdi Ziyaret Etmeniz İçin Tam da Bu Yüzden",
+        "ar": "كوبوليتي تتغيّر بسرعة — وهذا بالضبط سبب زيارتها الآن",
+        "he": "קובולטי משתנה במהירות — וזו בדיוק הסיבה לבקר בה עכשיו",
+        "fa": "کوبولتی دارد سریع تغییر می‌کند — و این دقیقاً دلیلی است که باید همین حالا آنجا بروید",
+        "de": "Kobuleti verändert sich rasant – und genau deshalb sollten Sie jetzt hinfahren",
+        "it": "Kobuleti sta cambiando rapidamente — ed è proprio per questo che dovreste visitarla adesso",
+        "es": "Kobuleti está cambiando a toda velocidad — y esa es exactamente la razón para visitarla ahora"
+      },
+      "emoji": "🌊",
+      "mode": "news",
+      "date": "2026-08-28"
     }
   ]
 }
