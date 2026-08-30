@@ -797,6 +797,25 @@
       "emoji": "🏛️",
       "mode": "evergreen",
       "date": "2026-08-29"
+    },
+    {
+      "slug": "swissotel-kobuleti-beach-resort-georgia-2026",
+      "topic_key": "kobuleti-swissotel-resort-2026",
+      "title_en": "Georgia's Black Sea Coast Just Got Its Biggest Hotel Investment Ever",
+      "titles": {
+        "ru": "Грузинское побережье Чёрного моря получило крупнейшие гостиничные инвестиции в своей истории",
+        "en": "Georgia's Black Sea Coast Just Got Its Biggest Hotel Investment Ever",
+        "tr": "Gürcistan'ın Karadeniz Kıyısı Tarihinin En Büyük Otel Yatırımına Kavuşuyor",
+        "ar": "الساحل الجورجي على البحر الأسود يشهد أضخم استثمار فندقي في تاريخه",
+        "he": "חוף הים השחור של גאורגיה זוכה להשקעת המלונאות הגדולה בתולדותיו",
+        "fa": "سواحل دریای سیاه گرجستان بزرگ‌ترین سرمایه‌گذاری هتلداری تاریخ خود را تجربه می‌کند",
+        "de": "Georgiens Schwarzmeerküste erlebt die größte Hotelinvestition ihrer Geschichte",
+        "it": "Il più grande investimento alberghiero di sempre sulla costa georgiana del Mar Nero",
+        "es": "La costa georgiana del mar Negro recibe la mayor inversión hotelera de su historia"
+      },
+      "emoji": "🏖️",
+      "mode": "news",
+      "date": "2026-08-30"
     }
   ]
 }
