@@ -816,6 +816,25 @@
       "emoji": "🏖️",
       "mode": "news",
       "date": "2026-08-30"
+    },
+    {
+      "slug": "khinkali-etiquette-how-georgians-eat-dumplings-2",
+      "topic_key": "khinkali-eating-etiquette",
+      "title_en": "Khinkali Etiquette: How Georgians Really Eat Dumplings",
+      "titles": {
+        "ru": "Этикет хинкали: как грузины на самом деле едят пельмени",
+        "en": "Khinkali Etiquette: How Georgians Really Eat Dumplings",
+        "tr": "Hinkali Adabı: Gürcüler Mantıyı Gerçekte Nasıl Yer?",
+        "ar": "آداب تناول الخينكالي: هكذا يأكل الجورجيون زلابيتهم الشهيرة حقاً",
+        "he": "אתיקט הח'ינקלי: כך אוכלים הגאורגים את הכופתאות שלהם באמת",
+        "fa": "آداب خوردن خینکالی: گرجی‌ها واقعاً چطور دامپلینگ می‌خورند",
+        "de": "Chinkali-Etikette: So essen Georgier wirklich Teigtaschen",
+        "it": "Il galateo dei khinkali: come mangiano davvero i georgiani i loro ravioli",
+        "es": "Etiqueta del Jinkali: Cómo Comen los Georgianos sus Empanadillas de Verdad"
+      },
+      "emoji": "🥟",
+      "mode": "evergreen",
+      "date": "2026-08-31"
     }
   ]
 }
