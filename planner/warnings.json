@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-31T12:27:36.649669",
-  "season": "summer",
+  "updated": "2026-09-01T10:57:16.296927",
+  "season": "autumn",
   "general": [
     {
       "level": "red",
@@ -46,10 +46,10 @@
     }
   ],
   "seasonal_tips": [
-    "High season July — book hotels 2-3 weeks in advance",
-    "Mountains are the best escape from Tbilisi heat in summer",
-    "Batumi beach is perfect — warm Black Sea water",
-    "Tusheti is open — most remote and beautiful region of Georgia"
+    "BEST time to visit — perfect weather, wine harvest",
+    "Rtveli festival — grape harvest in Kakheti (October)",
+    "Incredible colors in Svaneti forests",
+    "Slightly lower prices than summer"
   ],
   "transport_prices": {
     "tbilisi_to_kazbegi_taxi": "$60-85 per car",
@@ -58,6 +58,6 @@
     "tbilisi_to_kakheti_marshrutka": "$3-5 per person",
     "tbilisi_metro": "1 GEL per trip (~$0.35)",
     "tbilisi_taxi_in_city": "$2-5 per trip (Yandex/Bolt app)",
-    "note": "Prices approximate for summer 2026. Verify locally."
+    "note": "Prices approximate for autumn 2026. Verify locally."
   }
 }
