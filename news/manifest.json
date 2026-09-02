@@ -835,6 +835,25 @@
       "emoji": "🥟",
       "mode": "evergreen",
       "date": "2026-08-31"
+    },
+    {
+      "slug": "armenian-azerbaijani-quarters-old-tbilisi",
+      "topic_key": "old-tbilisi-armenian-azerbaijani-quarters",
+      "title_en": "Where Cultures Collide: The Armenian and Azerbaijani Quarters of Old Tbilisi",
+      "titles": {
+        "ru": "Там, где встречаются культуры: армянский и азербайджанский кварталы старого Тбилиси",
+        "en": "Where Cultures Collide: The Armenian and Azerbaijani Quarters of Old Tbilisi",
+        "tr": "Kültürlerin Kesiştiği Şehir: Eski Tiflis'in Ermeni ve Azerbaycan Mahalleleri",
+        "ar": "حيث تتلاقى الثقافات: الحيّان الأرمني والأذربيجاني في تبليسي العتيقة",
+        "he": "היכן שתרבויות נפגשות: הרובע הארמני והרובע האזרי בטביליסי העתיקה",
+        "fa": "آنجا که فرهنگ‌ها به هم می‌رسند: محله‌های ارمنی و آذربایجانی تفلیس قدیم",
+        "de": "Wo Kulturen aufeinanderprallen: Das armenische und das aserbaidschanische Viertel in der Altstadt von Tiflis",
+        "it": "Dove le culture si incontrano: i quartieri armeno e azerbaigiano della Tbilisi antica",
+        "es": "Donde se encuentran las culturas: los barrios armenio y azerbaiyano del Tiflis antiguo"
+      },
+      "emoji": "🕌",
+      "mode": "evergreen",
+      "date": "2026-09-02"
     }
   ]
 }
