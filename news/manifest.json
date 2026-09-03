@@ -854,6 +854,25 @@
       "emoji": "🕌",
       "mode": "evergreen",
       "date": "2026-09-02"
+    },
+    {
+      "slug": "tbilisi-gastro-week-georgia-food-tourism",
+      "topic_key": "tbilisi-gastro-week-2026",
+      "title_en": "Tbilisi Gastro Week: Why Georgia Is Now One of the World's Most Exciting Food Destinations",
+      "titles": {
+        "ru": "Тбилисская гастрономическая неделя: почему Грузия стала одним из самых захватывающих гастрономических направлений мира",
+        "en": "Tbilisi Gastro Week: Why Georgia Is Now One of the World's Most Exciting Food Destinations",
+        "tr": "Tiflis Gastro Haftası: Gürcistan Neden Dünyanın En Heyecan Verici Yemek Destinasyonlarından Biri Haline Geldi?",
+        "ar": "أسبوع تبليسي الغسترونومي: لماذا باتت جورجيا واحدةً من أكثر وجهات الطعام إثارةً في العالم",
+        "he": "שבוע הגסטרונומיה של טביליסי: מדוע גאורגיה הפכה לאחת מיעדי האוכל המרגשים בעולם",
+        "fa": "هفته گاسترونومی تفلیس: چرا گرجستان به یکی از هیجان‌انگیزترین مقاصد غذایی جهان تبدیل شده است",
+        "de": "Tbilisi Gastro Week: Warum Georgien zu einem der aufregendsten Reiseziele für Feinschmecker weltweit geworden ist",
+        "it": "Tbilisi Gastro Week: perché la Georgia è oggi una delle destinazioni gastronomiche più entusiasmanti del mondo",
+        "es": "La Semana Gastronómica de Tiflis: por qué Georgia se ha convertido en uno de los destinos culinarios más apasionantes del mundo"
+      },
+      "emoji": "🍽️",
+      "mode": "news",
+      "date": "2026-09-03"
     }
   ]
 }
