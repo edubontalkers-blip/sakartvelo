@@ -873,6 +873,25 @@
       "emoji": "🍽️",
       "mode": "news",
       "date": "2026-09-03"
+    },
+    {
+      "slug": "tbilisi-dry-bridge-flea-market",
+      "topic_key": "tbilisi-dry-bridge-flea-market",
+      "title_en": "Tbilisi's Dry Bridge Flea Market: A Treasure Hunt Through Soviet History",
+      "titles": {
+        "ru": "Блошиный рынок у Сухого моста в Тбилиси: охота за сокровищами сквозь советскую историю",
+        "en": "Tbilisi's Dry Bridge Flea Market: A Treasure Hunt Through Soviet History",
+        "tr": "Tiflis'in Kuru Köprü Bit Pazarı: Sovyet Tarihinde Bir Hazine Avı",
+        "ar": "سوق الجسر الجاف في تبليسي: رحلة بحث عن الكنوز عبر التاريخ السوفيتي",
+        "he": "שוק הפשפשים של גשר היבשה בטביליסי: מסע גילוי בתוך ההיסטוריה הסובייטית",
+        "fa": "بازار کهنه‌فروشی پل خشک تفلیس: گنج‌یابی در دل تاریخ شوروی",
+        "de": "Tiflis' Flohmarkt an der Trockenen Brücke: Eine Schatzsuche durch die Sowjetgeschichte",
+        "it": "Il Mercato delle Pulci del Ponte Secco di Tbilisi: Una Caccia al Tesoro tra i Ricordi Sovietici",
+        "es": "El Mercado de las Pulgas del Puente Seco de Tiflis: Una Búsqueda del Tesoro a Través de la Historia Soviética"
+      },
+      "emoji": "🪆",
+      "mode": "evergreen",
+      "date": "2026-09-04"
     }
   ]
 }
