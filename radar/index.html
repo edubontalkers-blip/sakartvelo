@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Things to Do Near Me in Georgia — Georgian Radar | sakartvelo.ai</title>
+<meta name="description" content="Find what's near you right now in Georgia — attractions, cafes, the nearest train station, and a live map. Free, powered by Georgian Radar.">
+<link rel="canonical" href="https://sakartvelo.ai/radar/">
+<meta property="og:title" content="Georgian Radar — Things to Do Near Me in Georgia">
+<meta property="og:description" content="Find attractions, cafes, and the nearest train station wherever you are in Georgia. Free tool by sakartvelo.ai">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Georgian Radar","url":"https://sakartvelo.ai/radar/","applicationCategory":"TravelApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--wine:#8b1a1a;--gold:#c4960a;--dark:#1a0d10;--card:#fff8f5;--bg:#fff;--ink:#1a0d10;--muted:#888;--line:#e8ddd5;--radius:16px}
+[data-theme=dark]{--bg:#120a0c;--card:#1e1214;--ink:#f0e8e0;--line:#2a1a1e;--muted:#aaa}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+header{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line)}
+.logo{font-weight:900;color:var(--wine);text-decoration:none;font-size:1.1rem}
+.back{color:var(--gold);font-size:.9rem;text-decoration:none;font-weight:600}
+.theme-btn{background:none;border:1px solid var(--line);border-radius:20px;padding:5px 12px;cursor:pointer;color:var(--ink);font-size:.9rem}
+main{max-width:600px;margin:0 auto;padding:24px 16px 60px}
+h1{font-size:1.7rem;font-weight:900;color:var(--wine);margin-bottom:6px;line-height:1.2}
+.subtitle{color:var(--muted);margin-bottom:24px;font-size:1rem;line-height:1.5}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+.card h2{font-size:1.05rem;color:var(--wine);margin-bottom:10px}
+.btn{display:block;width:100%;padding:15px;background:var(--wine);color:#fff;border:none;border-radius:var(--radius);font-size:1rem;font-weight:700;cursor:pointer;font-family:inherit;text-align:center;text-decoration:none}
+.btn.gold{background:var(--gold);color:var(--dark)}
+.dist{color:var(--gold);font-weight:700}
+.place-item{padding:10px 0;border-bottom:1px solid var(--line);font-size:.92rem}
+.place-item:last-child{border-bottom:none}
+.place-item .pn{font-weight:700}
+.place-item .pd{color:var(--muted);font-size:.82rem}
+.mapwrap{border-radius:var(--radius);overflow:hidden;margin:12px 0;border:1px solid var(--line)}
+.mapwrap iframe{width:100%;height:260px;border:0;display:block}
+.share-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.share-row button{border:none;cursor:pointer;font-family:inherit;padding:9px 16px;border-radius:20px;color:#fff;font-size:.85rem}
+.loading{text-align:center;padding:40px 0}
+.loading-logo{font-size:2.6rem;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.errbox{background:#fde8e8;border:1px solid #dc3545;border-radius:12px;padding:14px;color:#721c24;font-size:.9rem;margin-bottom:16px}
+.tip{background:#fff8e6;border:1px solid var(--gold);border-radius:12px;padding:12px 14px;font-size:.85rem;color:#7a5c00;margin-top:10px}
+footer{text-align:center;padding:30px 20px;color:var(--muted);font-size:.8rem}
+footer a{color:var(--wine);text-decoration:none}
+#screenStart{text-align:center;padding:20px 0}
+#screenStart .radar-emoji{font-size:3.5rem;margin-bottom:16px}
+</style>
+</head>
+<body>
+<header>
+  <a href="https://sakartvelo.ai" class="logo">🍶 sakartvelo.ai</a>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button class="theme-btn" id="langBtn">🌐</button>
+    <button class="theme-btn" id="themeBtn">🌙</button>
+    <a href="https://sakartvelo.ai" class="back" id="backLink">← Back</a>
+  </div>
+</header>
+
+<main>
+  <h1 id="pageH1">📡 Georgian Radar</h1>
+  <p class="subtitle" id="pageSub">Find what's near you right now in Georgia</p>
+
+  <div id="friendBanner" style="display:none" class="card">
+    <h2 id="friendTitle"></h2>
+    <div class="mapwrap" style="margin-top:10px"><iframe id="friendMapFrame" loading="lazy"></iframe></div>
+    <button class="btn gold" id="friendDistBtn" style="margin-top:12px"></button>
+    <div id="friendDistResult" style="display:none;margin-top:14px">
+      <p id="friendDistText" style="font-size:1.1rem;font-weight:700;color:var(--wine)"></p>
+      <a class="btn" id="friendFlightBtn" style="margin-top:10px" target="_blank" rel="noopener"></a>
+    </div>
+  </div>
+
+  <div id="screenStart">
+    <div class="radar-emoji">📡</div>
+    <button class="btn" id="findBtn">Find what's near me</button>
+    <p class="tip" id="privacyTip">Your location is only used in your browser — nothing is stored on our server.</p>
+  </div>
+
+  <div id="screenLoading" style="display:none">
+    <div class="loading">
+      <div class="loading-logo">📡</div>
+      <p style="margin-top:12px;color:var(--muted)" id="loadingText">Scanning what's nearby…</p>
+    </div>
+  </div>
+
+  <div id="screenError" style="display:none">
+    <div class="errbox" id="errText"></div>
+    <button class="btn" onclick="location.reload()" id="retryBtn">Try again</button>
+  </div>
+
+  <div id="screenResult" style="display:none">
+    <div class="card">
+      <h2 id="nearCityLabel"></h2>
+      <p id="nearCityDesc" style="margin-top:6px"></p>
+      <a class="btn gold" id="fullGuideBtn" style="margin-top:12px" target="_blank"></a>
+    </div>
+
+    <div class="card">
+      <h2 id="mapLabel">🗺️ Your exact spot</h2>
+      <div class="mapwrap"><iframe id="mapFrame" loading="lazy"></iframe></div>
+      <div class="share-row">
+        <button onclick="shareRadar('native')" id="shareNativeBtn" style="background:var(--wine)">Share</button>
+        <button onclick="shareRadar('whatsapp')" style="background:#25D366">WhatsApp</button>
+        <button onclick="shareRadar('telegram')" style="background:#0088cc">Telegram</button>
+        <button onclick="shareRadar('facebook')" style="background:#1877F2">Facebook</button>
+        <button onclick="shareRadar('twitter')" style="background:#000">X</button>
+        <button onclick="shareRadar('vk')" style="background:#0077FF">VK</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 id="trainLabel">🚆 Nearest train station</h2>
+      <p id="trainResult"></p>
+    </div>
+
+    <div class="card">
+      <h2 id="foodLabel">🍽️ Cafes & restaurants nearby</h2>
+      <div id="foodList"></div>
+      <p class="tip" id="osmCredit" style="margin-top:10px">Data: OpenStreetMap contributors</p>
+    </div>
+  </div>
+</main>
+
+<footer id="siteFooter">
+  <a href="https://sakartvelo.ai">sakartvelo.ai</a> — AI Travel Guide to Georgia 🇬🇪
+</footer>
+
+<script>
+// ══════════════════════════════════════
+// GEORGIAN RADAR — данные
+// ══════════════════════════════════════
+// Координаты 11 известных городов (те же, что использует weather.js).
+// Плюс соответствие geo-странице сайта (не у всех городов есть отдельная
+// geo-страница — тогда просто показываем название без ссылки).
+var CITIES = [
+  {key:'Tbilisi',   lat:41.7151, lon:44.8271, geo:'tbilisi'},
+  {key:'Batumi',    lat:41.6168, lon:41.6367, geo:'batumi'},
+  {key:'Kazbegi',   lat:42.6567, lon:44.6428, geo:'kazbegi'},
+  {key:'Telavi',    lat:41.9165, lon:45.4747, geo:'kakheti'},
+  {key:'Borjomi',   lat:41.8386, lon:43.3934, geo:'borjomi'},
+  {key:'Kutaisi',   lat:42.2679, lon:42.6946, geo:'kutaisi'},
+  {key:'Mestia',    lat:43.0466, lon:42.7278, geo:'svaneti'},
+  {key:'Mtskheta',  lat:41.8453, lon:44.7182, geo:'mtskheta'},
+  {key:'Gudauri',   lat:42.4738, lon:44.4776, geo:'gudauri'},
+  {key:'Sighnaghi', lat:41.6194, lon:45.9169, geo:'kakheti'},
+  {key:'Akhaltsikhe', lat:41.6403, lon:42.9856, geo:null}
+];
+
+// Проверенный список реальных ж/д станций Грузии (не выдумываем маршрутки —
+// их сеть неформальная, легко дать неточность и подвести туриста).
+var TRAIN_STATIONS = [
+  {name:'Tbilisi Central Station', lat:41.7225, lon:44.7925},
+  {name:'Batumi Railway Station',  lat:41.6440, lon:41.6180},
+  {name:'Zugdidi Railway Station', lat:42.5088, lon:41.8709},
+  {name:'Kopitnari (Kutaisi Airport)', lat:42.1746, lon:42.4867},
+  {name:'Ozurgeti Railway Station', lat:41.9264, lon:42.0067}
+];
+
+// Названия городов на 9 языках сайта.
+var CITY_NAMES = {
+  Tbilisi:     {ru:'Тбилиси', en:'Tbilisi', tr:'Tiflis', ar:'تبليسي', he:'טביליסי', fa:'تفلیس', de:'Tiflis', it:'Tbilisi', es:'Tiflis'},
+  Batumi:      {ru:'Батуми', en:'Batumi', tr:'Batum', ar:'باتومي', he:'בטומי', fa:'باتومی', de:'Batumi', it:'Batumi', es:'Batumi'},
+  Kazbegi:     {ru:'Казбеги', en:'Kazbegi', tr:'Kazbegi', ar:'كازبيغي', he:'קזבגי', fa:'کازبگی', de:'Kasbegi', it:'Kazbegi', es:'Kazbegi'},
+  Telavi:      {ru:'Телави', en:'Telavi', tr:'Telavi', ar:'تيلافي', he:'טלאווי', fa:'تلاوی', de:'Telavi', it:'Telavi', es:'Telavi'},
+  Borjomi:     {ru:'Боржоми', en:'Borjomi', tr:'Borjomi', ar:'بورجومي', he:'בורג׳ומי', fa:'بورجومی', de:'Borjomi', it:'Borjomi', es:'Borjomi'},
+  Kutaisi:     {ru:'Кутаиси', en:'Kutaisi', tr:'Kutaisi', ar:'كوتايسي', he:'קוטאיסי', fa:'کوتایسی', de:'Kutaissi', it:'Kutaisi', es:'Kutaisi'},
+  Mestia:      {ru:'Местиа', en:'Mestia', tr:'Mestia', ar:'ميستيا', he:'מסטיה', fa:'مستیا', de:'Mestia', it:'Mestia', es:'Mestia'},
+  Mtskheta:    {ru:'Мцхета', en:'Mtskheta', tr:'Mtskheta', ar:'متسخيتا', he:'מצחתה', fa:'متسخیتا', de:'Mzcheta', it:'Mtskheta', es:'Mtsjeta'},
+  Gudauri:     {ru:'Гудаури', en:'Gudauri', tr:'Gudauri', ar:'غودوري', he:'גודאורי', fa:'گودائوری', de:'Gudauri', it:'Gudauri', es:'Gudauri'},
+  Sighnaghi:   {ru:'Сигнахи', en:'Sighnaghi', tr:'Sighnaghi', ar:'سيغناغي', he:'סיגנאגי', fa:'سیغناغی', de:'Sighnaghi', it:'Sighnaghi', es:'Sighnaghi'},
+  Akhaltsikhe: {ru:'Ахалцихе', en:'Akhaltsikhe', tr:'Ahılkelek', ar:'أخالتسيخي', he:'אחלציחה', fa:'آخالتسیخه', de:'Achalziche', it:'Akhaltsikhe', es:'Ajaltsije'}
+};
+
+// Короткие тизеры на 9 языках (по-настоящему коротко — полный текст всегда
+// на geo-странице, тут просто затравка).
+var CITY_TEASERS = {
+  ru:'Узнайте больше в подробном гиде по этому месту.',
+  en:'See the full guide for this place.',
+  tr:'Bu yer için tam rehbere göz atın.',
+  ar:'اطّلع على الدليل الكامل لهذا المكان.',
+  he:'ראה את המדריך המלא למקום זה.',
+  fa:'راهنمای کامل این مکان را ببینید.',
+  de:'Sieh dir den vollständigen Guide für diesen Ort an.',
+  it:'Guarda la guida completa per questo posto.',
+  es:'Ver la guía completa de este lugar.'
+};
+
+var UI = {
+  ru:{h1:'📡 Georgian Radar', sub:'Узнай, что рядом с тобой прямо сейчас в Грузии', find:'Что рядом со мной', privacy:'Ваше местоположение используется только в браузере — ничего не сохраняется на сервере.', scanning:'Сканируем, что рядом…', err:'Не удалось определить местоположение. Проверьте разрешения геолокации в браузере.', retry:'Попробовать снова', nearYou:function(city,dist){return 'Вы рядом с '+city+' ('+dist+' км)';}, fullGuide:'Подробный гид →', mapLabel:'🗺️ Ваша точная точка', share:'Поделиться', trainLabel:'🚆 Ближайший вокзал', trainDist:function(name,dist){return name+' — '+dist+' км';}, foodLabel:'🍽️ Кафе и рестораны рядом', osmCredit:'Данные: OpenStreetMap', noFood:'Не удалось загрузить список — попробуйте позже.', shareText:function(city){return 'Я сейчас рядом с '+city+', Грузия! 🇬🇪 Нашёл(ла) через Georgian Radar на sakartvelo.ai';}, friendTitle:function(city){return 'Твой друг сейчас рядом с '+city+', Грузия! 🇬🇪';}, findDistBtn:'Узнать, сколько км до Грузии от тебя', distResult:function(km){return 'Ты в '+km+' км от Грузии!';}, flightBtn:'✈️ Поискать авиабилеты →'},
+  en:{h1:'📡 Georgian Radar', sub:"Find what's near you right now in Georgia", find:"Find what's near me", privacy:'Your location is only used in your browser — nothing is stored on our server.', scanning:"Scanning what's nearby…", err:"Couldn't get your location. Please check location permissions in your browser.", retry:'Try again', nearYou:function(city,dist){return 'You are near '+city+' ('+dist+' km)';}, fullGuide:'Full guide →', mapLabel:'🗺️ Your exact spot', share:'Share', trainLabel:'🚆 Nearest train station', trainDist:function(name,dist){return name+' — '+dist+' km';}, foodLabel:'🍽️ Cafes & restaurants nearby', osmCredit:'Data: OpenStreetMap', noFood:"Couldn't load the list — try again later.", shareText:function(city){return "I'm near "+city+', Georgia! 🇬🇪 Found via Georgian Radar on sakartvelo.ai';}, friendTitle:function(city){return 'Your friend is near '+city+', Georgia! 🇬🇪';}, findDistBtn:'See how far Georgia is from you', distResult:function(km){return 'You are '+km+' km from Georgia!';}, flightBtn:'✈️ Search flights →'},
+  tr:{h1:'📡 Georgian Radar', sub:'Gürcistan\'da şu anda yakınında olanları bul', find:'Yakınımdakileri bul', privacy:'Konumun sadece tarayıcında kullanılır — sunucumuzda saklanmaz.', scanning:'Yakındakiler taranıyor…', err:'Konum alınamadı. Lütfen tarayıcı izinlerini kontrol edin.', retry:'Tekrar dene', nearYou:function(city,dist){return city+'\'ye yakınsın ('+dist+' km)';}, fullGuide:'Tam rehber →', mapLabel:'🗺️ Tam konumun', share:'Paylaş', trainLabel:'🚆 En yakın tren istasyonu', trainDist:function(name,dist){return name+' — '+dist+' km';}, foodLabel:'🍽️ Yakındaki kafeler ve restoranlar', osmCredit:'Veri: OpenStreetMap', noFood:'Liste yüklenemedi — daha sonra tekrar deneyin.', shareText:function(city){return 'Şu anda '+city+', Gürcistan\'a yakınım! 🇬🇪 Georgian Radar ile buldum, sakartvelo.ai';}, friendTitle:function(city){return 'Arkadaşın şu anda '+city+', Gürcistan\'a yakın! 🇬🇪';}, findDistBtn:'Gürcistan sana ne kadar uzak öğren', distResult:function(km){return 'Gürcistan\'a '+km+' km uzaktasın!';}, flightBtn:'✈️ Uçuş ara →'},
+  de:{h1:'📡 Georgian Radar', sub:'Finde heraus, was gerade in deiner Nähe in Georgien ist', find:'Finde was in meiner Nähe ist', privacy:'Dein Standort wird nur in deinem Browser verwendet — nichts wird auf unserem Server gespeichert.', scanning:'Scanne die Umgebung…', err:'Standort konnte nicht ermittelt werden. Bitte Standortberechtigungen prüfen.', retry:'Erneut versuchen', nearYou:function(city,dist){return 'Du bist in der Nähe von '+city+' ('+dist+' km)';}, fullGuide:'Vollständiger Guide →', mapLabel:'🗺️ Dein genauer Standort', share:'Teilen', trainLabel:'🚆 Nächster Bahnhof', trainDist:function(name,dist){return name+' — '+dist+' km';}, foodLabel:'🍽️ Cafés & Restaurants in der Nähe', osmCredit:'Daten: OpenStreetMap', noFood:'Liste konnte nicht geladen werden — später erneut versuchen.', shareText:function(city){return 'Ich bin gerade in der Nähe von '+city+', Georgien! 🇬🇪 Gefunden mit Georgian Radar auf sakartvelo.ai';}, friendTitle:function(city){return 'Dein Freund ist gerade in der Nähe von '+city+', Georgien! 🇬🇪';}, findDistBtn:'Finde heraus, wie weit Georgien von dir entfernt ist', distResult:function(km){return 'Du bist '+km+' km von Georgien entfernt!';}, flightBtn:'✈️ Flüge suchen →'},
+  it:{h1:'📡 Georgian Radar', sub:'Scopri cosa c\'è vicino a te ora in Georgia', find:'Trova cosa c\'è vicino a me', privacy:'La tua posizione è usata solo nel browser — niente viene salvato sul nostro server.', scanning:'Scansione dei dintorni…', err:'Impossibile ottenere la posizione. Controlla i permessi del browser.', retry:'Riprova', nearYou:function(city,dist){return 'Sei vicino a '+city+' ('+dist+' km)';}, fullGuide:'Guida completa →', mapLabel:'🗺️ La tua posizione esatta', share:'Condividi', trainLabel:'🚆 Stazione ferroviaria più vicina', trainDist:function(name,dist){return name+' — '+dist+' km';}, foodLabel:'🍽️ Caffè e ristoranti vicini', osmCredit:'Dati: OpenStreetMap', noFood:'Impossibile caricare la lista — riprova più tardi.', shareText:function(city){return 'Sono vicino a '+city+', Georgia! 🇬🇪 Trovato con Georgian Radar su sakartvelo.ai';}, friendTitle:function(city){return 'Il tuo amico è vicino a '+city+', Georgia! 🇬🇪';}, findDistBtn:'Scopri quanto dista la Georgia da te', distResult:function(km){return 'Sei a '+km+' km dalla Georgia!';}, flightBtn:'✈️ Cerca voli →'},
+  es:{h1:'📡 Georgian Radar', sub:'Descubre qué hay cerca de ti ahora en Georgia', find:'Buscar qué hay cerca de mí', privacy:'Tu ubicación solo se usa en tu navegador — nada se guarda en nuestro servidor.', scanning:'Escaneando los alrededores…', err:'No se pudo obtener tu ubicación. Revisa los permisos del navegador.', retry:'Reintentar', nearYou:function(city,dist){return 'Estás cerca de '+city+' ('+dist+' km)';}, fullGuide:'Guía completa →', mapLabel:'🗺️ Tu ubicación exacta', share:'Compartir', trainLabel:'🚆 Estación de tren más cercana', trainDist:function(name,dist){return name+' — '+dist+' km';}, foodLabel:'🍽️ Cafés y restaurantes cerca', osmCredit:'Datos: OpenStreetMap', noFood:'No se pudo cargar la lista — intenta más tarde.', shareText:function(city){return 'Estoy cerca de '+city+', Georgia! 🇬🇪 Encontrado con Georgian Radar en sakartvelo.ai';}, friendTitle:function(city){return 'Tu amigo está cerca de '+city+', Georgia! 🇬🇪';}, findDistBtn:'Descubre qué tan lejos está Georgia de ti', distResult:function(km){return 'Estás a '+km+' km de Georgia!';}, flightBtn:'✈️ Buscar vuelos →'},
+  ar:{h1:'📡 Georgian Radar', sub:'اكتشف ما يحيط بك الآن في جورجيا', find:'ابحث عمّا حولي', privacy:'يُستخدم موقعك في متصفحك فقط — لا يُحفظ شيء على خادمنا.', scanning:'جارٍ المسح…', err:'تعذّر تحديد الموقع. يرجى التحقق من أذونات الموقع.', retry:'حاول مجدداً', nearYou:function(city,dist){return 'أنت بالقرب من '+city+' ('+dist+' كم)';}, fullGuide:'الدليل الكامل ←', mapLabel:'🗺️ موقعك الدقيق', share:'مشاركة', trainLabel:'🚆 أقرب محطة قطار', trainDist:function(name,dist){return name+' — '+dist+' كم';}, foodLabel:'🍽️ مقاهي ومطاعم قريبة', osmCredit:'البيانات: OpenStreetMap', noFood:'تعذّر تحميل القائمة — حاول لاحقاً.', shareText:function(city){return 'أنا بالقرب من '+city+'، جورجيا! 🇬🇪 وجدت هذا عبر Georgian Radar على sakartvelo.ai';}, friendTitle:function(city){return 'صديقك بالقرب من '+city+'، جورجيا الآن! 🇬🇪';}, findDistBtn:'اعرف كم تبعد جورجيا عنك', distResult:function(km){return 'أنت على بعد '+km+' كم من جورجيا!';}, flightBtn:'✈️ ابحث عن رحلات ←'},
+  he:{h1:'📡 Georgian Radar', sub:'גלה מה נמצא לידך עכשיו בגאורגיה', find:'מצא מה קרוב אליי', privacy:'המיקום שלך משמש רק בדפדפן — שום דבר לא נשמר בשרת שלנו.', scanning:'סורק את הסביבה…', err:'לא הצלחנו לקבל את המיקום. בדוק הרשאות מיקום בדפדפן.', retry:'נסה שוב', nearYou:function(city,dist){return 'אתה קרוב ל'+city+' ('+dist+' ק"מ)';}, fullGuide:'מדריך מלא ←', mapLabel:'🗺️ המיקום המדויק שלך', share:'שתף', trainLabel:'🚆 תחנת הרכבת הקרובה', trainDist:function(name,dist){return name+' — '+dist+' ק"מ';}, foodLabel:'🍽️ בתי קפה ומסעדות בקרבתך', osmCredit:'נתונים: OpenStreetMap', noFood:'לא ניתן היה לטעון את הרשימה — נסה שוב מאוחר יותר.', shareText:function(city){return 'אני קרוב ל'+city+', גאורגיה! 🇬🇪 מצאתי דרך Georgian Radar באתר sakartvelo.ai';}, friendTitle:function(city){return 'החבר שלך נמצא ליד '+city+', גאורגיה! 🇬🇪';}, findDistBtn:'גלה כמה רחוקה ממך גאורגיה', distResult:function(km){return 'אתה במרחק '+km+' ק\"מ מגאורגיה!';}, flightBtn:'✈️ חפש טיסות ←'},
+  fa:{h1:'📡 Georgian Radar', sub:'ببین همین الان چه چیزی نزدیک توست در گرجستان', find:'پیدا کن چه چیزی نزدیک من است', privacy:'موقعیت شما فقط در مرورگرتان استفاده می‌شود — چیزی روی سرور ما ذخیره نمی‌شود.', scanning:'در حال اسکن اطراف…', err:'موقعیت پیدا نشد. لطفاً مجوزهای موقعیت مکانی مرورگر را بررسی کنید.', retry:'دوباره امتحان کن', nearYou:function(city,dist){return 'شما نزدیک '+city+' هستید ('+dist+' کیلومتر)';}, fullGuide:'راهنمای کامل ←', mapLabel:'🗺️ موقعیت دقیق شما', share:'اشتراک‌گذاری', trainLabel:'🚆 نزدیک‌ترین ایستگاه قطار', trainDist:function(name,dist){return name+' — '+dist+' کیلومتر';}, foodLabel:'🍽️ کافه‌ها و رستوران‌های نزدیک', osmCredit:'داده: OpenStreetMap', noFood:'بارگذاری لیست ممکن نشد — بعداً امتحان کنید.', shareText:function(city){return 'من الان نزدیک '+city+'، گرجستان هستم! 🇬🇪 از طریق Georgian Radar در sakartvelo.ai پیدا کردم';}, friendTitle:function(city){return 'دوست تو الان نزدیک '+city+'، گرجستان است! 🇬🇪';}, findDistBtn:'ببین گرجستان چقدر از تو دور است', distResult:function(km){return 'تو '+km+' کیلومتر از گرجستان فاصله داری!';}, flightBtn:'✈️ جستجوی پرواز ←'}
+};
+
+// ══════════════════════════════════════
+// СОСТОЯНИЕ И ЯЗЫК
+// ══════════════════════════════════════
+var LANGUAGES = ['ru','en','tr','ar','he','fa','de','it','es'];
+function detectLang(){
+  var saved=null;
+  try{ saved = localStorage.getItem('sak_lang'); }catch(e){}
+  if(saved && LANGUAGES.indexOf(saved)!==-1) return saved;
+  var nav=(navigator.language||'en').slice(0,2).toLowerCase();
+  if(LANGUAGES.indexOf(nav)!==-1) return nav;
+  return 'en';
+}
+var lang = detectLang();
+var u = UI[lang] || UI.en;
+var userLat=null, userLon=null;
+
+function g(id){ return document.getElementById(id); }
+
+function applyUiTexts(){
+  var isRTL = (lang==='ar'||lang==='he'||lang==='fa');
+  document.documentElement.setAttribute('dir', isRTL?'rtl':'ltr');
+  document.documentElement.setAttribute('lang', lang);
+  g('pageH1').textContent = u.h1;
+  g('pageSub').textContent = u.sub;
+  g('findBtn').textContent = u.find;
+  g('privacyTip').textContent = u.privacy;
+  g('loadingText').textContent = u.scanning;
+  g('retryBtn').textContent = u.retry;
+  g('mapLabel').textContent = u.mapLabel;
+  g('shareNativeBtn').textContent = u.share;
+  g('trainLabel').textContent = u.trainLabel;
+  g('foodLabel').textContent = u.foodLabel;
+  g('osmCredit').textContent = u.osmCredit;
+}
+applyUiTexts();
+
+function initTheme(){
+  var saved = localStorage.getItem('sak_theme') || 'light';
+  if(saved==='dark') document.documentElement.dataset.theme='dark';
+  g('themeBtn').onclick=function(){
+    var dk=document.documentElement.dataset.theme==='dark';
+    document.documentElement.dataset.theme = dk?'':'dark';
+    try{ localStorage.setItem('sak_theme', dk?'':'dark'); }catch(e){}
+  };
+}
+initTheme();
+
+// ══════════════════════════════════════
+// РАССТОЯНИЕ (формула гаверсинуса)
+// ══════════════════════════════════════
+function distKm(lat1,lon1,lat2,lon2){
+  var R=6371;
+  var dLat=(lat2-lat1)*Math.PI/180;
+  var dLon=(lon2-lon1)*Math.PI/180;
+  var a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2);
+  var c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+  return R*c;
+}
+
+function findNearest(list, lat, lon){
+  var best=null, bestDist=Infinity;
+  list.forEach(function(item){
+    var d = distKm(lat, lon, item.lat, item.lon);
+    if(d < bestDist){ bestDist = d; best = item; }
+  });
+  return {item: best, dist: bestDist};
+}
+
+// ══════════════════════════════════════
+// ЗАПРОС ГЕОЛОКАЦИИ И ОСНОВНАЯ ЛОГИКА
+// ══════════════════════════════════════
+function showScreen(name){
+  ['Start','Loading','Error','Result'].forEach(function(s){
+    g('screen'+s).style.display = (s===name) ? 'block' : 'none';
+  });
+}
+
+// ══════════════════════════════════════
+// ОБНАРУЖЕНИЕ ССЫЛКИ ОТ ДРУГА (?from=friend&lat=..&lon=..&city=..)
+// ══════════════════════════════════════
+// Тбилиси используется как опорная точка "Грузии в целом" для расчёта
+// расстояния до страны — реальный физический центр тяжести туризма.
+var TBILISI_LAT = 41.7151, TBILISI_LON = 44.8271;
+
+(function checkFriendLink(){
+  var params = new URLSearchParams(window.location.search);
+  if(params.get('from') !== 'friend') return;
+
+  var friendLat = parseFloat(params.get('lat'));
+  var friendLon = parseFloat(params.get('lon'));
+  var friendCityKey = params.get('city');
+  if(isNaN(friendLat) || isNaN(friendLon)) return;
+
+  var cityName = (CITY_NAMES[friendCityKey] && CITY_NAMES[friendCityKey][lang]) || friendCityKey || 'Georgia';
+
+  g('friendTitle').textContent = u.friendTitle(cityName);
+  g('friendMapFrame').src = 'https://maps.google.com/maps?q=' + friendLat + ',' + friendLon + '&z=12&output=embed';
+  g('friendDistBtn').textContent = u.findDistBtn;
+  g('friendBanner').style.display = 'block';
+
+  g('friendDistBtn').onclick = function(){
+    if(!navigator.geolocation) return;
+    g('friendDistBtn').textContent = u.scanning;
+    navigator.geolocation.getCurrentPosition(function(pos){
+      var d = Math.round(distKm(pos.coords.latitude, pos.coords.longitude, TBILISI_LAT, TBILISI_LON));
+      g('friendDistText').textContent = u.distResult(d);
+      var flightBtn = g('friendFlightBtn');
+      flightBtn.textContent = u.flightBtn;
+      flightBtn.href = 'https://aviasales.tpm.lv/3v2DPRiC';
+      g('friendDistResult').style.display = 'block';
+      g('friendDistBtn').style.display = 'none';
+    }, function(){
+      g('friendDistBtn').textContent = u.findDistBtn;
+    }, {enableHighAccuracy:false, timeout:10000});
+  };
+})();
+
+g('findBtn').onclick = function(){
+  showScreen('Loading');
+  if(!navigator.geolocation){
+    g('errText').textContent = u.err;
+    showScreen('Error');
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(onLocationSuccess, onLocationError, {enableHighAccuracy:true, timeout:12000});
+};
+
+function onLocationError(){
+  g('errText').textContent = u.err;
+  showScreen('Error');
+}
+
+function onLocationSuccess(pos){
+  userLat = pos.coords.latitude;
+  userLon = pos.coords.longitude;
+  renderResult();
+}
+
+function renderResult(){
+  // Ближайший город
+  var cityResult = findNearest(CITIES, userLat, userLon);
+  var city = cityResult.item;
+  var cityDist = Math.round(cityResult.dist);
+  var cityName = (CITY_NAMES[city.key] && CITY_NAMES[city.key][lang]) || city.key;
+
+  g('nearCityLabel').textContent = u.nearYou(cityName, cityDist);
+  g('nearCityDesc').textContent = CITY_TEASERS[lang] || CITY_TEASERS.en;
+
+  var guideBtn = g('fullGuideBtn');
+  if(city.geo){
+    guideBtn.href = 'https://sakartvelo.ai/geo/' + city.geo + '/';
+    guideBtn.textContent = u.fullGuide;
+    guideBtn.style.display = 'block';
+  } else {
+    guideBtn.style.display = 'none';
+  }
+
+  // Карта — встройка Google Maps без API-ключа
+  var mapUrl = 'https://maps.google.com/maps?q=' + userLat + ',' + userLon + '&z=14&output=embed';
+  g('mapFrame').src = mapUrl;
+
+  // Ближайший вокзал (только реальные, проверенные станции)
+  var trainResult = findNearest(TRAIN_STATIONS, userLat, userLon);
+  var trainDist = Math.round(trainResult.dist);
+  g('trainResult').textContent = u.trainDist(trainResult.item.name, trainDist);
+
+  // Кафе/рестораны рядом — через OpenStreetMap Overpass API (бесплатно)
+  loadNearbyFood(userLat, userLon);
+
+  showScreen('Result');
+}
+
+// ══════════════════════════════════════
+// КАФЕ/РЕСТОРАНЫ ЧЕРЕЗ OPENSTREETMAP (бесплатно, без ключа)
+// ══════════════════════════════════════
+function loadNearbyFood(lat, lon){
+  var radius = 1500; // метров
+  var query = '[out:json][timeout:15];(node["amenity"~"restaurant|cafe|fast_food"](around:' + radius + ',' + lat + ',' + lon + '););out body 12;';
+  var url = 'https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(query);
+
+  fetch(url).then(function(res){ return res.json(); }).then(function(data){
+    var list = g('foodList');
+    if(!data.elements || !data.elements.length){
+      list.innerHTML = '<p style="color:var(--muted);font-size:.9rem">' + u.noFood + '</p>';
+      return;
+    }
+    var html = '';
+    data.elements.slice(0, 8).forEach(function(el){
+      var name = (el.tags && el.tags.name) || '—';
+      var type = (el.tags && el.tags.amenity) || '';
+      var d = Math.round(distKm(lat, lon, el.lat, el.lon) * 1000);
+      html += '<div class="place-item"><div class="pn">' + name + '</div><div class="pd">' + type + ' · ' + d + 'm</div></div>';
+    });
+    list.innerHTML = html;
+  }).catch(function(){
+    g('foodList').innerHTML = '<p style="color:var(--muted);font-size:.9rem">' + u.noFood + '</p>';
+  });
+}
+
+// ══════════════════════════════════════
+// КНОПКИ "ПОДЕЛИТЬСЯ" — с настоящей ссылкой на точную точку на карте
+// ══════════════════════════════════════
+function shareRadar(platform){
+  var cityResult = findNearest(CITIES, userLat, userLon);
+  var cityName = (CITY_NAMES[cityResult.item.key] && CITY_NAMES[cityResult.item.key][lang]) || cityResult.item.key;
+  // Ссылка ведёт на НАШ сайт (не сразу на Google Maps) — с координатами и
+  // городом в параметрах, чтобы друг, открыв её, увидел приглашение и мог
+  // узнать своё собственное расстояние до Грузии, а не просто голую карту.
+  var friendLink = 'https://sakartvelo.ai/radar/?from=friend&lat=' + userLat.toFixed(4) + '&lon=' + userLon.toFixed(4) + '&city=' + encodeURIComponent(cityResult.item.key);
+  var text = u.shareText(cityName) + ' ' + friendLink;
+
+  if(platform === 'native' && navigator.share){
+    navigator.share({title:'Georgian Radar', text: u.shareText(cityName), url: friendLink}).catch(function(){});
+    return;
+  }
+  var enc = encodeURIComponent(text);
+  var links = {
+    whatsapp: 'https://wa.me/?text=' + enc,
+    telegram: 'https://t.me/share/url?url=' + encodeURIComponent(friendLink) + '&text=' + encodeURIComponent(u.shareText(cityName)),
+    facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(friendLink),
+    twitter: 'https://twitter.com/intent/tweet?text=' + enc,
+    vk: 'https://vk.com/share.php?url=' + encodeURIComponent(friendLink) + '&title=' + encodeURIComponent(u.shareText(cityName))
+  };
+  if(links[platform]) window.open(links[platform], '_blank', 'noopener,width=600,height=500');
+}
+</script>
+</body>
+</html>
