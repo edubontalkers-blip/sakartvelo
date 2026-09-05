@@ -830,6 +830,15 @@ html[data-theme=dark] .closing, html[data-theme=dark] footer{color:#9aa8a4 !impo
     <a class="btn" id="bcardBtn" href="https://www.booking.com/searchresults.html?aid=7916610&ss=Tbilisi%2C+Georgia&order=bayesian_review_score" target="_blank" rel="noopener">See options</a>
   </div>
 
+  <div class="sec" id="shareSec" style="display:flex;flex-wrap:wrap;gap:8px;margin:20px 0">
+    <button onclick="shareArticle('native')" class="btn" id="shNativeBtn" style="border:none;cursor:pointer;font-family:inherit;font-size:inherit;padding:8px 16px;border-radius:20px">Share</button>
+    <button onclick="shareArticle('whatsapp')" class="btn" style="border:none;cursor:pointer;font-family:inherit;background:#25D366;padding:8px 16px;border-radius:20px">WhatsApp</button>
+    <button onclick="shareArticle('telegram')" class="btn" style="border:none;cursor:pointer;font-family:inherit;background:#0088cc;padding:8px 16px;border-radius:20px">Telegram</button>
+    <button onclick="shareArticle('facebook')" class="btn" style="border:none;cursor:pointer;font-family:inherit;background:#1877F2;padding:8px 16px;border-radius:20px">Facebook</button>
+    <button onclick="shareArticle('twitter')" class="btn" style="border:none;cursor:pointer;font-family:inherit;background:#000;padding:8px 16px;border-radius:20px">X</button>
+    <button onclick="shareArticle('vk')" class="btn" style="border:none;cursor:pointer;font-family:inherit;background:#0077FF;padding:8px 16px;border-radius:20px">VK</button>
+  </div>
+
   <div id="relatedLinks"></div>
 
   <a class="backlink" id="backLink" href="https://sakartvelo.ai/news/">← All articles</a>
@@ -856,6 +865,41 @@ var FOOTER_TEXT = {
   de:'Kostenloser KI-Reiseführer für Georgien · sakartvelo.ai', it:'Guida di viaggio AI gratuita per la Georgia · sakartvelo.ai',
   es:'Guía de viaje IA gratuita para Georgia · sakartvelo.ai'
 };
+
+// ══════════════════════════════════════
+// КНОПКИ "ПОДЕЛИТЬСЯ" — TikTok не поддерживает прямые ссылки "поделиться
+// конкретным URL" (ограничение самой платформы). Кнопка 'native' решает
+// это: на телефоне открывает системное меню "Поделиться", где TikTok,
+// Instagram и всё остальное появится само, если установлено.
+// ══════════════════════════════════════
+var SHARE_LABELS = {
+  ru:'Поделиться', en:'Share', tr:'Paylaş', ar:'مشاركة', he:'שתף',
+  fa:'اشتراک‌گذاری', de:'Teilen', it:'Condividi', es:'Compartir'
+};
+
+function updateShareLabel(lang){
+  var btn = g('shNativeBtn');
+  if(btn) btn.textContent = SHARE_LABELS[lang] || SHARE_LABELS.en;
+}
+
+function shareArticle(platform){
+  var lang = document.documentElement.getAttribute('lang') || 'en';
+  var d = D[lang] || D.en;
+  var url = encodeURIComponent(location.href);
+  var title = encodeURIComponent((d.title || 'Georgia') + ' - sakartvelo.ai');
+  if(platform === 'native' && navigator.share){
+    navigator.share({title: d.title || 'Georgia', text: d.tagline || '', url: location.href}).catch(function(){});
+    return;
+  }
+  var links = {
+    whatsapp: 'https://wa.me/?text=' + title + '%20' + url,
+    telegram: 'https://t.me/share/url?url=' + url + '&text=' + title,
+    facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + url,
+    twitter: 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title,
+    vk: 'https://vk.com/share.php?url=' + url + '&title=' + title
+  };
+  if(links[platform]) window.open(links[platform], '_blank', 'noopener,width=600,height=500');
+}
 
 function setLang(lang){
   var d = D[lang] || D.en;
@@ -887,6 +931,7 @@ function setLang(lang){
 
   try{ localStorage.setItem('sak_lang', lang); }catch(e){}
   document.title = d.title + ' | sakartvelo.ai';
+  updateShareLabel(lang);
 }
 
 function toggleTheme(){
