@@ -647,6 +647,95 @@ header.top{display:flex;align-items:center;justify-content:space-between;padding
       <a href="https://travelgeorgia.aldagi.ge/" target="_blank" rel="noopener" data-i18n="law_a">Оформить страховку →</a>
     </div>
   </section>
+  <!-- ══════════════════════════════════════ -->
+<!-- ЧАЧА СИГНАЛ — большая промо-карточка на главной, цвета флага Грузии -->
+<!-- (белый фон + красный, как у страховки — но не тёмно-бирюзовая, а в -->
+<!-- цветах флага, по просьбе). Ведёт на /radar/, где уже есть кнопки -->
+<!-- "Поделиться" на всех 9 языках. -->
+<!-- ══════════════════════════════════════ -->
+<div style="background:#fff;border:3px solid var(--wine);border-radius:20px;padding:24px;margin:20px 0;position:relative;overflow:hidden">
+  <!-- Тонкая красная полоса сверху и снизу — отсылка к флагу -->
+  <div style="position:absolute;top:0;left:0;right:0;height:6px;background:var(--wine)"></div>
+  <div style="position:absolute;bottom:0;left:0;right:0;height:6px;background:var(--wine)"></div>
+
+  <div style="display:flex;align-items:flex-start;gap:14px;margin-top:8px">
+    <div style="font-size:2.2rem;line-height:1;flex-shrink:0">📡</div>
+    <div>
+      <div style="font-weight:900;font-size:1.3rem;color:var(--wine);margin-bottom:6px;font-family:var(--ff,serif)" id="signalTitle">Georgian Radar</div>
+      <div style="color:var(--ink);font-size:.95rem;line-height:1.5;opacity:.85" id="signalDesc">Узнай, что рядом с тобой прямо сейчас — достопримечательности, кафе, ближайший вокзал и точная карта. Покажи друзьям, где ты!</div>
+    </div>
+  </div>
+
+  <a href="https://sakartvelo.ai/radar/" style="display:block;text-align:center;margin-top:16px;background:var(--gold);color:var(--dark);font-weight:700;padding:14px;border-radius:14px;text-decoration:none;font-size:1.02rem" id="signalBtn">📍 Что рядом со мной →</a>
+
+  <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;justify-content:center">
+    <button onclick="shareSignalCard('native')" id="signalShareNative" style="border:none;cursor:pointer;font-family:inherit;background:var(--wine);color:#fff;padding:8px 14px;border-radius:18px;font-size:.82rem">Поделиться</button>
+    <button onclick="shareSignalCard('whatsapp')" style="border:none;cursor:pointer;font-family:inherit;background:#25D366;color:#fff;padding:8px 14px;border-radius:18px;font-size:.82rem">WhatsApp</button>
+    <button onclick="shareSignalCard('telegram')" style="border:none;cursor:pointer;font-family:inherit;background:#0088cc;color:#fff;padding:8px 14px;border-radius:18px;font-size:.82rem">Telegram</button>
+    <button onclick="shareSignalCard('facebook')" style="border:none;cursor:pointer;font-family:inherit;background:#1877F2;color:#fff;padding:8px 14px;border-radius:18px;font-size:.82rem">Facebook</button>
+    <button onclick="shareSignalCard('twitter')" style="border:none;cursor:pointer;font-family:inherit;background:#000;color:#fff;padding:8px 14px;border-radius:18px;font-size:.82rem">X</button>
+    <button onclick="shareSignalCard('vk')" style="border:none;cursor:pointer;font-family:inherit;background:#0077FF;color:#fff;padding:8px 14px;border-radius:18px;font-size:.82rem">VK</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+// Переводы промо-карточки "Чача Сигнал" на 9 языков.
+// Подключить к существующей системе переключения языка на главной —
+// вызвать updateSignalCard(lang) там же, где обновляются остальные тексты
+// при смене языка (например, внутри уже существующей функции applyLang()).
+// ══════════════════════════════════════
+var SIGNAL_I18N = {
+  ru:{title:'Georgian Radar', desc:'Узнай, что рядом с тобой прямо сейчас — достопримечательности, кафе, ближайший вокзал и точная карта. Покажи друзьям, где ты!', btn:'📍 Что рядом со мной →', share:'Поделиться', shareMsg:'Нашёл классную штуку — Georgian Radar показывает всё интересное рядом с тобой в Грузии! 🇬🇪'},
+  en:{title:'Georgian Radar', desc:"See what's near you right now — attractions, cafes, the nearest train station, and a live map. Show your friends where you are!", btn:'📍 Find what\'s near me →', share:'Share', shareMsg:'Found a cool tool — Georgian Radar shows everything interesting near you in Georgia! 🇬🇪'},
+  tr:{title:'Georgian Radar', desc:'Şu anda yakınında olanları öğren — gezilecek yerler, kafeler, en yakın tren istasyonu ve canlı harita. Arkadaşlarına nerede olduğunu göster!', btn:'📍 Yakınımdakileri bul →', share:'Paylaş', shareMsg:'Harika bir araç buldum — Georgian Radar Gürcistan\'da yakınındaki her şeyi gösteriyor! 🇬🇪'},
+  de:{title:'Georgian Radar', desc:'Finde heraus, was gerade in deiner Nähe ist — Sehenswürdigkeiten, Cafés, der nächste Bahnhof und eine Live-Karte. Zeig deinen Freunden, wo du bist!', btn:'📍 Was ist in meiner Nähe →', share:'Teilen', shareMsg:'Ein cooles Tool gefunden — Georgian Radar zeigt alles Interessante in deiner Nähe in Georgien! 🇬🇪'},
+  it:{title:'Georgian Radar', desc:"Scopri cosa c'è vicino a te ora — attrazioni, caffè, la stazione più vicina e una mappa dal vivo. Mostra ai tuoi amici dove sei!", btn:'📍 Cosa c\'è vicino a me →', share:'Condividi', shareMsg:'Ho trovato uno strumento fantastico — Georgian Radar mostra tutto ciò che è interessante vicino a te in Georgia! 🇬🇪'},
+  es:{title:'Georgian Radar', desc:'Descubre qué hay cerca de ti ahora — atracciones, cafés, la estación más cercana y un mapa en vivo. ¡Muéstrales a tus amigos dónde estás!', btn:'📍 Qué hay cerca de mí →', share:'Compartir', shareMsg:'¡Encontré una herramienta genial — Georgian Radar muestra todo lo interesante cerca de ti en Georgia! 🇬🇪'},
+  ar:{title:'Georgian Radar', desc:'اكتشف ما يحيط بك الآن — المعالم والمقاهي وأقرب محطة قطار وخريطة حية. أرِ أصدقاءك أين أنت!', btn:'📍 ما حولي الآن ←', share:'مشاركة', shareMsg:'وجدت أداة رائعة — Georgian Radar يعرض كل شيء مثير للاهتمام بالقرب منك في جورجيا! 🇬🇪'},
+  he:{title:'Georgian Radar', desc:'גלה מה נמצא לידך עכשיו — אטרקציות, בתי קפה, תחנת הרכבת הקרובה ומפה חיה. הראה לחברים שלך איפה אתה!', btn:'📍 מה קרוב אליי ←', share:'שתף', shareMsg:'מצאתי כלי מגניב — Georgian Radar מראה כל דבר מעניין בקרבתך בגאורגיה! 🇬🇪'},
+  fa:{title:'Georgian Radar', desc:'ببین همین الان چه چیزی نزدیک توست — جاذبه‌ها، کافه‌ها، نزدیک‌ترین ایستگاه قطار و نقشه زنده. به دوستانت نشان بده کجا هستی!', btn:'📍 چه چیزی نزدیک من است ←', share:'اشتراک‌گذاری', shareMsg:'یک ابزار جالب پیدا کردم — Georgian Radar همه چیز جالب نزدیک تو را در گرجستان نشان می‌دهد! 🇬🇪'}
+};
+
+function updateSignalCard(lang){
+  var s = SIGNAL_I18N[lang] || SIGNAL_I18N.en;
+  var titleEl = document.getElementById('signalTitle');
+  var descEl = document.getElementById('signalDesc');
+  var btnEl = document.getElementById('signalBtn');
+  var shareEl = document.getElementById('signalShareNative');
+  if(titleEl) titleEl.textContent = s.title;
+  if(descEl) descEl.textContent = s.desc;
+  if(btnEl) btnEl.textContent = s.btn;
+  if(shareEl) shareEl.textContent = s.share;
+}
+
+// ══════════════════════════════════════
+// "Поделиться" прямо с главной страницы — приглашение попробовать
+// инструмент (в отличие от кнопок внутри /radar/, которые делятся уже
+// КОНКРЕТНЫМ местоположением человека). Тут делимся ссылкой на сам
+// инструмент, чтобы друг тоже мог им воспользоваться.
+// ══════════════════════════════════════
+function shareSignalCard(platform){
+  var currentLang = (document.documentElement.getAttribute('lang')) || 'ru';
+  var s = SIGNAL_I18N[currentLang] || SIGNAL_I18N.ru;
+  var link = 'https://sakartvelo.ai/radar/';
+  var text = s.shareMsg;
+
+  if(platform === 'native' && navigator.share){
+    navigator.share({title:'Georgian Radar', text:text, url:link}).catch(function(){});
+    return;
+  }
+  var enc = encodeURIComponent(text + ' ' + link);
+  var links = {
+    whatsapp: 'https://wa.me/?text=' + enc,
+    telegram: 'https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent(text),
+    facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(link),
+    twitter: 'https://twitter.com/intent/tweet?text=' + enc,
+    vk: 'https://vk.com/share.php?url=' + encodeURIComponent(link) + '&title=' + encodeURIComponent(text)
+  };
+  if(links[platform]) window.open(links[platform], '_blank', 'noopener,width=600,height=500');
+}
+</script>
 
   <!-- GEORGIA GUIDE -->
   <section class="guide-section" id="guideSection">
