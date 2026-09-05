@@ -122,13 +122,6 @@ async function setJobStatus(jobId, statusObj) {
 // ══════════════════════════════════════
 // ДНЕВНОЙ ЛИМИТ: 1 бесплатный маршрут в день на IP-адрес
 // ══════════════════════════════════════
-// Настоящая (серверная) защита от злоупотребления — в отличие от проверки
-// в localStorage на клиенте, эту нельзя обойти, просто очистив данные
-// браузера. Ключ хранилища — IP + сегодняшняя дата, значение — просто
-// факт использования. Ограничение по IP означает, что несколько человек
-// в одной сети (например, семья или офис) могут иногда столкнуться с
-// ограничением раньше, чем хотелось бы — это сознательный компромисс
-// простоты реализации, приемлемый для бесплатного продукта.
 function todayDateStr() {
   return new Date().toISOString().slice(0, 10); // YYYY-MM-DD (UTC)
 }
@@ -153,6 +146,23 @@ async function markDailyLimitUsed(ip) {
   } catch (e) {
     console.error('Daily limit write error:', e.message);
   }
+}
+
+// ══════════════════════════════════════
+// ГРАНИЦЫ ЧИСЛА ДНЕЙ (защита на бэкенде)
+// ══════════════════════════════════════
+// Фронтенд теперь предлагает только 1-3 дня, но это не единственная
+// точка входа (может быть старая ссылка, кэш, ручной запрос) — здесь
+// подстраховка на сервере, чтобы никогда не строить нереалистично
+// длинный (и неточный по ценам) маршрут.
+const MIN_DAYS = 1;
+const MAX_DAYS = 3;
+
+function clampDays(rawDays) {
+  const n = parseInt(rawDays, 10);
+  if (!Number.isFinite(n) || n < MIN_DAYS) return MIN_DAYS;
+  if (n > MAX_DAYS) return MAX_DAYS;
+  return n;
 }
 
 // ══════════════════════════════════════
@@ -183,6 +193,10 @@ exports.handler = async (event) => {
     return { statusCode: 200 };
   }
 
+  // Подстраховка: даже если клиент прислал что-то другое — маршрут
+  // строим только на 1-3 дня.
+  data.days = clampDays(data.days);
+
   const ip = event.headers['x-nf-client-connection-ip']
     || event.headers['client-ip']
     || event.headers['x-forwarded-for']
@@ -196,11 +210,6 @@ exports.handler = async (event) => {
     return { statusCode: 200 };
   }
 
-  // Проверка дневного лимита: 1 бесплатный маршрут в день на IP.
-  // Проверяем ДО кэша намеренно — лимит про "одна попытка в день", а не
-  // про экономию токенов, так что даже попадание в кэш должно засчитываться.
-  // Исключение: если передан правильный секретный ADMIN_BYPASS_CODE
-  // (владелец сайта тестирует изменения) — лимит пропускается.
   const isAdminBypass = !!process.env.ADMIN_BYPASS_CODE
     && data.bypassCode === process.env.ADMIN_BYPASS_CODE;
 
@@ -210,8 +219,6 @@ exports.handler = async (event) => {
     return { statusCode: 200 };
   }
 
-  // Сразу помечаем задачу как "в процессе" — на случай если клиент
-  // начнёт спрашивать статус раньше, чем мы дойдём до конца.
   await setJobStatus(jobId, { status: 'pending' });
 
   try {
@@ -278,12 +285,6 @@ function getRelevantFileWarnings(data) {
 // ══════════════════════════════════════
 // ОЧИСТКА ТЕКСТА ОТ ПРОБЛЕМНЫХ СИМВОЛОВ
 // ══════════════════════════════════════
-// Иногда модель (или сбой кодировки при передаче) вставляет символы,
-// которые шрифт в PDF не может отобразить — это выглядит как "??" в
-// середине слова. Здесь убираем самые частые причины: символ замены
-// Unicode (�), мягкий/неразрывный дефис, невидимые zero-width символы.
-// Это не чинит саму причину (если модель реально "придумала" странный
-// символ), но не даёт этому долетать до пользователя в виде "??".
 function sanitizeText(str) {
   if (typeof str !== 'string') return str;
   return str
@@ -308,6 +309,138 @@ function personalize(route, data) {
   personalized._personalName = data.name || 'Traveler';
   personalized._personalDate = data.arrivalDate || '';
   return personalized;
+}
+
+// ══════════════════════════════════════
+// ОРИЕНТИРЫ ЦЕН (2026) — вместо того чтобы модель гадала цены по памяти
+// ══════════════════════════════════════
+// ВАЖНО: это приблизительные, ориентировочные цифры, а не гарантированно
+// свежие данные — цены в реальности меняются (сезон, инфляция, курс лари).
+// Но это ГОРАЗДО честнее, чем полностью выдуманное число без всякой
+// привязки к реальности (как было раньше). Модель получает явный диапазон
+// и явную инструкцию — писать диапазон, а не точную цифру, и не завышать
+// уверенность там, где её не может быть.
+//
+// TODO (владелец сайта): если на сайте уже есть раздел "Честные цены 2026"
+// с проверенными цифрами — эти значения стоит заменить на те же самые,
+// чтобы на сайте и в PDF-маршруте не было расхождений.
+const PRICE_ANCHORS_2026 = `
+APPROXIMATE 2026 PRICE ANCHORS — use these as a realistic baseline for
+"price_mid" values. These are ballpark reference ranges, not guaranteed
+current prices (prices genuinely change with season/inflation). Because of
+that:
+- Prefer a RANGE over a single exact number where realistic (e.g. "$8-12"
+  rather than a suspiciously precise "$9.37").
+- Never invent a price with more confidence than these anchors justify.
+- Museum/attraction entrance fees: $2-8 for most sites, $8-15 for major
+  national museums.
+- City taxi ride (Bolt/Yandex, within Tbilisi/Batumi/Kutaisi): $2-6 for a
+  typical in-city trip.
+- Intercity transfer/taxi (e.g. Tbilisi–Kazbegi, Tbilisi–Kakheti day trip):
+  $40-80 for a full car for the whole group, one-way.
+- Tbilisi Metro: fixed 1 GEL (~$0.35) per ride regardless of distance,
+  paid with a rechargeable Metromoney card.
+- City bus (Tbilisi/Batumi): fixed 0.5-1 GEL (~$0.20-0.35) per ride.
+- Intercity marshrutka (shared minivan), e.g. Tbilisi–Kutaisi, Tbilisi–
+  Kazbegi, Tbilisi–Batumi: roughly $5-12 per person one-way depending on
+  distance — mention this explicitly when a route includes intercity
+  travel, so the traveler knows the honest fixed fare and isn't
+  overcharged by an individual driver quoting a much higher "tourist price".
+- Intercity train (e.g. Tbilisi–Batumi, Tbilisi–Kutaisi/Zugdidi): roughly
+  $5-15 per person one-way depending on class.
+- Sulfur bath private room (Tbilisi, per hour): $15-40 depending on room
+  quality.
+- Cable car / ropeway ticket: $3-10.
+- Wine tasting with light snacks (Kakheti): $10-25 per person.
+- Local restaurant meal, mid-range, per person: $8-18.
+- Guesthouse/budget hotel per night: $20-40.
+- Mid-range hotel per night: $60-110.
+- Museum-quality/boutique hotel per night: $120-250.
+When unsure of a specific attraction's exact fee, use the closest category
+above rather than fabricating an unrelated number.
+
+IMPORTANT — protect the traveler from overpaying: whenever the schedule
+involves intercity travel (marshrutka, bus, train, or hired transfer car
+between cities), the "tip" field for that schedule item MUST mention the
+honest fixed price range from the anchors above (e.g. "Marshrutka fare is
+fixed at about $6-8 per person — don't pay more if a driver quotes higher").
+This is specifically to prevent tourists from being overcharged locally.`;
+
+// ══════════════════════════════════════
+// ПОГОДА ДЛЯ МАРШРУТА
+// ══════════════════════════════════════
+// Честное правило: реальный прогноз погоды существует физически только на
+// ближайшие ~5 дней вперёд (ограничение любого прогноза, не только нашего).
+// Если дата поездки в этих пределах — берём настоящий прогноз напрямую у
+// OpenWeather (тот же API, что использует weather.js). Если дата дальше —
+// НЕ притворяемся, что знаем погоду точно, а даём спокойные типичные для
+// сезона цифры — с явной пометкой, что это ориентир, а не прогноз.
+
+// Типичные (климатические) диапазоны температур по сезону — раздельно для
+// низменных городов (Тбилиси/Батуми/Кутаиси) и гор (Казбеги/Местиа/Гудаури),
+// потому что разница в горах гораздо заметнее.
+const SEASONAL_TYPICAL = {
+  winter: { lowland: '2-9°C, occasional rain or light snow', mountain: '-8 to 0°C, snow likely — mountain roads may need chains' },
+  spring: { lowland: '10-20°C, changeable, pack a light rain jacket', mountain: '0-12°C, still cold at altitude, some roads may reopen late spring' },
+  summer: { lowland: '24-32°C, hot and mostly dry', mountain: '12-22°C, pleasant but bring a warm layer for evenings' },
+  autumn: { lowland: '12-22°C, mild, some rain', mountain: '2-12°C, cools quickly, pack layers' },
+};
+
+function isMountainCity(cityName) {
+  return ['Kazbegi', 'Mestia', 'Gudauri'].indexOf(cityName) !== -1;
+}
+
+async function getWeatherContext(data, season) {
+  // startCity приходит с эмодзи с фронтенда ("Tbilisi ✈️") — берём чистое имя.
+  const cityName = (data.startCity || 'Tbilisi').split(' ')[0];
+  const isMountain = isMountainCity(cityName);
+  const typical = SEASONAL_TYPICAL[season] || SEASONAL_TYPICAL.summer;
+  const typicalRange = isMountain ? typical.mountain : typical.lowland;
+
+  const daysUntilArrival = data.arrivalDate
+    ? Math.floor((new Date(data.arrivalDate) - new Date()) / 86400000)
+    : null;
+
+  // Дата в пределах ближайших 5 дней — пробуем настоящий прогноз.
+  if (daysUntilArrival !== null && daysUntilArrival >= 0 && daysUntilArrival <= 5 && process.env.OPENWEATHER_KEY) {
+    try {
+      const CITY_COORDS = {
+        Tbilisi: { lat: 41.7151, lon: 44.8271 },
+        Batumi: { lat: 41.6168, lon: 41.6367 },
+        Kutaisi: { lat: 42.2679, lon: 42.6946 },
+      };
+      const coords = CITY_COORDS[cityName] || CITY_COORDS.Tbilisi;
+      const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${coords.lat}&lon=${coords.lon}&appid=${process.env.OPENWEATHER_KEY}&units=metric&cnt=40`;
+      const res = await fetch(url);
+      const json = await res.json();
+      if (json.cod === '200' && json.list && json.list.length) {
+        const targetDay = data.arrivalDate;
+        const match = json.list.find(item => {
+          const d = new Date(item.dt * 1000);
+          return d.toISOString().split('T')[0] === targetDay
+            && d.getUTCHours() >= 11 && d.getUTCHours() <= 14;
+        });
+        if (match) {
+          return `\nWEATHER — REAL FORECAST (use this exact info, calm and factual tone,
+no exaggeration): On ${targetDay} in ${cityName}, expect around
+${Math.round(match.main.temp)}°C (${match.weather[0].description}),
+wind ${Math.round(match.wind.speed)} m/s, humidity ${match.main.humidity}%.
+Mention this briefly and practically (e.g. what to wear/bring), don't dramatize it.`;
+        }
+      }
+    } catch (e) {
+      console.warn('Weather fetch failed, falling back to seasonal typical:', e.message);
+    }
+  }
+
+  // Дата далеко (или прогноз не удался) — честный сезонный ориентир,
+  // явно НЕ выдаём за прогноз.
+  return `\nWEATHER — SEASONAL TYPICAL (NOT a forecast — the trip date is too far
+ahead for an actual forecast to exist, so be upfront about that): around
+${cityName} in ${season}, typical weather is ${typicalRange}. Mention this
+as a general seasonal expectation ("typically..."), not as a specific
+prediction for that exact day. Calm, practical tone — suggest what to pack,
+don't create alarm.`;
 }
 
 async function generateRoute(data, season, lang, fileWarnings) {
@@ -354,7 +487,8 @@ time-of-day schedule (don't schedule things outside these windows):
 - Mountain driving (Georgian Military Highway, Svaneti roads): strongly avoid scheduling after dark — plan arrivals in mountain regions before ~18:00.
 When you assign a "time" in the schedule, make sure it is consistent with these
 realistic windows and with travel time between locations (don't put someone in
-two towns 3 hours apart within the same hour).${yogaBlock}`;
+two towns 3 hours apart within the same hour).${yogaBlock}
+${PRICE_ANCHORS_2026}`;
 
   const prompt = `You are an expert Georgia (country in Caucasus) travel guide.
 Create a detailed travel route based on:
@@ -373,6 +507,7 @@ IMPORTANT: Write ALL text content (title, tagline, day themes, tips, warnings �
 everything except place names, which should stay in their common form) in
 ${langName}. The person using this guide reads ${langName}, not English.${fileWarningsBlock}
 ${schedulingFacts}
+${await getWeatherContext(data, season)}
 
 Return ONLY valid JSON, no markdown, no explanation:
 {
@@ -390,7 +525,7 @@ Return ONLY valid JSON, no markdown, no explanation:
           "place": "place name",
           "duration": "2 hours",
           "tip": "practical tip",
-          "price_mid": "$25"
+          "price_mid": "$20-25"
         }
       ],
       "food": {"breakfast": "where", "lunch": "where", "dinner": "where"},
@@ -412,13 +547,11 @@ Return ONLY valid JSON, no markdown, no explanation:
 }`;
 
   // ⚠️ Фоновая функция может работать до 15 минут — риска таймаута больше нет.
-  // Модель claude-haiku-4-5 поддерживает вывод до 64000 токенов (подтверждённый
-  // официальный лимит), а старый потолок 16000 был занижен и вызывал обрыв JSON
-  // на маршрутах с более "многословными" требованиями (например, категория yoga,
-  // где на каждый день нужно больше деталей — конкретные районы, отдельные сессии).
+  // Дни теперь всегда 1-3 (clampDays), поэтому запас токенов можно смело
+  // держать поменьше — маршрут физически короче.
   const isComplexCategory = (data.category === 'yoga');
   const categoryBuffer = isComplexCategory ? 3000 : 0;
-  const computedMaxTokens = Math.max(6000, parseInt(data.days || 5) * 900 + 3000 + categoryBuffer);
+  const computedMaxTokens = Math.max(6000, parseInt(data.days || 3) * 900 + 3000 + categoryBuffer);
 
   return new Promise((resolve, reject) => {
     const body = JSON.stringify({
