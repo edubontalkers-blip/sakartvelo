@@ -892,6 +892,25 @@
       "emoji": "🪆",
       "mode": "evergreen",
       "date": "2026-09-04"
+    },
+    {
+      "slug": "west-caucasian-tur-mountain-goat-caucasus",
+      "topic_key": "west-caucasian-tur",
+      "title_en": "West Caucasian Tur: The Mountain Goat of the Caucasus",
+      "titles": {
+        "ru": "Западнокавказский тур: горный козёл Кавказа",
+        "en": "West Caucasian Tur: The Mountain Goat of the Caucasus",
+        "tr": "Batı Kafkas Turu: Kafkasya'nın Dağ Keçisi",
+        "ar": "وَعِل القوقاز الغربي: تيسُ الجبال في قلب القوقاز",
+        "he": "תור הקווקז המערבי: עז ההרים של הקווקז",
+        "fa": "تور قفقاز غربی: بز کوهی سلسله‌جبال قفقاز",
+        "de": "Westkaukasischer Tur: Die Bergziege des Kaukasus",
+        "it": "Tur del Caucaso Occidentale: Lo Stambecco delle Vette Caucasiche",
+        "es": "El tur del Cáucaso occidental: la cabra montesa de las cumbres caucásicas"
+      },
+      "emoji": "🐐",
+      "mode": "evergreen",
+      "date": "2026-09-06"
     }
   ]
 }
